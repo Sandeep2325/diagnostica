@@ -1,0 +1,8 @@
+<h1>dummy</h1>
+{% for i in data%}
+{{i.package_title}}
+{% for j in i.test_name.all%}
+{{j.testt}}<br>
+{{j.price}}
+{%endfor%}
+{%endfor%}

@@ -1,0 +1,26 @@
+{% extends 'admin/base_site.html' %}
+
+{% block content %}
+    <div>
+        <form action="." method="POST" enctype="multipart/form-data">
+            <div class="custom-file-upload">
+            {{ form.as_p }}
+            </div>
+            {% csrf_token %}
+            {{message}}
+            <button class="btn btn-secondary" type="submit">Upload File</button>
+        </form>
+    </div> 
+    <div>
+
+   <Style>
+        .custom-file-upload {
+            border: 2px solid #ccc;
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+            {% comment %} border-color:#3d5c5c; {% endcomment %}
+   
+        }
+    </style>
+{% endblock %}

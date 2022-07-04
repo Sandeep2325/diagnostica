@@ -1,0 +1,28 @@
+<h1>hello</h1>
+{%for i in healthcheckup %}
+{{i.package_title}}<br>
+{{i.actual_price}}<br>
+<a href="{% url 'Health-checkup' slug=i.slug %}"> Detail </a><br><br>
+<input type="button" onclick="deleteUser({{ i.id }})" value="delete"><br>
+{% comment %} <a class="btn btn-danger" class="fa fa-trash-alt " href="{% url 'destroy' i.id %}">delete</a><br><br> {% endcomment %}
+{%endfor%}
+<scripts>
+    function deleteUser(id) {
+        var action = confirm("Are you sure you want to delete this user?");
+        if (action != false) {
+          $.ajax({
+              url: '{% url "destroy" %}',
+              data: {
+                  'id': id,
+              }, 
+              {% comment %} dataType: 'json', {% endcomment %}
+              success: function (data) {
+                alert("Deleted")
+                  {% comment %} if (data.deleted) {
+                    $("#userTable #user-" + id).remove();
+                  } {% endcomment %}
+              }
+          });
+        }
+      }
+</scripts>
