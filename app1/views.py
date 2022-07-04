@@ -284,7 +284,7 @@ def selectedtestview(request):
     
 def subscriptionview(request):
     if request.method=="POST":
-        form=subscriptionform
+        form=subscriptionform()
         if form.is_valid:
             email=request.POST.get("email")
             template_name = 'email.html'
