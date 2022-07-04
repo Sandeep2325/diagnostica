@@ -1,0 +1,18 @@
+
+{% for message in messages %}
+{{message}}
+{% endfor %}
+<form method="POST" enctype="multipart/form-data" name="contact" action="" class="form-group">
+{%csrf_token%}
+{{fm.test_name}}<br>
+{% comment %} {{fm.prescription_file.label}}<br> {% endcomment %}
+{{fm.myself}}<br>
+{{fm.others}}<br>
+{{fm.others_choice}}<br>
+{{fm.firstname}}<br>
+{{fm.lastname}}<br>
+{{fm.contact}}<br>
+{{fm.age}}<br>
+{{fm.gender}}<br>
+<button>submit</button>
+</form>

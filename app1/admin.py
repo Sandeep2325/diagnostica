@@ -59,15 +59,20 @@ class testadmin(admin.ModelAdmin):
             data = {"form": form}
             return render(request, "admin/csv_upload.html", data)
 class prescriptionbookadmin(admin.ModelAdmin):
-    list_display=["id","user","myself","others","others_choice","firstname","lastname","contact","age","gender","prescription_file","created","updated"]        
-    # prepopulated_fields = {"slug": ("name",)}
-class selectedtestbookadmin(admin.ModelAdmin):
-    list_display=["id","user","testname","myself","others","others_choice","firstname","lastname","contact","age","gender","created","updated"]
+    list_display=["id","user","testname","myself","others","others_choice","firstname","lastname","contact","age","gender","prescription_file","created","updated"]        
     def testname(self, obj):
         return ", ".join([
             test.testt for test in obj.test_name.all()
         ])
     testname.short_description = "Tests"
+    # prepopulated_fields = {"slug": ("name",)}
+# class selectedtestbookadmin(admin.ModelAdmin):
+#     list_display=["id","user","testname","myself","others","others_choice","firstname","lastname","contact","age","gender","created","updated"]
+#     def testname(self, obj):
+#         return ", ".join([
+#             test.testt for test in obj.test_name.all()
+#         ])
+#     testname.short_description = "Tests"
 class categoryadmin(admin.ModelAdmin):
     list_display=["id","categoryy","created","updated","action_btn"]
     prepopulated_fields = {"slug": ("categoryy",)}
@@ -81,14 +86,18 @@ class categoryadmin(admin.ModelAdmin):
     action_btn.short_description = "Action"
 class healthcheckup_admin(SummernoteModelAdmin):
     list_display=["id","package_title","testname","test_nos","description","actual_price","discounted_price","discount","created","updated","action_btn"]    
-    readonly_fields=["discounted_price",]
+    readonly_fields=["discounted_price","test_nos"]
     prepopulated_fields = {"slug": ("package_title",)}
-    summernote_fields = ('description','package_title')
+    summernote_fields = ('description')
     def testname(self, obj):
+        
         return ", ".join([
             test.testt for test in obj.test_name.all()
         ])
-    testname.short_description = "Tests"
+    # def count(self,obj):
+    #     a=obj.test_name.all().count()
+    #     print(a)
+    # testname.short_description = "Tests"
     
     def action_btn(self, obj):
         html = "<div class='field-action_btn d-flex m-8'> <a class='fa fa-edit ml-2' href='/admin/app1/healthcheckuppackages/" + \
@@ -181,7 +190,7 @@ class profileadmin(admin.ModelAdmin):
             return format_html('<img src="https://thumbs.dreamstime.com/b/no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482953.jpg" width="100" height="100"/>')
     imagee.short_description = 'Image'
 class aboutspanadmin(admin.ModelAdmin):
-    list_display=["id","description1","description2","testedpeople","verifiedcenter","cities","dailyvisits","created","updated",]
+    list_display=["id","description1","testedpeople","verifiedcenter","cities","dailyvisits","created","updated","action_btn"]
     def action_btn(self, obj):
         html = "<div class='field-action_btn d-flex m-8'> <a class='fa fa-edit ml-2' href='/admin/app1/aboutspan/" + \
             str(obj.id)+"/change/'></a><br></br>"
@@ -194,11 +203,11 @@ class aboutspanadmin(admin.ModelAdmin):
             return False
         return super().has_add_permission(request)
 class socialmediaadmin(admin.ModelAdmin):
-    list_display=["id","facebook","twitter","instagram"]
-    def has_add_permission(self, request):
-        if self.model.objects.count() >= 1:
-            return False
-        return super().has_add_permission(request)
+    list_display=["id","name","url"]
+    # def has_add_permission(self, request):
+    #     if self.model.objects.count() >= 1:
+    #         return False
+    #     return super().has_add_permission(request)
 class UserAdmin(OriginalUserAdmin): 
     list_display = ['id','username', 'email','is_staff', 'phone_no','action_btn','date_joined']
     # list_editable=['is_confirmed']
@@ -214,10 +223,15 @@ class subscriptionadmin(admin.ModelAdmin):
     list_display=["id","email","created"]
 class bookhistoryadmin(admin.ModelAdmin):
     list_display=["id","user","patient_info","booking_type","bookingdetails","amount","status","payment_status","created","updated","report"]    
+class couponadmin(admin.ModelAdmin):
+    list_display=["id","couponcode","discount","startdate","enddate"]
+class cartadmin(admin.ModelAdmin):
+    list_display=["id","user","items","categoryy","price","created","updated"]
 # admin.site.register(User, UserAdmin)
+
 admin.site.register(test,testadmin)
 admin.site.register(prescription_book,prescriptionbookadmin)
-admin.site.register(selectedtest_book,selectedtestbookadmin)
+# admin.site.register(selectedtest_book,selectedtestbookadmin)
 admin.site.register(User,UserAdmin)
 admin.site.register(category,categoryadmin)
 admin.site.register(healthcheckuppackages,healthcheckup_admin)
@@ -230,4 +244,5 @@ admin.site.register(profile,profileadmin)
 admin.site.register(aboutspan,aboutspanadmin)
 admin.site.register(subscription,subscriptionadmin)
 admin.site.register(socialmedialinks,socialmediaadmin)
-admin.site.register(cart)
+admin.site.register(coupons,couponadmin)
+admin.site.register(cart,cartadmin)

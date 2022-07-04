@@ -11,7 +11,7 @@ urlpatterns = [
     path('',views.home,name="home"),
     path("prescription/",views.prescriptionbookview,name="prescriptiontest"),
     path("selectedtest/",views.selectedtestview,name="selectedtest"),
-    path('delete/<int:id>', views.destroy,name="destroy"),
+    path('delete/<slug:slug>', views.destroy,name="destroy"),
     path("bookinghistory/",views.bookinghistoryview,name="booking-history"),
     path('healthcheckup/<slug:slug>/',views.healthcheckupview, name='Health-checkup'),
     path('healthpackage/<slug:slug>/',views.healthpackageview, name='Healt-package'),
@@ -31,4 +31,4 @@ urlpatterns = [
     # path('change-password/<slug:uid>/',views.change_password,name="change-password"),
     path('payment/', payments.payment, name='index'),
     path('paymenthandler/', payments.paymenthandler, name='paymenthandler'),
-]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

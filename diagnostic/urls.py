@@ -22,3 +22,4 @@ urlpatterns = [
     path('',include("app1.urls")),
     path('summernote/', include('django_summernote.urls')),
 ]
+

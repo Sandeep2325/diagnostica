@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+{% comment %} <html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnostic Span</title>
+    <link rel="stylesheet" href="asset/css/style.css">
+    <link rel="stylesheet" href="asset/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="asset/css/bootstrap.min.css">
+    <link rel="stylesheet" href="asset/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="asset/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+
+
+    <script src="asset/js/jquery-3.6.0.min.js"></script>
+    <script src="asset/js/bootstrap.bundle.min.js"></script>
+    <script src="asset/js/owl.carousel.min.js"></script>
+    <script src="asset/js/script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.js"></script>
+    <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+</head> {% endcomment %}
+{% include "header.html" %}
+{%load static%}
+<body>
+
+    {% comment %} <section class="section_nav_bar bg-light-grey">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="nav_bar">
+                        <img src="{%static "images/image_logo.png"%}" alt="" class="img-fluid logo-img" />
+                        <div class="menu-center">
+                            <span onClick="toggleMenu()" id="open_icon">&#9776;</span>
+                            <ul class="p-0 m-0" id="menu-box">
+                                <li class="pt-xl-0 pt-5 active"><a>Our Services</a></li>
+                                <li><a>Packages</a></li>
+                                <li><a>Our Lab</a></li>
+                                <li><a>About Us</a></li>
+                                <li><a>Contact Us</a></li>
+                                <li><a class="nav_button"><i class="fa fa-search pe-2" aria-hidden="true"></i>Book A
+                                        Test
+                                        Online</a></li>
+                                <li> <a href="#" class=" cart-logo1">
+                                        <img src="asset/images/bg-user.png" alt="" class="" />
+                                    </a></li>
+                                <li>
+                                    <a href="#" class="">
+                                        <img src="asset/images/bg-cart.png" alt="" class="" />
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            function toggleMenu() {
+                var menuBox = document.getElementById('menu-box');
+
+                if (menuBox.style.display == "block") {
+                    menuBox.style.display = "none";
+                }
+                else {
+                    menuBox.style.display = "block";
+                }
+            }
+        </script>
+    </section> {% endcomment %}
+
+    <section class="sub_header py-xl-4 py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="d-flex ">
+                        <p class="m-0 fs-18 font-regular cl-dark-blue opc-5 pe-1 sub_nav_bar">Home</p>
+                        /
+                        <p class="m-0 fs-18 font-regular cl-dark-blue ps-1 sub_nav_bar">Login</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% comment %} {% for message in messages%}
+{{message}}
+{%endfor%} {% endcomment %}
+    <section class="section_login br-10">
+        <div class="container">
+            <div class="row h-100 ">
+                <form method="post" action="#">
+                    {%csrf_token%}
+                <div class="col-lg-12">
+                    <div class="row px-3 h-100">
+                        <div class="col-lg-7 p-0 bg-light-grey">
+                            <div class="px-xl-5 py-xl-5 pt-lg-2 bg-light-grey">
+                                
+                                <div class="px-xxl-5 mx-xl-4 px-3">
+                                    <h1 class="fs-40 font-bold cl-dark-blue pt-lg-0 pt-3 m-0 ">Login</h1>
+                                    <p class="fs-18 font-regular cl-dark-blue m-0 py-xl-5 py-3">Lorem Ipsum is simply
+                                        dummy text of the
+                                        printing and typesetting industry.</p>
+                                    <div class="row">
+                                        <div class="col-lg-6 pb-xl-0 pb-3">
+                                            <label class="fs-20 font-bold cl-dark-blue pb-2">Email Id</label>
+                                            <input class="login_input br-5  ps-5" name="email" placeholder="Enter your email Id">
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label class="fs-20 font-bold cl-dark-blue pb-2">Password</label>
+                                            <input class="login_input_2 br-5  ps-5" name="password" placeholder="Enter your Password">
+                                        </div>
+                                    </div>
+                                    <div class="error">
+                                    {% for message in messages%}
+                                    {{message}}
+                                    {%endfor%}
+                                    </div>
+                                    <div class="row py-lg-5 py-3 ">
+                                        <div class="col-lg-7 col-md-6 col-12 text-start">
+                                            <input type="checkbox" class="">
+                                            <label for="" class=" cl-dark-blue font-regular opc-5"> Lorem Ipsum is
+                                                simply dummy</label>
+                                        </div>
+                                        <div
+                                            class="col-lg-5 col-md-6 col-12 text-lg-end text-md-end cl-dark-blue fs-16 font-regular">
+                                            Forgot Password?</div>
+                                    </div>
+                                    <div class="pt-3">
+                                        {% comment %} <a
+                                            class=" fs-18 font-bold cl-dark-white py-lg-3 py-2 px-5 bg-sky-blue br-5 ">Login</a> {% endcomment %}
+                                    <button type="submit" class=" fs-18 font-bold cl-dark-white py-lg-3 py-2 px-5 bg-sky-blue br-5 ">Login</button>
+                                    </div>
+                                    <div class="d-flex py-2 mt-xl-5  mt-2">
+                                        <p class="m-0 pe-3 fs-16 font-regular">Create an account?</p>
+                                        <a class="fs-20 font-bold ">Sign Up</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 p-0 bg-light-grey ">
+                            <img src="{%static "images/login.png"%}" alt="" class="img-fluid h-100">
+                        </div>
+                    </div>
+                </div>
+            </form>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

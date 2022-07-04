@@ -13,7 +13,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
-
+import datetime
 def Registration(request):
     if request.method == "POST":
         fm = UserRegistrationForm(request.POST)
@@ -163,24 +163,28 @@ def otpforgotpassword(request):
     return render(request,'registration-otp.html')      
           
 def userLogin(request):
-    try :
-        if request.session.get('failed') > 2:
-            return HttpResponse('<h1> You have to wait for 5 minutes to login again</h1>')
-    except:
-        request.session['failed'] = 0
-        request.session.set_expiry(100)
+    # try :
+    #     if request.session.get('failed') > 2:
+    #         return HttpResponse('<h1> You have to wait for 5 minutes to login again</h1>')
+    # except:
+    #     request.session['failed'] = 0
+    #     request.session.set_expiry(100)
     if request.method == "POST":
         username = request.POST['email']
+        print(username)
         password = request.POST['password']
+        print(password)
         user = authenticate(request,username=username,password=password)
         if user is not None:
             login(request,user)
+            messages.success(request,'Login Successfull')
             return redirect('/')
         else:
             messages.error(request,'Email or password is wrong')
     return render(request,'login.html')
 
 def home(request):
+    print(".....",request.user)
     if request.method =="GET":
         healthcheckup=healthcheckuppackages.objects.all()
         healthpackage=healthpackages.objects.all()
@@ -263,14 +267,20 @@ def selectedtestview(request):
     fm=selectedtestform()
     if request.method=="POST":
         # others=request.POST.get("myself")
-        print(request.POST.get("myself"))
+        form = selectedtestform(request.POST)
+        form.save()
+        print(request.POST)
+        print(request.POST.getlist("test_name"))
         print(request.POST.get("firstname"))
         print(request.POST.get("lastname"))
-        # print(request.POST.get("prescription_file"))
+        tests=request.POST.getlist("test_name")
+        for i in tests:
+            item=test.objects.get(id=i)
+            cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.price).save()
         messages.success(request,"Your booking added to cart successfully")
-        return render(request,".html",{"fm":fm})
+        return render(request,"selectedtest.html",{"fm":fm})
     else:
-        return render(request,".html",{"fm":fm})
+        return render(request,"selectedtest.html",{"fm":fm})
     
 def subscriptionview(request):
     if request.method=="POST":
@@ -292,10 +302,25 @@ def subscriptionview(request):
     else:
         form=subscriptionform
         return render(request,"home",{"form":form})
-def destroy(request, id):  
-    employee = healthcheckuppackages.objects.get(id=id)  
+def destroy(request, slug): 
+    print("ok") 
+    print(slug)
+    employee = healthcheckuppackages.objects.get(slug=slug)  
     employee.delete()  
-    return redirect("/")     
+    return redirect("/")
+
+def coupon(request):
+    if request.method=="POST":
+        coupon=request.POST.get("coupon")
+        try:
+            c=coupons.objects.get(couponcode=coupon)
+            c.discount
+            if datetime.now() > c.enddate:
+                messages.error(request,"Coupon Expired")
+        except:
+            messages.info(request,"Invalid Coupon")
+        return redirect("/")
+    
 @login_required(login_url="login/")    
 def bookinghistoryview(request):
     # data=book_history.objects.all()

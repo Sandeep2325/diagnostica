@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+{%load static%}
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagnostic Span</title>
+  <link rel="stylesheet" href=" {% static 'css/style.css' %}">
+ 
+  <link rel="stylesheet" href="{%static 'fontawesome/css/font-awesome.min.css'%}">
+  <link rel="stylesheet" href="  {% static 'css/bootstrap.min.css'%}">
+  <link rel="stylesheet" href="{%static 'css/owl.carousel.min.css'%}">
+  <link rel="stylesheet" href="{%static 'css/owl.theme.default.min.css'%}">
+  <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+  <script src="{%static "js/jquery-3.6.0.min.js" %}"></script>
+  <script src="{%static "js/bootstrap.bundle.min.js" %}"></script>
+  <script src="{%static "js/owl.carousel.min.js" %}"></script>
+  <script src="{%static "js/script.js" %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.js"></script>
+  <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+</head>
+
+<body>
+    <section class="section_footer ">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-3 col-lg-6 col-md-12 col-12">
+                    <div class="footer_image_logo pt-lg-5 mt-lg-5 pt-xl-4 pt-4">
+                        <img src="{%static "images/image_logo.png"%}" alt="" class="img-fluid">
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-3  col-6 pt-xl-5 pt-3 ">
+                    <h3 class="fs-30  footer_branches font-bold m-0">Branches</h3>
+                    <ul class="p-0">
+                        <li class="text_decoration font-bold pt-xl-4 pt-2">
+                            <a class="footer_branch_text fs-24 ">Bangalore</a>
+                        </li>
+                        <li class="text_decoration font-bold pt-xl-4 pt-2">
+                            <a class="footer_branch_text fs-24 ">Chennai</a>
+                        </li>
+                        <li class="text_decoration font-bold pt-xl-4 pt-2">
+                            <a class="footer_branch_text fs-24 ">Mumbai</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-6 pt-xl-5 pt-3 subscription_div">
+                    <h3 class="fs-30 footer_branches font-bold m-0 pb-4">Useful Links</h3>
+                    <ul class="p-0 ">
+                        <li class="text_decoration_usefull font-regular">
+                            <a class="">About us </a>
+                        </li>
+                        <li class="text_decoration_usefull font-regular">
+                            <a class="">Packages</a>
+                        </li>
+                        <li class="text_decoration_usefull font-regular">
+                            <a class="">Contact</a>
+                        </li>
+                        <li class="text_decoration_usefull font-regular">
+                            <a class="">Franchisee Opportunities </a>
+                        </li>
+                        <li class="text_decoration_usefull font-regular">
+                            <a class="">Careers</a>
+                        </li>
+                        <li class="text_decoration_usefull font-regular">
+                            <a class="">FAQs</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-xl-3 col-lg-5 pt-xl-5">
+                    <h3 class="fs-30 footer_branches font-bold m-0 pb-4">Subscribe</h3>
+                    <form>
+                        <label class="footer_Subscribe_label">Enter Email Address</label>
+                        <br>
+                        <input class="footer_Subscribe_input ">
+                        <div class="d-flex justify-content-end pe-5 me-2">
+                            <button class="footer_sub_button mt-3 py-3 px-5 br-50">SUBSCRIBE</button>
+                        </div>
+                        <div>
+                            <h3 class="fs-30 footer_branches font-bold m-0 pt-4 mt-2">Social Media</h3>
+                            <ul class="d-flex p-0 pt-3 ">
+                                <li class="text_dec_media pe-3"><a>
+                                        <img src="{%static "images/bg-facebook.png"%}" alt="" class="img-fluid">
+                                    </a></li>
+                                <li class="text_dec_media pe-3"><a>
+                                        <img src="{%static "images/bg-twitter.png"%}" alt="" class="img-fluid">
+                                    </a></li>
+                                <li class="text_dec_media pe-3"><a>
+                                        <img src="{%static "images/bg-insta.png"%}" alt="" class="img-fluid">
+                                    </a></li>
+                            </ul>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row py-4">
+                <div class="col-lg-2 pe-0 footer-policy">Privacy Policy</div>
+                <div class="col-lg-2 px-0 footer-policy">Terms of use</div>
+                <div class="col-lg-2 ps-0 footer-policy">Payment & Refunds</div>
+                <div class="col-lg-6 ps-0 footer-policy d-flex justify-content-end align-content-end pe-5">© 2021
+                    Diagnostica
+                    Span Private Limited</div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

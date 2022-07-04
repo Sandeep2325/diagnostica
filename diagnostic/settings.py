@@ -119,7 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
@@ -131,7 +131,8 @@ import os
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 MEDIA_URL = '/photos/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'photos')
-STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'app1/static')
+STATIC_URL = '/static/'
 RAZOR_KEY_ID = "rzp_test_JiD8eNtJ2aNwZr"
 RAZOR_KEY_SECRET = "gtukARkLZ5U4Bjo9EfCSWkMf"
 # Default primary key field type
@@ -155,5 +156,7 @@ JAZZMIN_SETTINGS = {
 
     # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
     "site_brand": "Diagnostica Span",
+    "custom_css": None,
+    "custom_js": None,
     
     }

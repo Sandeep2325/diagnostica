@@ -36,7 +36,7 @@ class prescriptionform(forms.ModelForm):
         # read_only_fields=["user"]
 class selectedtestform(forms.ModelForm):
     class Meta:
-        model=selectedtest_book
+        model=prescription_book
         # fields=["user","test_name",]
         fields="__all__"
         read_only_fields=["user"]

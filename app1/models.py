@@ -19,7 +19,6 @@ import uuid
 #     uuid = models.UUIDField(default=uuid.uuid4,editable=False)
 class aboutspan(models.Model):
     description1=models.TextField(null=True,blank=True)
-    description2=models.TextField(null=True,blank=True)  
     testedpeople=models.IntegerField(null=True,blank=True)  
     verifiedcenter=models.IntegerField(null=True,blank=True) 
     cities=models.IntegerField(null=True,blank=True) 
@@ -116,6 +115,7 @@ STATUS_CHOICES = (
 class prescription_book(models.Model):
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
     prescription_file=models.FileField(upload_to="prescription",null=True,blank=True)
+    test_name=models.ManyToManyField(test,blank=True)
     myself=models.BooleanField(default=False)
     others=models.BooleanField(default=False)
     others_choice = models.CharField(
@@ -142,39 +142,39 @@ class prescription_book(models.Model):
     def __str__(self):
         return "Prescription booking"
     class Meta:
-        verbose_name_plural="Prescription Bookings"
-class selectedtest_book(models.Model):
-    user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
-    test_name=models.ManyToManyField(test)
-    myself=models.BooleanField(default=False)
-    others=models.BooleanField(default=False)
-    others_choice = models.CharField(
-        choices=STATUS_CHOICES1,
-        max_length=8,
-        default="", null=True,blank=True
-    )
-    firstname=models.CharField(max_length=200,null=True,blank=True)
-    lastname=models.CharField(max_length=200,null=True,blank=True)
-    contact=models.CharField(max_length=200,null=True,blank=True)
-    age=models.CharField(max_length=3,null=True,blank=True)
-    gender = models.CharField(
-        choices=STATUS_CHOICES,
-        max_length=8,
-        default="", null=True,blank=True
-    )
-    # slug = models.SlugField(null=True, unique=True)
-    created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
-    updated = models.DateTimeField(auto_now=True,null=True, blank=True)
-    # def save(self, *args, **kwargs):  # new
-    #     if not self.slug:
-    #         self.slug = slugify(self.test_name)
-    #     return super().save(*args, **kwargs)
-    def __str__(self):
-        return "Test booking"
-    class Meta:
         verbose_name_plural="Test Bookings"
+# class selectedtest_book(models.Model):
+#     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
+#     test_name=models.ManyToManyField(test)
+#     myself=models.BooleanField(default=False)
+#     others=models.BooleanField(default=False)
+#     others_choice = models.CharField(
+#         choices=STATUS_CHOICES1,
+#         max_length=8,
+#         default="", null=True,blank=True
+#     )
+#     firstname=models.CharField(max_length=200,null=True,blank=True)
+#     lastname=models.CharField(max_length=200,null=True,blank=True)
+#     contact=models.CharField(max_length=200,null=True,blank=True)
+#     age=models.CharField(max_length=3,null=True,blank=True)
+#     gender = models.CharField(
+#         choices=STATUS_CHOICES,
+#         max_length=8,
+#         default="", null=True,blank=True
+#     )
+#     # slug = models.SlugField(null=True, unique=True)
+#     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
+#     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
+#     # def save(self, *args, **kwargs):  # new
+#     #     if not self.slug:
+#     #         self.slug = slugify(self.test_name)
+#     #     return super().save(*args, **kwargs)
+#     def __str__(self):
+#         return "Test booking"
+#     class Meta:
+#         verbose_name_plural="Tests Bookings"
 class healthcheckuppackages(models.Model):
-    package_title=models.TextField(null=True,blank=True,verbose_name="Package Title")
+    package_title=models.CharField(max_length=200,null=True,blank=True,verbose_name="Package Title")
     test_name=models.ManyToManyField(test)
     test_nos=models.CharField(max_length=100,null=True,blank=True,verbose_name="No of test")
     description=models.TextField(null=True,blank=True,verbose_name="Description")
@@ -188,9 +188,10 @@ class healthcheckuppackages(models.Model):
     def __str__(self):
         return self.package_title
     class Meta:
-        verbose_name_plural = " Health Checkup Packages"
+        verbose_name_plural = " Health Checkup"
     def save(self, *args, **kwargs):  # new
         discount_price=self.actual_price*(self.discount/100)
+        self.test_nos=self.test_name.all().count()
         self.discounted_price=self.actual_price-discount_price
         if not self.slug:
             self.slug = slugify(self.package_title)
@@ -257,8 +258,8 @@ class testimonials(models.Model):
         verbose_name_plural = "Testimonials"
 class cart(models.Model):
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
-    items=models.ManyToManyField(test)
-    categoryy=models.CharField(max_length=200,null=True,blank=True)
+    items=models.ForeignKey(test,null=True,blank=True,on_delete=models.CASCADE)
+    categoryy=models.ForeignKey(category,null=True,blank=True,on_delete=models.SET_NULL)
     price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
@@ -300,6 +301,8 @@ class book_history(models.Model):
     #     return super().save(*args, **kwargs)
     def __str__(self):
         return "Book History"
+    class Meta:
+        verbose_name_plural="Booking Histories"
 class subscription(models.Model):
     email=models.EmailField(max_length=255,null=True,blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
@@ -309,12 +312,20 @@ class subscription(models.Model):
     class Meta:
         verbose_name_plural="Subscriptions"
 class socialmedialinks(models.Model):
-    facebook=models.URLField(null=True,blank=True)
-    twitter=models.URLField(null=True,blank=True)
-    instagram=models.URLField(null=True,blank=True)
-    
+    name=models.CharField(max_length=100,null=True,blank=True)
+    url=models.URLField(null=True,blank=True)
     def __str__(self):
         return "Social Media Links"
     class Meta:
         verbose_name_plural="Social media links"
-
+class coupons(models.Model):
+    couponcode=models.CharField(max_length=100,null=True,blank=True,verbose_name="Coupon Code")
+    discount=models.CharField(max_length=2,null=True,blank=True,verbose_name="Discount(%)")
+    startdate=models.DateTimeField(null=True,blank=True,verbose_name="Start Date")
+    enddate=models.DateTimeField(null=True,blank=True,verbose_name="Start Date")
+    
+    def __str__(self):
+        return self.couponcode
+    class Meta:
+        verbose_name_plural="Coupons"
+        
