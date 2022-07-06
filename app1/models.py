@@ -17,6 +17,14 @@ import uuid
 #     phone_number = models.CharField(max_length=17,validators=[phone_regex],unique=True)
 #     email_verified = models.BooleanField(default=False)
 #     uuid = models.UUIDField(default=uuid.uuid4,editable=False)
+class city(models.Model):
+    cityname=models.CharField(max_length=200,null=True,blank=True)
+    created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
+    updated = models.DateTimeField(auto_now=True,null=True, blank=True)
+    def __str__(self):
+        return self.cityname
+    class Meta:
+        verbose_name_plural="City"
 class aboutspan(models.Model):
     description1=models.TextField(null=True,blank=True)
     testedpeople=models.IntegerField(null=True,blank=True)  
@@ -29,78 +37,93 @@ class aboutspan(models.Model):
         return str(self.description1)[0:15]
     class Meta:
         verbose_name_plural = "About Span"
+GENDER_CHOICES = (
+    ("m","Male"),
+    ("f","female"),
+    )
 class User(AbstractUser,PermissionsMixin):
+    photo=models.ImageField(upload_to='Profile',max_length=500, verbose_name="Profile photo", null=True, blank=True)
     username = models.CharField(
-        max_length=50, blank=False, null=True,verbose_name="Full name")
+        max_length=50, blank=False, null=True,verbose_name="user name")
     email = models.EmailField(_('email address'), unique=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    phone_no = models.CharField(max_length=10, null=True, unique=True)
-    otp = models.IntegerField(default=False)
+    phone_no = models.CharField(max_length=10, null=True, unique=True,verbose_name="Mobile number")
+    location=models.CharField(max_length=200,null=True,blank=True)
+    dob=models.CharField(max_length=50,blank=True,null=True)
+    address=models.TextField(null=True,blank=True)
+    gender = models.CharField(
+        choices=GENDER_CHOICES,
+        max_length=8,
+        default="choose", null=True,blank=True
+    )
     is_used = models.BooleanField(default=False)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name','phone_no']
     def __str__(self):
         return "{}".format(str(self.username))
     
-GENDER_CHOICES = (
-    ("m","Male"),
-    ("f","female"),
-    ) 
-class profile(models.Model):
-    user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
-    photo=models.ImageField(upload_to='Profile',max_length=500, verbose_name="Profile photo", null=True, blank=True)
-    name=models.CharField(max_length=200,null=True,blank=True)
-    email = models.EmailField(max_length=255,null=True,blank=True)
-    phone_no = models.CharField(max_length=10, null=True, unique=True,blank=True)
-    gender = models.CharField(
-        choices=GENDER_CHOICES,
-        max_length=8,
-        default="choose", null=True,blank=True
-    )
-    location=models.CharField(max_length=200,null=True,blank=True)
-    dob=models.CharField(max_length=50,blank=True,null=True)
-    created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
-    updated = models.DateTimeField(auto_now=True,null=True, blank=True)
-    slug = models.SlugField(null=True, unique=True)
-    def __str__(self):
-        return str(self.user.username)
-    def save(self, *args, **kwargs):  # new
-        if not self.slug:
-            self.slug = slugify(self.name)
-        return super().save(*args, **kwargs)
-    class Meta:
-        verbose_name_plural = "User Profiles"
+# class profile(models.Model):
+#     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
+#     photo=models.ImageField(upload_to='Profile',max_length=500, verbose_name="Profile photo", null=True, blank=True)
+#     name=models.CharField(max_length=200,null=True,blank=True)
+#     email = models.EmailField(max_length=255,null=True,blank=True)
+#     phone_no = models.CharField(max_length=10, null=True, unique=True,blank=True)
+#     gender = models.CharField(
+#         choices=GENDER_CHOICES,
+#         max_length=8,
+#         default="choose", null=True,blank=True
+#     )
+#     location=models.CharField(max_length=200,null=True,blank=True)
+#     dob=models.CharField(max_length=50,blank=True,null=True)
+#     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
+#     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
+#     slug = models.SlugField(null=True, unique=True)
+#     def __str__(self):
+#         return str(self.user.username)
+#     def save(self, *args, **kwargs):  # new
+#         if not self.slug:
+#             self.slug = slugify(self.name)
+#         return super().save(*args, **kwargs)
+#     class Meta:
+#         verbose_name_plural = "User Profiles"
 class category(models.Model):
     categoryy=models.CharField(max_length=200,null=True,blank=True)
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    slug = models.SlugField(null=True, unique=True)
+    # slug = models.SlugField(null=True, unique=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
     def __str__(self):
         return self.categoryy
-    def save(self, *args, **kwargs):  # new
-        if not self.slug:
-            self.slug = slugify(self.categoryy)
-        return super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):  # new
+    #     if not self.slug:
+    #         self.slug = slugify(self.categoryy)
+    #     return super().save(*args, **kwargs)
     class Meta:
-        verbose_name_plural = "  Test Category"
+        verbose_name_plural = "Test Category"
 class test(models.Model):
-    testt=models.CharField(max_length=200,null=True,blank=True)
+    testt=models.CharField(max_length=200,null=True,blank=True,verbose_name="Test")
     description=models.TextField(null=True,blank=True)
     categoryy=models.ForeignKey(category,null=True,blank=True,on_delete=models.CASCADE)
-    price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
+    is_active=models.BooleanField(default=True,verbose_name="Is Active?")
+    # price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
+    pricel1=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="L1 Price")
+    pricel2=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="L2 Price")
+    pricel3=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="L3 Price")
+    pricel4=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="L4 Price")
+    pricel5=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="L5 Price")
+    pricel6=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="L6 Price")
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    slug = models.SlugField(null=True, unique=True)
+    # slug = models.SlugField(null=True, unique=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
     def __str__(self):
         return self.testt
-    def save(self, *args, **kwargs):  # new
-        if not self.slug:
-            self.slug = slugify(self.testt)
-        return super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):  # new
+    #     if not self.slug:
+    #         self.slug = slugify(self.testt)
+    #     return super().save(*args, **kwargs)
     class Meta:
-        verbose_name_plural = "   Tests"
+        verbose_name_plural = "Tests"
 STATUS_CHOICES1 = (
     ('m', 'Mother'),
     ('f', 'Father'),
@@ -113,6 +136,7 @@ STATUS_CHOICES = (
     ('f', 'Female'),
 )   
 class prescription_book(models.Model):
+    unique=models.UUIDField(null=True,blank=True)
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
     prescription_file=models.FileField(upload_to="prescription",null=True,blank=True)
     test_name=models.ManyToManyField(test,blank=True)
@@ -143,6 +167,8 @@ class prescription_book(models.Model):
         return "Prescription booking"
     class Meta:
         verbose_name_plural="Test Bookings"
+        
+
 # class selectedtest_book(models.Model):
 #     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
 #     test_name=models.ManyToManyField(test)
@@ -176,7 +202,8 @@ class prescription_book(models.Model):
 class healthcheckuppackages(models.Model):
     package_title=models.CharField(max_length=200,null=True,blank=True,verbose_name="Package Title")
     test_name=models.ManyToManyField(test)
-    test_nos=models.CharField(max_length=100,null=True,blank=True,verbose_name="No of test")
+    location=models.ForeignKey(city,null=True,on_delete=models.CASCADE,verbose_name="Location")
+    # test_nos=models.CharField(max_length=100,null=True,blank=True,verbose_name="No of test")
     description=models.TextField(null=True,blank=True,verbose_name="Description")
     actual_price=models.IntegerField(null=True,blank=True,verbose_name="Actual Price(₹)")
     discount=models.DecimalField(max_digits=5, decimal_places=2, null=True, verbose_name='Discount(%)', validators=[
@@ -188,20 +215,33 @@ class healthcheckuppackages(models.Model):
     def __str__(self):
         return self.package_title
     class Meta:
-        verbose_name_plural = " Health Checkup"
+        verbose_name_plural = "Lab Tests"
     def save(self, *args, **kwargs):  # new
-        discount_price=self.actual_price*(self.discount/100)
-        self.test_nos=self.test_name.all().count()
-        self.discounted_price=self.actual_price-discount_price
+        # discount_price=self.actual_price*(self.discount/100)
+        # self.test_nos=self.test_name.all().count()
+        # self.discounted_price=self.actual_price-discount_price
         if not self.slug:
-            self.slug = slugify(self.package_title)
+            self.slug = slugify(uuid.uuid4())
         return super().save(*args, **kwargs)
+    @property
+    def testcount(self):
+        return self.test_name.all().count()
+# from django.db.models.signals import post_save
+# from django.dispatch import receiver
+# from django.db.models.signals import pre_save
+# @receiver(post_save, sender=healthcheckuppackages)
+# def update_stock(sender, instance, **kwargs):
+#     instance.test_nos = instance.test_name.all().count()
+    # instance.save()
+    
 class healthpackages(models.Model):
     package_name=models.CharField(max_length=300,null=True,blank=True)
+    location=models.ForeignKey(city,null=True,on_delete=models.CASCADE,verbose_name="Location")
     test_name=models.ManyToManyField(test)
+    description=models.TextField(null=True,blank=True,verbose_name="Description")
     actual_price=models.IntegerField(null=True,blank=True)
-    discount=models.DecimalField(max_digits=5, decimal_places=2, null=True, verbose_name='Discount(%)', validators=[
-        MinValueValidator(1), MaxValueValidator(99)])
+    # discount=models.DecimalField(max_digits=5, decimal_places=2, null=True, verbose_name='Discount(%)', validators=[
+    #     MinValueValidator(1), MaxValueValidator(99)])
     discounted_price=models.IntegerField(null=True,blank=True)
     slug = models.SlugField(null=True, unique=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
@@ -209,15 +249,15 @@ class healthpackages(models.Model):
     def __str__(self):
         return self.package_name
     class Meta:
-        verbose_name_plural = " Health Packages"
+        verbose_name_plural = "Health Packages"
     def save(self, *args, **kwargs):  # new
-        discount_price=self.actual_price*(self.discount/100)
-        self.discounted_price=self.actual_price-discount_price
         if not self.slug:
-            self.slug = slugify(self.package_name)
+            self.slug = slugify(uuid.uuid4())
         return super().save(*args, **kwargs)
+        
 class healthsymptoms(models.Model):
     name=models.CharField(max_length=200,null=True,blank=True)
+    photo=models.ImageField(upload_to='symptoms',max_length=500, verbose_name="Profile photo", null=True, blank=True)
     symptoms=models.TextField(null=True,blank=True)
     test_name=models.ManyToManyField(test)
     slug = models.SlugField(null=True, unique=True)
@@ -226,26 +266,38 @@ class healthsymptoms(models.Model):
     def __str__(self):
         return self.name
     class Meta:
-        verbose_name_plural = " Health Symptoms"
+        verbose_name_plural = "Health Symptoms"
     def save(self, *args, **kwargs):  # new
         if not self.slug:
             self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
+    
 class healthcareblogs(models.Model):
     image=models.ImageField(upload_to='blog',max_length=500, verbose_name="Blog photo", null=True, blank=True)
     title=models.CharField(max_length=300,blank=True,null=True)
     description=models.TextField(null=True,blank=True)
+    category=models.ForeignKey("blogcategory",null=True,blank=True,on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     slug = models.SlugField( unique=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
     def __str__(self):
         return self.title
     class Meta:
-        verbose_name_plural = " Health care blogs"
+        verbose_name_plural = "Blogs"
     def save(self, *args, **kwargs):  # new
         if not self.slug:
             self.slug = slugify(self.title)
         return super().save(*args, **kwargs)
+class blogcategory(models.Model):
+    category=models.CharField(max_length=200,null=True,blank=True)
+    created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    slug = models.SlugField( unique=True,null=True, blank=True)
+    updated = models.DateTimeField(auto_now=True,null=True, blank=True)
+    
+    def __str__(self):
+        return self.category
+    class Meta:
+        verbose_name_plural="Blogs Category"
 class testimonials(models.Model):
     username=models.CharField(max_length=200,null=True,blank=True)
     photo=models.ImageField(upload_to='testimonials',max_length=500, verbose_name="Profile photo", null=True, blank=True)
@@ -278,6 +330,7 @@ STATUS=[
     ('t',"tested")
 ]    
 class book_history(models.Model):
+    testbooking_id=models.IntegerField(null=True,blank=True)
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     # patient_info=models.ForeignKey(cart2,null=True,blank=True,on_delete=models.CASCADE)
@@ -285,6 +338,8 @@ class book_history(models.Model):
     booking_type=models.CharField(max_length=200,null=True,blank=True)
     bookingdetails=models.TextField(null=True,blank=True)
     amount=models.IntegerField(null=True,blank=True)
+    # test=models.ForeignKey(prescription_book,null=True,blank=True,on_delete=models.CASCADE)
+    # test1=models.CharField(max_length=200,null=True,blank=True)
     status = models.CharField(
         choices=STATUS,
         max_length=8,
@@ -318,14 +373,32 @@ class socialmedialinks(models.Model):
         return "Social Media Links"
     class Meta:
         verbose_name_plural="Social media links"
+SELECT_CHOICES=[
+    ("a","Active"),
+    ("i","Inactive")
+]
+
 class coupons(models.Model):
     couponcode=models.CharField(max_length=100,null=True,blank=True,verbose_name="Coupon Code")
     discount=models.CharField(max_length=2,null=True,blank=True,verbose_name="Discount(%)")
-    startdate=models.DateTimeField(null=True,blank=True,verbose_name="Start Date")
-    enddate=models.DateTimeField(null=True,blank=True,verbose_name="Start Date")
+    status = models.CharField(
+        choices=SELECT_CHOICES,
+        max_length=100,
+        default="a", null=True
+    )
     
     def __str__(self):
         return self.couponcode
     class Meta:
         verbose_name_plural="Coupons"
+
+class pricee(models.Model):
+    testt=models.ForeignKey(test,null=True,blank=True,on_delete=models.SET_NULL,verbose_name="Test")
+    city=models.ForeignKey(city,null=True,blank=True,on_delete=models.SET_NULL,verbose_name="City")
+    price=models.CharField(max_length=50,null=True,blank=True,verbose_name="Price")
+    def __str__(self):
+        return str(self.price    ) 
+    class Meta:
+        verbose_name_plural="Test Price"
+     
         

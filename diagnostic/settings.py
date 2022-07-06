@@ -58,7 +58,7 @@ ROOT_URLCONF = 'diagnostic.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR/'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -156,7 +156,7 @@ JAZZMIN_SETTINGS = {
 
     # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
     "site_brand": "Diagnostica Span",
-    "custom_css": None,
-    "custom_js": None,
-    
+    "custom_css": "jazzmin/css/custom.css",
+    "custom_js": "jazzmin/js/custom.js",
+    "order_with_respect_to": ["app1.city","app1.User","app1.aboutspan" "app1.User","app1.category", "app1.test","app1.prescription_book","app1.book_history","app1.blogcategory","app1.healthcareblogs","app1.healthcheckuppackages","app1.healthpackages","app1.healthsymptoms"],
     }

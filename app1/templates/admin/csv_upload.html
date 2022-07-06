@@ -10,17 +10,19 @@
             {{message}}
             <button class="btn btn-secondary" type="submit">Upload File</button>
         </form>
+        <a href="http://example.com/files/myfile.pdf" target="_blank">Download</a>
+          
     </div> 
     <div>
 
    <Style>
-        .custom-file-upload {
+        {% comment %} .custom-file-upload {
             border: 2px solid #ccc;
             display: inline-block;
             padding: 6px 12px;
             cursor: pointer;
-            {% comment %} border-color:#3d5c5c; {% endcomment %}
+           border-color:#3d5c5c;
    
-        }
+        } {% endcomment %}
     </style>
 {% endblock %}

@@ -14,6 +14,42 @@ from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 import datetime
+import uuid
+import json
+from django.utils.translation import gettext_lazy as _
+def dashboard(request):
+    test=prescription_book.objects.all().count()
+    test_bookings=prescription_book.objects.exclude(test_name__isnull=True,prescription_file__isnull=False).count()
+    prescription_bookings=prescription_book.objects.exclude(test_name__isnull=False,prescription_file__isnull=True).count()
+    packages=healthpackages.objects.all().count()
+    context={
+        "test":test,
+        "test_bookings":test_bookings,
+        "prescription_bookings":prescription_bookings,
+        "packages":packages,
+    }
+    # print(context)
+    return HttpResponse(json.dumps(context),content_type="application/json")
+# def get_client_ip(request):
+#     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+#     print(x_forwarded_for)
+#     if x_forwarded_for:
+#         ip = x_forwarded_for.split(',')[0]
+#         # print(ip)
+#         ips=ipapi.location(ip="182.71.142.105")
+#         print(ips)
+#         city=ips['city']
+#         return HttpResponse (city)
+#     else:
+#         ip = request.META.get('REMOTE_ADDR')
+#         print(ip)
+#         # print(ip)
+#         ips=ipapi.location(ip="162.240.64.22")
+#         print(ips)
+#         city=ips['city']
+#         print(ip,city)
+#         return HttpResponse(city)
+    
 def Registration(request):
     if request.method == "POST":
         fm = UserRegistrationForm(request.POST)
@@ -68,10 +104,10 @@ def otpRegistration(request):
                             phone_no=p_number,
                             password=hash_pwd
             )
-            user1=User.objects.get(email=email_address)
-            profile.objects.create(
-                user=user1,name=user,email=email_address,phone_no=p_number
-            ).save()
+            # user1=User.objects.get(email=email_address)
+            # profile.objects.create(
+            #     user=user1,name=user,email=email_address,phone_no=p_number
+            # ).save()
             # user_instance = User.objects.get(username=user)
             # User.objects.create(
             #                 user = user_instance,phone_number=p_number
@@ -222,7 +258,7 @@ def search(request):
         return render(request,"same.html")
     
 def prescriptionbookview(request):
-    print(request.FILES)
+    # print(request.FILES)
     fm=prescriptionform()
     if request.method=="POST":
         # others=request.POST.get("myself")
@@ -242,8 +278,12 @@ def prescriptionbookview(request):
         contact=request.POST.get('contact')
         age=request.POST.get('age')
         gender=request.POST.get('gender')
-        
-        prescription_book(prescription_file=prescription_file,
+        unique = uuid.uuid4()
+        print(unique)
+        prescription_book(
+            user=request.user,
+            unique=unique,
+            prescription_file=prescription_file,
                           myself=True if myself == "on" else False,
                           others=True if others == "on" else False,
                           others_choice=others_choice,
@@ -252,7 +292,12 @@ def prescriptionbookview(request):
                           contact=contact,
                           age=age,
                           gender=gender).save()
-        book_history(patient_info="myself" if others==None else "others",
+        data=prescription_book.objects.get(unique=unique)
+        print(data)
+        book_history(
+            user=request.user,
+            testbooking_id=data.id,
+            patient_info="myself" if others==None else "others",
                      booking_type="Prescription",
                      bookingdetails="upload prescription",
                      payment_status=False).save()
@@ -260,28 +305,45 @@ def prescriptionbookview(request):
         return render(request,"prescriptiontest.html",{"fm":fm})
     else:
         return render(request,"prescriptiontest.html",{"fm":fm})
-    
-    
 def selectedtestview(request):
     print(request.method)
     fm=selectedtestform()
     if request.method=="POST":
         # others=request.POST.get("myself")
-        form = selectedtestform(request.POST)
-        form.save()
-        print(request.POST)
-        print(request.POST.getlist("test_name"))
-        print(request.POST.get("firstname"))
-        print(request.POST.get("lastname"))
-        tests=request.POST.getlist("test_name")
-        for i in tests:
+        
+        test_name=request.POST.getlist("test_name")
+        myself=request.POST.get("myself")
+        others=request.POST.get('others')
+        others_choice=request.POST.get("others_choice")
+        firstname=request.POST.get('firstname')
+        lastname=request.POST.get('lastname')
+        contact=request.POST.get('contact')
+        age=request.POST.get('age')
+        gender=request.POST.get('gender')
+        unique = uuid.uuid4()
+        print(request.user)
+        a=prescription_book.objects.create(
+            unique=unique,
+            user=request.user,
+                          myself=True if myself == "on" else False,
+                          others=True if others == "on" else False,
+                          others_choice=others_choice,
+                          firstname=firstname,
+                          lastname=lastname,
+                          contact=contact,
+                          age=age,
+                          gender=gender)
+        
+        for j in test_name:
+            item=test.objects.get(id=j)
+            a.test_name.add(item)
+        for i in test_name:
             item=test.objects.get(id=i)
             cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.price).save()
         messages.success(request,"Your booking added to cart successfully")
         return render(request,"selectedtest.html",{"fm":fm})
     else:
         return render(request,"selectedtest.html",{"fm":fm})
-    
 def subscriptionview(request):
     if request.method=="POST":
         form=subscriptionform()
@@ -293,7 +355,6 @@ def subscriptionview(request):
             render_to_string(template_name),
             settings.EMAIL_HOST_USER,
             [email],
-            
         )
         msg.content_subtype ="html"
         msg.send()

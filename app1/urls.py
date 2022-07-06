@@ -8,6 +8,8 @@ from django.conf import settings
 """<a href="{% url 'update' slug=instance.slug %}"> Edit </a>
 <a href="{% url 'delete' slug=instance.slug %}"> Delete</a> """
 urlpatterns = [
+    # path("ip",views.get_client_ip),
+    path("dashboard",views.dashboard),
     path('',views.home,name="home"),
     path("prescription/",views.prescriptionbookview,name="prescriptiontest"),
     path("selectedtest/",views.selectedtestview,name="selectedtest"),

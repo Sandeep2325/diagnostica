@@ -1,0 +1,29 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static admin_modify jazzmin %}
+{% get_jazzmin_settings request as jazzmin_settings %}
+{% load static %}
+{% block content %}
+    <div>
+        <form action="." method="POST" enctype="multipart/form-data">
+            
+            <div class="custom-file-upload">
+            {{ form.as_p }}
+            </div>
+            {% csrf_token %}
+            {{message}}
+            <button class="btn btn-secondary" type="submit">Upload File</button>
+        </form>
+        <a href="{% static "files/test bulk.csv"%}" download>Sample file</a>
+    </div> 
+    <div>
+   <Style>
+        {% comment %} .custom-file-upload {
+            border: 2px solid #ccc;
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+           border-color:#3d5c5c;
+   
+        } {% endcomment %}
+    </style>
+{% endblock %}

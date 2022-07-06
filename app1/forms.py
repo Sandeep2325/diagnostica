@@ -44,3 +44,15 @@ class subscriptionform(forms.ModelForm):
     class Meta:
         fields="__all__"
         model=subscription
+        
+class testnameform(forms.ModelForm):
+    # here we only need to define the field we want to be editable
+    test_name = forms.ModelMultipleChoiceField(
+        queryset=test.objects.all(), required=False)
+    
+class testform(forms.ModelForm):
+    price = forms.IntegerField(label="price")
+
+    class Meta:
+        model = test
+        fields="__all__"
