@@ -9,7 +9,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login 
 from django.core.mail import send_mail
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
@@ -30,6 +30,28 @@ def dashboard(request):
     }
     # print(context)
     return HttpResponse(json.dumps(context),content_type="application/json")
+
+def cityy_(request):
+    cit=city.objects.all()
+    context={
+        "city":cit
+    }
+    return HttpResponse(json.dumps(context),content_type="application/json")
+
+def cityy(request):
+        # if request.is_ajax():
+        q = request.GET.get('term', '')
+        Datas = city.objects.all()
+        results = []
+        for Data in Datas:
+            Data_json = {}
+            Data_json['value'] = Data.cityname
+            results.append(Data_json)
+        data = json.dumps(results)
+        # else:
+        #     data = 'fail'
+        # mimetype = 'application/json'
+        return HttpResponse(data)
 # def get_client_ip(request):
 #     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
 #     print(x_forwarded_for)
@@ -305,6 +327,7 @@ def prescriptionbookview(request):
         return render(request,"prescriptiontest.html",{"fm":fm})
     else:
         return render(request,"prescriptiontest.html",{"fm":fm})
+    
 def selectedtestview(request):
     print(request.method)
     fm=selectedtestform()
@@ -321,7 +344,7 @@ def selectedtestview(request):
         age=request.POST.get('age')
         gender=request.POST.get('gender')
         unique = uuid.uuid4()
-        print(request.user)
+        # print(request.user)
         a=prescription_book.objects.create(
             unique=unique,
             user=request.user,
@@ -339,11 +362,10 @@ def selectedtestview(request):
             a.test_name.add(item)
         for i in test_name:
             item=test.objects.get(id=i)
-            cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.price).save()
+            cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel1).save()
         messages.success(request,"Your booking added to cart successfully")
         return render(request,"selectedtest.html",{"fm":fm})
-    else:
-        return render(request,"selectedtest.html",{"fm":fm})
+    return render(request,"selectedtest.html",{"fm":fm})
 def subscriptionview(request):
     if request.method=="POST":
         form=subscriptionform()
@@ -363,13 +385,19 @@ def subscriptionview(request):
     else:
         form=subscriptionform
         return render(request,"home",{"form":form})
-def destroy(request, slug): 
-    print("ok") 
-    print(slug)
-    employee = healthcheckuppackages.objects.get(slug=slug)  
-    employee.delete()  
-    return redirect("/")
 
+def destroy(request, slug): 
+    if request.method=="GET":
+        fm=selectedtestform()
+        # if request.is_ajax():
+        print("ok") 
+        print(slug)
+        employee = healthcheckuppackages.objects.get(slug=slug)  
+        employee.delete()  
+        return redirect("/")
+        # return JsonResponse({"message":"success"})
+        # return JsonResponse({"message": "Wrong request"})
+        
 def coupon(request):
     if request.method=="POST":
         coupon=request.POST.get("coupon")

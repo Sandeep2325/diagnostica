@@ -88,12 +88,12 @@
               <div>
                 <h1 class="cl-dark-blue fs-35 font-bold test_head">{{i.package_title|safe}}</h1>
               </div>
-              <ul class="pb-5 pt-3 ps-3 m-0 ">
-                <li class="health_li fs-18">{{i.description|safe}}
-                </li>
-                <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                </li>
-              </ul>
+              {% comment %} <ul class="pb-5 pt-3 ps-3 m-0 "> {% endcomment %}
+                {{i.description|safe}}
+              
+                {% comment %} <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                </li> {% endcomment %}
+              {% comment %} </ul> {% endcomment %}
               <div>
                 <p class="mb-2 pt-2 fs-20 font-bold cl-light-blue">Price</p>
                 <div class="d-flex">
@@ -585,3 +585,5 @@
 
 
 <!--  -->
+
+

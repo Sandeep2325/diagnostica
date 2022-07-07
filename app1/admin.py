@@ -78,6 +78,7 @@ class testadmin(admin.ModelAdmin):
 class prescriptionbookadmin(admin.ModelAdmin):
     list_display=["users","testname","myself","others","others_choice","firstname","lastname","contact","age","gender","prescription_file","created","updated","action_btn"]        
     readonly_fields=["user","myself","others","others_choice","firstname","lastname","contact","age","gender","unique"]
+    exclude = ('unique',)
     # list_editable=[""]
     def testname(self, obj):
         return ", ".join([
@@ -118,10 +119,10 @@ class categoryadmin(admin.ModelAdmin):
         return format_html(html)
     action_btn.short_description = "Action"
 class healthcheckup_admin(SummernoteModelAdmin):
-    list_display=["package_title","location","testname","testcount","actual_price","discounted_price","discount","created","updated","action_btn"]    
-    readonly_fields=["slug"]
-    list_editable=["location"]
-    # prepopulated_fields = {"slug": ("package_title","location")}
+    list_display=["package_title","testname","testcount","actual_price","discounted_price","discount","created","updated","action_btn"]    
+    # readonly_fields=["slug"]
+    # list_editable=["location"]
+    prepopulated_fields = {"slug": ("package_title",)}
     summernote_fields = ('description')
     def testname(self, obj):
         
@@ -142,10 +143,10 @@ class healthcheckup_admin(SummernoteModelAdmin):
         return format_html(html)
     action_btn.short_description = "Action"
 class healthpackage_admin(SummernoteModelAdmin):
-    list_display=["package_name","location","testname","actual_price","discounted_price","created","updated","action_btn"]
-    readonly_fields=["slug",]
-    list_editable=["location"]
-    # prepopulated_fields = {"slug": ("package_name","location")}
+    list_display=["package_name","testname","actual_price","discounted_price","created","updated","action_btn"]
+    # readonly_fields=["slug",]
+    # list_editable=["location"]
+    prepopulated_fields = {"slug": ("package_name",)}
     # summernote_fields = ('content','package_name')
     def testname(self, obj):
         return ", ".join([
@@ -209,6 +210,7 @@ class healthcareblog_admin(SummernoteModelAdmin):
     imagee.short_description = 'Image'
 class testimonialsadmin(admin.ModelAdmin):
     list_display=["username","imagee","description","created","updated",]
+    readonly_fields=["created","updated"]
     def imagee(self, obj):
         # a=obj.image.first()
         # print(obj.image.first().image.url)
@@ -343,7 +345,7 @@ admin.site.register(coupons,couponadmin)
 # admin.site.register(pricee,priceadmin)
 from django.contrib.auth.models import Group
 admin.site.unregister(Group)
-admin.site.register(cart,cartadmin)
+# admin.site.register(cart,cartadmin)
 
 
 

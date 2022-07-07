@@ -156,7 +156,11 @@ JAZZMIN_SETTINGS = {
 
     # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
     "site_brand": "Diagnostica Span",
+    # "site_logo": "jazzmin/img/logo.png",
     "custom_css": "jazzmin/css/custom.css",
     "custom_js": "jazzmin/js/custom.js",
-    "order_with_respect_to": ["app1.city","app1.User","app1.aboutspan" "app1.User","app1.category", "app1.test","app1.prescription_book","app1.book_history","app1.blogcategory","app1.healthcareblogs","app1.healthcheckuppackages","app1.healthpackages","app1.healthsymptoms"],
+    "order_with_respect_to": ["app1.city","app1.User","app1.aboutspan" "app1.User","app1.category", "app1.test","app1.prescription_book","app1.book_history","app1.healthcheckuppackages","app1.healthpackages","app1.healthcareblogs","app1.healthcheckuppackages","app1.healthsymptoms","app1.coupons","app1.blogcategory","app1.healthcareblogs","app1.subscription","app1.socialmedialinks"],
+    "default_icon_parents": "",
+    "default_icon_children": "",
     }
+

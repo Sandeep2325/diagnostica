@@ -16,3 +16,24 @@
 {{fm.gender}}<br>
 <button>submit</button>
 </form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $('#id_test_name').change(function() {
+        var selected = []; // create an array to hold all currently selected motivations
+    
+        // loop through each available motivation
+        $('#id_test_name option').each(function() {
+            // if it's selected, add it to the array above
+            if (this.selected) {
+                selected.push(this.value);
+            }
+        });
+    
+        localStorage.setItem('testname', JSON.stringify(selected));
+    });
+    alert("ok")
+console.log(localStorage.getItem('testname'))
+</script>
+
+
+

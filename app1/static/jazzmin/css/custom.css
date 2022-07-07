@@ -1,0 +1,38 @@
+/* .sidebar {
+    background-color: whitesmoke;
+} */
+
+;
+.brand-link {
+    background-color: rgb(224, 231, 237);
+}
+
+;
+.sidebar,
+a {
+    color: black;
+    font-style: italic;
+}
+
+;
+.brand-image {
+    float: left;
+    line-height: 6.8;
+    margin-left: 0.8rem;
+    margin-right: 0.5rem;
+    margin-top: 11px;
+    max-height: 10px;
+    width: auto;
+}
+
+
+/* .sidebar ,
+    a {
+      color: $sidebar-dark-color;
+
+      &:hover,
+      &:focus {
+        text-decoration: none;
+      }
+    }
+   */

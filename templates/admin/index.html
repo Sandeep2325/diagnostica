@@ -26,10 +26,10 @@ Dashboard
     {%if model.name == "Test Bookings"%}
 <div class="card w-100 m-2" style="background:#00cccc">
     <h5 class="card-header" style="font-size:17px ;text-align:center;height: 57px;">Booking</h5>
-    <div class="card-body">
+    <div class="card-body" style="height:150px">
       {% comment %} <h5 class="card-title" style="font-size:14px;text:center">Total Bookings</h5> {% endcomment %}
       <p id="tcount" style="text-align:center;" class="card-text"></p>
-      <a style="margin:auto;display:block" href={{model.url}} class="btn btn-primary btn-xs button">Bookings</a>
+      <a style="margin:auto;display:block" href={{model.url}} class="btn btn-primary btn-xs button">View</a>
     </div>
 </div>
 <div class="card w-100 m-2 " style="background:#00cccc">
@@ -37,7 +37,7 @@ Dashboard
     <div class="card-body" style="text-align:center;">
       {% comment %} <h5 class="card-title" style="font-size:14px;text-align:center;">Total Bookings</h5> {% endcomment %}
       <p id="tbcount" style="text-align:center;" class="card-text"></p>
-      <a style="margin:auto;display:block" href={{model.url}} class="btn btn-primary btn-xs button">Bookings</a>
+      <a style="margin:auto;display:block" href={{model.url}} class="btn btn-primary btn-xs button">View</a>
     </div>
 </div>
 <div class="card w-100 m-2 " style="background:#00cccc">
@@ -45,32 +45,32 @@ Dashboard
     <div class="card-body">
       {% comment %} <h5 class="card-title" style="font-size:14px">Total Bookings</h5> {% endcomment %}
       <p id="pbcount" style="text-align:center;" class="card-text"></p>
-      <a style="margin:auto;display:block" href={{model.url}} class="btn btn-primary btn-xs button">Bookings</a>
+      <a style="margin:auto;display:block" href={{model.url}} class="btn btn-primary btn-xs button">View</a>
     </div>
 </div>
 {%elif model.name == "Health Packages" %}
 <div class="card w-100 m-2 " style="background:#00cccc">
     <h5 class="card-header" style="font-size:17px;text-align:center;height: 57px;"> Total Packages</h5>
-    <div class="card-body">
+    <div class="card-body" style="height:150px">
       {% comment %} <h5 class="card-title" style="font-size:14px;text-align:center;">Total Packages</h5> {% endcomment %}
       <p id="hpcount" style="text-align:center;" class="card-text"></p>
-      <a style="margin:auto;display:block" href={{model.url}} class="btn btn-primary btn-xs button">Packages</a>
+      <a style="margin:auto;display:block" href={{model.url}} class="btn btn-primary btn-xs button">View</a>
     </div>
 </div>
 <div class="card w-100 m-2 " style="background:#00cccc">
     <h5 class="card-header" style="font-size:17px;text-align:center;height: 57px;">Total Amount</h5>
-    <div class="card-body">
+    <div class="card-body" style="height:150px">
       {% comment %} <h5 class="card-title" style="font-size:14px"> Amount</h5> {% endcomment %}
       <p id="acount" style="text-align:center;" class="card-text">₹50000</p>
-      <a style="margin:auto;display:block" href="#" class="btn btn-primary btn-xs button">Payments</a>
+      <a style="margin:auto;display:block" href="#" class="btn btn-primary btn-xs button">View</a>
     </div>
 </div>
 <div class="card w-100 m-2 " style="background:#00cccc">
     <h5 class="card-header" style="font-size:17px;text-align:center;height: 57px;">Outstanding Amount</h5>
-    <div class="card-body">
+    <div class="card-body" style="height:150px">
       {% comment %} <h5 class="card-title" style="font-size:14px">Amount</h5> {% endcomment %}
       <p id="ocount" style="text-align:center;" class="card-text">₹8000</p>
-      <a style="margin:auto;display:block" href="#" class="btn btn-primary btn-xs button">Payments</a>
+      <a style="margin:auto;display:block" href="#" class="btn btn-primary btn-xs button">View</a>
     </div>
 </div>
 {% comment %}{%elif model.name == "Users"%}
@@ -153,14 +153,16 @@ Dashboard
 </div>
 <style>
     .button {
-        position: absolute;
         top:50%;
         background-color:#0a0a23;
         color: #fff;
         border:none;
         border-radius:10px;
-        top: 103px;
-        left: 45px
+        top: 145px;
+        left: 53px
+        padding: 10px 20px;
+        height: 30px;
+        font-size: 18px;
       }
 </style>
 {{j.products}}

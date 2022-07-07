@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path,re_path
 from .import views,payments
 from django.contrib.auth import views as auth_view
 from django.views.generic import TemplateView
@@ -10,10 +10,11 @@ from django.conf import settings
 urlpatterns = [
     # path("ip",views.get_client_ip),
     path("dashboard",views.dashboard),
+    path("city",views.cityy),
     path('',views.home,name="home"),
     path("prescription/",views.prescriptionbookview,name="prescriptiontest"),
     path("selectedtest/",views.selectedtestview,name="selectedtest"),
-    path('delete/<slug:slug>', views.destroy,name="destroy"),
+    path('delete/<slug:slug>/', views.destroy,name="destroy"),
     path("bookinghistory/",views.bookinghistoryview,name="booking-history"),
     path('healthcheckup/<slug:slug>/',views.healthcheckupview, name='Health-checkup'),
     path('healthpackage/<slug:slug>/',views.healthpackageview, name='Healt-package'),
