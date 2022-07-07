@@ -12,12 +12,11 @@ $(document).ready(function() {
     $(".nav-header").text('Core Modules').css("background-color", "cornflowerblue");
     $(".btn btn-primary btn-xs").css("align", "right")
 
-    testPath = location.pathname;
+    var testPath = location.pathname;
+    if (testPath.includes("/user/")) {
+        if (testPath.includes("/change/")) {
+            $(".btn-outline-danger").css("display", "none");
 
-    if (testpath.includes("/user/")) {
-        if (testpath.includes("/change/")) {
-            alert(testPath)
-                // $(".btn btn-outline-danger form-control").css("display", "none")
         }
     }
     if (testPath.includes("/test/")) {
