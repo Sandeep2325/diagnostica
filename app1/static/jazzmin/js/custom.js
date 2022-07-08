@@ -20,7 +20,7 @@ $(document).ready(function() {
         }
     }
     if (testPath.includes("/test/")) {
-        alert("ok")
+        // alert("ok")
         if (testPath.includes("/change/")) {
             // var parent = $(".col-lg-9:nth-child(1)").attr("class");
             var ht = `<div class="row">
