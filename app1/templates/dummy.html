@@ -5,8 +5,20 @@
 {{i.package_title}}
 {% for j in i.test_name.all%}
 {{j.testt}}<br>
-{{j.price}}
-
+{%if city == "Banglore" %}
+{{j.pricel1}}
+{%elif city == "Chennai"%}
+{{j.pricel2}}
+{%elif city == "Mumbai"%}
+{{j.pricel3}}
+{%elif city == "Hyderabad"%}
+hyderabad
+{{j.pricel4}}
+{%elif city == "Delhi"%}
+{{j.pricel5}}
+{%elif city == "Kolkata"%}
+{{j.pricel6}}
+{%endif%}
 {%endfor%}
 {%endfor%}
  <script type = "text/javascript">

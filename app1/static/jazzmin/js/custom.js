@@ -13,6 +13,10 @@ $(document).ready(function() {
     $(".btn btn-primary btn-xs").css("align", "right")
 
     var testPath = location.pathname;
+    if (testPath.includes("/delete/")) {
+        alert("ok")
+        $(".col-sm-9").css("display", "none")
+    }
     if (testPath.includes("/user/")) {
         if (testPath.includes("/change/")) {
             $(".btn-outline-danger").css("display", "none");

@@ -46,6 +46,7 @@ GENDER_CHOICES = (
     ("m","Male"),
     ("f","female"),
     )
+
 class User(AbstractUser,PermissionsMixin):
     photo=models.ImageField(upload_to='Profile',max_length=500, verbose_name="Profile photo", null=True, blank=True)
     username = models.CharField(

@@ -71,7 +71,14 @@ def cityy(request):
 #         city=ips['city']
 #         print(ip,city)
 #         return HttpResponse(city)
-    
+
+def cityselection(request):
+    if request.method=="POST":
+        c=request.POST.get("city")
+        request.session["city"]=c
+    cit=city.objects.all()
+    return render(request,"home.html",{"city":cit})
+
 def Registration(request):
     if request.method == "POST":
         fm = UserRegistrationForm(request.POST)
@@ -189,10 +196,10 @@ def forgotpassword(request):
                 recipient_list,
                 fail_silently=False,
             )
-            return redirect('/registration/otp/')
+            return redirect('/fotgotpassword/otp/')
         else:
             messages.error(request,'Given Email id is wrong')
-            
+           
 def otpforgotpassword(request):
     if request.method == "POST":
         u_otp = request.POST['otp']
@@ -219,6 +226,25 @@ def otpforgotpassword(request):
         else:
             messages.error(request,'Wrong OTP')
     return render(request,'registration-otp.html')      
+def forgotresendotp(request):
+    # if request.method=="POST":
+    email_address = request.session.get('email')
+    otp = random.randint(1000,9999)
+    request.session['otp'] = otp
+    message = f'Welcome your resend otp is {otp} '
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = [email_address]
+    message = message
+    subject = "OTP" 
+    send_mail(
+            subject,
+            message,
+            email_from,
+            recipient_list,
+            fail_silently=False,
+    )
+    messages.success(request,"resend otp sent")
+    return redirect('/forgotpassword/otp/') 
           
 def userLogin(request):
     # try :
@@ -242,6 +268,7 @@ def userLogin(request):
     return render(request,'login.html')
 
 def home(request):
+    c=request.session.get("city")
     print(".....",request.user)
     if request.method =="GET":
         healthcheckup=healthcheckuppackages.objects.all()
@@ -255,21 +282,42 @@ def home(request):
             "healthsymptom":healthsymptom,
             "testimonial":testimonial,
             "healthcareblog":healthcareblog,
+            "city":c,
         }
         return render(request,'home.html',context)
     return render(request,'home.html',context)
 def healthcheckupview(request,slug):
-    print(slug)
+    c=request.session.get("city")
+    city="Hyderabad"
     data=healthcheckuppackages.objects.filter(slug=slug)
-    return render(request,'dummy.html',{"data":data})
+    context={
+        "data":data,
+        "city":city
+    }
+    return render(request,'dummy.html',context)
 def healthpackageview(request,slug):
+    c=request.session.get("city")
     data=healthpackages.objects.filter(slug=slug)
-    return render(request,'',{"data":data})
+    context={
+        "data":data,
+        "city":c
+    }
+    return render(request,'',context)
 def healthsymptomview(request,slug):
+    c=request.session.get("city")
     data=healthsymptoms.objects.filter(slug=slug)
-    return render(request,'',{"data":data})
+    context={
+        "data":data,
+        "city":c
+    }
+    return render(request,'',context)
 def healthcareblogsview(request,slug):
+    c=request.session.get("city")
     data=healthcareblogs.objects.filter(slug=slug)
+    context={
+        "data":data,
+        "city":c
+    }
     return render(request,'',{"data":data})
 def search(request):
     if request.method=="POST":
