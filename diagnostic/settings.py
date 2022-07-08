@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-q6^hx14a=lgi46rai+=20-31f7&-sfp@5tb7i+yf*f%f8xoz-=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["162.240.55.20"]
+ALLOWED_HOSTS = ["162.240.55.20","127.0.0.1"]
 
 
 # Application definition
@@ -86,7 +86,7 @@ AUTH_USER_MODEL = 'app1.User'
 # DATABASES = {  
 #     'default': {  
 #         'ENGINE': 'django.db.backends.mysql',  
-#         'NAME': 'diagnostica',  
+#         'NAME': 'diagnospan',  
 #         'USER': 'root',  
 #         'PASSWORD': 'Sandeep@8105',  
 #         'HOST': 'localhost',  
@@ -169,7 +169,7 @@ JAZZMIN_SETTINGS = {
     # "site_logo": "jazzmin/img/logo.png",
     "custom_css": "jazzmin/css/custom.css",
     "custom_js": "jazzmin/js/custom.js",
-    "order_with_respect_to": ["app1.city","app1.User","app1.aboutspan" "app1.User","app1.category", "app1.test","app1.prescription_book","app1.book_history","app1.healthcheckuppackages","app1.healthpackages","app1.healthcareblogs","app1.healthcheckuppackages","app1.healthsymptoms","app1.coupons","app1.blogcategory","app1.healthcareblogs","app1.subscription","app1.socialmedialinks"],
+    "order_with_respect_to": ["app1.city","app1.User","app1.aboutspan" "app1.User","app1.category", "app1.test","app1.prescription_book","app1.book_history","app1.healthcheckuppackages","app1.healthpackages","app1.healthcheckuppackages","app1.healthsymptoms","app1.coupons","app1.blogcategory","app1.healthcareblogs","app1.healthcareblogs","app1.subscription","app1.socialmedialinks"],
     "default_icon_parents": "",
     "default_icon_children": "",
     }
