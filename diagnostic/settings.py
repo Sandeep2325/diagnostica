@@ -99,7 +99,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',  
         'NAME': 'diagnospan',  
         'USER': 'root',  
-        'PASSWORD': 'mysqlServer@#$432',  
+        'PASSWORD': 'mySqlServer@#$432',  
         'HOST': 'localhost',  
         'PORT': '3306',  
         
