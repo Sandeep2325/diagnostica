@@ -12,60 +12,77 @@
   <link rel="stylesheet" href="  {% static 'css/bootstrap.min.css'%}">
   <link rel="stylesheet" href="{%static 'css/owl.carousel.min.css'%}">
   <link rel="stylesheet" href="{%static 'css/owl.theme.default.min.css'%}">
-  <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+  {% comment %} <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css"> {% endcomment %}
   <script src="{%static "js/jquery-3.6.0.min.js" %}"></script>
   <script src="{%static "js/bootstrap.bundle.min.js" %}"></script>
   <script src="{%static "js/owl.carousel.min.js" %}"></script>
   <script src="{%static "js/script.js" %}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.js"></script>
-  <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 </head>
 
 <body>
 
-  <section class="section_nav_bar bg-light-grey">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="nav_bar">
-                    <img src="{%static "images/image_logo.png" %}" alt="" class="img-fluid logo-img" />
+    <section class="section_nav_bar bg-light-grey">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <a href="home.html" class="nav_bar">
+                        <img src="{%static "images/image_logo.png"%}" alt="" class="img-fluid logo-img" />
+                    </a>
                     <div class="menu-center">
                         <span onClick="toggleMenu()" id="open_icon">&#9776;</span>
-                    <ul class="p-0 m-0" id="menu-box">
-                        <li class="pt-xl-0 pt-5 active"><a>Our Services</a></li>
-                        <li ><a >Packages</a></li>
-                        <li><a>Our Lab</a></li>
-                        <li><a>About Us</a></li>
-                        <li><a>Contact Us</a></li>
-                        <li><a class="nav_button"><i class="fa fa-search pe-2" aria-hidden="true"></i>Book A Test
-                            Online</a></li>
-                        <li> <a href="#" class=" cart-logo1">
-                            <img src="{% static "images/bg-user.png" %}" alt="" class="" />
-                        </a></li>
-                        <li>
-                            <a href="#" class="">
-                                <img src="{% static "images/bg-cart.png"%}" alt="" class="" />
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                        <ul class="p-0 m-0" id="menu-box">
+                            <li class="pt-xl-0 pt-5 active "><a href="health-pack-started.html" class="nav_hov">Our
+                                    Services</a></li>
+                            <li><a href="health-packages.html" class="nav_hov">Packages</a></li>
+                            <li><a href="" class="nav_hov">Our Lab</a></li>
+                            <li><a href="home.html #about" class="nav_hov">About Us</a></li>
+                            <li><a href="" class="nav_hov">Contact Us</a></li>
+                            <li><a href="{%url "bookonline" %}" class="nav_button"><i class="fa fa-search pe-2"
+                                        aria-hidden="true"></i>Book A
+                                    Test
+                                    Online</a></li>
+                            <li>
+                                <a class=" cart-logo1 " id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <img src="{%static "images/bg-user.png"%}" alt="" class="" />
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li class="p-0"><a class="dropdown-item" href="login.html">Login</a></li>
+                                    <br>
+                                    <li class="p-0"><a class="dropdown-item" href="register.html">Register</a></li>
+                                    <br>
+                                    <li class="p-0"><a class="dropdown-item" href="profile.html">Profile</a></li>
+                                    <br>
+                                    <li class="p-0"><a class="dropdown-item" href="logout.html">Logout</a></li>
+                                    <br>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="{%url "cart"%}">
+                                    <img src="{%static "images/bg-cart.png"%}" alt="" class="" />
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <script>
-        function toggleMenu() {
-     var menuBox = document.getElementById('menu-box');   
+        <script>
+            function toggleMenu() {
+                var menuBox = document.getElementById('menu-box');
 
-     if(menuBox.style.display == "block") { 
-       menuBox.style.display = "none";
-     }
-     else { 
-       menuBox.style.display = "block";
-     }
-   }
-      </script>
-</section>
+                if (menuBox.style.display == "block") {
+                    menuBox.style.display = "none";
+                }
+                else {
+                    menuBox.style.display = "block";
+                }
+            }
+        </script>
+    </section>
+
 
 </body>
 

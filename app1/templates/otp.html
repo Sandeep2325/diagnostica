@@ -1,0 +1,84 @@
+{%include "header.html"%}
+{%load static%}
+<body>
+   
+
+    <section class="sub_header py-xl-4 py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="d-flex ">
+                        <p class="m-0 fs-18 font-regular cl-dark-blue opc-5 pe-1 sub_nav_bar"><a
+                                href="{%url "home"%}">Home</a></p>
+                        /
+                        <p class="m-0 fs-18 font-regular cl-dark-blue ps-1 sub_nav_bar">OTP</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section_register">
+        <div class="container">
+            <div class="row">
+                {%for message in messages%}
+                {{message}}
+                {%endfor%}
+                <form method="post">
+                    {%csrf_token%}
+                <div class="col-lg-12">
+                    <div class="row px-3">
+                        <div class="col-lg-7 bg-light-grey p-0 py-xl-5 px-xl-5 br-5">
+                            <div class="px-xl-5 mx-3">
+                                <h1 class="fs-40 font-bold cl-dark-blue py-4 m-0">
+                                    Enter OTP
+                                </h1>
+                                <p class="fs18 font-regular cl-dark-blue opc-5 m-0 pe-xl-5">
+                                    Lorem Ipsum is simply dummy text of the printing and
+                                    typesetting industry.
+                                </p>
+                                <div class="row pt-xl-5 pt-4" id="otp">
+                                    <div class="d-flex ">
+                                        <input class=" col-1 h-100 otp_digit_input digit text-center" type="text"
+                                            name="digit-1" id="verificationCodeDigit1" minlength="1" maxlength="1" required>
+                                        <input class=" col-1 h-100 otp_digit_input digit text-center mx-3" type="text"
+                                        name="digit-2" id="verificationCodeDigit2" minlength="1" maxlength="1" required>
+                                        <input class=" col-1 h-100 otp_digit_input digit text-center" type="text"
+                                        name="digit-3"id="verificationCodeDigit3" minlength="1" maxlength="1" required>
+                                        <input class=" col-1 h-100 otp_digit_input digit text-center mx-3" type="text"
+                                        name="digit-4" id="verificationCodeDigit4" minlength="1" maxlength="1" required>
+                                    </div>
+                                    <a href="{%url "resend"%}" class="py-3 cursor">Resend OTP</a>
+                                </div>
+                                <div class="mt-xl-5 my-4">
+                                    <button
+                                        class="px-5 py-2  bg-sky-blue br-5  fs-18 font-bold cl-dark-white cursor br" type="submit">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 bg-light-grey p-0">
+                            <img src="asset/images/login.png" alt="" class="img-fluid h-100" />
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+            </div>
+        </div>
+    </section>
+</body>
+
+<script>
+    function toggleMenu() {
+        var menuBox = document.getElementById('menu-box');
+
+        if (menuBox.style.display == "block") {
+            menuBox.style.display = "none";
+        }
+        else {
+            menuBox.style.display = "block";
+        }
+    }
+</script>
+
+</html>

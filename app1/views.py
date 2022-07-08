@@ -81,39 +81,40 @@ def cityselection(request):
 
 def Registration(request):
     if request.method == "POST":
+        print("dataa")
         fm = UserRegistrationForm(request.POST)
         up = UserProfileForm(request.POST)
-        if fm.is_valid():
-            e = fm.cleaned_data['email']
-            u = fm.cleaned_data['username']
-            p = fm.cleaned_data['password2']
-            request.session['email'] = e
-            request.session['username'] = u
-            request.session['password'] = p
-            p_number = fm.cleaned_data['phone_no']
-            request.session['number'] = p_number
-            otp = random.randint(1000,9999)
-            request.session['otp'] = otp
+        # if fm.is_valid():
+        e = request.POST['email']
+        u = request.POST['name']
+        p = request.POST['confirmpassword']
+        request.session['email'] = e
+        request.session['username'] = u
+        request.session['password'] = p
+        p_number = request.POST['phone']
+        request.session['number'] = p_number
+        otp = random.randint(1000,9999)
+        request.session['otp'] = otp
             # message = f'your otp is {otp}'
             # send_otp(p_number,message)
-            message = f'Welcome your otp is {otp} '
-            email_from = settings.EMAIL_HOST_USER
-            recipient_list = [e]
-            message = message
-            subject = "OTP" 
-            send_mail(
+        message = f'Welcome your otp is {otp} '
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [e]
+        message = message
+        subject = "OTP" 
+        send_mail(
                 subject,
                 message,
                 email_from,
                 recipient_list,
                 fail_silently=False,
-            )
-            return redirect('/registration/otp/')
+        )
+        return redirect('/registration/otp/')
     else:
         fm  = UserRegistrationForm()
         up = UserProfileForm()
     context = {'fm':fm,'up':up}
-    return render(request,'registration.html',context)
+    return render(request,'register.html',context)
 
 
 def otpRegistration(request):
@@ -155,7 +156,7 @@ def otpRegistration(request):
             return redirect('/login/')
         else:
             messages.error(request,'Wrong OTP')
-    return render(request,'registration-otp.html')
+    return render(request,'otp.html')
 def resendotp(request):
     # if request.method=="POST":
     email_address = request.session.get('email')
@@ -179,31 +180,30 @@ def resendotp(request):
 def forgotpassword(request):
     if request.method=="POST":
         fm = forgotpasswordform(request.POST)
-        if fm.is_valid:
-            e = fm.cleaned_data['email']
+        e = request.POST['email']
             # u = fm.cleaned_data['password']
-            p = fm.cleaned_data['password2']
-            request.session['email'] = e
-            request.session['password'] = p
-            otp = random.randint(1000,9999)
-            request.session['otp'] = otp
+        p = request.POST['confirmpassword']
+        request.session['email'] = e
+        request.session['password'] = p
+        otp = random.randint(1000,9999)
+        request.session['otp'] = otp
             # message = f'your otp is {otp}'
             # send_otp(p_number,message)
-            message = f'Welcome your forgot password otp is {otp} '
-            email_from = settings.EMAIL_HOST_USER
-            recipient_list = [e]
-            message = message
-            subject = "OTP" 
-            send_mail(
+        message = f'Welcome your forgot password otp is {otp} '
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [e]
+        message = message
+        subject = "OTP" 
+        send_mail(
                 subject,
                 message,
                 email_from,
                 recipient_list,
                 fail_silently=False,
-            )
-            return redirect('/fotgotpassword/otp/')
-        else:
-            messages.error(request,'Given Email id is wrong')
+        )
+        return redirect('/forgotpassword/otp/')
+    
+    return render(request,"forgotpassword.html")
            
 def otpforgotpassword(request):
     if request.method == "POST":
@@ -231,11 +231,12 @@ def otpforgotpassword(request):
             request.session.delete('otp')
             request.session.delete('email')
             request.session.delete('password')
-            messages.success(request,'Password changed successfully!!')
-            return redirect('login')
+            # messages.success(request,'Password changed successfully!!')
+            return redirect('user-login')
         else:
             messages.error(request,'Wrong OTP')
-    return render(request,'registration-otp.html')      
+    return render(request,'otpforgot.html') 
+    
 def forgotresendotp(request):
     # if request.method=="POST":
     email_address = request.session.get('email')
@@ -271,12 +272,13 @@ def userLogin(request):
         user = authenticate(request,username=username,password=password)
         if user is not None:
             login(request,user)
-            messages.success(request,'Login Successfull')
+            # messages.success(request,'Login Successfull')
             return redirect('/')
         else:
             messages.error(request,'Email or password is wrong')
     return render(request,'login.html')
-
+def booktestonline(request):
+    return render(request,"book-test-online.html")
 from django.contrib.auth import logout
 def logout_request(request):
     logout(request)
@@ -337,7 +339,7 @@ def healthcareblogsview(request,slug):
 def search(request):
     if request.method=="POST":
         searched=request.POST.get('searched')
-        venues=test.objects.filter(testt__contains=searched)
+        venues=test.objects.filter(testt__icontains=searched)
         return render(request,"same.html",{'searched':searched,"venues":venues})
     else:
         return render(request,"same.html")
@@ -347,21 +349,15 @@ def prescriptionbookview(request):
     # print(request.FILES)
     fm=prescriptionform()
     if request.method=="POST":
-        # others=request.POST.get("myself")
-        # print(request.POST)
-        # form = prescriptionform(request.POST)
-        # form.save()
-        # print(request.POST.get("myself"))
-        # print(request.POST.get("firstname"))
-        # print(request.POST.get("lastname"))
-        # print(request.FILES.get("prescription_file"))
-        prescription_file=request.FILES.get("prescription_file")
-        myself=request.POST.get("myself")
-        others=request.POST.get('others')
-        others_choice=request.POST.get("others_choice")
+        print(request.POST)
+        prescription_file=request.FILES.get("file")
+        print()
+        myself=request.POST.get("radio_self")
+        others=request.POST.get('radio_others')
+        others_choice=request.POST.get("option")
         firstname=request.POST.get('firstname')
         lastname=request.POST.get('lastname')
-        contact=request.POST.get('contact')
+        contact=request.POST.get('phone')
         age=request.POST.get('age')
         gender=request.POST.get('gender')
         unique = uuid.uuid4()
@@ -389,9 +385,9 @@ def prescriptionbookview(request):
                      bookingdetails="upload prescription",
                      payment_status=False).save()
         messages.success(request,"Your response is recorded successfully")
-        return render(request,"prescriptiontest.html",{"fm":fm})
+        return render(request,"uploadprescriptions.html",{"fm":fm})
     else:
-        return render(request,"prescriptiontest.html",{"fm":fm})
+        return render(request,"uploadprescriptions.html",{"fm":fm})
     
 def selectedtestview(request):
     c=request.session.get("city")
@@ -436,6 +432,8 @@ def selectedtestview(request):
         messages.success(request,"Your booking added to cart successfully")
         return render(request,"selectedtest.html",{"fm":fm})
     return render(request,"selectedtest.html",{"fm":fm})
+def cart(request):
+    return render(request,"mycart.html")
 def subscriptionview(request):
     if request.method=="POST":
         form=subscriptionform()

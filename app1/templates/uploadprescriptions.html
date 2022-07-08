@@ -1,0 +1,283 @@
+{%include "header.html"%}
+{%load static %}
+<body>
+   
+    <section class="sub_header py-xl-4 py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="d-flex ">
+                        <p class="m-0 fs-18 font-regular cl-dark-blue opc-5 pe-1 sub_nav_bar"><a href="home.html">Home</a></p>
+                        /
+                        <p class="m-0 fs-18 font-regular cl-dark-blue ps-1 sub_nav_bar">Book a Test Online</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section_book-test-online pb-5">
+        <div class="container">
+            <div class="row">
+                <diV class="col-lg-12">
+                    <div class="bg-light-grey">
+                        <div class="row">
+                            <div class="col-lg-11 col-md-12 mx-auto py-lg-5">
+                                <div class="row">
+                                    <div class="col-xxl-5  col-xl-6 col-lg-6 mx-auto py-4  opc-5">
+                                        <div class="bg-sky-blue br-15 px-5 py-4 text-center ">
+                                            <h2 class="cl-dark-white fs-30  font-bold mb-3 pb-2">Upload Prescription
+                                            </h2>
+                                            <p class="cl-dark-white fs-18  font-regular">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                                            <a> <img src="{%static "images/uploadprescription.png"%}" alt="" class="img-fluid mb-2" /></a>
+                                            <br>
+                                            <a class="cl-dark-white fs-14 font-bold lh-10">Upload Here</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xxl-5  col-xl-6 col-lg-6 mx-auto py-4 ">
+                                        <div class="bg-dark-green br-15 px-5 py-4 text-center ">
+                                            <h2 class="cl-dark-white fs-30  font-bold mb-3 pb-2">Choose Test Lists
+                                            </h2>
+                                            <p class="cl-dark-white fs-18  font-regular ">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                                            <a href="choose-test-list.html">
+                                                <div class="pb-4"> <button class="bg-dark-orange px-4 py-3 fs-18 font-bold cl-dark-blue br-50 br mb-2">CHOOSE
+                                                        HERE
+                                                    </button></div>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                {%for message in messages%}
+                                        {{message}}
+                                        {%endfor%}
+                                <form method="post" id="prescription" enctype="multipart/form-data">
+                                    {%csrf_token%}
+                                    <div class="row py-lg-5 py-3">
+
+                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto">
+                                            <h4 class="px-lg-0 px-3 font-bold cl-dark-blue">If Upload Prescription are selected
+                                            </h4>
+                                        </div>
+                                        
+                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto"></div>
+                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto pt-4">
+                                            <div class="px-lg-0 px-3 position-relative ">
+                                                <input class="w-100 bg-white br-5" placeholder="Choose File" type="file" name="file" id="file" />
+                                                <label class="folder_icon"><i class="fa fa-folder"
+                                                    aria-hidden="true"></i></label>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto"></div>
+                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto pt-3">
+                                            <div class="row ">
+                                                <div class="col-lg-6 ">
+                                                    <div class="bg-white px-lg-4 py-3 px-3 myself_other mx-3 mx-lg-0 mt-lg-0 mt-3">
+                                                        <input class="" type="radio" name="radio_self" id="myself" onClick="ckChange(this)"/>
+                                                        <label>My Self</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="bg-white px-lg-4 py-3 px-3 myself_other mx-3 mx-lg-0 mt-lg-0 mt-3  ">
+                                                        <input class="" type="radio" name="radio_others" id="others" onClick="ckChange1(this)"/>
+                                                        <label>Others</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto pt-3">
+                                            <div class="px-lg-0 px-3 ">
+                                                <select class="w-100 py-3" type="select" name="option" id="option">
+                                                <option selected="selected"  class="opc-5" disabled>Option</option>
+                                                <option value="m">Mother</option>
+                                                <option value="f">Father</option>
+                                                <option value="s">Son</option>
+                                                <option value="s">Daughter</option>
+                                                <option value="s">Others</option>
+                                            </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto pt-lg-5 pt-3 pb-3 ">
+                                            <h4 class="px-lg-0 px-3 font-bold fs-24  cl-dark-blue m-0">Patient Information (It will be used on Reports)</h4>
+                                        </div>
+                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto"></div>
+                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto pt-3">
+                                            <div class="px-lg-0 px-3">
+                                                <input class="w-100  br-5" placeholder="First Name" name="firstname" id="firstname" type="text" />
+                                            </div>
+                                        </div>
+                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto pt-3">
+                                            <div class="px-lg-0 px-3">
+                                                <input class="w-100  br-5" placeholder="Last Name" name="lastname" id="lastname" type="text" />
+                                            </div>
+                                        </div>
+                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto pt-3">
+                                            <div class="px-lg-0 px-3">
+                                                <input class="w-100  br-5" placeholder="Contact Number" name="phone" id="phone" type="text" />
+                                            </div>
+                                        </div>
+                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto pt-3">
+                                            <div class="px-lg-0 px-3">
+                                                <input class="w-100  br-5" placeholder="Age" name="age" id="age" type="text" />
+                                            </div>
+                                        </div>
+                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto pt-3">
+                                            <div class="px-lg-0 px-3">
+                                                <select class="w-100" type="select" name="gender" id="gender">
+                                                <option selected="selected" class="opc-5" disabled>
+                                                    Gender</option>
+                                                    <option value="m">Male</option>
+                                                    <option value="f">Female</option>
+                                                    <option>Others</option>
+                                            </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto"></div>
+                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto py-lg-5 py-3 ">
+                                            <button class="mx-lg-0 mx-3 prescription br bg-sky-blue br-5 cl-dark-white" type="submit" name="submit" id="submit">SUBMIT</button>
+                                        </div>
+                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto">
+                                            <div class="px-lg-0 px-3">
+                                                <h3 class="fs-30 font-bold cl-dark-blue">How it Works</h3>
+                                                <p class="m-0 mb-1">1. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                                </p>
+                                                <p class="m-0 mb-1"> 2. Praesent non mi id est efficitur convallis at sed eros.
+                                                </p>
+                                                <p class="m-0 mb-1"> 3. Donec vitae elit efficitur, sollicitudin tortor ut, aliquet nunc. </p>
+                                                <p class="m-0 mb-1"> 4. Praesent vestibulum tortor vitae dolor blandit ultrices.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="col-xxl-11 col-xl-12 col-lg-12 mx-auto">
+                                        test
+                                    </div> -->
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </diV>
+            </div>
+        </div>
+    </section>
+{%include "footer.html"%}
+
+</body>
+<script>
+            function toggleMenu() {
+                var menuBox = document.getElementById('menu-box');
+
+                if (menuBox.style.display == "block") {
+                    menuBox.style.display = "none";
+                }
+                else {
+                    menuBox.style.display = "block";
+                }
+            }
+
+    jQuery.validator.addMethod("name_regex", function (value, element) {
+        return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);
+    }, "Enter valid name");
+    jQuery.validator.addMethod("phone_regex", function (value, element) {
+        return this.optional(element) || /^[0-9\.\-_]{10,30}$/i.test(value);
+    }, "Enter valid phone number");
+    jQuery.validator.addMethod("age_regex", function (value, element) {
+        return this.optional(element) || /^[0-9\.\-_]{1,2}$/i.test(value);
+    }, "Enter valid age");
+    $.validator.addMethod('filesize', function (value, element, param) {
+        return this.optional(element) || (element.files[0].size <= param)
+    }, 'File size must be less than {0}');
+    $("#prescription").validate({
+        rules: {
+            'radio_self': {
+                required: true,
+            },
+            'radio_others': {
+                required: true,
+            },
+            'file': {
+                required: true,
+            },
+            'option': {
+                required: true,
+            },
+            'firstname': {
+                required: true,
+                minlength: 1,
+                name_regex: true,
+            },
+            'lastname': {
+                required: true,
+                minlength: 1,
+                name_regex: true,
+            },
+            'age': {
+                required: true,
+                age_regex:true
+            },
+            'phone': {
+                required: true,
+                phone_regex: true,
+                minlength: 10
+            },
+            'gender': {
+                required: true,
+            },
+        },
+
+        messages: {
+            'radio_self': {
+                required: "Select any one",
+            },
+
+            'file': {
+                required: "Enter file",
+            },
+            'option': {
+                required: "Select valid option",
+                email: "Select valid option"
+            },
+            'phone': {
+                required: "Enter mobile number",
+            },
+            'gender': {
+                required: "Select gender",
+            },
+            'firstname' : {
+                required: "Enter first name"
+            },
+            'lastname' : {
+                required: "Enter last name"
+            },
+            'age': {
+                required: "Enter Age"  
+            }
+
+
+        },
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+    function ckChange(ckType){
+        var ckName = document.getElementsByName(ckType.name);
+        var checked = document.getElementById(ckType.id);
+    
+        if (checked.checked) {
+            document.getElementById("others").checked = false;
+            var g = document.getElementById("option").disabled= true
+        }   
+    }
+    function ckChange1(ckType){
+        var ckName = document.getElementsByName(ckType.name);
+        var checked = document.getElementById(ckType.id);
+    
+        if (checked.checked) {
+            document.getElementById("myself").checked = false;
+            document.getElementById("option").disabled= false
+        }   
+    }
+</script>
+</html>

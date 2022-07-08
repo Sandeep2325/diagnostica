@@ -48,10 +48,10 @@
                     <h3 class="fs-30 footer_branches font-bold m-0 pb-4">Useful Links</h3>
                     <ul class="p-0 ">
                         <li class="text_decoration_usefull font-regular">
-                            <a class="">About us </a>
+                            <a href="home.html #about" class="">About us </a>
                         </li>
                         <li class="text_decoration_usefull font-regular">
-                            <a class="">Packages</a>
+                            <a href="health-packages.html" class="">Packages</a>
                         </li>
                         <li class="text_decoration_usefull font-regular">
                             <a class="">Contact</a>
@@ -69,12 +69,13 @@
                 </div>
                 <div class="col-xl-3 col-lg-5 pt-xl-5">
                     <h3 class="fs-30 footer_branches font-bold m-0 pb-4">Subscribe</h3>
-                    <form>
-                        <label class="footer_Subscribe_label">Enter Email Address</label>
+                    <form action="javascript:void(0)" id="subscribes">
+                        <label class="footer_Subscribe_label" for="email">Enter Email Address</label>
                         <br>
-                        <input class="footer_Subscribe_input ">
-                        <div class="d-flex justify-content-end pe-5 me-2">
-                            <button class="footer_sub_button mt-3 py-3 px-5 br-50">SUBSCRIBE</button>
+                        <input class="footer_Subscribe_input" id="email" name="email" type="email">
+                        <div class="d-flex justify-content-end ">
+                            <button class="footer_sub_button mt-3 py-3 px-5 br-50" type="submit"
+                                value="submit">SUBSCRIBE</button>
                         </div>
                         <div>
                             <h3 class="fs-30 footer_branches font-bold m-0 pt-4 mt-2">Social Media</h3>
@@ -94,15 +95,39 @@
                 </div>
             </div>
             <div class="row py-4">
-                <div class="col-lg-2 pe-0 footer-policy">Privacy Policy</div>
-                <div class="col-lg-2 px-0 footer-policy">Terms of use</div>
-                <div class="col-lg-2 ps-0 footer-policy">Payment & Refunds</div>
-                <div class="col-lg-6 ps-0 footer-policy d-flex justify-content-end align-content-end pe-5">© 2021
+                <div class="col-lg-2 px-lg-0 footer-policy">Privacy Policy</div>
+                <div class="col-lg-2 px-lg-0 footer-policy">Terms of use</div>
+                <div class="col-lg-2 ps-lg-0 footer-policy">Payment & Refunds</div>
+                <div class="col-lg-6 ps-lg-0 footer-policy d-flex justify-content-end align-content-end pe-lg-5">© 2021
                     Diagnostica
                     Span Private Limited</div>
             </div>
         </div>
     </section>
 </body>
+<script>
+
+    $.validator.addMethod('filesize', function (value, element, param) {
+        return this.optional(element) || (element.files[0].size <= param)
+    }, 'File size must be less than {0}');
+    $("#subscribes").validate({
+        rules: {
+            'email': {
+                required: true,
+                email: true
+            },
+        },
+
+        messages: {
+            'email': {
+                required: "Enter email ID",
+                email: "Enter valid email ID"
+            },
+        },
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+</script>
 
 </html>

@@ -1,122 +1,33 @@
-{% comment %} <!DOCTYPE html>
-<html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Diagnostic Span</title>
-  <link rel="stylesheet" href="asset/css/style.css">
-  <link rel="stylesheet" href="asset/fontawesome/css/font-awesome.min.css">
-  <link rel="stylesheet" href="asset/css/bootstrap.min.css">
-  <link rel="stylesheet" href="asset/css/owl.carousel.min.css">
-  <link rel="stylesheet" href="asset/css/owl.theme.default.min.css">
-  <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
-
-
-  <script src="asset/js/jquery-3.6.0.min.js"></script>
-  <script src="asset/js/bootstrap.bundle.min.js"></script>
-  <script src="asset/js/owl.carousel.min.js"></script>
-  <script src="asset/js/script.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.js"></script>
-  <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
-</head> {% endcomment %}
-{% include "header.html" %}
+{%include "header.html"%}
 {%load static%}
 <body>
-  {% if user.is_authenticated %}
-  hello {{user}}
-<a href={% url "logout"%}>logout</a>
-{%else%}
-<a href={% url "user-login" %}>login</a>
-{%endif%}
-  {% comment %} <section class="section_nav_bar bg-light-grey">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="nav_bar">
-                    <img src="images/image_logo.png" alt="" class="img-fluid logo-img" />
-                    <div class="menu-center">
-                        <span onClick="toggleMenu()" id="open_icon">&#9776;</span>
-                        
-
-                    <ul class="p-0 m-0" id="menu-box">
-                        <li class="pt-xl-0 pt-5 active"><a>Our Services</a></li>
-                        <li ><a >Packages</a></li>
-                        <li><a>Our Lab</a></li>
-                        <li><a>About Us</a></li>
-                        <li><a>Contact Us</a></li>
-                        <li><a class="nav_button"><i class="fa fa-search pe-2" aria-hidden="true"></i>Book A Test
-                            Online</a></li>
-                        <li> <a href="#" class=" cart-logo1">
-                            <img src="images/bg-user.png" alt="" class="" />
-                        </a></li>
-                        <li>
-                            <a href="#" class="">
-                                <img src="asset/images/bg-cart.png" alt="" class="" />
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                </div>
+  <section class="home_banner pt-3 pb-lg-5">
+    <div class="owl-carousel owl-theme home-banner-slider">
+      <div class="home-banner py-5">
+        <div class="container">
+          <div class="row">
+            <div class="offset-lg-1 col-xxl-5 col-xl-6 col-lg-10 ">
+              <h1 class="">Hello Bengaluru,</h1>
+              <h2 class="">Protect your health with This simple Checkup.</h2>
+              <p class="fs-24">To become <b> “One Stop Solution” </b> for all your Diagnostic needs</p>
+              <button>BOOK A TEST ONLINE</button>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-    <script>
-        function toggleMenu() {
-     var menuBox = document.getElementById('menu-box');   
-
-     if(menuBox.style.display == "block") { 
-       menuBox.style.display = "none";
-     }
-     else { 
-       menuBox.style.display = "block";
-     }
-   }
-      </script>
-</section> {% endcomment %}
+  </section>
 
   <section class="section_home_health_check">
     <div class="container">
       <div class="row">
-        <div class="col-lg-12 d-flex justify-content-between ">
-          <h1 class="fs-40 font-bold home_health_h1 w-100">Health Checks & Lab Tests</h1>
+        <div class="col-lg-12 d-flex justify-content-between pt-3">
+          <h1 class="fs-40 font-bold home_health_h1 w-100 m-0">Health Checks & Lab Tests</h1>
           <p class="fs-18 font-bold home_health_p  ">View All</p>
         </div>
-        {%for i in healthcheckup %}
-        <div class="col-lg-4 col-xl-3 col-md-6 py-xl-5 py-2">
-          <div class=" bg-light-grey br-10">
-            <div class="position-relative ">
-              <div class="batdge">{{i.discount}}% off</div>
-            </div>
-            <div class="px-xl-4 px-3 py-5 bg-light-grey br-10">
-              <h1 class="pt-3 font-bold fs-35 cl-light-blue test_head">{{i.testcount}}+ Tests</h1>
-              <div>
-                <h1 class="cl-dark-blue fs-35 font-bold test_head">{{i.package_title|safe}}</h1>
-              </div>
-              {% comment %} <ul class="pb-5 pt-3 ps-3 m-0 "> {% endcomment %}
-                {{i.description|safe}}
-              
-                {% comment %} <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                </li> {% endcomment %}
-              {% comment %} </ul> {% endcomment %}
-              <div>
-                <p class="mb-2 pt-2 fs-20 font-bold cl-light-blue">Price</p>
-                <div class="d-flex">
-                  <h2 class="fs-30 font-bold cl-dark-blue home_price">{{i.discounted_price}}</h2>
-                  <strike
-                    class="d-flex ps-xl-3 ps-2 align-items-center text-center fs-24 font-bold cl-light-blue health_price_disc">{{i.actual_price}}</strike>
-                  <div class=" ps-xl-4 p-0 text-end">
-                    <a class=" test_now_button fs-16 cl-dark-blue font-bold py-3 br-50">Test Now</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        {%endfor%}
-        {% comment %} <div class="col-lg-4 col-xl-3 col-md-6 py-xl-5 py-2">
-          <div class=" bg-light-grey br-10">
+        <div class="col-lg-4 col-xl-4 col-xxl-3 col-md-6 py-xl-5 py-2 ">
+          <div class=" bg-light-grey br-10 h-100 health_check_height">
             <div class="position-relative ">
               <div class="batdge">20% off</div>
             </div>
@@ -125,20 +36,23 @@
               <div>
                 <h1 class="cl-dark-blue fs-35 font-bold test_head">Full Body Checkup</h1>
               </div>
-              <ul class="pb-5 pt-3 ps-3 m-0 ">
-                <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                </li>
-                <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                </li>
-              </ul>
-              <div>
+              <div class="home_ul_li ul-dot pt-3  m-0">
+                <ul class="">
+                  <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                  </li>
+                  <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                  </li>
+                </ul>
+              </div>
+              <div class="position-relative">
                 <p class="mb-2 pt-2 fs-20 font-bold cl-light-blue">Price</p>
                 <div class="d-flex">
-                  <h2 class="fs-30 font-bold cl-dark-blue home_price">1299</h2>
+                  <h2 class="fs-25 font-bold cl-dark-blue home_price">1299</h2>
                   <strike
-                    class="d-flex ps-xl-3 ps-2 align-items-center text-center fs-24 font-bold cl-light-blue health_price_disc">1699</strike>
-                  <div class=" ps-xl-4 p-0 text-end">
-                    <a class=" test_now_button fs-16 cl-dark-blue font-bold py-3 br-50">Test Now</a>
+                    class="d-flex ps-xl-3 ps-2 align-items-center text-center fs-20 font-bold cl-light-blue health_price_disc">1699</strike>
+                  <div class="  p-0 ">
+                    <a class=" test_now_button fs-16 cl-dark-blue font-bold py-2 px-4 br-20 position-absolute">Test
+                      Now</a>
                   </div>
 
                 </div>
@@ -146,8 +60,8 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-4 col-xl-3 col-md-6 py-xl-5 py-2">
-          <div class=" bg-light-grey br-10">
+        <div class="col-lg-4 col-xl-4 col-xxl-3 col-md-6 py-xl-5 py-2 ">
+          <div class=" bg-light-grey br-10 h-100 health_check_height">
             <div class="position-relative ">
               <div class="batdge">20% off</div>
             </div>
@@ -156,20 +70,23 @@
               <div>
                 <h1 class="cl-dark-blue fs-35 font-bold test_head">Full Body Checkup</h1>
               </div>
-              <ul class="pb-5 pt-3 ps-3 m-0 ">
-                <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                </li>
-                <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                </li>
-              </ul>
-              <div>
+              <div class="home_ul_li ul-dot  pt-3  m-0">
+                <ul class="">
+                  <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                  </li>
+                  <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                  </li>
+                </ul>
+              </div>
+              <div class="position-relative">
                 <p class="mb-2 pt-2 fs-20 font-bold cl-light-blue">Price</p>
                 <div class="d-flex">
-                  <h2 class="fs-30 font-bold cl-dark-blue home_price">1299</h2>
+                  <h2 class="fs-25 font-bold cl-dark-blue home_price">1299</h2>
                   <strike
-                    class="d-flex ps-xl-3 ps-2 align-items-center text-center fs-24 font-bold cl-light-blue health_price_disc">1699</strike>
-                  <div class=" ps-xl-4 p-0 text-end">
-                    <a class=" test_now_button fs-16 cl-dark-blue font-bold py-3 br-50">Test Now</a>
+                    class="d-flex ps-xl-3 ps-2 align-items-center text-center fs-20 font-bold cl-light-blue health_price_disc">1699</strike>
+                  <div class="  p-0 ">
+                    <a class=" test_now_button fs-16 cl-dark-blue font-bold py-2 px-4 br-20 position-absolute">Test
+                      Now</a>
                   </div>
 
                 </div>
@@ -177,8 +94,8 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-4 col-xl-3 col-md-6 py-xl-5 py-2">
-          <div class=" bg-light-grey br-10">
+        <div class="col-lg-4 col-xl-4 col-xxl-3 col-md-6 py-xl-5 py-2 ">
+          <div class=" bg-light-grey br-10 h-100 health_check_height">
             <div class="position-relative ">
               <div class="batdge">20% off</div>
             </div>
@@ -187,27 +104,64 @@
               <div>
                 <h1 class="cl-dark-blue fs-35 font-bold test_head">Full Body Checkup</h1>
               </div>
-              <ul class="pb-5 pt-3 ps-3 m-0 ">
-                <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                </li>
-                <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                </li>
-              </ul>
-              <div>
+              <div class="home_ul_li ul-dot  pt-3  m-0">
+                <ul class="">
+                  <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                  </li>
+                  <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                  </li>
+                </ul>
+              </div>
+              <div class="position-relative">
                 <p class="mb-2 pt-2 fs-20 font-bold cl-light-blue">Price</p>
                 <div class="d-flex">
-                  <h2 class="fs-30 font-bold cl-dark-blue home_price">1299</h2>
+                  <h2 class="fs-25 font-bold cl-dark-blue home_price">1299</h2>
                   <strike
-                    class="d-flex ps-xl-3 ps-2 align-items-center text-center fs-24 font-bold cl-light-blue health_price_disc">1699</strike>
-                  <div class=" ps-xl-4 p-0 text-end">
-                    <a class=" test_now_button fs-16 cl-dark-blue font-bold py-3 br-50">Test Now</a>
+                    class="d-flex ps-xl-3 ps-2 align-items-center text-center fs-20 font-bold cl-light-blue health_price_disc">1699</strike>
+                  <div class="  p-0 ">
+                    <a class=" test_now_button fs-16 cl-dark-blue font-bold py-2 px-4 br-20 position-absolute">Test
+                      Now</a>
                   </div>
 
                 </div>
               </div>
             </div>
           </div>
-        </div> {% endcomment %}
+        </div>
+        <div class="col-lg-4 col-xl-4 col-xxl-3 col-md-6 py-xl-5 py-2 ">
+          <div class=" bg-light-grey br-10 h-100 health_check_height">
+            <div class="position-relative ">
+              <div class="batdge">20% off</div>
+            </div>
+            <div class="px-xl-4 px-3 py-5 bg-light-grey br-10">
+              <h1 class="pt-3 font-bold fs-35 cl-light-blue test_head">55+ Tests</h1>
+              <div>
+                <h1 class="cl-dark-blue fs-35 font-bold test_head">Full Body Checkup</h1>
+              </div>
+              <div class="home_ul_li ul-dot  pt-3  m-0">
+                <ul class="">
+                  <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                  </li>
+                  <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                  </li>
+                </ul>
+              </div>
+              <div class="position-relative">
+                <p class="mb-2 pt-2 fs-20 font-bold cl-light-blue">Price</p>
+                <div class="d-flex">
+                  <h2 class="fs-25 font-bold cl-dark-blue home_price">1299</h2>
+                  <strike
+                    class="d-flex ps-xl-3 ps-2 align-items-center text-center fs-20 font-bold cl-light-blue health_price_disc">1699</strike>
+                  <div class="  p-0 ">
+                    <a class=" test_now_button fs-16 cl-dark-blue font-bold py-2 px-4 br-20 position-absolute">Test
+                      Now</a>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -215,7 +169,7 @@
   <section class="section_synbrome">
     <div class="container">
       <div class="row h-100">
-        <h1 class="fs-40  cl-dark-blue font-bold home_health_symp_header">Health Symptoms</h1>
+        <h1 class="fs-40  cl-dark-blue font-bold home_health_symp_header pb-lg-4">Health Symptoms</h1>
         <div class="col-xl-2 col-lg-4 col-md-4 col-12 py-2 ">
           <div class=" px-3 bg-light-blue text-center py-5 br-10">
             <img src="{%static "images/icon-symp-1.png"%}" alt="" class="img-fluid pb-3">
@@ -224,7 +178,7 @@
         </div>
         <div class="col-xl-2 col-lg-4 col-md-4 col-12 py-2">
           <div class=" px-3 bg-light-orange text-center py-5 br-10">
-            <img src="{%static "images/icon-symp-2.png"%}"alt="" class="img-fluid pb-3">
+            <img src="{%static "images/icon-symp-2.png"%}" alt="" class="img-fluid pb-3">
             <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold">Diabetes</p>
           </div>
         </div>
@@ -259,9 +213,9 @@
   <section class="section_health_pack pb-3">
     <div class="container">
       <div class="row">
-        <h1 class="fs-40  cl-dark-blue font-bold home_health_symp_header">Health Packages</h1>
+        <h1 class="fs-40  cl-dark-blue font-bold home_health_symp_header py-4 m-0">Health Packages</h1>
         <div class="col-xl-3  col-lg-4 col-md-6 pt-3">
-          <div class="py-5 bg-light-grey br-30 ">
+          <div class="py-5 bg-light-grey br-30 health_hover">
             <p class="fs-35 font-bold cl-dark-blue text-center m-0">STARTED</p>
             <div class="d-flex justify-content-center align-content-center pt-4 mt-3">
               <div class="home_linear_border  ">
@@ -284,7 +238,7 @@
           </div>
         </div>
         <div class="col-xl-3  col-lg-4 col-md-6 pt-3 ">
-          <div class="py-5 bg-light-grey br-30 ">
+          <div class="py-5 bg-light-grey br-30 health_hover">
             <p class="fs-35 font-bold cl-dark-blue text-center m-0">BASIC</p>
             <div class="d-flex justify-content-center align-content-center pt-4 mt-3">
               <div class="home_linear_border  ">
@@ -307,7 +261,7 @@
           </div>
         </div>
         <div class="col-xl-3  col-lg-4 col-md-6 pt-3">
-          <div class="py-5 home_health_standard br-30 ">
+          <div class="py-5 home_health_standard br-30 health_hover ">
             <p class="fs-35 font-bold cl-dark-white text-center m-0">STANDARD</p>
             <div class="d-flex justify-content-center align-content-center pt-4 mt-3">
               <div class="home_linear_border_2  ">
@@ -330,7 +284,7 @@
           </div>
         </div>
         <div class="col-xl-3  col-lg-4 col-md-6 pt-3">
-          <div class="py-5 home_health_premium br-30 ">
+          <div class="py-5 home_health_premium br-30 health_hover">
             <p class="fs-35 font-bold cl-dark-white text-center m-0">PREMIUM</p>
             <div class="d-flex justify-content-center align-content-center pt-4 mt-3">
               <div class="home_linear_border_3  ">
@@ -361,35 +315,38 @@
     <div class="container">
       <div class="">
         <div class="row">
-          <h1 class="fs-40  cl-dark-blue font-bold home_health_symp_header">Health Care</h1>
+          <h1 class="fs-40  cl-dark-blue font-bold home_health_symp_header m-0 py-5">Health Care</h1>
           <div id="health-care-slider" class="col-lg-12 health-care-slider owl-carousel owl-theme">
             <div class="col-lg-6 w-100">
               <div class="row">
-                <div class="col-lg-6">
-                  <div class="pe-4">
-                    <img src="images/bg-health-care.png" alt="" class="img-fluid">
+                <div class="col-lg-6 h-100">
+                  <div class="pe-lg-4">
+                    <img src="{%static "images/bg-health-care.png"%}" alt="" class="img-fluid">
                   </div>
                 </div>
                 <div class="col-lg-6">
-                  <h1 class="fs-35 font-bold cl-dark-blue m-0">A better life starts with beautiful smile.</h1>
-                  <p class="m-0 fs-18 cl-dark-blue health_care_p pt-4 pb-5">Lorem Ipsum is simply dummy text of the
-                    printing and typesetting industry.</p>
+                  <h1 class="fs-35 font-bold cl-dark-blue m-0">A better life starts with beautiful smiles.</h1>
+                  <p class="m-0 fs-18 cl-dark-blue health_care_p pt-4 pb-5">Lorem Ipsum is simply dummy text of
+                    the
+                    printing and typesetting industry</p>
+
                   <a class="py-3 px-4 bg-dark-orange cl-dark-blue font-bold fs-16 br-30">READ MORE</a>
                 </div>
               </div>
             </div>
-            <div class="col-lg-6 w-100">
+            <div class="col-lg-6 w-100 h-100">
               <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-6 h-100">
                   <div class="pe-4">
-                    <img src="images/bg-health-care.png" alt="" class="img-fluid">
+                    <img src="{%static "images/bg-health-care.png"%}" alt="" class="img-fluid">
                   </div>
                 </div>
                 <div class="col-lg-6">
                   <h1 class="fs-35 font-bold cl-dark-blue m-0">A better life starts with beautiful smile.</h1>
-                  <p class="m-0 fs-18 cl-dark-blue health_care_p pt-4 pb-5">Lorem Ipsum is simply dummy text of the
+                  <p class="m-0 fs-18 cl-dark-blue health_care_p pt-4 pb-5 ">Lorem Ipsum is simply dummy text of
+                    the
                     printing and typesetting industry.</p>
-                  <a class="py-3 px-4 bg-dark-orange cl-dark-blue font-bold fs-16 br-30">READ MORE</a>
+                  <a class="py-3 px-4 bg-dark-orange cl-dark-blue font-bold fs-16 br-30 mb-5">READ MORE</a>
                 </div>
               </div>
             </div>
@@ -399,11 +356,11 @@
     </div>
   </section>
 
-  <section class="section_about_span bg-light-grey my-4">
+  <section class="section_about_span bg-light-grey mt-5" id="about">
     <div class="container">
-      <div class="row py-5">
-        <div class="col-lg-6 pe-lg-5 py-5">
-          <h1 class="fs-40 font-bold cl-dark-blue py-5">About Span</h1>
+      <div class="row py-lg-5 py-3">
+        <div class="col-lg-6 pe-lg-5 py-lg-5 py-3">
+          <h1 class="fs-40 font-bold cl-dark-blue py-lg-5">About Span</h1>
           <p class="fs-30 font-regular cl-dark-brown m-0 pt-2">On December 1 2018, SPAN (www.spanhealth.com) took the
             first
             step towards
@@ -436,6 +393,7 @@
         </div>
         <div class="col-lg-6 ps-lg-5">
           <img src="{%static "images/about-us-img.png"%}" alt="" class="img-fluid">
+
         </div>
       </div>
     </div>
@@ -444,7 +402,7 @@
   <section class="section_critical">
     <div class="container">
       <div class="row">
-        <h1 class="fs-40 font-bold cl-dark-blue py-5">Our CRITICAL services</h1>
+        <h1 class="fs-40 font-bold cl-dark-blue py-5 m-0">Our CRITICAL services</h1>
         <div class="col-lg-12 pb-5">
           <img src="{%static "images/bg-critical.png"%}" alt="" class="img-fluid">
         </div>
@@ -455,142 +413,250 @@
   <section class="section_testimonial">
     <div class="container">
       <div class="row">
-        <h1 class="fs-40 font-bold cl-dark-blue py-5">Testimonials</h1>
-        <div id="testimonial_slider" class="owl-carousel owl-theme">
-          <div class="col-lg-4 bg-light-brown w-100 br-15">
-            <div class="px-4 fs-40 mx-3">
-              <i class="fa fa-quote-left testimonial_quote d-flex justify-content-center" aria-hidden="true"></i>
-              <p class="fs-18 font-bold">The Company’s broad spectrum of services offer around 1200 clinical laboratory
-                tests and various
-                profiles. Various test combinations, specific to a disease or disorder and wellness profiles used for
-                health and fitness screening, form a part of the Company’s service profile. One can choose and book
-                blood tests for: CBC, Blood Liver profile, Vitamin B12 or Vitamin D3 and many more.The Company’s broad
-                spectrum of services offer around 1200 clinical laboratory tests and various profiles.</p>
-              <div class="test_img d-flex justify-content-center align-items-center"><img
-                  src="{%static "images/testimonial.png"%}" alt="" class="img-fluid"></div>
+        <div class="col-lg-12">
+          <h1 class="fs-40 font-bold cl-dark-blue py-4">Testimonials</h1>
+          <div id="testimonial_slider" class="owl-carousel owl-theme">
+            <div class=" bg-light-brown w-100 br-15">
+              <div class="px-4 fs-40 mx-3">
+                <i class="fa fa-quote-left testimonial_quote text-center" aria-hidden="true"></i>
+                <p class="fs-18 font-bold">The Company’s broad spectrum of services offer around 1200 clinical
+                  laboratory
+                  tests and various
+                  profiles. Various test combinations, specific to a disease or disorder and wellness profiles used for
+                  health and fitness screening, form a part of the Company’s service profile. One can choose and book
+                  blood tests for: CBC, Blood Liver profile, Vitamin B12 or Vitamin D3 and many more.The Company’s broad
+                  spectrum of services offer around 1200 clinical laboratory tests and various profiles.</p>
+                <div class="test_img "><img src="{%static "images/testimonial.png"%}" alt="" class="img-fluid"></div>
+              </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
+  <section class="helping_book_test pt-3 mt-lg-5">
+    <div class="helping-book-banner py-lg-5 py-3">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 col-md-12 py-4 ">
+            <h1 class="fs-40 font-bold cl-dark-white pe-xxl-5 me-xxl-5">Helping Patients for around The Globe !!!</h1>
+            <div class="row">
+              <div class="col-12 col-md-6 pe-lg-5 helper_header_col">
+                <div class="d-flex">
+                  <i class="fa fa-comments-o help-book-icon" aria-hidden="true"></i>
+                  <h4 class="healper_sub_header">Whats app</h4>
+                </div>
+                <p class="helping_contact">+91 97693 51301</p>
+              </div>
+              <div class="col-12 col-md-6 pe-lg-5 helper_header_col">
+                <div class="d-flex">
+                  <i class="fa fa-envelope-o help-book-icon" aria-hidden="true"></i>
+                  <p class="healper_sub_header">Email Enquiry</p>
+                </div>
+                <div class="helping_contact">enquiry@spandiagno.com</div>
+              </div>
+              <div class="col-12 col-md-6 pe-lg-5 helper_header_col">
+                <div class="d-flex">
+                  <i class="fa fa-clock-o help-book-icon" aria-hidden="true"></i>
+                  <h4 class="healper_sub_header">Opening Hours</h4>
+                </div>
+                <p class="helping_contact">Monday – Sunday 06:00 AM – 10:00 PM</p>
+              </div>
+              <div class="col-12 col-md-6 pe-lg-5 helper_header_col">
+                <div class="d-flex">
+                  <i class="fa fa-address-card-o  help-book-icon" aria-hidden="true"></i>
+                  <h4 class="healper_sub_header">Contact Us</h4>
+                </div>
+                <p class="helping_contact">First Floor, 15/2, 11th Main Road, 13th Cross, Malleswaram, Bangalore – 560
+                  003</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6  py-4 px-lg-4">
+            <form action="javascript:void(0)" id="homeForm">
+              <div class="bg-dark-white px-lg-5 px-3 py-4 br-15">
+                <h1 class="fs-40 font-bold cl-dark-blue pb-lg-4">Book a Test Online</h1>
+                <div class="row">
+                  <div class="col-12 col-md-12 col-lg-6 pt-4">
+                    <label class="fs-20 font-regular cl-dark-blue">Name</label>
+                    <input class="w-100  br-5 mt-2" type="text" name="name" id="name" />
+                  </div>
+                  <div class="col-12 col-md-12 col-lg-6 pt-4">
+                    <label class="fs-20 font-regular cl-dark-blue">Surname</label>
+                    <input class="w-100 br-5 mt-2" type="text" name="surname" id="surname" />
+                  </div>
+                  <div class="col-12 col-md-12 col-lg-6 pt-4">
+                    <label class="fs-20 font-regular cl-dark-blue">Phone Number</label>
+                    <input class="w-100 br-5 mt-2" type="text" name="phone" id="phone" />
+                  </div>
+                  <div class="col-12 col-md-12 col-lg-6 pt-4">
+                    <label class="fs-20 font-regular cl-dark-blue">Email Address</label>
+                    <input class="w-100 br-5 mt-2" type="email" name="email" id="email" />
+                  </div>
+                  <div class="col-12 pt-4">
+                    <label class="fs-20 font-regular cl-dark-blue">Select your Test Name</label>
+                    <input class="w-100 br-5 mt-2" />
+                  </div>
+                  <div class="col-12 py-4 mt-3"><button
+                      class="br px-4 py-3 fs-18 font-bold cl-dark-white bg-sky-blue br-5">BOOK A TEST ONLINE</button>
+                  </div>
+                </div>
+              </div>
+            </form>
           </div>
 
         </div>
       </div>
     </div>
   </section>
-  {% include "footer.html" %}
-{% comment %} 
-  <section class="section_footer">
-    <div class="container">
-      <div class="row">
-        <div class="col-xl-3 col-lg-6 col-md-12 col-12">
-          <div class="footer_image_logo pt-lg-5 mt-lg-5 pt-xl-4 pt-4">
-            <img src="images/image_logo.png" alt="" class="img-fluid">
-          </div>
-        </div>
-        <div class="col-xl-3 col-lg-3  col-6 pt-xl-5 pt-3 ">
-          <h3 class="fs-30  footer_branches font-bold m-0">Branches</h3>
-          <ul class="p-0">
-            <li class="text_decoration font-bold pt-xl-4 pt-2">
-              <a class="footer_branch_text fs-24 ">Bangalore</a>
-            </li>
-            <li class="text_decoration font-bold pt-xl-4 pt-2">
-              <a class="footer_branch_text fs-24 ">Chennai</a>
-            </li>
-            <li class="text_decoration font-bold pt-xl-4 pt-2">
-              <a class="footer_branch_text fs-24 ">Mumbai</a>
-            </li>
-          </ul>
-        </div>
-        <div class="col-xl-3 col-lg-3 col-6 pt-xl-5 pt-3 subscription_div">
-          <h3 class="fs-30 footer_branches font-bold m-0 pb-4">Useful Links</h3>
-          <ul class="p-0 ">
-            <li class="text_decoration_usefull font-regular">
-              <a class="">About us </a>
-            </li>
-            <li class="text_decoration_usefull font-regular">
-              <a class="">Packages</a>
-            </li>
-            <li class="text_decoration_usefull font-regular">
-              <a class="">Contact</a>
-            </li>
-            <li class="text_decoration_usefull font-regular">
-              <a class="">Franchisee Opportunities </a>
-            </li>
-            <li class="text_decoration_usefull font-regular">
-              <a class="">Careers</a>
-            </li>
-            <li class="text_decoration_usefull font-regular">
-              <a class="">FAQs</a>
-            </li>
-          </ul>
-        </div>
-        <div class="col-xl-3 col-lg-5 pt-xl-5">
-          <h3 class="fs-30 footer_branches font-bold m-0 pb-4">Subscribe</h3>
-          <form>
-            <label class="footer_Subscribe_label">Enter Email Address</label>
-            <br>
-            <input class="footer_Subscribe_input ">
-            <div class="d-flex justify-content-end ">
-              <button class="footer_sub_button mt-3 py-3 px-5 br-50">SUBSCRIBE</button>
-            </div>
-            <div>
-              <h3 class="fs-30 footer_branches font-bold m-0 pt-4 mt-2">Social Media</h3>
-              <ul class="d-flex p-0 pt-3 ">
-                <li class="text_dec_media pe-3"><a>
-                    <img src="asset/images/bg-facebook.png" alt="" class="img-fluid">
-                  </a></li>
-                <li class="text_dec_media pe-3"><a>
-                    <img src="asset/images/bg-twitter.png" alt="" class="img-fluid">
-                  </a></li>
-                <li class="text_dec_media pe-3"><a>
-                    <img src="asset/images/bg-insta.png" alt="" class="img-fluid">
-                  </a></li>
-              </ul>
-            </div>
-          </form>
-        </div>
-      </div>
-      <div class="row py-4">
-        <div class="col-lg-2 pe-0 footer-policy">Privacy Policy</div>
-        <div class="col-lg-2 px-0 footer-policy">Terms of use</div>
-        <div class="col-lg-2 ps-0 footer-policy">Payment & Refunds</div>
-        <div class="col-lg-6 ps-0 footer-policy d-flex justify-content-end align-content-end ">© 2021
-          Diagnostica
-          Span Private Limited</div>
-      </div>
-    </div>
-  </section> {% endcomment %}
 
+  {%include "footer.html"%}
 </body>
 
+<script>
+  function toggleMenu() {
+    var menuBox = document.getElementById('menu-box');
+
+    if (menuBox.style.display == "block") {
+      menuBox.style.display = "none";
+    }
+    else {
+      menuBox.style.display = "block";
+    }
+  }
+  $("#health-care-slider").owlCarousel({
+    loop: true,
+    margin: 30,
+    items: 2,
+    responsiveClass: true,
+    autoHeight: false,
+    autoplayTimeout: 3000,
+    smartSpeed: 800,
+    dots: false,
+    nav: false,
+    autoplay: true,
+    responsive: {
+      0: {
+        items: 1,
+      },
+
+      576: {
+        items: 1,
+      },
+      768: {
+        items: 2,
+      },
+
+      992: {
+        items: 2,
+      },
+
+      1199: {
+        items: 2,
+      },
+    },
+  });
+  $("#testimonial_slider").owlCarousel({
+    loop: true,
+    margin: 30,
+    items: 2.7,
+    responsiveClass: true,
+    autoHeight: false,
+    autoplayTimeout: 7000,
+    smartSpeed: 800,
+    dots: false,
+    nav: false,
+    autoplay: true,
+    responsive: {
+      0: {
+        items: 1,
+      },
+
+      576: {
+        items: 1,
+      },
+      768: {
+        items: 2,
+      },
+
+      992: {
+        items: 2.5,
+      },
+
+      1199: {
+        items: 2.7,
+      },
+    },
+  });
+
+
+  $('.home-banner-slider').owlCarousel({
+    loop: true,
+    margin: 20,
+    nav: false,
+    items: 1.2,
+    center: true,
+    nav: false,
+    dots: false
+  })
+
+  jQuery.validator.addMethod("name_regex", function (value, element) {
+    return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);
+  }, "Enter valid name");
+  jQuery.validator.addMethod("phone_regex", function (value, element) {
+    return this.optional(element) || /^[0-9\.\-_]{10,30}$/i.test(value);
+  }, "Enter valid phone number");
+  $.validator.addMethod('filesize', function (value, element, param) {
+    return this.optional(element) || (element.files[0].size <= param)
+  }, 'File size must be less than {0}');
+  $("#homeForm").validate({
+    rules: {
+
+      'name': {
+        required: true,
+        minlength: 1,
+        name_regex: true,
+      },
+      'surname': {
+        required: true,
+        minlength: 1,
+        name_regex: true,
+      },
+      'email': {
+        required: true,
+        email: true
+      },
+      'phone': {
+        required: true,
+        phone_regex: true,
+        minlength: 10
+      },
+
+    },
+
+    messages: {
+
+      'name': {
+        required: "Enter first name",
+      },
+      'surname': {
+        required: "Enter  name",
+      },
+      'email': {
+        required: "Enter email ID",
+        email: "Enter valid email"
+      },
+      'phone': {
+        required: "Enter phone number",
+      },
+    },
+    submitHandler: function (form) {
+      form.submit();
+    }
+  });
+</script>
+
+
 </html>
-
-
-<!-- 
-
-<div class="col-lg-3 col-md-4 col-6">
-  <div class="px-4 py-3 bg-light-grey br-10">
-    <h2 class="fs-35 font-bold health_test">55+ test</h2>
-    <h2 class="fs-35 font-bold health_test_h2 m-0">Full Body Checkup</h2>
-    <ul class="pb-5 pt-3 ps-3 m-0 ">
-      <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-      </li>
-      <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-      </li>
-    </ul>
-    <p class="py-3 m-0 fs-20 font-bold health_price">Price</p>
-    <div class="d-flex ">
-      <h2 class="m-0 font-bold">1299</h2>
-      <strike>
-        <h2 class="m-0 fs-24 pt-2 ps-3 health_price_disc font-bold">1699</h2>
-      </strike>
-      <div class="w-100 text-end ">
-        <a class="py-3 px-4  test_now_button br-50">Test Now</a>
-      </div>
-    </div>
-  </div>
-</div> -->
-
-
-<!--  -->
-
-
