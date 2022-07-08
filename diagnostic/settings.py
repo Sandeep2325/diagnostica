@@ -83,18 +83,28 @@ AUTH_USER_MODEL = 'app1.User'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+# DATABASES = {  
+#     'default': {  
+#         'ENGINE': 'django.db.backends.mysql',  
+#         'NAME': 'diagnostica',  
+#         'USER': 'root',  
+#         'PASSWORD': 'Sandeep@8105',  
+#         'HOST': 'localhost',  
+#         'PORT': '3306',  
+        
+#     }  
+# }  
 DATABASES = {  
     'default': {  
         'ENGINE': 'django.db.backends.mysql',  
-        'NAME': 'diagnostica',  
+        'NAME': 'diagnospan',  
         'USER': 'root',  
-        'PASSWORD': 'Sandeep@8105',  
+        'PASSWORD': 'mysqlServer@#$432',  
         'HOST': 'localhost',  
         'PORT': '3306',  
         
     }  
-}  
-
+}
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
