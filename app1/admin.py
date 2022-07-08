@@ -19,6 +19,9 @@ class cityadmin(admin.ModelAdmin):
 class testadmin(admin.ModelAdmin):
     list_display=["testt","categoryy","pricel1","pricel2","pricel3","pricel4","pricel5","pricel6","is_active","created","updated","action_btn"]
     list_editable=["is_active"]
+    list_filter = ('categoryy', 'is_active')
+    search_fields = ('testt', 'categoryy__categoryy')
+   
     # form = testform
     # def get_fieldsets(self, request, obj=None):
     #     fieldsets = super(testadmin, self).get_fieldsets(request, obj)
@@ -77,8 +80,10 @@ class testadmin(admin.ModelAdmin):
             return render(request, "admin/app1/csv_upload.html", data)
 class prescriptionbookadmin(admin.ModelAdmin):
     list_display=["users","testname","myself","others","others_choice","firstname","lastname","contact","age","gender","prescription_file","created","updated","action_btn"]        
-    readonly_fields=["user","myself","others","others_choice","firstname","lastname","contact","age","gender","unique"]
+    readonly_fields=["user","myself","others","others_choice","firstname","lastname","contact","age","gender","unique","created","updated","location"]
     exclude = ('unique',)
+    list_filter = ("user","test_name",'prescription_file',"myself","others","gender")
+    # search_fields = ('testt', 'categoryy__categoryy')
     # list_editable=[""]
     def testname(self, obj):
         return ", ".join([
@@ -109,6 +114,7 @@ class prescriptionbookadmin(admin.ModelAdmin):
 #     testname.short_description = "Tests"
 class categoryadmin(admin.ModelAdmin):
     list_display=["categoryy","created","updated","action_btn"]
+    readonly_fields=["created","updated"]
     # prepopulated_fields = {"slug": ("categoryy",)}
     def action_btn(self, obj):
         html = "<div class='field-action_btn d-flex m-8'> <a class='fa fa-edit ml-2' href='/admin/app1/category/" + \
@@ -164,6 +170,7 @@ class healthpackage_admin(SummernoteModelAdmin):
     
 class healthsymptoms_admin(admin.ModelAdmin):
     list_display=["name","imagee","testname","symptoms","created","updated","action_btn"]
+    readonly_fields=["created","updated"]
     prepopulated_fields = {"slug": ("name",)}
     def testname(self, obj):
         return ", ".join([
@@ -189,6 +196,7 @@ class healthsymptoms_admin(admin.ModelAdmin):
     action_btn.short_description = "Action"
 class healthcareblog_admin(SummernoteModelAdmin):
     list_display=["imagee","title","category","description","created","updated","action_btn"]
+    readonly_fields=["created","updated"]
     prepopulated_fields = {"slug": ("title",)}
     summernote_fields = ('description',)
     def action_btn(self, obj):
@@ -221,6 +229,7 @@ class testimonialsadmin(admin.ModelAdmin):
             return format_html('<img src="https://thumbs.dreamstime.com/b/no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482953.jpg" width="100" height="100"/>')
 class profileadmin(admin.ModelAdmin):
     list_display=["user","imagee","name","email","phone_no","gender","location","dob","created","updated",]
+    readonly_fields=["created","updated"]
     prepopulated_fields = {"slug": ("name",)}
     def imagee(self, obj):
         # a=obj.image.first()
@@ -233,6 +242,7 @@ class profileadmin(admin.ModelAdmin):
     imagee.short_description = 'Image'
 class aboutspanadmin(admin.ModelAdmin):
     list_display=["description1","testedpeople","verifiedcenter","cities","dailyvisits","created","updated","action_btn"]
+    readonly_fields=["created","updated"]
     def action_btn(self, obj):
         html = "<div class='field-action_btn d-flex m-8'> <a class='fa fa-edit ml-2' href='/admin/app1/aboutspan/" + \
             str(obj.id)+"/change/'></a><br></br>"
@@ -252,7 +262,7 @@ class socialmediaadmin(admin.ModelAdmin):
     #     return super().has_add_permission(request)
 from django.utils.translation import gettext_lazy as _
 class UserAdmin(OriginalUserAdmin): 
-    list_display = ['username','email',"phone_no",'location','dob','gender','address','action_btn','date_joined']
+    list_display = ['username','email',"phone_no",'location','dob','gender','address','date_joined']
     # list_editable=['is_confirmed']
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
@@ -270,6 +280,8 @@ class subscriptionadmin(admin.ModelAdmin):
     list_display=["email","created"]
 class bookhistoryadmin(admin.ModelAdmin):
     list_display=["id","users","patient_infoo","booking_type","bookingdetails","amount","status","payment_status","created","updated","report","action_btn"]    
+    readonly_fields=["created","updated"]
+    list_filter = ("user","booking_type")
     def action_btn(self, obj):
         html = "<div class='field-action_btn d-flex m-8'> <a class='fa fa-edit ml-2' href='/admin/app1/book_history/" + \
             str(obj.id)+"/change/'></a><br></br>"
@@ -294,10 +306,12 @@ class bookhistoryadmin(admin.ModelAdmin):
         return False
 class couponadmin(admin.ModelAdmin):
     list_display=["couponcode","discount","status"]
+    # readonly_fields=["created","updated"]
 class cartadmin(admin.ModelAdmin):
     list_display=["user","items","categoryy","price","created","updated"]
 class blogcategoryadmin(admin.ModelAdmin):
     list_display=["category","created","updated"]
+    readonly_fields=["created","updated"]
     prepopulated_fields = {"slug": ("category",)}
 class testnamee(ChangeList):
     def __init__(self, request, model, list_display,
@@ -317,13 +331,7 @@ class testnamee(ChangeList):
         self.list_editable = ['test_name']
 class priceadmin(admin.ModelAdmin):
     list_display=["testt","city","price"]
-class prescriptionbookadmin1(admin.ModelAdmin):
 
-    def get_changelist(self, request, **kwargs):
-        return testnamee
-
-    def get_changelist_form(self, request, **kwargs):
-        return testnameform
 admin.site.register(city,cityadmin)
 admin.site.register(blogcategory,blogcategoryadmin)
 admin.site.register(test,testadmin)

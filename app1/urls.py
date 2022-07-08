@@ -9,6 +9,7 @@ from django.conf import settings
 <a href="{% url 'delete' slug=instance.slug %}"> Delete</a> """
 urlpatterns = [
     # path("ip",views.get_client_ip),
+    path("logout", views.logout_request, name="logout"),
     path("dashboard",views.dashboard),
     path("city",views.cityy),
     path('',views.home,name="home"),

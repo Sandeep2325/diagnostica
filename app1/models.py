@@ -94,7 +94,7 @@ class User(AbstractUser,PermissionsMixin):
 #     class Meta:
 #         verbose_name_plural = "User Profiles"
 class category(models.Model):
-    categoryy=models.CharField(max_length=200,null=True,blank=True)
+    categoryy=models.CharField(max_length=200,null=True,blank=True,verbose_name="Category")
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     # slug = models.SlugField(null=True, unique=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
@@ -174,11 +174,16 @@ class prescription_book(models.Model):
         return "Prescription booking"
     class Meta:
         verbose_name_plural="Test Bookings" 
+        
 @receiver(post_save, sender=prescription_book)
 def testbookings(sender, instance, **kwargs):
     a=[]
     for i in instance.test_name.all():
-        a.append(i.pricel1)
+        if i.location=="Banglore":
+            a.append(i.pricel1)
+        else:
+            a.append(i.pricel2)
+            
     book_history.objects.filter(testbooking_id=instance.id).update(amount=sum(a))
     print(bool(instance.prescription_file))
     if (instance.test_name.first()!=None) and (bool(instance.prescription_file)==True): 
@@ -375,6 +380,8 @@ class subscription(models.Model):
 class socialmedialinks(models.Model):
     name=models.CharField(max_length=100,null=True,blank=True)
     url=models.URLField(null=True,blank=True)
+    created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
+    updated = models.DateTimeField(auto_now=True,null=True, blank=True)
     def __str__(self):
         return "Social Media Links"
     class Meta:
@@ -392,6 +399,8 @@ class coupons(models.Model):
         max_length=100,
         default="a", null=True
     )
+    created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
+    updated = models.DateTimeField(auto_now=True,null=True, blank=True)
     
     def __str__(self):
         return self.couponcode

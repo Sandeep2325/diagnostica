@@ -118,7 +118,12 @@ def Registration(request):
 
 def otpRegistration(request):
     if request.method == "POST":
-        u_otp = request.POST['otp']
+        u_otp1 = request.POST['digit-1']
+        u_otp2 = request.POST['digit-2']
+        u_otp3 = request.POST['digit-3']
+        u_otp4 = request.POST['digit-4']
+        a=str(u_otp1)+str(u_otp2)+str(u_otp3)+str(u_otp4)
+        print(a)
         otp = request.session.get('otp')
         user = request.session['username']
         # hash_pwd=request.session.get('password')
@@ -126,7 +131,7 @@ def otpRegistration(request):
         p_number = request.session.get('number')
         email_address = request.session.get('email') 
 
-        if int(u_otp) == otp:
+        if int(a) == otp:
             User.objects.create(
                             username = user,
                             email=email_address,
@@ -202,7 +207,12 @@ def forgotpassword(request):
            
 def otpforgotpassword(request):
     if request.method == "POST":
-        u_otp = request.POST['otp']
+        u_otp1 = request.POST['digit-1']
+        u_otp2 = request.POST['digit-2']
+        u_otp3 = request.POST['digit-3']
+        u_otp4 = request.POST['digit-4']
+        a=str(u_otp1)+str(u_otp2)+str(u_otp3)+str(u_otp4)
+        print(a)
         otp = request.session.get('otp')
         # user = request.session['username']
         # hash_pwd=request.session.get('password')
@@ -210,7 +220,7 @@ def otpforgotpassword(request):
         # p_number = request.session.get('number')
         email_address = request.session.get('email') 
         
-        if int(u_otp) == otp:
+        if int(a) == otp:
             User.objects.filter(
                             email=email_address
             ).update(password=hash_pwd)
@@ -267,6 +277,11 @@ def userLogin(request):
             messages.error(request,'Email or password is wrong')
     return render(request,'login.html')
 
+from django.contrib.auth import logout
+def logout_request(request):
+    logout(request)
+    messages.info(request, "Logged out successfully!")
+    return redirect("/")
 def home(request):
     c=request.session.get("city")
     print(".....",request.user)
@@ -328,6 +343,7 @@ def search(request):
         return render(request,"same.html")
     
 def prescriptionbookview(request):
+    c=request.session.get("city")
     # print(request.FILES)
     fm=prescriptionform()
     if request.method=="POST":
@@ -361,7 +377,8 @@ def prescriptionbookview(request):
                           lastname=lastname,
                           contact=contact,
                           age=age,
-                          gender=gender).save()
+                          gender=gender,
+                          location=c).save()
         data=prescription_book.objects.get(unique=unique)
         print(data)
         book_history(
@@ -377,11 +394,11 @@ def prescriptionbookview(request):
         return render(request,"prescriptiontest.html",{"fm":fm})
     
 def selectedtestview(request):
+    c=request.session.get("city")
     print(request.method)
     fm=selectedtestform()
     if request.method=="POST":
         # others=request.POST.get("myself")
-        
         test_name=request.POST.getlist("test_name")
         myself=request.POST.get("myself")
         others=request.POST.get('others')
@@ -403,14 +420,19 @@ def selectedtestview(request):
                           lastname=lastname,
                           contact=contact,
                           age=age,
-                          gender=gender)
+                          gender=gender,
+                          location=c)
         
         for j in test_name:
             item=test.objects.get(id=j)
             a.test_name.add(item)
         for i in test_name:
             item=test.objects.get(id=i)
-            cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel1).save()
+            if c=="Banglore":
+                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel1).save()
+            else:
+                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel2).save()
+                
         messages.success(request,"Your booking added to cart successfully")
         return render(request,"selectedtest.html",{"fm":fm})
     return render(request,"selectedtest.html",{"fm":fm})

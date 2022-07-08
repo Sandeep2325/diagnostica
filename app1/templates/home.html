@@ -24,6 +24,12 @@
 {% include "header.html" %}
 {%load static%}
 <body>
+  {% if user.is_authenticated %}
+  hello {{user}}
+<a href={% url "logout"%}>logout</a>
+{%else%}
+<a href={% url "user-login" %}>login</a>
+{%endif%}
   {% comment %} <section class="section_nav_bar bg-light-grey">
     <div class="container">
         <div class="row">
@@ -553,6 +559,7 @@
       </div>
     </div>
   </section> {% endcomment %}
+
 </body>
 
 </html>

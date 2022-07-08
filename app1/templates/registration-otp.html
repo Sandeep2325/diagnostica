@@ -31,8 +31,11 @@
    <div class="mt-5 otp-signup-form text-center pb-3 shadow">
        <h5 class="p-3">An OTP has been send to your mobile number</h5>
        <form method="POST" class="p-4" novalidate> {% csrf_token%}
-
-        <input type="text" name="otp" placeholder="paste an OTP here">
+        <input type="text" id="digit-1" name="digit-1" data-next="digit-2" />
+        <input type="text" id="digit-2" name="digit-2" data-next="digit-3" data-previous="digit-1" />
+        <input type="text" id="digit-3" name="digit-3" data-next="digit-4" data-previous="digit-2" />
+        <input type="text" id="digit-4" name="digit-4" data-next="digit-5" data-previous="digit-3" />
+        {% comment %} <input type="text" name="otp" placeholder="paste an OTP here"> {% endcomment %}
 
     <button class="btn" name="registration" required>Submit</button>
     <a href="{%url "resend" %}" class="btn" name="otp" required>resend</button>
