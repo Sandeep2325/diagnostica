@@ -526,7 +526,7 @@ def addtocart(request):
         return JsonResponse({"message":"success"})
 def destroy(request): 
     if request.method=="POST":
-        pk=request.POST.get["pk"]
+        pk=request.POST["pk"]
         print(pk)
         a = cart.objects.get(id=pk)  
         print(a)
