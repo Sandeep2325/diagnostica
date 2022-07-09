@@ -17,7 +17,8 @@
 
     <section class="section_login br-10">
         <div class="container">
-            <form action="javascript:void(0)" id="loginForm">
+            <form method ="post"  id="loginForm">
+                {%csrf_token%}
                 <div class="row h-100 ">
                     <div class="col-lg-12">
                         <div class="row px-3 h-100">
@@ -31,7 +32,7 @@
                                             <div class="col-lg-6 pb-xl-0 pb-3">
                                                 <label class="fs-20 font-bold cl-dark-blue pb-2" for="email">Email
                                                     Id</label>
-                                                <input class="login_input br-5  ps-5" placeholder="Enter your email Id" id="email" name="email" type="email">
+                                                <input class="login_input br-5  ps-5" placeholder="Enter your email Id" id="email" name="email" type="email" autocomplete="off">
                                             </div>
                                             <div class="col-lg-6 login_input_col">
                                                 <label class="fs-20 font-bold cl-dark-blue pb-2" for="password">Password</label>
@@ -48,7 +49,7 @@
                                                         simply dummy</p>
                                                 </label>
                                             </div>
-                                            <a href="forgotpassword.html" class="col-lg-5 col-md-6 col-12 text-lg-end text-md-end cl-dark-blue fs-16 font-regular cursor">
+                                            <a href="{%url "forgot-password"%}" class="col-lg-5 col-md-6 col-12 text-lg-end text-md-end cl-dark-blue fs-16 font-regular cursor">
                                                 Forgot Password?</a>
                                         </div>
                                         <div class="pt-3">
@@ -57,7 +58,7 @@
 
                                         <div class="d-flex py-2 mt-xl-5  mt-2">
                                             <p class="m-0 pe-3 fs-18 font-regular">Create an account?</p>
-                                            <a href="register.html">
+                                            <a href="{%url "Registration"%}">
                                                 <h5 class="fs-20 font-bold cursor">Sign Up</h5>
                                             </a>
                                         </div>
@@ -65,7 +66,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-5 p-0 bg-light-grey ">
-                                <img src="asset/images/login.png" alt="" class="img-fluid h-100">
+                                <img src="{%static "images/login.png"%}" alt="" class="img-fluid h-100">
                             </div>
                         </div>
                     </div>
@@ -77,15 +78,7 @@
 
 
 <script>
-    function toggleMenu() {
-        var menuBox = document.getElementById('menu-box');
-
-        if (menuBox.style.display == "block") {
-            menuBox.style.display = "none";
-        } else {
-            menuBox.style.display = "block";
-        }
-    }
+  
 
     $(document).on('click', '.toggle-password', function() {
 

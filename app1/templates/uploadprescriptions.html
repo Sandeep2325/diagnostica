@@ -1,21 +1,8 @@
 {%include "header.html"%}
+{%include "subheader.html"%}
 {%load static %}
 <body>
    
-    <section class="sub_header py-xl-4 py-3">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="d-flex ">
-                        <p class="m-0 fs-18 font-regular cl-dark-blue opc-5 pe-1 sub_nav_bar"><a href="home.html">Home</a></p>
-                        /
-                        <p class="m-0 fs-18 font-regular cl-dark-blue ps-1 sub_nav_bar">Book a Test Online</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <section class="section_book-test-online pb-5">
         <div class="container">
             <div class="row">
@@ -40,7 +27,7 @@
                                             <h2 class="cl-dark-white fs-30  font-bold mb-3 pb-2">Choose Test Lists
                                             </h2>
                                             <p class="cl-dark-white fs-18  font-regular ">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                                            <a href="choose-test-list.html">
+                                            <a href="{%url "testselect"%}">
                                                 <div class="pb-4"> <button class="bg-dark-orange px-4 py-3 fs-18 font-bold cl-dark-blue br-50 br mb-2">CHOOSE
                                                         HERE
                                                     </button></div>
@@ -163,7 +150,6 @@
         </div>
     </section>
 {%include "footer.html"%}
-
 </body>
 <script>
             function toggleMenu() {

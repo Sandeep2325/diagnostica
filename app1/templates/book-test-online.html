@@ -1,21 +1,7 @@
 {%include "header.html"%}
+{%include "subheader.html"%}
 {%load static%}
 <body>
-    <section class="sub_header py-xl-4 py-3">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="d-flex ">
-                        <p class="m-0 fs-18 font-regular cl-dark-blue opc-5 pe-1 sub_nav_bar"><a
-                                href="{%url "home"%}">Home</a></p>
-                        /
-                        <p class="m-0 fs-18 font-regular cl-dark-blue ps-1 sub_nav_bar">Book a Test Online</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <section class="section_book-test-online mb-4">
         <div class="container">
             <div class="row">
@@ -30,7 +16,7 @@
                                     </h2>
                                     <p class="cl-dark-white fs-18  font-regular">Lorem Ipsum is simply dummy
                                         text of the printing and typesetting industry.</p>
-                                    <a href="{%url "prescriptiontest"%}"> <img src="{%static "images/uploadprescription.png"%}"
+                                    <a href="{% url "prescription-upload"%}"> <img src="{%static "images/uploadprescription.png"%}"
                                             alt="" class="img-fluid mb-2" /></a>
                                     <br>
                                     <a href="uploadprescriptions.html" class="cl-dark-white fs-14 font-bold lh-10">Upload
@@ -43,7 +29,7 @@
                                     </h2>
                                     <p class="cl-dark-white fs-18  font-regular ">Lorem Ipsum is simply dummy
                                         text of the printing and typesetting industry.</p>
-                                    <a href="choose-test-list.html">
+                                    <a href="{%url "testselect"%}">
                                         <div class="pb-4"> <button
                                                 class="bg-dark-orange px-4 py-3 fs-18 font-bold cl-dark-blue br-50 br mb-2">CHOOSE
                                                 HERE
@@ -60,16 +46,7 @@
 {%include "footer.html"%}
 </body>
 <script>
-    function toggleMenu() {
-        var menuBox = document.getElementById('menu-box');
-
-        if (menuBox.style.display == "block") {
-            menuBox.style.display = "none";
-        }
-        else {
-            menuBox.style.display = "block";
-        }
-    }
+    
 
     $.validator.addMethod('filesize', function (value, element, param) {
         return this.optional(element) || (element.files[0].size <= param)

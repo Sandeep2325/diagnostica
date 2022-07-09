@@ -9,14 +9,18 @@ from django.conf import settings
 <a href="{% url 'delete' slug=instance.slug %}"> Delete</a> """
 urlpatterns = [
     # path("ip",views.get_client_ip),
+    
+    path('',views.home,name="home"),
     path("logout", views.logout_request, name="logout"),
     path("dashboard",views.dashboard),
+    path("profile",views.profilee,name="profile"),
     path("city",views.cityy),
-    path('',views.home,name="home"),
-    path("prescription-upload/",views.prescriptionbookview,name="prescriptiontest"),
-    path("selectedtest/",views.selectedtestview,name="selectedtest"),
-    path('delete/<slug:slug>/', views.destroy,name="destroy"),
-    path("cart",views.cart,name="cart"),
+    path("search",views.search,name="search"),
+    path("prescription-upload/",views.prescriptionbookview,name="prescription-upload"),
+    path("testselect/",views.testselect,name="testselect"),
+    path('delete/', views.destroy,name="destroy"),
+    path("cart",views.cartt,name="cart"),
+    path("addtocart/",views.addtocart,name="addtocart"),
     path("bookinghistory/",views.bookinghistoryview,name="booking-history"),
     path('healthcheckup/<slug:slug>/',views.healthcheckupview, name='Health-checkup'),
     path('healthpackage/<slug:slug>/',views.healthpackageview, name='Healt-package'),

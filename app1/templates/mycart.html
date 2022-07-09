@@ -1,7 +1,8 @@
+
 {%include "header.html"%}
-
-    {%include "subheader.html"%}
-
+{%include "subheader.html"%}
+{%load static%}
+<body>
     <section class="cart_table">
         <div class="container">
             <div class="row ">
@@ -29,98 +30,30 @@
                                                     Price
                                                 </div>
                                             </div>
-
+{%for cart in data%}
                                             <div class="row">
                                                 <div class="cell" data-title=" S.No">
-                                                    S.No
+                                                    {{ forloop.counter }}
                                                 </div>
                                                 <div class="cell" data-title="Test Name">
-                                                    Test Name
+                                                    {{cart.items}}
                                                 </div>
                                                 <div class="cell" data-title="Category Name">
-                                                    Category Name
+                                                    {{cart.categoryy}}
                                                 </div>
                                                 <div class="cell" data-title="">
-                                                    <i class="fa fa-trash cursor" aria-hidden="true"></i>
+                                                    {% comment %} href="{%url "destroy" cart.id%}" {% endcomment %}
+                                                    {% comment %} <a href="{% url "destroy" cart.id%}" class="link-delete text-danger" ><i class="fa fa-trash cursor" aria-hidden="true"></i></a> {% endcomment %}
+                                                   {% comment %} <button  class="link-delete br" ><i class="fa fa-trash cursor" aria-hidden="true"></i></button> {% endcomment %}
+                                                <button  name={{cart.id}} id="delete"  type="button" class="link-delete br"><i class="fa fa-trash cursor" aria-hidden="true"></i></button>
                                                 </div>
                                                 <div class="cell" data-title="Price">
-                                                    Rs. 245.00
+                                                   Rs {{cart.price}}
                                                 </div>
                                             </div>
-
-                                            <div class="row">
-                                                <div class="cell" data-title=" S.No">
-                                                    S.No
-                                                </div>
-                                                <div class="cell" data-title="Test Name">
-                                                    Test Name
-                                                </div>
-                                                <div class="cell" data-title="Category Name">
-                                                    Category Name
-                                                </div>
-                                                <div class="cell" data-title="">
-                                                    <i class="fa fa-trash cursor" aria-hidden="true"></i>
-                                                </div>
-                                                <div class="cell" data-title="Price">
-                                                    Rs. 245.00
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="cell" data-title=" S.No">
-                                                    S.No
-                                                </div>
-                                                <div class="cell" data-title="Test Name">
-                                                    Test Name
-                                                </div>
-                                                <div class="cell" data-title="Category Name">
-                                                    Category Name
-                                                </div>
-                                                <div class="cell" data-title="">
-                                                    <i class="fa fa-trash cursor" aria-hidden="true"></i>
-                                                </div>
-                                                <div class="cell" data-title="Price">
-                                                    Rs. 245.00
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="cell" data-title=" S.No">
-                                                    S.No
-                                                </div>
-                                                <div class="cell" data-title="Test Name">
-                                                    Test Name
-                                                </div>
-                                                <div class="cell" data-title="Category Name">
-                                                    Category Name
-                                                </div>
-                                                <div class="cell" data-title="">
-                                                    <i class="fa fa-trash cursor" aria-hidden="true"></i>
-                                                </div>
-                                                <div class="cell" data-title="Price">
-                                                    Rs. 245.00
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="cell" data-title=" S.No">
-                                                    S.No
-                                                </div>
-                                                <div class="cell" data-title="Test Name">
-                                                    Test Name
-                                                </div>
-                                                <div class="cell" data-title="Category Name">
-                                                    Category Name
-                                                </div>
-                                                <div class="cell" data-title="">
-                                                    <i class="fa fa-trash cursor" aria-hidden="true"></i>
-                                                </div>
-                                                <div class="cell" data-title="Price">
-                                                    Rs. 245.00
-                                                </div>
-                                            </div>
-                                        </div>
-
+{%endfor%}
+                                       
+                                        </div> 
                                         <div class="row py-4">
                                             <div class="col-lg-6">
                                                 <form action="javascript:void(0)" id="couponForm">
@@ -146,7 +79,7 @@
                                                         <h4 class="fs-20 font-bold cl-dark-blue mb-3">Sub Total</h4>
                                                     </div>
                                                     <div class="col-6">
-                                                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Rs. 245.00</h4>
+                                                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Rs. {{subtotal}}</h4>
                                                     </div>
                                                 </div>
                                                 <div class="row py-4 text-center bg-white sub_total">
@@ -154,7 +87,7 @@
                                                         <h4 class="fs-30 font-bold cl-dark-blue">Total</h4>
                                                     </div>
                                                     <div class="col-6">
-                                                        <h4 class="fs-30 font-bold cl-dark-blue">Rs. 245.00</h4>
+                                                        <h4 class="fs-30 font-bold cl-dark-blue">Rs.{{subtotal}}</h4>
                                                     </div>
 
                                                 </div>
@@ -175,21 +108,14 @@
     </section>
 
 {%include "footer.html"%}
+
 </body>
 
 
+
+
 <script>
-    function toggleMenu() {
-        var menuBox = document.getElementById('menu-box');
-
-        if (menuBox.style.display == "block") {
-            menuBox.style.display = "none";
-        }
-        else {
-            menuBox.style.display = "block";
-        }
-    }
-
+    
     $.validator.addMethod('filesize', function (value, element, param) {
         return this.optional(element) || (element.files[0].size <= param)
     }, 'File size must be less than {0}');
@@ -231,195 +157,54 @@
         }
     });
 </script>
+<script type = "text/javascript">
 
+    
+    /* $(".link-delete").on("click", function(e){
+        alert("delete")
+        e.preventDefault();
+        var $this = $(this).val();
+        if(confirm("Sure to delete?")){
+            alert("ohhh")
+            $.ajax({
+                url: ""
+                type: "GET",
+                dataType: "json",
+                success: function(resp){
+                   alert("Deleted")
+                }
+            });
+        }
+        return false;
+    }); */
+
+    $("#delete").on("click", function(e){
+        
+       
+
+        var idd = $(this).attr('name');
+        
+        if(confirm("Sure to delete?")){
+            $.ajax({
+                url: {% url 'destroy' %},
+                type: "POST",
+                dataType: "json",
+                data: {
+                    'pk':idd,
+                    'csrfmiddlewaretoken':'{{ csrf_token }}',
+                },
+                success: function(resp){
+                   
+                   window.location.reload();
+                }
+            });
+        }
+        return false;
+    });
+    </script> 
 </html>
 
 
 
 
 
-<!-- 
-
-
-<!DOCTYPE html>
-<html lang="en">
-
-<input class="w-100 coupon_input" placeholder="Apply Coupon" />
-                                                <button
-                                                    class="coupon_apply br br-5 text-center fs-18 font-regular ms-3">APPLY</button>
-
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diagnostic Span</title>
-    <link rel="stylesheet" href="asset/css/style.css">
-    <link rel="stylesheet" href="asset/fontawesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="asset/css/bootstrap.min.css">
-    <link rel="stylesheet" href="asset/css/owl.carousel.min.css">
-    <link rel="stylesheet" href="asset/css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
-
-
-    <script src="asset/js/jquery-3.6.0.min.js"></script>
-    <script src="asset/js/bootstrap.bundle.min.js"></script>
-    <script src="asset/js/owl.carousel.min.js"></script>
-    <script src="asset/js/script.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-    <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
-</head>
-
-<body>
-
-    <section class="section_nav_bar bg-light-grey">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="nav_bar">
-                        <img src="asset/images/image_logo.png" alt="" class="img-fluid logo-img" />
-                        <div class="menu-center">
-                            <span onClick="toggleMenu()" id="open_icon">&#9776;</span>
-                            <ul class="p-0 m-0" id="menu-box">
-                                <li class="pt-xl-0 pt-5 active"><a>Our Services</a></li>
-                                <li><a>Packages</a></li>
-                                <li><a>Our Lab</a></li>
-                                <li><a>About Us</a></li>
-                                <li><a>Contact Us</a></li>
-                                <li><a class="nav_button"><i class="fa fa-search pe-2" aria-hidden="true"></i>Book A
-                                        Test
-                                        Online</a></li>
-                                <li> <a href="#" class=" cart-logo1">
-                                        <img src="asset/images/bg-user.png" alt="" class="" />
-                                    </a></li>
-                                <li>
-                                    <a href="#" class="">
-                                        <img src="asset/images/bg-cart.png" alt="" class="" />
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="sub_header py-xl-4 py-3">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="d-flex ">
-                        <p class="m-0 fs-18 font-regular cl-dark-blue opc-5 pe-1 sub_nav_bar">Home</p>
-                        /
-                        <p class="m-0 fs-18 font-regular cl-dark-blue ps-1 sub_nav_bar">Cart</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="cart_table">
-        <div class="container">
-            <div class="row ">
-                <div class="col-lg-12 ">
-                    <div class="bg-light-grey br-15">
-                        <h1 class="fs-40 font-bold cl-dark-blue text-center py-5">My Cart</h1>
-                        <div class="row justify-content-center">
-                            <div class="col-lg-10">
-                                <table class="table ">
-                                    <thead class="bg-light-green">
-                                        <tr class="table_head">
-                                            <td class="table_head_name " style="width: 15.66%" scope="col">S.No</td>
-                                            <td class="table_head_name" style="width: 22.66%" scope="col">Test Name</td>
-                                            <td class="table_head_name" style="width: 29.66%" scope="col">Category Name
-                                            </td>
-                                            <td class="table_head_name" style="width: 17.66%" scope="col"></td>
-                                            <td class="table_head_name " scope="col">Price</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="cart_table_body ">
-                                        <tr class="br_btm ps-5">
-                                            <td class="table_body_name" data-title="S.NO">S.No</td>
-                                            <td class="table_body_name" data-title="Test Name">Test Data</td>
-                                            <td class="table_body_name" data-title="Category Name">Test Data</td>
-                                            <td class="table_body_name" data-title=""><i class="fa fa-trash"
-                                                    aria-hidden="true"></i></td>
-                                            <td class="table_body_name" data-title="Price">Rs. 245.00</td>
-                                        </tr>
-                                        <tr class="br_btm">
-                                            <td class="table_body_name" data-title="S.NO">S.No</td>
-                                            <td class="table_body_name" data-title="Test Name">Test Data</td>
-                                            <td class="table_body_name" data-title="Category Name">Test Data</td>
-                                            <td class="table_body_name" data-title=""><i class="fa fa-trash"
-                                                    aria-hidden="true"></i></td>
-                                            <td class="table_body_name" data-title="Price">Rs. 245.00</td>
-                                        </tr>
-                                        <tr class="br_btm">
-                                            <td class="table_body_name" data-title="S.NO">S.No</td>
-                                            <td class="table_body_name" data-title="Test Name">Test Data</td>
-                                            <td class="table_body_name" data-title="Category Name">Test Data</td>
-                                            <td class="table_body_name" data-title=""><i class="fa fa-trash"
-                                                    aria-hidden="true"></i></td>
-                                            <td class="table_body_name" data-title="Price">Rs. 245.00</td>
-                                        </tr>
-                                        <tr class="br_btm">
-                                            <td class="table_body_name" data-title="S.NO">S.No</td>
-                                            <td class="table_body_name" data-title="Test Name">Test Data</td>
-                                            <td class="table_body_name" data-title="Category Name">Test Data</td>
-                                            <td class="table_body_name" data-title=""><i class="fa fa-trash"
-                                                    aria-hidden="true"></i></td>
-                                            <td class="table_body_name" data-title="Price">Rs. 245.00</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <div class="row pb-5">
-                                    <div class="col-lg-6">
-                                        <h3 class="fs-24 font-bold cl-dark-blue m-0 py-4">Enter Coupon Code</h3>
-                                        <div class="row">
-                                            <div class="col-lg-7">
-                                                <input class="w-100 h-100  br-5 px-3 py-3" placeholder="First Name" />
-                                            </div>
-                                            <div class="col-lg-5">
-                                                <button
-                                                    class="table_head br br-5 text-center py-3  w-100">APPLY</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6  ps-5 text-center">
-                                        <div class="row   ">
-                                            <div class="col-lg-6">
-                                                test
-                                            </div>
-                                            <div class="col-lg-6">test</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-</body>
-
-
-
-
-<script>
-    function toggleMenu() {
-        var menuBox = document.getElementById('menu-box');
-
-        if (menuBox.style.display == "block") {
-            menuBox.style.display = "none";
-        }
-        else {
-            menuBox.style.display = "block";
-        }
-    }
-</script>
-
-</html> -->
