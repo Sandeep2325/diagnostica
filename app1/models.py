@@ -1,3 +1,4 @@
+import email
 from tabnanny import verbose
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -409,13 +410,36 @@ class coupons(models.Model):
     class Meta:
         verbose_name_plural="Coupons"
 
-class pricee(models.Model):
-    testt=models.ForeignKey(test,null=True,blank=True,on_delete=models.SET_NULL,verbose_name="Test")
-    city=models.ForeignKey(city,null=True,blank=True,on_delete=models.SET_NULL,verbose_name="City")
-    price=models.CharField(max_length=50,null=True,blank=True,verbose_name="Price")
+class faq(models.Model):
+    question=models.CharField(max_length=600,null=True,blank=True)
+    answer=models.TextField(null=True,blank=True)
+
     def __str__(self):
-        return str(self.price    ) 
+        return self.question
+
     class Meta:
-        verbose_name_plural="Test Price"
-     
-        
+        verbose_name_plural="FAQ"
+
+class contactus(models.Model):
+    fullname=models.CharField(max_length=200,blank=True,null=True)
+    email=models.EmailField(max_length=255,null=True,blank=True)
+    phone=models.CharField(max_length=13,null=True,blank=True)
+    subject=models.TextField(null=True,blank=True)
+    message=models.TextField(null=True,blank=True)
+
+    def __str__(self):
+        return self.fullname
+    class Meta:
+        verbose_name_plural="Contact us form"
+class payment(models.Model):
+    paymentid=models.CharField(max_length=400,null=True,blank=True)
+    transid=models.CharField(max_length=400,null=True,blank=True)
+    date=models.CharField(max_length=30,null=True,blank=True)
+    amount=models.CharField(max_length=50,null=True,blank=True)
+
+    def __str__(Self):
+        return self.paymentid
+
+    class Meta:
+        verbose_name_plural="Payments"
+

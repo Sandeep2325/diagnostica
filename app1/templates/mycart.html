@@ -184,7 +184,7 @@
 
         var idd = $(this).attr('name');
         
-        if(confirm("Sure to delete?")){
+        
             $.ajax({
                 url: {% url 'destroy' %},
                 type: "POST",
@@ -198,7 +198,7 @@
                    window.location.reload();
                 }
             });
-        }
+        
         return false;
     });
     </script> 

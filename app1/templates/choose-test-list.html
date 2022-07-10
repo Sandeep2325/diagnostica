@@ -137,7 +137,7 @@
     $("#addcart").on("click", function(e){
         
         var idd = $(this).attr('name');
-        
+        alert(idd)
             $.ajax({
                 url: {% url "addtocart" %},
                 type: "POST",
