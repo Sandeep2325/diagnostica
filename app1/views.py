@@ -400,7 +400,7 @@ def home(request):
         cart.objects.create(user=request.user,items=tes,categoryy=tes.categoryy,price=tes.pricel3).save()
     elif c == "Delhi":
         cart.objects.create(user=request.user,items=tes,categoryy=tes.categoryy,price=tes.pricel3).save()
-     
+
     cit=city.objects.all()
     tests=test.objects.all()
     healthcheckup=healthcheckuppackages.objects.all()
@@ -746,8 +746,8 @@ def paymenthandler(request,str,amount):
         history.payment_status=True
         history.save()
         request.session.delete("amount")
-        return HttpResponse("Payment Successfull")
-        # return redirect("bookinghistory/")
+        return HttpResponseRedirect(reverse("booking-history"))
+        
 def subscriptionview(request):
     if request.method=="POST":
         form=subscriptionform()
