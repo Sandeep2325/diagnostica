@@ -113,7 +113,7 @@ class prescriptionbookadmin(admin.ModelAdmin):
 #         ])
 #     testname.short_description = "Tests"
 class categoryadmin(admin.ModelAdmin):
-    list_display=["categoryy","created","updated","action_btn"]
+    list_display=["id","categoryy","created","updated","action_btn"]
     readonly_fields=["created","updated"]
     # prepopulated_fields = {"slug": ("categoryy",)}
     def action_btn(self, obj):
@@ -149,7 +149,7 @@ class healthcheckup_admin(SummernoteModelAdmin):
         return format_html(html)
     action_btn.short_description = "Action"
 class healthpackage_admin(SummernoteModelAdmin):
-    list_display=["package_name","testname","pricel1","pricel2","pricel3","pricel4","pricel5","pricel6","dpricel1","dpricel2","dpricel3","dpricel4","dpricel5","dpricel6","created","updated","action_btn"]
+    list_display=["package_name","testname","pricel1","pricel2","pricel3","pricel4","pricel5","pricel6","created","updated","action_btn"]
     readonly_fields=["created","updated"]
     # list_editable=["location"]
     prepopulated_fields = {"slug": ("package_name",)}
@@ -168,10 +168,11 @@ class healthpackage_admin(SummernoteModelAdmin):
         return format_html(html)
     action_btn.short_description = "Action"
     
-class healthsymptoms_admin(admin.ModelAdmin):
+class healthsymptoms_admin(SummernoteModelAdmin):
     list_display=["name","imagee","testname","symptoms","created","updated","action_btn"]
     readonly_fields=["created","updated"]
     prepopulated_fields = {"slug": ("name",)}
+    summernote_fields = ('symptoms',)
     def testname(self, obj):
         return ", ".join([
             test.testt for test in obj.test_name.all()
@@ -331,7 +332,15 @@ class testnamee(ChangeList):
         self.list_editable = ['test_name']
 class priceadmin(admin.ModelAdmin):
     list_display=["testt","city","price"]
-
+class paymentadmin(admin.ModelAdmin):
+    list_display=["user","paymentid","transid","amount","date"]
+class contactusadmin(admin.ModelAdmin):
+    list_display=["fullname","email","phone","subject","message"]
+class faqadmin(admin.ModelAdmin):
+    list_display=["question","answer"]
+admin.site.register(faq,faqadmin)
+admin.site.register(contactus,contactusadmin)
+admin.site.register(payment,paymentadmin)
 admin.site.register(city,cityadmin)
 admin.site.register(blogcategory,blogcategoryadmin)
 admin.site.register(test,testadmin)
@@ -350,10 +359,11 @@ admin.site.register(aboutspan,aboutspanadmin)
 admin.site.register(subscription,subscriptionadmin)
 admin.site.register(socialmedialinks,socialmediaadmin)
 admin.site.register(coupons,couponadmin)
+
 # admin.site.register(pricee,priceadmin)
 from django.contrib.auth.models import Group
 admin.site.unregister(Group)
-admin.site.register(cart,cartadmin)
+# admin.site.register(cart,cartadmin)
 
 
 

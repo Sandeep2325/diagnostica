@@ -281,7 +281,7 @@ textarea {
 }
 
 .test_nav {
-    text-align: right !important;
+    text-align: left !important;
 }
 
 .section_nav_bar ul li {
@@ -294,6 +294,16 @@ textarea {
     display: block;
     padding: 0px !important;
     cursor: pointer;
+}
+
+.dropdown-menu {
+    position: static;
+    top: 10px !important;
+    left: -60px !important;
+}
+
+.dropdown-menu li {
+    width: 100% !important;
 }
 
 .section_nav_bar a {
@@ -341,10 +351,14 @@ textarea {
 
 .cart-logo1 .show {
     display: block;
+    position: absolute;
+    top: 100px;
 }
 
 .dropdown-menu .show {
     display: block;
+    position: static;
+    top: 100px;
 }
 
 
@@ -522,7 +536,7 @@ textarea {
 .section_home_health_check ul {
     color: #17235A;
     border-bottom: 1px solid #17235A;
-    opacity: 0.6;
+    opacity: 1;
 }
 
 .health_price_disc {
@@ -653,11 +667,18 @@ textarea {
     padding-top: 100px;
 }
 
-.helping_book_test input {
+.helping_book_test input,
+.bookhelper_select {
     padding: 12px 20px;
     outline: none;
     border: 2px solid #DBDEEF;
 }
+
+
+/* .home_modal_city_icon {
+    width: 100px;
+    height: 100px;
+  } */
 
 
 /* -------------------Login------------------- */
@@ -747,11 +768,93 @@ input::-webkit-input-placeholder {
 }
 
 
+/* -----------Change password -----------------*/
+
+.change_password_eye {
+    position: absolute;
+    right: 73px;
+    top: 20px;
+    font-size: 20px !important;
+}
+
+
 /* ----------------profile------------- */
 
 .section_profile input {
     border: none;
     outline: none;
+    border: 2px solid #DBDEEF;
+}
+
+.change_password_modal input {
+    border: none;
+    outline: none;
+    border: 2px solid #DBDEEF;
+}
+
+.user_profile_pic .profile-pic-wrapper {
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.user_profile_pic .pic-holder {
+    text-align: center;
+    position: relative;
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.user_profile_pic .pic-holder .pic {
+    height: 100%;
+    width: 100%;
+    -o-object-fit: cover;
+    object-fit: cover;
+    -o-object-position: center;
+    object-position: center;
+}
+
+.user_profile_pic .pic-holder .upload-file-block,
+.user_profile_pic .pic-holder .upload-loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(90, 92, 105, 0.7);
+    color: #f8f9fc;
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.user_profile_pic .pic-holder .upload-file-block {
+    cursor: pointer;
+}
+
+.user_profile_pic .pic-holder:hover .upload-file-block {
+    opacity: 1;
+}
+
+.user_profile_pic .pic-holder.uploadInProgress .upload-file-block {
+    display: none;
+}
+
+.user_profile_pic .pic-holder.uploadInProgress .upload-loader {
+    opacity: 1;
 }
 
 
@@ -767,6 +870,11 @@ input::-webkit-input-placeholder {
     flex-shrink: 0;
     width: unset !important;
     max-width: 100%;
+}
+
+.cart_table a i {
+    font-size: 20px;
+    color: #2B3147;
 }
 
 .cart_table .table {
@@ -789,11 +897,6 @@ input::-webkit-input-placeholder {
     color: #ffffff;
     background: #2B3147;
     padding: 20px 50px;
-}
-
-.cart_table a i {
-    font-size: 20px;
-    color: #2B3147;
 }
 
 .cart_table .cell {
@@ -826,6 +929,25 @@ input::-webkit-input-placeholder {
     padding: 0px 30px;
     max-width: 1400px;
     right: 0px;
+}
+
+.cart_checkout_modal .close {
+    position: absolute;
+    right: 0px;
+    top: -1px;
+    color: #2B3147;
+}
+
+.cart_checkout_modal .modal-dialog {
+    margin: 10vh auto 0px auto
+}
+
+.cart_checkout_modal input,
+select {
+    padding: 12px 20px;
+    outline: none;
+    border: 2px solid #DBDEEF;
+    margin-top: 20px;
 }
 
 
@@ -935,9 +1057,9 @@ table td {
     }
     .section_booking_history table td::before {
         /*
-  * aria-label has no advantage, it won't be read inside a table
-  content: attr(aria-label);
-  */
+      * aria-label has no advantage, it won't be read inside a table
+      content: attr(aria-label);
+      */
         content: attr(data-label);
         float: left;
         font-weight: bold;
@@ -970,6 +1092,10 @@ select,
     padding: 10px 70px;
 }
 
+.section_book-test-online ul li {
+    list-style: none;
+}
+
 
 /* --------choose test list--------- */
 
@@ -992,7 +1118,6 @@ select,
     font-size: 24px;
     font-family: Chivo-bold;
     color: #2B3147;
-    border-bottom: 2px solid orange;
 }
 
 .test-list-search {
@@ -1022,6 +1147,162 @@ select,
     align-items: center;
     align-content: center;
     top: 60px;
+}
+
+
+/* ---------------Contact us------------- */
+
+.contact .contact_button {
+    width: 200px;
+    height: 50px;
+    background: #2B3147;
+}
+
+.contact .contact_button:hover {
+    background: white;
+    color: #2B3147;
+    transition: 0.5s ease-in-out;
+}
+
+.contact ul li {
+    list-style: none;
+    font-size: 16px;
+    color: #2B3147;
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 35px;
+}
+
+.contact ul li a {
+    color: #2B3147;
+}
+
+.contact ul li a:hover {
+    font-size: 17px;
+    transition: 0.5s ease-in-out;
+}
+
+.contact ul li i {
+    list-style: none;
+    left: 0px;
+    position: absolute;
+    font-size: 20px;
+    color: #2B3147;
+}
+
+.contact input,
+textarea {
+    border: 2px solid #DBDEEF;
+    outline: none;
+}
+
+
+/* ------------faq---------- */
+
+.section_faq .faqitem {
+    background-color: #f0f3f8 !important;
+    border: none;
+    border-bottom: 1px solid #7a2020;
+    font-size: 30px;
+}
+
+.section_faq .accordion-header {
+    margin-bottom: 0px;
+    margin-top: 15px;
+}
+
+.section_faq .accordion-button:after {
+    background-image: url(https://www.freepnglogos.com/uploads/plus-icon/plus-icon-plus-math-icon-download-icons-9.png);
+}
+
+.section_faq .faqitem:hover {
+    background-color: #f0f3f8 !important;
+    border: none;
+    border-bottom: 1px solid #7a2020;
+}
+
+
+/* --------------blog detail-------------- */
+
+.section_blog_detail .detail_blog p {
+    font-size: 20px;
+    font-family: Chivo-Regular;
+    color: #2B3147;
+    opacity: 0.6;
+}
+
+.section_blog_detail .categort_data button {
+    font-size: 17px;
+    font-family: Chivo-Regular;
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    background: transparent linear-gradient(90deg, #20C7BA 0%, #1686F1 100%) 0% 0% no-repeat;
+    /* border-radius: 10px 5px 30px 10px; */
+}
+
+.section_blog_detail .categort_data button:hover {
+    font-size: 15px;
+    font-family: Chivo-Bold;
+    background: white;
+    transition: 0.5s ease-in-out;
+}
+
+.section_blog_detail .recent_article a {
+    font-size: 16px;
+    font-family: Chivo-Regular;
+    cursor: pointer;
+}
+
+.section_blog_detail .recent_article a:hover {
+    font-size: 17px;
+    opacity: 1;
+}
+
+.section_blog_detail .recent_article .recent_article_a {
+    border-bottom: 1px solid #d8d8d8;
+    opacity: 0.6;
+    margin-bottom: 30px;
+}
+
+.section_franchises_opportunity .franchise_1_img img {
+    border-radius: 30px;
+}
+
+.section_franchises_opportunity input,
+textarea {
+    padding: 12px 0px;
+    outline: none;
+}
+
+.section_franchises_opportunity button {
+    background: #2B3147;
+}
+
+
+/* --------------About us-------------------- */
+
+.section_about_us p {
+    font-size: 16px;
+    font-family: Chivo-Regular;
+    color: #2B3147;
+    opacity: 0.7;
+}
+
+.section_about_why_choose_us i {
+    font-size: 75px;
+    color: #332a61;
+    display: flex;
+    justify-content: center;
+}
+
+.section_about_why_choose_us .about_carousel {
+    border: 2px solid white;
+    background: white;
+    border-radius: 10px;
+    -webkit-box-shadow: 0 0 20px #eceaea;
+    box-shadow: 0 0 20px #eceaea;
 }
 
 
@@ -1253,6 +1534,20 @@ select,
 
 @media (max-width: 1199.98px) {
     /* header */
+    .section_nav_bar .menu-center ul li {
+        text-align: left !important;
+    }
+    .change_password_eye {
+        position: absolute;
+        right: 24px;
+        top: 22px;
+    }
+    .dropdown-menu {
+        position: static !important;
+        top: 200px !important;
+        left: -60px !important;
+        transform: unset !important;
+    }
     .home_health_h1 {
         font-size: 25px;
     }
@@ -1274,6 +1569,15 @@ select,
     .home_health_symp_header {
         font-size: 25px;
     }
+    .section_nav_bar .nav_button {
+        display: none !important;
+    }
+    .nav_book_res {
+        display: block !important;
+    }
+    .nav_cart_img {
+        display: none !important;
+    }
     /*----------- Navber----------- */
     .section_nav_bar .nav_bar .logo-img {
         height: 50px;
@@ -1289,7 +1593,7 @@ select,
     .section_nav_bar ul li {
         display: block;
         text-align: end;
-        padding: 15px 10px;
+        padding: 7px 20px;
     }
     .section_nav_bar ul {
         display: none;

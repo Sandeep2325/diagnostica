@@ -79,6 +79,7 @@
                                                 <option selected="selected"  class="opc-5" disabled>Option</option>
                                                 <option value="m">Mother</option>
                                                 <option value="f">Father</option>
+                                                <option value="w">Wife</option>
                                                 <option value="s">Son</option>
                                                 <option value="s">Daughter</option>
                                                 <option value="s">Others</option>
@@ -177,12 +178,7 @@
     }, 'File size must be less than {0}');
     $("#prescription").validate({
         rules: {
-            'radio_self': {
-                required: true,
-            },
-            'radio_others': {
-                required: true,
-            },
+           
             'file': {
                 required: true,
             },
@@ -214,17 +210,12 @@
         },
 
         messages: {
-            'radio_self': {
-                required: "Select any one",
-            },
+            
 
             'file': {
-                required: "Enter file",
+                required: "Upload file",
             },
-            'option': {
-                required: "Select valid option",
-                email: "Select valid option"
-            },
+           
             'phone': {
                 required: "Enter mobile number",
             },

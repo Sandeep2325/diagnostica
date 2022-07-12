@@ -1,6 +1,7 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
-    {%load static%}
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,11 +15,10 @@
     <script src="{%static "js/jquery-3.6.0.min.js"%}"></script>
     <script src="{%static "js/bootstrap.bundle.min.js"%}"></script>
     <script src="{%static "js/owl.carousel.min.js"%}"></script>
-    <script src="{%static "js/script.js"%}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 </head>
 <body>
-
     <section class="section_nav_bar bg-light-grey">
         <div class="container">
             <div class="row">
@@ -29,33 +29,37 @@
                     <div class="menu-center">
                         <span onClick="toggleMenu()" id="open_icon">&#9776;</span>
                         <ul class="p-0 m-0" id="menu-box">
-                            <li class="pt-xl-0 pt-5 active "><a href="health-pack-started.html" class="nav_hov">Our
+                            <li class="pt-xl-0 pt-5 active "><a href="{%url 'Health-package' slug='basic'%}" class="nav_hov">Our
                                     Services</a></li>
-                            <li><a href="health-packages.html" class="nav_hov">Packages</a></li>
-                            <li><a href="" class="nav_hov">Our Lab</a></li>
-                            <li><a href="home.html #about" class="nav_hov">About Us</a></li>
-                            <li><a href="" class="nav_hov">Contact Us</a></li>
+                            <li><a href="{%url "packages"%}" class="nav_hov">Packages</a></li>
+                            <li><a href="{%url "testselect"%}" class="nav_hov">Our Lab</a></li>
+                            <li><a href="{%url "aboutus"%}" class="nav_hov">About Us</a></li>
+                            <li><a href="{%url "contactus"%}" class="nav_hov">Contact Us</a></li>
                             <li><a href="{%url "bookonline"%}" class="nav_button"><i class="fa fa-search pe-2"
                                         aria-hidden="true"></i>Book A
                                     Test
                                     Online</a></li>
                             <li>
-                                <a class=" cart-logo1 " id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                                <a class="cart-logo1" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                                     aria-expanded="false">
-                                    <img src="{%static "images/bg-user.png"%}" alt="" class="" />
+                                    <img src="{%static 'images/bg-user.png' %}" alt="" class="" />
                                 </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    {%if user.is_authenticated %}
-                                    <li class="p-0"><a class="dropdown-item" href="{%url "profile"%}">Profile</a></li>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown" id="navBar">
+                                    {% if user.is_authenticated %}
+                                    <li class="p-0"><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
                                     <br>
-                                    <li class="p-0"><a class="dropdown-item" href="{%url "logout"%}">Logout</a></li>
+                                    <li class="p-0"><a class="dropdown-item" href="{% url 'booking-history' %}">Booking History</a></li>
                                     <br>
-                                    {%else%}
-                                    <li class="p-0"><a class="dropdown-item" href="{%url "user-login"%}">Login</a></li>
+                                    <li class="p-0"><a class="dropdown-item" href="{% url 'changepassword' %}">Change password</a></li>
                                     <br>
-                                    <li class="p-0"><a class="dropdown-item" href="{%url "Registration"%}">Register</a></li>
+                                    <li class="p-0"><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                                     <br>
-                                    {%endif%}
+                                    {% else %}
+                                    <li class="p-0"><a class="dropdown-item" href="{% url 'user-login' %}">Login</a></li>
+                                    <br>
+                                    <li class="p-0"><a class="dropdown-item" href="{% url 'Registration' %}">Register</a></li>
+                                    <br>
+                                    {% endif%}
                                 </ul>
                             </li>
                             <li>
@@ -68,9 +72,7 @@
                 </div>
             </div>
         </div>
-
     </section>
-
 </body>
 <script>
     function toggleMenu() {
@@ -83,6 +85,10 @@
             menuBox.style.display = "block";
         }
     }
-
+$("#navbarDropdown").click(function(){
+    $("#navBar").addClass(" show");
+    $("#navBar").attr("data-popper-placement","bottom-end");
+    $("#navBar").attr("style","position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(1570px, 62px);");
+});
 </script>
 </html>

@@ -1,6 +1,5 @@
-
-{%include "header.html"%}
 {%load static%}
+{%include "header.html"%}
 <body>
   <section class="home_banner pt-3 pb-lg-5">
     <div class="owl-carousel owl-theme home-banner-slider">
@@ -8,7 +7,7 @@
         <div class="container">
           <div class="row">
             <div class="offset-lg-1 col-xxl-5 col-xl-6 col-lg-10 ">
-              <h1 class="">Hello Bengaluru,</h1>
+              <h1 class="" id="cityName">Hello {{currentcity}},</h1>
               <h2 class="">Protect your health with This simple Checkup.</h2>
               <p class="fs-24">To become <b> “One Stop Solution” </b> for all your Diagnostic needs</p>
               <button>BOOK A TEST ONLINE</button>
@@ -25,186 +24,65 @@
           <h1 class="fs-40 font-bold home_health_h1 w-100 m-0">Health Checks & Lab Tests</h1>
           <p class="fs-18 font-bold home_health_p  ">View All</p>
         </div>
+        {%for checkup in healthcheckup%}
         <div class="col-lg-4 col-xl-4 col-xxl-3 col-md-6 py-xl-5 py-2 ">
           <div class=" bg-light-grey br-10 h-100 health_check_height">
             <div class="position-relative ">
-              <div class="batdge">20% off</div>
+              <div class="batdge">{{checkup.discount}}% off</div>
             </div>
             <div class="px-xl-4 px-3 py-5 bg-light-grey br-10">
-              <h1 class="pt-3 font-bold fs-35 cl-light-blue test_head">55+ Tests</h1>
+              <h1 class="pt-3 font-bold fs-35 cl-light-blue test_head">{{checkup.testcount}}+ Tests</h1>
               <div>
-                <h1 class="cl-dark-blue fs-35 font-bold test_head">Full Body Checkup</h1>
+                <h1 class="cl-dark-blue fs-35 font-bold test_head">{{checkup.package_title}}</h1>
               </div>
               <div class="home_ul_li ul-dot pt-3  m-0">
                 <ul class="">
-                  <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                  {{checkup.description|safe}}
+                  {% comment %} <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                   </li>
                   <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                  </li>
+                  </li> {% endcomment %}
                 </ul>
               </div>
               <div class="position-relative">
                 <p class="mb-2 pt-2 fs-20 font-bold cl-light-blue">Price</p>
                 <div class="d-flex">
-                  <h2 class="fs-25 font-bold cl-dark-blue home_price">1299</h2>
+                  {%if currentcity == "Bangalore"%}
+                  <h2 class="fs-25 font-bold cl-dark-blue home_price">₹{{checkup.pricel1}}</h2>
+                  {%elif currentcity == "Chennai"%}
+                  <h2 class="fs-25 font-bold cl-dark-blue home_price">₹{{checkup.pricel2}}</h2>
+                  {%elif currentcity == "Mumbai"%}
+                  <h2 class="fs-25 font-bold cl-dark-blue home_price">₹{{checkup.pricel2}}</h2>
+                  {%elif currentcity == "Delhi"%}
+                  <h2 class="fs-25 font-bold cl-dark-blue home_price">₹{{checkup.pricel2}}</h2>
+                  {%endif%}
                   <strike
-                    class="d-flex ps-xl-3 ps-2 align-items-center text-center fs-20 font-bold cl-light-blue health_price_disc">1699</strike>
+                    class="d-flex ps-xl-3 ps-2 align-items-center text-center fs-20 font-bold cl-light-blue health_price_disc">₹{{checkup.dpricel1}}</strike>
                   <div class="  p-0 ">
                     <a class=" test_now_button fs-16 cl-dark-blue font-bold py-2 px-4 br-20 position-absolute">Test
                       Now</a>
                   </div>
-
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-lg-4 col-xl-4 col-xxl-3 col-md-6 py-xl-5 py-2 ">
-          <div class=" bg-light-grey br-10 h-100 health_check_height">
-            <div class="position-relative ">
-              <div class="batdge">20% off</div>
-            </div>
-            <div class="px-xl-4 px-3 py-5 bg-light-grey br-10">
-              <h1 class="pt-3 font-bold fs-35 cl-light-blue test_head">55+ Tests</h1>
-              <div>
-                <h1 class="cl-dark-blue fs-35 font-bold test_head">Full Body Checkup</h1>
-              </div>
-              <div class="home_ul_li ul-dot  pt-3  m-0">
-                <ul class="">
-                  <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                  </li>
-                  <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                  </li>
-                </ul>
-              </div>
-              <div class="position-relative">
-                <p class="mb-2 pt-2 fs-20 font-bold cl-light-blue">Price</p>
-                <div class="d-flex">
-                  <h2 class="fs-25 font-bold cl-dark-blue home_price">1299</h2>
-                  <strike
-                    class="d-flex ps-xl-3 ps-2 align-items-center text-center fs-20 font-bold cl-light-blue health_price_disc">1699</strike>
-                  <div class="  p-0 ">
-                    <a class=" test_now_button fs-16 cl-dark-blue font-bold py-2 px-4 br-20 position-absolute">Test
-                      Now</a>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-xl-4 col-xxl-3 col-md-6 py-xl-5 py-2 ">
-          <div class=" bg-light-grey br-10 h-100 health_check_height">
-            <div class="position-relative ">
-              <div class="batdge">20% off</div>
-            </div>
-            <div class="px-xl-4 px-3 py-5 bg-light-grey br-10">
-              <h1 class="pt-3 font-bold fs-35 cl-light-blue test_head">55+ Tests</h1>
-              <div>
-                <h1 class="cl-dark-blue fs-35 font-bold test_head">Full Body Checkup</h1>
-              </div>
-              <div class="home_ul_li ul-dot  pt-3  m-0">
-                <ul class="">
-                  <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                  </li>
-                  <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                  </li>
-                </ul>
-              </div>
-              <div class="position-relative">
-                <p class="mb-2 pt-2 fs-20 font-bold cl-light-blue">Price</p>
-                <div class="d-flex">
-                  <h2 class="fs-25 font-bold cl-dark-blue home_price">1299</h2>
-                  <strike
-                    class="d-flex ps-xl-3 ps-2 align-items-center text-center fs-20 font-bold cl-light-blue health_price_disc">1699</strike>
-                  <div class="  p-0 ">
-                    <a class=" test_now_button fs-16 cl-dark-blue font-bold py-2 px-4 br-20 position-absolute">Test
-                      Now</a>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-xl-4 col-xxl-3 col-md-6 py-xl-5 py-2 ">
-          <div class=" bg-light-grey br-10 h-100 health_check_height">
-            <div class="position-relative ">
-              <div class="batdge">20% off</div>
-            </div>
-            <div class="px-xl-4 px-3 py-5 bg-light-grey br-10">
-              <h1 class="pt-3 font-bold fs-35 cl-light-blue test_head">55+ Tests</h1>
-              <div>
-                <h1 class="cl-dark-blue fs-35 font-bold test_head">Full Body Checkup</h1>
-              </div>
-              <div class="home_ul_li ul-dot  pt-3  m-0">
-                <ul class="">
-                  <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                  </li>
-                  <li class="health_li fs-18">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                  </li>
-                </ul>
-              </div>
-              <div class="position-relative">
-                <p class="mb-2 pt-2 fs-20 font-bold cl-light-blue">Price</p>
-                <div class="d-flex">
-                  <h2 class="fs-25 font-bold cl-dark-blue home_price">1299</h2>
-                  <strike
-                    class="d-flex ps-xl-3 ps-2 align-items-center text-center fs-20 font-bold cl-light-blue health_price_disc">1699</strike>
-                  <div class="  p-0 ">
-                    <a class=" test_now_button fs-16 cl-dark-blue font-bold py-2 px-4 br-20 position-absolute">Test
-                      Now</a>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+        {%endfor%}
+       
   </section>
-
   <section class="section_synbrome">
     <div class="container">
       <div class="row h-100">
         <h1 class="fs-40  cl-dark-blue font-bold home_health_symp_header pb-lg-4">Health Symptoms</h1>
+        {%for symptoms in healthsymptom%}
+        
         <div class="col-xl-2 col-lg-4 col-md-4 col-12 py-2 ">
-          <div class=" px-3 bg-light-blue text-center py-5 br-10">
-            <img src="{%static "images/icon-symp-1.png"%}" alt="" class="img-fluid pb-3">
-            <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold">Covid</p>
+          <div class=" px-3 {% cycle 'bg-light-blue' 'bg-light-orange' 'bg-light-green' 'bg-light-pink' %} text-center py-5 br-10">
+            <img src="{{ symptoms.photo.url }}" alt="" class="img-fluid pb-3">
+            <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold">{{symptoms.name}}</p>
           </div>
         </div>
-        <div class="col-xl-2 col-lg-4 col-md-4 col-12 py-2">
-          <div class=" px-3 bg-light-orange text-center py-5 br-10">
-            <img src="{%static "images/icon-symp-2.png"%}" alt="" class="img-fluid pb-3">
-            <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold">Diabetes</p>
-          </div>
-        </div>
-        <div class="col-xl-2 col-lg-4 col-md-4 col-12 py-2">
-          <div class=" px-3 bg-light-green text-center py-5 br-10">
-            <img src="{%static "images/icon-symp-3.png"%}" alt="" class="img-fluid pb-3">
-            <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold">Fever</p>
-          </div>
-        </div>
-        <div class="col-xl-2 col-lg-4 col-md-4 col-12 py-2">
-          <div class=" px-3 bg-light-pink text-center py-5 br-10">
-            <img src="{%static "images/icon-symp-4.png"%}" alt="" class="img-fluid pb-3">
-            <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold">Weight Loss</p>
-          </div>
-        </div>
-        <div class="col-xl-2 col-lg-4 col-md-4 col-12 py-2">
-          <div class=" px-3 bg-light-blue text-center py-5 br-10">
-            <img src="{%static "images/icon-symp-5.png"%}" alt="" class="img-fluid pb-3">
-            <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold">Back Pain</p>
-          </div>
-        </div>
-        <div class="col-xl-2 col-lg-4 col-md-4 col-12 py-2">
-          <div class=" px-3 bg-light-orange text-center py-5 br-10">
-            <img src="{%static "images/icon-symp-6.png"%}" alt="" class="img-fluid pb-3">
-            <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold">Pregnancy</p>
-          </div>
-        </div>
+        {%endfor%}
       </div>
     </div>
   </section>
@@ -213,98 +91,40 @@
     <div class="container">
       <div class="row">
         <h1 class="fs-40  cl-dark-blue font-bold home_health_symp_header py-4 m-0">Health Packages</h1>
+        {%for package in healthpackage%}
         <div class="col-xl-3  col-lg-4 col-md-6 pt-3">
           <div class="py-5 bg-light-grey br-30 health_hover">
-            <p class="fs-35 font-bold cl-dark-blue text-center m-0">STARTED</p>
+            <p class="fs-35 font-bold cl-dark-blue text-center m-0">{{package.package_name}}</p>
             <div class="d-flex justify-content-center align-content-center pt-4 mt-3">
               <div class="home_linear_border  ">
                 <div class="pt-5 mt-4">
                   <p
                     class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">
                     Price</p>
-                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">799</h1>
+                    {%if currentcity == "Bangalore"%}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.pricel1}}</h1>
+                  {%elif currentcity == "Chennai"%}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.pricel2}}</h1>
+                  {%elif currentcity == "Mumbai"%}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.pricel3}}</h1>
+                  {%elif currentcity == "Delhi"%}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.pricel4}}</h1>
+                  {%endif%}
                   <p
                     class="d-flex justify-content-center align-content-center align-items-center m-0 fs-18 cl-dark-blue font-bold">
-                    Includes 29
+                    Includes {{package.testcount}}
                     Tests
                   </p>
                 </div>
               </div>
             </div>
             <div class="d-flex justify-content-center pt-5">
-              <button class="home_pack_viewpack py-3 fs-16 font-bold br-50 ">VIEW PACK</button>
+              <a href="{%url "Health-package" package.slug%}"><button class="home_pack_viewpack py-3 fs-16 font-bold br-50 ">VIEW PACK</button></a>
             </div>
           </div>
         </div>
-        <div class="col-xl-3  col-lg-4 col-md-6 pt-3 ">
-          <div class="py-5 bg-light-grey br-30 health_hover">
-            <p class="fs-35 font-bold cl-dark-blue text-center m-0">BASIC</p>
-            <div class="d-flex justify-content-center align-content-center pt-4 mt-3">
-              <div class="home_linear_border  ">
-                <div class="pt-5 mt-4">
-                  <p
-                    class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">
-                    Price</p>
-                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">999</h1>
-                  <p
-                    class="d-flex justify-content-center align-content-center align-items-center m-0 fs-18 cl-dark-blue font-bold">
-                    Includes 29
-                    Tests
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="d-flex justify-content-center pt-5">
-              <button class="home_pack_viewpack py-3 fs-16 font-bold  br-50 ">VIEW PACK</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3  col-lg-4 col-md-6 pt-3">
-          <div class="py-5 home_health_standard br-30 health_hover ">
-            <p class="fs-35 font-bold cl-dark-white text-center m-0">STANDARD</p>
-            <div class="d-flex justify-content-center align-content-center pt-4 mt-3">
-              <div class="home_linear_border_2  ">
-                <div class="pt-5 mt-4">
-                  <p
-                    class="font-bold fs-20 cl-dark-white d-flex justify-content-center align-content-center align-items-center m-0">
-                    Price</p>
-                  <h1 class="fs-40 cl-dark-white font-bold d-flex justify-content-center m-0 ">1499</h1>
-                  <p
-                    class="d-flex justify-content-center align-content-center align-items-center m-0 fs-18 cl-dark-white font-bold">
-                    Includes 29
-                    Tests
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="d-flex justify-content-center pt-5">
-              <button class="home_pack_viewpack_2 py-3 cl-dark-blue fs-16 font-bold br-50 ">VIEW PACK</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3  col-lg-4 col-md-6 pt-3">
-          <div class="py-5 home_health_premium br-30 health_hover">
-            <p class="fs-35 font-bold cl-dark-white text-center m-0">PREMIUM</p>
-            <div class="d-flex justify-content-center align-content-center pt-4 mt-3">
-              <div class="home_linear_border_3  ">
-                <div class="pt-5 mt-4">
-                  <p
-                    class="font-bold fs-20 cl-dark-white d-flex justify-content-center align-content-center align-items-center m-0">
-                    Price</p>
-                  <h1 class="fs-40 cl-dark-white font-bold d-flex justify-content-center m-0 ">1499</h1>
-                  <p
-                    class="d-flex justify-content-center align-content-center align-items-center m-0 fs-18 cl-dark-white font-bold">
-                    Includes 29
-                    Tests
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="d-flex justify-content-center pt-5">
-              <button class="home_pack_viewpack_2 py-3 cl-dark-blue fs-16 font-bold br-50 ">VIEW PACK</button>
-            </div>
-          </div>
-        </div>
+        {%endfor%}
+       
       </div>
 
     </div>
@@ -315,41 +135,31 @@
       <div class="">
         <div class="row">
           <h1 class="fs-40  cl-dark-blue font-bold home_health_symp_header m-0 py-5">Health Care</h1>
+         
           <div id="health-care-slider" class="col-lg-12 health-care-slider owl-carousel owl-theme">
+            {%for blog in healthcareblog%}
             <div class="col-lg-6 w-100">
+             
               <div class="row">
                 <div class="col-lg-6 h-100">
                   <div class="pe-lg-4">
-                    <img src="{%static "images/bg-health-care.png"%}" alt="" class="img-fluid">
+                    <img src="{{blog.image.url}}" alt="" class="img-fluid">
                   </div>
                 </div>
                 <div class="col-lg-6">
-                  <h1 class="fs-35 font-bold cl-dark-blue m-0">A better life starts with beautiful smiles.</h1>
-                  <p class="m-0 fs-18 cl-dark-blue health_care_p pt-4 pb-5">Lorem Ipsum is simply dummy text of
-                    the
-                    printing and typesetting industry</p>
-
-                  <a class="py-3 px-4 bg-dark-orange cl-dark-blue font-bold fs-16 br-30">READ MORE</a>
+                  <h1 class="fs-35 font-bold cl-dark-blue m-0">{{blog.title}}</h1>
+                  <p class="m-0 fs-18 cl-dark-blue health_care_p pt-4 pb-5">{{blog.description|safe}}</p>
+                  <a href="{%url "blogsdetail" blog.slug %}"class="py-3 px-4 bg-dark-orange cl-dark-blue font-bold fs-16 br-30">READ MORE</a>
                 </div>
               </div>
+              
             </div>
-            <div class="col-lg-6 w-100 h-100">
-              <div class="row">
-                <div class="col-lg-6 h-100">
-                  <div class="pe-4">
-                    <img src="{%static "images/bg-health-care.png"%}" alt="" class="img-fluid">
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <h1 class="fs-35 font-bold cl-dark-blue m-0">A better life starts with beautiful smile.</h1>
-                  <p class="m-0 fs-18 cl-dark-blue health_care_p pt-4 pb-5 ">Lorem Ipsum is simply dummy text of
-                    the
-                    printing and typesetting industry.</p>
-                  <a class="py-3 px-4 bg-dark-orange cl-dark-blue font-bold fs-16 br-30 mb-5">READ MORE</a>
-                </div>
-              </div>
-            </div>
+            {%endfor%}
+            
           </div>
+
+
+
         </div>
       </div>
     </div>
@@ -415,19 +225,18 @@
         <div class="col-lg-12">
           <h1 class="fs-40 font-bold cl-dark-blue py-4">Testimonials</h1>
           <div id="testimonial_slider" class="owl-carousel owl-theme">
-            <div class=" bg-light-brown w-100 br-15">
-              <div class="px-4 fs-40 mx-3">
-                <i class="fa fa-quote-left testimonial_quote text-center" aria-hidden="true"></i>
-                <p class="fs-18 font-bold">The Company’s broad spectrum of services offer around 1200 clinical
-                  laboratory
-                  tests and various
-                  profiles. Various test combinations, specific to a disease or disorder and wellness profiles used for
-                  health and fitness screening, form a part of the Company’s service profile. One can choose and book
-                  blood tests for: CBC, Blood Liver profile, Vitamin B12 or Vitamin D3 and many more.The Company’s broad
-                  spectrum of services offer around 1200 clinical laboratory tests and various profiles.</p>
-                <div class="test_img "><img src="{%static "images/testimonial.png"%}" alt="" class="img-fluid"></div>
+            {%for test in testimonial%}
+            <div class=" bg-light-brown w-100 br-15 position-relative">
+              <div class="px-lg-4 fs-40 mx-3 text-center ">
+                <i class="fa fa-quote-left testimonial_quote text-center py-4" aria-hidden="true"></i>
+                <p class="fs-18 font-regular">{{test.description}}</p>
+                <div>
+                  <img src="{{test.photo.url}}" alt="" class="img-fluid test_img">
+                </div>
+                <p class="fs-18 font-bold py-4">{{test.username}}</p>
               </div>
             </div>
+            {%endfor%}
           </div>
         </div>
       </div>
@@ -474,32 +283,40 @@
           </div>
 
           <div class="col-lg-6  py-4 px-lg-4">
-            <form action="javascript:void(0)" id="homeForm">
+            <form method= "post" id="homeForm">
+              {%csrf_token%}
               <div class="bg-dark-white px-lg-5 px-3 py-4 br-15">
                 <h1 class="fs-40 font-bold cl-dark-blue pb-lg-4">Book a Test Online</h1>
                 <div class="row">
                   <div class="col-12 col-md-12 col-lg-6 pt-4">
-                    <label class="fs-20 font-regular cl-dark-blue">Name</label>
-                    <input class="w-100  br-5 mt-2" type="text" name="name" id="name" />
+                    <label class="fs-20 font-regular cl-dark-blue">First name</label>
+                    <input class="w-100  br-5 mt-2" type="text" name="firstname" id="name" maxlength="250" />
                   </div>
                   <div class="col-12 col-md-12 col-lg-6 pt-4">
-                    <label class="fs-20 font-regular cl-dark-blue">Surname</label>
-                    <input class="w-100 br-5 mt-2" type="text" name="surname" id="surname" />
+                    <label class="fs-20 font-regular cl-dark-blue">Last name</label>
+                    <input class="w-100 br-5 mt-2" type="text" name="lastname" id="surname" maxlength="250" />
                   </div>
                   <div class="col-12 col-md-12 col-lg-6 pt-4">
                     <label class="fs-20 font-regular cl-dark-blue">Phone Number</label>
-                    <input class="w-100 br-5 mt-2" type="text" name="phone" id="phone" />
+                    <input class="w-100 br-5 mt-2" type="text" name="phone" id="phone" maxlength="250" />
                   </div>
                   <div class="col-12 col-md-12 col-lg-6 pt-4">
                     <label class="fs-20 font-regular cl-dark-blue">Email Address</label>
-                    <input class="w-100 br-5 mt-2" type="email" name="email" id="email" />
+                    <input class="w-100 br-5 mt-2" type="email" name="email" id="email" maxlength="250" />
                   </div>
                   <div class="col-12 pt-4">
                     <label class="fs-20 font-regular cl-dark-blue">Select your Test Name</label>
-                    <input class="w-100 br-5 mt-2" />
+                    <select class="w-100 px-3 py-2 mt-2 br-5 cl-dark-blue fs-20 font-bold br bookhelper_select"
+                      type="select" name="selectbookhelp">
+                      <option selected="selected" class="opc-5"  disabled>Select
+                        Test</option>
+                        {%for test in tests%}
+                      <option value={{test.id}}>{{test.testt}}</option>
+                      {%endfor%}
+                    </select>
                   </div>
                   <div class="col-12 py-4 mt-3"><button
-                      class="br px-4 py-3 fs-18 font-bold cl-dark-white bg-sky-blue br-5">BOOK A TEST ONLINE</button>
+                      class="br px-4 py-3 fs-18 font-bold cl-dark-white bg-sky-blue br-5" type="submit">BOOK A TEST ONLINE</button>
                   </div>
                 </div>
               </div>
@@ -510,11 +327,47 @@
       </div>
     </div>
   </section>
-
+  <section>
+    <div id="myModal" class="modal fade">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body">
+            <h4 class="fs-24 font-bold cl-dark-blue text-center py-3">Select City's</h4>
+            <div class="home_modal_city_icon ">
+              <div class="container">
+                <div class="row">
+                  {%for i in city%}
+                  <div class="col-lg-3 pt-3">
+                    <button class="cursor" id="city" name="{{i.cityname}}" onclick=myfunction("{{i.cityname}}")>
+                      <img src="{%static "images/city.png"%}" alt="" class="img-fluid">
+                      <h6 class="text-center">{{i.cityname}}</h6>
+                    </button>
+                  </div>
+                  {%endfor%}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
   {%include "footer.html"%}
 </body>
 
 <script>
+$(document).ready(function(){
+  
+  if("{{currentcity}}" != "None"){
+    
+    $('#myModal').modal('hide');
+ 
+   }
+   else{
+    $('#myModal').modal('show');
+   }
+});
+
   function toggleMenu() {
     var menuBox = document.getElementById('menu-box');
 
@@ -655,6 +508,34 @@
       form.submit();
     }
   });
+ setTimeout(function () {
+  $('#myModal').modal({
+      backdrop: 'static'
+   });
+   //$('#myModal').modal('show');
+
+   }, 100);
+
+        function myfunction(city){
+          
+          $.ajax({
+            url: "{% url 'city' %}",
+            type : "POST", 
+            data: {
+             "city":city,
+             csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            dataType: "json",
+            success: function(resp){
+             console.log(resp);
+             if(resp["city"]){
+              $('#myModal').modal('hide');
+              window.location.reload();
+             }
+            }
+           });
+         };
+         
 </script>
 
 

@@ -59,7 +59,7 @@
     <div class="card">
       <div class="btn_container">
         <!-- Payment Button -->
-        
+        {{ razorpay_merchant_key }}
             <button class="btn" id="pay-btn">Pay</button>
       </div>
     </div>
@@ -67,7 +67,7 @@
    
   <!-- Razorpay's Javascript code. -->
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-  <script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js">
     var options = {
        
       // Enter the Key ID generated from the Dashboard

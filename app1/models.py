@@ -135,6 +135,7 @@ class test(models.Model):
 STATUS_CHOICES1 = (
     ('m', 'Mother'),
     ('f', 'Father'),
+    ('w','Wife'),
     ('s', 'Son'),
     ('d',"Daughter"),
     ('o',"Other")
@@ -181,13 +182,13 @@ class prescription_book(models.Model):
 def testbookings(sender, instance, **kwargs):
     a=[]
     for i in instance.test_name.all():
-        if i.location=="Banglore":
-            a.append(i.pricel1)
-        else:
-            a.append(i.pricel2)
+        # if i.location=="Banglore":
+        a.append(i.pricel1)
+        # else:
+        #     a.append(i.pricel2)
             
     book_history.objects.filter(testbooking_id=instance.id).update(amount=sum(a))
-    print(bool(instance.prescription_file))
+    # print(bool(instance.prescription_file))
     if (instance.test_name.first()!=None) and (bool(instance.prescription_file)==True): 
             print("sent")
             send_mail(str("Hello"),
@@ -245,12 +246,12 @@ class healthpackages(models.Model):
     pricel4=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Hyderabad Price")
     pricel5=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Delhi Price")
     pricel6=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Kolkata Price")
-    dpricel1=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Banglore Discounted Price")
-    dpricel2=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Mumbai Discounted Price")
-    dpricel3=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Chennai DiscountedPrice")
-    dpricel4=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Hyderabad Discounted Price")
-    dpricel5=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Delhi DiscountedPrice")
-    dpricel6=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Kolkata Discounted Price")
+    # dpricel1=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Banglore Discounted Price")
+    # dpricel2=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Mumbai Discounted Price")
+    # dpricel3=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Chennai DiscountedPrice")
+    # dpricel4=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Hyderabad Discounted Price")
+    # dpricel5=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Delhi DiscountedPrice")
+    # dpricel6=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Kolkata Discounted Price")
     # actual_price=models.IntegerField(null=True,blank=True)
     # discount=models.DecimalField(max_digits=5, decimal_places=2, null=True, verbose_name='Discount(%)', validators=[
     #     MinValueValidator(1), MaxValueValidator(99)])
@@ -266,7 +267,9 @@ class healthpackages(models.Model):
         if not self.slug:
             self.slug = slugify(uuid.uuid4())
         return super().save(*args, **kwargs)
-        
+    @property
+    def testcount(self):
+        return self.test_name.all().count()   
 class healthsymptoms(models.Model):
     name=models.CharField(max_length=200,null=True,blank=True)
     photo=models.ImageField(upload_to='symptoms',max_length=500, verbose_name="Photo", null=True, blank=True)
@@ -346,12 +349,13 @@ STATUS=[
 class book_history(models.Model):
     testbooking_id=models.IntegerField(null=True,blank=True)
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
-    date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    #  = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     # patient_info=models.ForeignKey(cart2,null=True,blank=True,on_delete=models.CASCADE)
     patient_info=models.CharField(max_length=200,null=True,blank=True)
     booking_type=models.CharField(max_length=200,null=True,blank=True)
     bookingdetails=models.TextField(null=True,blank=True)
     amount=models.IntegerField(null=True,blank=True)
+    payment_id=models.CharField(max_length=500,null=True,blank=True)
     # test=models.ForeignKey(prescription_book,null=True,blank=True,on_delete=models.CASCADE)
     # test1=models.CharField(max_length=200,null=True,blank=True)
     status = models.CharField(
@@ -426,18 +430,18 @@ class contactus(models.Model):
     phone=models.CharField(max_length=13,null=True,blank=True)
     subject=models.TextField(null=True,blank=True)
     message=models.TextField(null=True,blank=True)
-
     def __str__(self):
         return self.fullname
     class Meta:
         verbose_name_plural="Contact us form"
 class payment(models.Model):
+    user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
     paymentid=models.CharField(max_length=400,null=True,blank=True)
     transid=models.CharField(max_length=400,null=True,blank=True)
-    date=models.CharField(max_length=30,null=True,blank=True)
+    date=models.DateTimeField(auto_now_add=True,max_length=30,null=True,blank=True)
     amount=models.CharField(max_length=50,null=True,blank=True)
 
-    def __str__(Self):
+    def __str__(self):
         return self.paymentid
 
     class Meta:

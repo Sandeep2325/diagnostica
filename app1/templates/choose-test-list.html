@@ -1,6 +1,7 @@
+
 {%include "header.html"%}
 {%include "subheader.html"%}
-{%load static%}
+{%load static %}
 <body>
 
     <section class="section_book-test-online pb-5">
@@ -11,7 +12,6 @@
                         <div class="row">
                             <div class="col-lg-11 col-md-12 mx-auto py-lg-5">
                                 <div class="row">
-                                    
                                     <div class="col-xxl-5  col-xl-6 col-lg-6 mx-auto py-4">
                                         <div class="bg-sky-blue br-15 px-5 py-4 text-center ">
                                             <h2 class="cl-dark-white fs-30  font-bold mb-3 pb-2">Upload Prescription
@@ -44,33 +44,61 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-xl-11  mx-auto choose_test_header">
-                                        <form method="get" action="{%url "search"%}" >
-                                        {% csrf_token%}
+                                        {% comment %} <form method="get" action="{%url "search"%}" >
+                                            {% csrf_token%} {% endcomment %}
+                                        <div class="row">
+                                           
                                             <div class="col-lg-5 position-relative py-4 mx-lg-0 mx-2">
-                                            <input class="w-100 px-3 py-2 br br-5" name="searched" placeholder="Search" />
-                                         <button  type="submit"class="br">  <i class="fa fa-search test-list-search" aria-hidden="true"></i></button>
+                                                <input class="w-100 px-3 py-2 br br-5" id="searched" placeholder="Search" name="searched" />
+                                                {% comment %} <button  type="submit"class="br">  <i class="fa fa-search test-list-search" aria-hidden="true"></i></button> {% endcomment %}
+                                            </div>
+                                        {% comment %} </form> {% endcomment %}
+                                            <div class="col-lg-5 position-relative py-4 mx-lg-0 mx-2">
+                                                <select
+                                                    class="w-50 px-3 py-2  br-5 cl-dark-blue fs-22 font-bold br select_option"
+                                                    type="select" name="" id="category">
+                                                    <option selected="selected" class="opc-5" disabled>Select Category
+                                                    </option>
+                                                    
+                                                    {%for category in categories%}
+                                                    <option  value={{category.id}}>{{category.categoryy}}</option>
+                                                    {%endfor%}
+                                                </select>
+                                            </div>
                                         </div>
-                                    </form>
+                                        <div id="main-test-div">
                                         {%for test in tests%}
-                                        <div class="bg-light-green px-4 py-3 mt-2">
+                                        
+                                        <div class="bg-white br-5 px-4 py-3 mt-2">
                                             <h5 class="fs-20 font-regular cl-dark-blue ">{{test.testt}}</h5>
                                             <div class="row">
                                                 <div class="col-xl-6 col-md-6 test-list">
                                                     <p> {{test.description}} </p>
                                                 </div>
+                                                {%if city == Bangalore%}
                                                 <div class="col-xl-3 col-md-2 test-list-price">
                                                     <p>{{test.pricel1}}</p>
                                                 </div>
-                                                <div class="col-xl-3 col-md-4 test-list-button">
-                                                    <button id="addcart"
-                                                       name={{test.id}}  class="bg-sky-blue br br-5 cl-dark-white px-5 py-3">Add to
-                                                        Cart</button></div>
+                                                {%elif city == Chennai%}
+                                                <div class="col-xl-3 col-md-2 test-list-price">
+                                                    <p>{{test.pricel2}}</p>
                                                 </div>
-                                                {%for message in messages%}
-                                                {{message}}
-                                                {%endfor%}
+                                                {%elif city == Mumbai%}
+                                                <div class="col-xl-3 col-md-2 test-list-price">
+                                                    <p>{{test.pricel3}}</p>
+                                                </div>
+                                                {%elif city == Delhi%}
+                                                <div class="col-xl-3 col-md-2 test-list-price">
+                                                    <p>{{test.pricel4}}</p>
+                                                </div>
+                                                {%endif%}
+                                                <div class="col-xl-3 col-md-4 test-list-button"><button id="addtocart"
+                                                      name={{test.id}}  class="bg-sky-blue br br-5 cl-dark-white px-5 py-3" onclick=myfunction("{{test.id}}")>Add to
+                                                        Cart</button></div>
+                                            </div>
                                         </div>
                                         {%endfor%}
+                                    </div>
                                     </div>
                                     <div class="text-center py-4 test-list-load-button">
                                         <button class="py-3 px-5 br br-30 bg-dark-orange  fs-18 font-bold">Load
@@ -84,8 +112,7 @@
             </div>
         </div>
     </section>
-
-    
+    {%include "footer.html"%}
 </body>
 <script>
     function toggleMenu() {
@@ -119,27 +146,12 @@
             form.submit();
         }
     });
-</script>
 
-<script>
-    $(document).ready(function(){ 
-        $("#searched").autocomplete({
-            source: "/search/",
-            minLength: 2,
-            open: function(){
-                setTimeout(function () {
-                    $('.ui-autocomplete').css('z-index', 99);
-                }, 0);
-            }
-          });
-    });
-
-    $("#addcart").on("click", function(e){
+    $("#category").on("change", function(e){
+        var idd = $(this).val();
         
-        var idd = $(this).attr('name');
-        alert(idd)
             $.ajax({
-                url: {% url "addtocart" %},
+                url: "{% url 'category' %}",
                 type: "POST",
                 dataType: "json",
                 data: {
@@ -147,12 +159,135 @@
                     'csrfmiddlewaretoken':'{{ csrf_token }}',
                 },
                 success: function(resp){
-                   
-                   window.location.reload();
+                    $("#main-test-div").empty();
+                   for(var i=0; i<resp.length ; i++){
+                    console.log(resp[i]["id"]);
+                    
+                    var divs = `<div class="bg-white br-5 px-4 py-3 mt-2">
+                        <h5 class="fs-20 font-regular cl-dark-blue ">${resp[i]['testt']}</h5>
+                        <div class="row">
+                            <div class="col-xl-6 col-md-6 test-list">
+                                <p>${resp[i]['description']} </p>
+                            </div>
+                            <div class="col-xl-3 col-md-2 test-list-price">
+                                <p>${resp[i]['pricel1']}</p>
+                            </div>
+                            <div class="col-xl-3 col-md-4 test-list-button"><button id="addtocart"
+                                    name=${resp[i]['id']} class="bg-sky-blue br br-5 cl-dark-white px-5 py-3">Add to
+                                    Cart</button></div>
+                        </div>
+                    </div>`;
+                    $("#main-test-div").append(divs);
+
+                   }
+                  
                 }
             });
         
-        return false;
+
     });
+
+
+    $("#searched").on("change", function(e){
+
+        var searched = $(this).val();
+        
+            $.ajax({
+                url: "{% url 'search' %}",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    'searched':searched,
+                    'csrfmiddlewaretoken':'{{ csrf_token }}',
+                },
+                success: function(resp){
+                    $("#main-test-div").empty();
+                   for(var i=0; i<resp.length ; i++){
+                    console.log(resp[i]['id']);
+                    
+                    var divs = `<div class="bg-white br-5 px-4 py-3 mt-2">
+                        <h5 class="fs-20 font-regular cl-dark-blue ">${resp[i]['testt']}</h5>
+                        <div class="row">
+                            <div class="col-xl-6 col-md-6 test-list">
+                                <p>${resp[i]['description']} </p>
+                            </div>
+                            <div class="col-xl-3 col-md-2 test-list-price">
+                                <p>${resp[i]['pricel1']}</p>
+                            </div>
+                            <div class="col-xl-3 col-md-4 test-list-button"><button id="addtocart"
+                                name=${resp[i]['id']} class="bg-sky-blue br br-5 cl-dark-white px-5 py-3">Add to
+                                    Cart</button></div>
+                        </div>
+                    </div>`;
+                    $("#main-test-div").append(divs);
+
+                   }
+                  
+                }
+            });
+    });
+   
+    /*$("#addtocart").each(function(index){
+        e.preventDefault();
+        alert(index);
+        $(this).click(function(){
+            alert("clicked");
+        });
+});
+
+
+    $("#addtocart").on("click", function(e){
+        alert();
+            $("#addtocart").each(function(index){
+                alert(index);
+        });
+      });*/
+
+     /* $("#addtocart").on("click", function(e){   
+        var idd = $(this).attr('name');
+        alert(idd);
+
+            $.ajax({
+                url: "{% url 'addtocart' %}",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    'pk':idd,
+                    'csrfmiddlewaretoken':'{{ csrf_token }}',
+                },
+                success: function(resp){
+                    console.log(resp);
+                    if(!resp['message']){
+                        alert("Test Already Added");
+                    }else{
+                        alert("Test Added");
+                    }
+                    
+                },
+            });
+    });*/
+
+   function myfunction(id){
+    alert(id)
+    $.ajax({
+        url: "{% url 'addtocart' %}",
+        type: "POST",
+        dataType: "json",
+        data: {
+            'pk':id,
+            'csrfmiddlewaretoken':'{{ csrf_token }}',
+        },
+        success: function(resp){
+            console.log(resp);
+            if(!resp['message']){
+                alert("Test Already Added");
+            }else{
+                alert("Test Added");
+            }
+            
+        },
+    });
+   }
 </script>
+
 </html>

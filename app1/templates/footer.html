@@ -44,13 +44,13 @@
                     <h3 class="fs-30 footer_branches font-bold m-0 pb-4">Useful Links</h3>
                     <ul class="p-0 ">
                         <li class="text_decoration_usefull font-regular">
-                            <a href="home.html #about" class="">About us </a>
+                            <a href="{%url "aboutus"%}" class="">About us </a>
                         </li>
                         <li class="text_decoration_usefull font-regular">
-                            <a href="health-packages.html" class="">Packages</a>
+                            <a href="{%url "packages"%}" class="">Packages</a>
                         </li>
                         <li class="text_decoration_usefull font-regular">
-                            <a class="">Contact</a>
+                            <a  href="{%url "contactus"%}"class="">Contact</a>
                         </li>
                         <li class="text_decoration_usefull font-regular">
                             <a class="">Franchisee Opportunities </a>
@@ -59,35 +59,35 @@
                             <a class="">Careers</a>
                         </li>
                         <li class="text_decoration_usefull font-regular">
-                            <a class="">FAQs</a>
+                            <a href="{%url "faq"%}" class="">FAQs</a>
                         </li>
                     </ul>
                 </div>
                 <div class="col-xl-3 col-lg-5 pt-xl-5">
                     <h3 class="fs-30 footer_branches font-bold m-0 pb-4">Subscribe</h3>
-                    <form action="javascript:void(0)" id="subscribes">
+                    {% comment %} <form action="javascript:void(0)" id="subscribes"> {% endcomment %}
                         <label class="footer_Subscribe_label" for="email">Enter Email Address</label>
                         <br>
-                        <input class="footer_Subscribe_input" id="email" name="email" type="email">
-                        <div class="d-flex justify-content-end ">
-                            <button class="footer_sub_button mt-3 py-3 px-5 br-50" type="submit"
-                                value="submit">SUBSCRIBE</button>
+                        <input class="footer_Subscribe_input" id="emaill" name="email" type="email" maxlength="250">
+                        <div class="d-flex justify-content-end" id="respp">
+                            <button class="footer_sub_button mt-3 py-3 px-5 br-50" id="newsletter"
+                                >SUBSCRIBE</button>
                         </div>
                         <div>
                             <h3 class="fs-30 footer_branches font-bold m-0 pt-4 mt-2">Social Media</h3>
                             <ul class="d-flex p-0 pt-3 ">
-                                <li class="text_dec_media pe-3"><a>
+                                <li class="text_dec_media pe-3"><a href="https://www.facebook.com/">
                                         <img src="{%static "images/bg-facebook.png"%}" alt="" class="img-fluid">
                                     </a></li>
-                                <li class="text_dec_media pe-3"><a>
+                                <li class="text_dec_media pe-3"><a href="https://www.twitter.com/">
                                         <img src="{%static "images/bg-twitter.png"%}" alt="" class="img-fluid">
                                     </a></li>
-                                <li class="text_dec_media pe-3"><a>
+                                <li class="text_dec_media pe-3"><a href="https://www.instagram.com/">
                                         <img src="{%static "images/bg-insta.png"%}" alt="" class="img-fluid">
                                     </a></li>
                             </ul>
                         </div>
-                    </form>
+                    {% comment %} </form> {% endcomment %}
                 </div>
             </div>
             <div class="row py-4">
@@ -106,7 +106,7 @@
     $.validator.addMethod('filesize', function (value, element, param) {
         return this.optional(element) || (element.files[0].size <= param)
     }, 'File size must be less than {0}');
-    $("#subscribes").validate({
+    $("#emaill").validate({
         rules: {
             'email': {
                 required: true,
@@ -120,10 +120,27 @@
                 email: "Enter valid email ID"
             },
         },
-        submitHandler: function (form) {
-            form.submit();
-        }
+    });
+
+    $("#newsletter").on("click", function(e){
+        var email = $("#emaill").val();
+            $.ajax({
+                url: "{% url 'newsletter' %}",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    'email':email,
+                    'csrfmiddlewaretoken':'{{ csrf_token }}',
+                },
+                success: function(resp){
+                    //alert(resp["email"])
+                  alert("Thank you for subscribing")
+                   //var h1=`<h5>Thank you for subscribing</h5>`
+                   //$("#respp").append(h1)
+                }
+            });
+        
+        return false;
     });
 </script>
-
 </html>
