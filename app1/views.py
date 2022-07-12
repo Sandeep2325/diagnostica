@@ -18,6 +18,8 @@ import uuid
 import json
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 def dashboard(request):
     test=prescription_book.objects.all().count()
     test_bookings=prescription_book.objects.exclude(test_name__isnull=True,prescription_file__isnull=False).count()
@@ -93,7 +95,6 @@ def Registration(request):
             return redirect('/registration/otp/')
     
     return render(request,'register.html')
-
 def otpRegistration(request):
     if request.method == "POST":
         u_otp1 = request.POST['digit-1']
@@ -434,44 +435,55 @@ def hpackagess(request):
         "city":city,
     }
     return render(request,'healthpackages.html',context)
-@login_required(login_url="login/") 
+
+# @login_required(login_url="login/") 
 def healthpackageview(request,slug):
-    c=request.session.get("city")
-    package=healthpackages.objects.get(slug=slug)
-    packages=healthpackages.objects.exclude(slug=slug)
-    context={
-        "package":package,
-        "packages":packages,
-        "city":c
-    }
-    currency = 'INR'
-    if c == "Bangalore":
-        amount=int(package.pricel1)
-    elif c == "Chennai":
-        amount=int(package.pricel2)
-    elif c == "Mumbai":
-        amount=int(package.pricel3)
-    elif c == "Delhi":
-        amount=int(package.pricel4)
-    client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
-    try:
-        razorpay_order = client.order.create(
-                {"amount": int(amount) * 100, "currency": "INR", "payment_capture": "1"}
-        )
-    except:
-        razorpay_order = client.order.create(
-                {"amount": 1* 100, "currency": "INR", "payment_capture": "1"}
-        )
-    request.session["order_id"]=razorpay_order['id']
-    request.session['amount']=amount
-    razorpay_order_id = razorpay_order['id']
-    callback_url = 'http://127.0.0.1:8000/paymenthandler/{}/{}/'.format(request.user.email,amount)
-    context['razorpay_order_id'] = razorpay_order_id
-    context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
-    context['razorpay_amount'] = amount
-    context['currency'] = currency
-    context['callback_url'] = callback_url
-    return render(request,'packagedetail.html',context)
+    if request.user.is_anonymous:
+        # return redirect("user-login")
+        return HttpResponseRedirect(reverse("user-login"))
+    else:
+        
+        c=request.session.get("city")
+        package=healthpackages.objects.get(slug=slug)
+        packages=healthpackages.objects.exclude(slug=slug)
+        context={
+            "package":package,
+            "packages":packages,
+            "city":c
+        }
+        currency = 'INR'
+        if c == "Bangalore":
+            amount=int(package.pricel1)
+        elif c == "Chennai":
+            amount=int(package.pricel2)
+        elif c == "Mumbai":
+            amount=int(package.pricel3)
+        elif c == "Delhi":
+            amount=int(package.pricel4)
+        client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+        try:
+            razorpay_order = client.order.create(
+                    {"amount": int(amount) * 100, "currency": "INR", "payment_capture": "1"}
+            )
+        except Exception as e:
+            razorpay_order = client.order.create(
+                    {"amount": 1* 100, "currency": "INR", "payment_capture": "1"}
+            )
+        request.session["order_id"]=razorpay_order['id']
+        request.session['amount']=amount
+        razorpay_order_id = razorpay_order['id']
+
+        
+        
+        callback_url = callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
+        context['razorpay_order_id'] = razorpay_order_id
+        context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
+        context['razorpay_amount'] = amount
+        context['currency'] = currency
+        context['callback_url'] = callback_url
+        print("okkk")
+        return render(request,'packagedetail.html',context)
+    
 def healthsymptomview(request,slug):
     c=request.session.get("city")
     data=healthsymptoms.objects.filter(slug=slug)
@@ -556,9 +568,11 @@ def prescriptionbookview(request):
                      bookingdetails="upload prescription",
                      payment_status=False).save()
         messages.success(request,"Your response is recorded successfully")
+        return HttpResponseRedirect(reverse("booking-history"))
         return render(request,"uploadprescriptions.html",{"fm":fm})
     else:
         return render(request,"uploadprescriptions.html",{"fm":fm})
+    
 @login_required(login_url="login/")  
 def testselect(request):
     c=request.session.get("city")
@@ -705,7 +719,10 @@ def cartt(request):
     request.session["order_id"]=razorpay_order['id']
     request.session['amount']=amount
     razorpay_order_id = razorpay_order['id']
-    callback_url = 'http://127.0.0.1:8000/paymenthandler/{}/{}/'.format(request.user.email,amount)
+    request.build_absolute_uri('/bands/?print=true')
+    # print("----------",request.user.email,amount)
+    callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
+    # callback_url = 'http://127.0.0.1:8000/paymenthandler/{}/{}/'.format(request.user.email,amount)
     context['razorpay_order_id'] = razorpay_order_id
     context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
     context['razorpay_amount'] = amount
