@@ -384,6 +384,7 @@ def home(request):
         print(c)
         return render(request,'home.html',context)
     
+    
     testt=request.POST["selectbookhelp"]
     tes=test.objects.get(id=testt)
     firtname=request.POST["firstname"]
@@ -417,7 +418,8 @@ def home(request):
             "currentcity":c,
             "tests":tests,
     }
-    return render(request,'home.html',context)
+    return HttpResponseRedirect(reverse("cart"))
+
 def healthcheckupview(request,slug):
     c=request.session.get("city")
     city="Hyderabad"
