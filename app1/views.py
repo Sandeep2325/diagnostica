@@ -746,8 +746,9 @@ def paymenthandler(request,str,amount):
         history.payment_status=True
         history.save()
         request.session.delete("amount")
+        messages.info(request, "Thank You, your Payment was successful")
         return HttpResponseRedirect(reverse("booking-history"))
-        
+
 def subscriptionview(request):
     if request.method=="POST":
         form=subscriptionform()
@@ -780,7 +781,7 @@ def addtocart(request):
         if data.exists():
             return JsonResponse({"message":False})
         cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel1).save()
-        messages.success(request,"add to cart")
+        # messages.success(request,"add to cart")
         print("success")
         return JsonResponse({"message":True})
         # return JsonResponse({"message":"success"})
@@ -854,7 +855,7 @@ def contactuss(request):
         subject=request.POST["subject"]
         message=request.POST["message"]
         contactus.objects.create(fullname=name,email=email,phone=phone,subject=subject,message=message).save()
-        messages.success(request,"Your response submitted successfully")
+        # messages.success(request,"Your response submitted successfully")
         return render(request,"contactus.html")
     return render(request,"contactus.html")       
 @login_required(login_url="login/")    
