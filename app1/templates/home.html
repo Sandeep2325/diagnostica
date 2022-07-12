@@ -7,7 +7,11 @@
         <div class="container">
           <div class="row">
             <div class="offset-lg-1 col-xxl-5 col-xl-6 col-lg-10 ">
+              {%if currentcity == None%}
+              <h1 class="" id="cityName">Hello,</h1>
+              {%else%}
               <h1 class="" id="cityName">Hello {{currentcity}},</h1>
+              {%endif%}
               <h2 class="">Protect your health with This simple Checkup.</h2>
               <p class="fs-24">To become <b> “One Stop Solution” </b> for all your Diagnostic needs</p>
               <button>BOOK A TEST ONLINE</button>

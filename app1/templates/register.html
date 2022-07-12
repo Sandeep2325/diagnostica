@@ -80,8 +80,9 @@
                                         <div class="pe-xl-5 pt-2 position-relative">
                                             <input class="w-100 px-4 py-2 register_input br-5 m-0"
                                                 placeholder="Enter Your Confirm Password" type="password"
-                                                name="confirmpassword" id="confirmpassword" />
-                                            <!-- <i class=" toggle-password-register fa fa-fw fa-eye-slash "></i> -->
+                                                name="confirmpassword" id="rePassword" />
+                                                <i
+                                                class=" r_password change_password_eye fa fa-fw fa-eye-slash position-absolute "></i>
                                         </div>
                                     </div>
                                     <div class="mt-3">
@@ -185,6 +186,17 @@
             form.submit();
         }
     });
+
+
+    $(document).on('click', '.r_password', function () {
+
+        $(this).toggleClass("fa-eye fa-eye-slash");
+
+        var input = $("#rePassword");
+        input.attr('type') === 'password' ? input.attr('type', 'text') : input.attr('type', 'password')
+    });
+
+
 </script>
 
 </html>

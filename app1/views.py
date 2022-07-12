@@ -341,7 +341,7 @@ def userLogin(request):
         else:
             messages.error(request,'Email or password is wrong')
     return render(request,'login.html')
-
+@login_required(login_url="login/")  
 def booktestonline(request):
     return render(request,"book-test-online.html")
 from django.contrib.auth import logout
@@ -434,6 +434,7 @@ def hpackagess(request):
         "city":city,
     }
     return render(request,'healthpackages.html',context)
+@login_required(login_url="login/") 
 def healthpackageview(request,slug):
     c=request.session.get("city")
     package=healthpackages.objects.get(slug=slug)
@@ -512,7 +513,8 @@ def categoryblog(request,slug):
 #     context={
 #         "categories":tcategories
 #     }
-#     return render(request,"choose-test-list.html",context)  
+#     return render(request,"choose-test-list.html",context)
+@login_required(login_url="login/")   
 def prescriptionbookview(request):
     c=request.session.get("city")
     # print(request.FILES)
@@ -557,6 +559,7 @@ def prescriptionbookview(request):
         return render(request,"uploadprescriptions.html",{"fm":fm})
     else:
         return render(request,"uploadprescriptions.html",{"fm":fm})
+@login_required(login_url="login/")  
 def testselect(request):
     c=request.session.get("city")
     print("-----",city)
