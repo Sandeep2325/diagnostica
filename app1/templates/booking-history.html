@@ -54,6 +54,7 @@
                                                     <td class="t_head" scope="col">Date</td>
                                                     <td class="t_head" scope="col">Patient Info</td>
                                                     <td class="t_head" scope="col">Booking Type</td>
+                                                    <td class="t_head" scope="col">Prescription</td>
                                                     <td class="t_head" scope="col">Booking Details</td>
                                                     <td class="t_head" scope="col">Amount</td>
                                                     <td class="t_head" scope="col">Payment Status</td>
@@ -63,43 +64,54 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {%for bookhistory in bookhistories%}
+                                                {% for bookhistory in bookhistories %}
                                                 <tr>
-                                                    <td data-label="ID">{{bookhistory.testbooking_id}}</td>
+                                                    <td data-label="ID">{{bookhistory.id}}</td>
                                                     <td data-label="Date">{{bookhistory.created}}</td>
                                                     <td data-label="Patient Info">{{bookhistory.patient_info}}</td>
                                                     <td data-label="Booking Type">{{bookhistory.booking_type}}</td>
-                                                    <td data-label="Booking Details">{{bookhistory.bookingdetails}}
+                                                    <td data-label="Presciption">-</td>
+                                                    <td data-label="Booking Details">{{bookhistory.bookingdetails}}</td>
+                                                    
                                                         <!-- <div class="w-100 cl-dark-blue bg-dark-green fs-12 br-5">ABC,
                                                             CDS, TEST,
                                                             DFCABC,
                                                             CDS,
                                                             TEST,
                                                             DFC Test Available</div> -->
-                                                    </td>
+                                                    
+
                                                     {%if bookhistory.amount == None%}
-                                                    <td data-label="Amount">-</td>
+                                                        <td data-label="Amount">-</td>
                                                     {%else%}
-                                                    <td data-label="Amount">{{bookhistory.amount}}</td>
+                                                        <td data-label="Amount">{{bookhistory.amount}}</td>
                                                     {%endif%}
+
                                                     {%if bookhistory.payment_status == False%}
-                                                    <td data-label="Payment Status">Not paid</td>
+                                                        <td data-label="Payment Status">Not paid</td>
                                                     {%else%}
-                                                    <td data-label="Payment Status">Paid</td>
+                                                        <td data-label="Payment Status">Paid</td>
                                                     {%endif%}
+
                                                     {% comment %} <td data-label="Status">On Process</td> {% endcomment %}
-                                                    {%if bookhistory.payment_status == False%}
-                                                    <td data-label="Report"><button
-                                                            class="br br-5 fs-16 font-bold bg-dark-green cl-dark-white download text-center">Pay
-                                                            Now</button>
-                                                    </td>
-                                                    {%else%}
-                                                    <td data-label="Report">
-                                                        <a href="{% static "files/test bulk.csv"%}"
+                                                    {%if bookhistory.payment_status == False %}
+                                                        <td data-label="Report"><button
+                                                                class="br br-5 fs-16 font-bold bg-dark-green cl-dark-white download text-center">Pay
+                                                                Now</button>
+                                                        </td>
+                                                    {%else%}  
+                                                        {% if bookhistory.report %}
+                                                        <td data-label="Report">
+                                                        <a href='{{bookhistory.report.url}}'
                                                         class="" download><button class="download br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue">Download
                                                         Now</button></a>
                                                 </td>
-                                                {%endif%}
+                                                    {% else %}
+                                                    <td data-label="Report">
+                                                        <a href="#"
+                                                        class=""><button class="download br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue">No File</button></a>
+                                                    {% endif %}
+                                                    {%endif%}
                                                 </tr>
                                                 {%endfor%}
                                             </tbody>

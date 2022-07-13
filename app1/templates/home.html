@@ -13,8 +13,8 @@
               <h1 class="" id="cityName">Hello {{currentcity}},</h1>
               {%endif%}
               <h2 class="">Protect your health with This simple Checkup.</h2>
-              <p class="fs-24">To become <b> “One Stop Solution” </b> for all your Diagnostic needs</p>
-              <button>BOOK A TEST ONLINE</button>
+              <p class="fs-24">To become <b> “One Stop Solution” </b> for all your Diagnostic needs</p> 
+              <a href="{%url "bookonline"%}" ><button>BOOK A TEST ONLINE</button></a>
             </div>
           </div>
         </div>
@@ -26,7 +26,7 @@
       <div class="row">
         <div class="col-lg-12 d-flex justify-content-between pt-3">
           <h1 class="fs-40 font-bold home_health_h1 w-100 m-0">Health Checks & Lab Tests</h1>
-          <p class="fs-18 font-bold home_health_p  ">View All</p>
+         <a href="{% url 'Health-checkups' %}" <p class="fs-18 font-bold home_health_p  ">View All</p></a>
         </div>
         {%for checkup in healthcheckup%}
         <div class="col-lg-4 col-xl-4 col-xxl-3 col-md-6 py-xl-5 py-2 ">

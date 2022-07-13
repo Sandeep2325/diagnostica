@@ -20,6 +20,11 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.http import FileResponse
+from io import BytesIO
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
 def dashboard(request):
     test=prescription_book.objects.all().count()
     test_bookings=prescription_book.objects.exclude(test_name__isnull=True,prescription_file__isnull=False).count()
@@ -127,6 +132,7 @@ def otpRegistration(request):
         else:
             messages.error(request,'Wrong OTP')
     return render(request,'otp.html')
+
 def resendotp(request):
     # if request.method=="POST":
     email_address = request.session.get('email')
@@ -146,32 +152,37 @@ def resendotp(request):
     )
     messages.success(request,"resend otp sent")
     return redirect('/registration/otp/')
+
 def changepassword(request):
     if request.method=="POST":
       password=request.POST["currentPassword"]
-    #   newpassword=request.POST["password"]
       conpassword=request.POST["confirmpassword"]
-      request.session["ppassword"]=password 
-    #   request.session["newpassword"]=newpassword 
-      request.session["conpassword"]=conpassword 
+       
       otp = random.randint(1000,9999)
+      print(otp)
       email_address = request.user.email
-      request.session['otp'] = otp
-      message = f'Welcome your resend otp is {otp} '
-      email_from = settings.EMAIL_HOST_USER
-      recipient_list = [email_address]
-      message = message
-      subject = "OTP" 
-      send_mail(
-            subject,
-            message,
-            email_from,
-            recipient_list,
-            fail_silently=False,
-        )
-      return redirect('/forgotpassword/otp/')
+      a=authenticate(request,username=request.user.email,password=password)
+      if a == None:
+          messages.info(request,"Invalid password")
+          return render (request,"changepassword.html")
+      else:
+        request.session["ppassword"]=password 
+        request.session["conpassword"]=conpassword
+        request.session['otp'] = otp
+        message = f'Welcome your resend otp is {otp} '
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [email_address]
+        message = message
+        subject = "OTP" 
+        send_mail(
+                subject,
+                message,
+                email_from,
+                recipient_list,
+                fail_silently=False,
+            )
+        return redirect('/changepasswordotp/')
     return render (request,"changepassword.html")
-    
 
 def forgotpassword(request):
     if request.method=="POST":
@@ -181,10 +192,10 @@ def forgotpassword(request):
         p = request.POST['confirmpassword']
         user=User.objects.filter(email=e)
         if user.exists():
-            
             request.session['email'] = e
             request.session['password'] = p
             otp = random.randint(1000,9999)
+            
             request.session['otp'] = otp
                 # message = f'your otp is {otp}'
                 # send_otp(p_number,message)
@@ -214,6 +225,7 @@ def changepasswordotp(request):
         a=str(u_otp1)+str(u_otp2)+str(u_otp3)+str(u_otp4)
         print(a)
         otp = request.session.get('otp')
+        
         # user = request.session['username']
         # hash_pwd=request.session.get('password')
         hash_pwd = make_password(request.session.get('password'))
@@ -235,12 +247,29 @@ def changepasswordotp(request):
             request.session.delete("ppassword")
             # request.session.delete("newpassword")
             request.session.delete("conpassword")
+            print("changed successfully")
             # messages.success(request,'Password changed successfully!!')
-            return redirect('user-login')
+            return redirect('home')
         else:
             messages.error(request,'Wrong OTP')
     return render(request,'otpforgot.html')    
-     
+def passwordcheck(request):
+    if request.method=="POST":
+        password=request.POST.get("password")
+        # print(password)
+        try:
+            a=authenticate(request,username=request.user.email,password=password)
+            if a == None:
+            # User.objects.get(email=request.user.email,password=password) 
+                return JsonResponse({"message":False})
+                
+            else:
+                return JsonResponse({"message":True})
+        except Exception as e: 
+            print(e)
+            return JsonResponse({"message":False})
+
+              
 def otpforgotpassword(request):
     if request.method == "POST":
         u_otp1 = request.POST['digit-1']
@@ -294,18 +323,19 @@ def forgotresendotp(request):
     return redirect('/forgotpassword/otp/') 
 def profilee(request):
     profile=User.objects.get(email=request.user.email)
+    print(profile.email)
+    print(profile.address)
     context={
         "profile":profile,
     }
     if request.method=="POST":
-        name=request.POST["name"]
-        email=request.POST["email"]
-        phone=request.POST["phone"]
-        gender=request.POST["gender"]
-        location=request.POST["location"]
-        dob=request.POST["date"]
-        address=request.POST["address"]
-        print(request.POST)
+        name=request.POST.get("name")
+        email=request.POST.get("email")
+        phone=request.POST.get("phone")
+        gender=request.POST.get("gender")
+        location=request.POST.get("location")
+        dob=request.POST.get("date")
+        address=request.POST.get("address")
         User.objects.filter(email=request.user.email).update(username=name,
                                                              email=email,
                                                              phone_no=phone,
@@ -366,7 +396,7 @@ def home(request):
     if request.method =="GET":
         cit=city.objects.all()
         tests=test.objects.all()
-        healthcheckup=healthcheckuppackages.objects.all()
+        healthcheckup=healthcheckuppackages.objects.all()[0:4]
         healthpackage=healthpackages.objects.all()
         healthsymptom=healthsymptoms.objects.all()
         healthcareblog=healthcareblogs.objects.all()
@@ -403,7 +433,7 @@ def home(request):
 
     cit=city.objects.all()
     tests=test.objects.all()
-    healthcheckup=healthcheckuppackages.objects.all()
+    healthcheckup=healthcheckuppackages.objects.all()[0:4]
     healthpackage=healthpackages.objects.all()
     healthsymptom=healthsymptoms.objects.all()
     healthcareblog=healthcareblogs.objects.all()
@@ -423,12 +453,21 @@ def home(request):
 def healthcheckupview(request,slug):
     c=request.session.get("city")
     city="Hyderabad"
-    data=healthcheckuppackages.objects.filter(slug=slug)
+    data=healthcheckuppackages.objects.filter(slug=slug)[0:4]
     context={
         "data":data,
         "city":city
     }
     return render(request,'dummy.html',context)
+
+def healthcheckupallview(request):
+    c=request.session.get("city")
+    checkups=healthcheckuppackages.objects.all()
+    context={
+        "checkups":checkups,
+        "currentcity":c
+    }
+    return render(request,'latestviewall.html',context)
 def hpackagess(request):
     packages=healthpackages.objects.all()
     city=request.session.get("city")
@@ -437,14 +476,13 @@ def hpackagess(request):
         "city":city,
     }
     return render(request,'healthpackages.html',context)
-
 # @login_required(login_url="login/") 
+    
 def healthpackageview(request,slug):
     if request.user.is_anonymous:
         # return redirect("user-login")
         return HttpResponseRedirect(reverse("user-login"))
     else:
-        
         c=request.session.get("city")
         package=healthpackages.objects.get(slug=slug)
         packages=healthpackages.objects.exclude(slug=slug)
@@ -471,12 +509,9 @@ def healthpackageview(request,slug):
             razorpay_order = client.order.create(
                     {"amount": 1* 100, "currency": "INR", "payment_capture": "1"}
             )
-        request.session["order_id"]=razorpay_order['id']
+        # request.session["order_id"]=razorpay_order['id']
         request.session['amount']=amount
         razorpay_order_id = razorpay_order['id']
-
-        
-        
         callback_url = callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
         context['razorpay_order_id'] = razorpay_order_id
         context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
@@ -484,6 +519,49 @@ def healthpackageview(request,slug):
         context['currency'] = currency
         context['callback_url'] = callback_url
         print("okkk")
+        bookhistory=book_history(
+            user=request.user,
+                     booking_type="Selected test",
+                     bookingdetails="Package",
+                     patient_info="Myself",
+                     amount=amount,
+                     payment_id=razorpay_order['id'],
+                     payment_status=False).save()
+        """ data=cart.objects.filter(user=request.user)
+        a=prescription_book.objects.create(
+                unique=uniquee,
+                user=request.user,
+                                myself=True if others == "m" else False,
+                                others=True if others == "o" else False,
+                                others_choice=others_choice,
+                                firstname=firstname,
+                                lastname=lastname,
+                                contact=contact,
+                                age=age,
+                                gender=gender,
+                                location=c)
+        for j in data:
+            item=test.objects.get(id=j.items.id)
+            a.test_name.add(item)
+        data2=prescription_book.objects.get(unique=uniquee)
+        data1=cart.objects.filter(user=request.user)
+        a=[]
+        for i in data:
+            a.append(i.price)
+        def testname():
+            return ", ".join([
+                test.testt for test in data2.test_name.all()
+            ])
+        bookhistory=book_history(
+            user=request.user,
+            testbooking_id=data2.id,
+            patient_info="myself" if others==None else "others",
+                     booking_type="Selected test",
+                     bookingdetails=testname(),
+                     amount=sum(a),
+                     payment_id=request.session.get("order_id"),
+                     payment_status=False).save()
+        request.session.delete("order_id") """
         return render(request,'packagedetail.html',context)
     
 def healthsymptomview(request,slug):
@@ -574,7 +652,7 @@ def prescriptionbookview(request):
         return render(request,"uploadprescriptions.html",{"fm":fm})
     else:
         return render(request,"uploadprescriptions.html",{"fm":fm})
-    
+  
 @login_required(login_url="login/")  
 def testselect(request):
     c=request.session.get("city")
@@ -630,7 +708,6 @@ def testselect(request):
 from django.core.paginator import Paginator,EmptyPage, PageNotAnInteger
 import razorpay
 razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
-
 @login_required(login_url="login/")    
 def cartt(request):
     print(request.POST)
@@ -688,7 +765,6 @@ def cartt(request):
         request.session.delete("order_id")
         
         return JsonResponse({"message":True})
-    
     data=cart.objects.filter(user=request.user)
     p = Paginator(data, 5)
     page_number = request.GET.get('page')
@@ -708,21 +784,31 @@ def cartt(request):
         'page_obj': page_obj
     }
     currency = 'INR'
-    amount=int(sum(a))
+    
+    if request.session.get("couponamount")!=None:
+        amount=request.session.get("couponamount")
+        request.session.delete("couponamount")
+    else:
+        print("coupon is none")
+        amount=int(sum(a))
     client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
     try:
         razorpay_order = client.order.create(
                 {"amount": int(amount) * 100, "currency": "INR", "payment_capture": "1"}
         )
+        request.session.delete("couponamount")
     except:
         razorpay_order = client.order.create(
                 {"amount": 1* 100, "currency": "INR", "payment_capture": "1"}
         )
+        request.session.delete("couponamount")
+    del request.session['couponamount']
+    print(request.session.get("couponamount"))
+    request.session.delete("couponamount")
     request.session["order_id"]=razorpay_order['id']
     request.session['amount']=amount
     razorpay_order_id = razorpay_order['id']
     request.build_absolute_uri('/bands/?print=true')
-    # print("----------",request.user.email,amount)
     callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
     # callback_url = 'http://127.0.0.1:8000/paymenthandler/{}/{}/'.format(request.user.email,amount)
     context['razorpay_order_id'] = razorpay_order_id
@@ -731,7 +817,6 @@ def cartt(request):
     context['currency'] = currency
     context['callback_url'] = callback_url
     return render(request,"mycart.html",context)
-
 @csrf_exempt
 def paymenthandler(request,str,amount):
     if request.method =="POST":
@@ -746,6 +831,7 @@ def paymenthandler(request,str,amount):
         history.payment_status=True
         history.save()
         request.session.delete("amount")
+        request.session.delete("couponamount")
         messages.info(request, "Thank You, your Payment was successful")
         return HttpResponseRedirect(reverse("booking-history"))
 
@@ -833,7 +919,6 @@ def destroy(request):
         # return JsonResponse({"message": "Wrong request"})
 def coupon(request):
     if request.method=="POST":
-        print(request.POST)
         coupon=request.POST.get("coupon")
         total=request.POST.get("total")
         try:
@@ -842,11 +927,17 @@ def coupon(request):
             discount=(float(total)*(int(c.discount)/100))
             # print(t)
             totall=float(total)-int(discount)
-            return JsonResponse({"message":True,"total":totall})
+            request.session["couponamount"]=totall
+            return JsonResponse({"message":True,"total":totall,"percent":c.discount,"discount":"{:.2f}".format(discount)})
         except:
-            print("Invalid")
             return JsonResponse({"message":False})
         # return redirect("/")
+def razorpayclose(request):
+    if request.method=="POST":
+        paymentid=request.POST["paymentid"]
+        book_history.objects.filter(payment_id=paymentid).delete()
+        return JsonResponse({"message":True})
+    
 def contactuss(request):
     if request.method=="POST":
         name=request.POST["name"]
@@ -861,8 +952,7 @@ def contactuss(request):
 @login_required(login_url="login/")    
 def bookinghistoryview(request):
     # data=book_history.objects.all()
-    print(request.user)
-    bookhistories=book_history.objects.filter(user=request.user).order_by('-created')
+    bookhistories=book_history.objects.filter(user=request.user).order_by('-created')        
     payments=payment.objects.filter(user=request.user).order_by('-date')
     testbooking=prescription_book.objects.filter(user=request.user)
     context={
@@ -875,11 +965,7 @@ def bookinghistoryview(request):
 def faqs(request):
     faqss=faq.objects.all()
     return render(request,"faq.html",{"faqs":faqss})
-from django.http import FileResponse
-from io import BytesIO
-from django.http import HttpResponse
-from django.template.loader import get_template
-from xhtml2pdf import pisa
+
 
 def html_to_pdf(template_src, context_dict={}):
     template = get_template(template_src)
@@ -896,17 +982,6 @@ def invoice(request,orderid):
     print(order)
     payments=payment.objects.get(transid=orderid)
     
-    # payment=payment.objects.get(id=order_id)
-    # print(order.order_payment_id)
-    # data=cart2.objects.filter(order_id=order_id)
-    # total_amount=[]
-    # for i in data:
-    #     total_amount.append(float(i.price))
-    # amount=sum(total_amount)   
-    # gst= amount*0.18
-    # deliver_charge=(amount+gst)*0.04
-    # grand_total=order.total_price
-    # paymentid=payment.objects.get(order_id=order_id)
     # print(data)
     context_dict={
         "order":order,
@@ -932,76 +1007,3 @@ def invoice(request,orderid):
     print(pdf)
     return FileResponse(pdf,as_attachment=True,filename="invoice.pdf",content_type='application/pdf') 
 
-# def otpLogin(request):
-#     if request.method == "POST":
-#         username = request.session['username']
-#         password = request.session['password']
-#         otp = request.session.get('login_otp')
-#         u_otp = request.POST['otp']
-#         if int(u_otp) == otp:
-#             user = authenticate(request,username=username,password=password)
-#             if user is not None:
-#                 login(request,user)
-#                 request.session.delete('login_otp')
-#                 messages.success(request,'login successfully')
-#                 return redirect('/')
-#         else:
-#             messages.error(request,'Wrong OTP')
-#     return render(request,'login-otp.html')
-# @login_required(login_url='/login/')
-# def email_verification(request):
-#     if request.method == "POST":
-#         u_otp = request.POST['otp']
-#         otp = request.session['email_otp']
-#         if int(u_otp) == otp:
-#            p =  Profile.objects.get(user=request.user)
-#            p.email_verified = True
-#            p.save()
-#            messages.success(request,f'Your email {request.user.email} is verified now')
-#            return redirect('/')
-#         else:
-#             messages.error(request,'Wrong OTP')
-
-
-#     return render(request,'email-verified.html')
-
-# def forget_password(request):
-#     if request.method == "POST":
-#         email = request.POST['email']
-#         if User.objects.filter(email=email).exists():
-#             uid = User.objects.get(email=email)
-#             url = f'http://127.0.0.1:8000/change-password/{uid.profile.uuid}'
-#             send_mail(
-#             'Reset Password',
-#             url,
-#             settings.EMAIL_HOST_USER,
-#             [email],
-#             fail_silently=False,
-#         )
-#             return redirect('/forget-password/done/')
-#         else:
-#             messages.error(request,'email address is not exist')
-#     return render(request,'forget-password.html')
-
-# def change_password(request,uid):
-#     try:
-#         if Profile.objects.filter(uuid = uid).exists():
-#             if request.method == "POST":
-#                 pass1 = 'password1'in request.POST and request.POST['password1']
-#                 pass2 =  'password2'in request.POST and request.POST['password2']
-#                 if pass1 == pass2:
-#                     p = Profile.objects.get(uuid=uid)
-#                     u = p.user
-#                     user = User.objects.get(username=u)
-#                     user.password = make_password(pass1)
-#                     user.save()
-#                     messages.success(request,'Password has been reset successfully')
-#                     return redirect('/login/')
-#                 else:
-#                     return HttpResponse('Two Password did not match')
-                
-#         else:
-#             return HttpResponse('Wrong URL')
-#     except:
-#         return HttpResponse('Wrong URL')
-#     return render(request,'change-password.html')

@@ -196,7 +196,7 @@ class healthsymptoms_admin(SummernoteModelAdmin):
         return format_html(html)
     action_btn.short_description = "Action"
 class healthcareblog_admin(SummernoteModelAdmin):
-    list_display=["imagee","title","category","description","created","updated","action_btn"]
+    list_display=["imagee","title","category","created","updated","action_btn"]
     readonly_fields=["created","updated"]
     prepopulated_fields = {"slug": ("title",)}
     summernote_fields = ('description',)
@@ -267,7 +267,7 @@ class UserAdmin(OriginalUserAdmin):
     # list_editable=['is_confirmed']
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        (_('Personal info'), {'fields': ('first_name','last_name', 'email',"phone_no",'location','dob','gender','address')}),
+        (_('Personal info'), {'fields': ('photo','first_name','last_name', 'email',"phone_no",'location','dob','gender','address')}),
     )
     def action_btn(self, obj):
         html = "<div class='field-action_btn d-flex m-8'> <a class='fa fa-edit ml-2' href='/admin/app1/user/" + \
