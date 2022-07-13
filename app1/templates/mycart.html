@@ -409,7 +409,6 @@ $(document).ready(function(){
     
         },
         submitHandler: function (form) {
-            //form.submit();
             var firstname=$("#firstname").val();
                     var lastname=$("#lastname").val();
                     var phone=$("#phone").val();
@@ -434,7 +433,6 @@ $(document).ready(function(){
                            dataType: "json",
                            success: function(resp){
                             
-                            console.log(resp);
                             $("#infomodal").hide();
                             var options = {
            
@@ -449,7 +447,51 @@ $(document).ready(function(){
                                 callback_url: "{{ callback_url }}",
                                 redirect:true
                               };
-                              // initialise razorpay with the options.
+
+                              var options = {
+                                key: "{{razorpay_key}}",
+                                amount: {{order.total_amount}}*100, 
+                                currency: "INR",
+                                name: "{{order.name}}",
+                                description: "Test Transaction",
+                                image: "{% static 'assets/img/invoice_logo.png' %}",
+                                order_id: "{{order.provider_order_id}}",
+                                callback_url: "{% url 'callback' %}",
+                                redirect: true,
+                                prefill: {
+                                    "name": "{{order.name}}"
+                                    },
+                                notes: {
+                                    "address": "Razorpay Corporate Office"
+                                },
+                                theme: {
+                                    "color": "#005aeb"
+                                },
+                                modal: { 
+                                    escape: false,
+                                    ondismiss: function()
+                                    { 
+                                        $.ajax({
+                                        url:"{% url 'orders:deleteOrderObj' %}",
+                                        type: 'post',
+                                        headers: {
+                                            'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
+                                        },
+                                        data: {
+                                          csrfmiddlewaretoken: '{{ csrf_token }}',
+                                          "cmd":"fetchAllAddress",
+                                          "id":"{{order.orderID}}",
+                                        },
+                                        dataType: 'json',
+                                        success: function (response) {
+                                        }
+                                        });
+                                    }
+                                },
+                                handler: function (response){
+                                    console.log(response)
+                                }
+                            };
                               var rzp1 = new Razorpay(options);
                                
                               // add event listener to the payment button.

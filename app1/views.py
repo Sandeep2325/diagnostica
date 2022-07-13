@@ -13,13 +13,15 @@ from django.http import HttpResponse,JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
-import datetime
 import uuid
 import json
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.views import View
+import razorpay
+
 def dashboard(request):
     test=prescription_book.objects.all().count()
     test_bookings=prescription_book.objects.exclude(test_name__isnull=True,prescription_file__isnull=False).count()
@@ -628,7 +630,6 @@ def testselect(request):
         return render(request,"choose-test-list.html",context)
     return render(request,"choose-test-list.html",context)
 from django.core.paginator import Paginator,EmptyPage, PageNotAnInteger
-import razorpay
 razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
 
 @login_required(login_url="login/")    
@@ -734,19 +735,32 @@ def cartt(request):
 
 @csrf_exempt
 def paymenthandler(request,str,amount):
-    if request.method =="POST":
-        print(str)
-        usr=User.objects.get(email=str)
-        paymentid=request.POST["razorpay_payment_id"]
-        transid=request.POST["razorpay_order_id"]
-        print(amount)
-        cart.objects.filter(user=usr).delete()
-        payment.objects.create(user=usr,paymentid=paymentid,transid=transid,amount=amount).save()
-        history=book_history.objects.get(payment_id=transid)
-        history.payment_status=True
-        history.save()
-        request.session.delete("amount")
-        messages.info(request, "Thank You, your Payment was successful")
+    def verify_signature(response_data):
+        client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+        b = client.utility.verify_payment_signature(response_data)
+        return b
+    try:
+        if request.method =="POST":
+            usr=User.objects.get(email=str)
+            paymentid=request.POST.get("razorpay_payment_id")
+            if paymentid:
+                if verify_signature(request.POST):
+                    transid=request.POST["razorpay_order_id"]
+                    cart.objects.filter(user=usr).delete()
+                    payment.objects.create(user=usr,paymentid=paymentid,transid=transid,amount=amount).save()
+                    history=book_history.objects.get(payment_id=transid)
+                    history.payment_status=True
+                    history.save()
+                    request.session.delete("amount")
+                    messages.info(request, "Thank You, your Payment was successful")
+                    return HttpResponseRedirect(reverse("booking-history"))
+            else:
+                error = request.POST.get('error[description]')
+                messages.error(request, error)
+                return HttpResponseRedirect(reverse("booking-history"))
+    except Exception as e:
+        print(e)
+        messages.error(request, e)
         return HttpResponseRedirect(reverse("booking-history"))
 
 def subscriptionview(request):
@@ -857,21 +871,22 @@ def contactuss(request):
         contactus.objects.create(fullname=name,email=email,phone=phone,subject=subject,message=message).save()
         # messages.success(request,"Your response submitted successfully")
         return render(request,"contactus.html")
-    return render(request,"contactus.html")       
-@login_required(login_url="login/")    
-def bookinghistoryview(request):
-    # data=book_history.objects.all()
-    print(request.user)
-    bookhistories=book_history.objects.filter(user=request.user).order_by('-created')
-    payments=payment.objects.filter(user=request.user).order_by('-date')
-    testbooking=prescription_book.objects.filter(user=request.user)
-    context={
-        "bookhistories":bookhistories,
-        "payments":payments,
-        "testbooking":testbooking,
-    }
-    
-    return render(request,"booking-history.html",context)
+    return render(request,"contactus.html") 
+
+
+# @login_required(login_url="login/")    
+# def bookinghistoryview(request):
+#     bookhistories=book_history.objects.filter(user=request.user).order_by('-created')
+#     payments=payment.objects.filter(user=request.user).order_by('-date')
+#     testbooking=prescription_book.objects.filter(user=request.user)
+#     context={
+#         "bookhistories":bookhistories,
+#         "payments":payments,
+#         "testbooking":testbooking,
+#     }
+#     return render(request,"booking-history.html",context)
+
+
 def faqs(request):
     faqss=faq.objects.all()
     return render(request,"faq.html",{"faqs":faqss})
@@ -1005,3 +1020,44 @@ def invoice(request,orderid):
 #     except:
 #         return HttpResponse('Wrong URL')
 #     return render(request,'change-password.html')
+
+
+class BookingHistoryPay(View):
+    def get(self, request,*args, **kwargs):
+        bookhistories=book_history.objects.filter(user=request.user).order_by('-created')
+        payments=payment.objects.filter(user=request.user).order_by('-date')
+        testbooking=prescription_book.objects.filter(user=request.user)
+        context={
+            "bookhistories":bookhistories,
+            "payments":payments,
+            "testbooking":testbooking,
+        }
+        return render(request,"booking-history.html",context)
+
+    def post(self, request, *args, **kwargs):
+        if request.POST.get("action") == "retreive_data":
+            mod = book_history.objects.get(testbooking_id=request.POST.get('id'))
+            client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+
+            tot_amt = int(mod.amount) * 100
+
+            razorpay_order = client.order.create(
+                {"amount": tot_amt, "currency": "INR", "payment_capture": "1"}
+            )
+            mod.payment_id = razorpay_order['id']
+            mod.save()
+            callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
+            to_return = {
+                "razorKey":settings.RAZOR_KEY_ID,
+                "valid":True,
+                "amount":tot_amt,
+                "order_id":razorpay_order['id'],
+                "callbackUrl":callback_url,
+            }
+        if request.POST.get("action") == "payment_canceled":
+            mod = book_history.objects.get(testbooking_id=request.POST.get('id'))
+            mod.payment_id = None
+            mod.payment_status = False
+            mod.save()
+            to_return = {"valid":True}
+        return HttpResponse(json.dumps(to_return), content_type="application/json")

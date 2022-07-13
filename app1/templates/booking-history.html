@@ -90,8 +90,10 @@
                                                     {% comment %} <td data-label="Status">On Process</td> {% endcomment %}
                                                     {%if bookhistory.payment_status == False%}
                                                     <td data-label="Report"><button
-                                                            class="br br-5 fs-16 font-bold bg-dark-green cl-dark-white download text-center">Pay
-                                                            Now</button>
+                                                            class="br br-5 fs-16 font-bold bg-dark-green cl-dark-white download text-center paynow-btn" 
+                                                            {% if bookhistory.amount == None %}
+                                                            onclick='paymentFunction({{bookhistory.testbooking_id}}, "false")';
+                                                            {% else %}onclick='paymentFunction({{bookhistory.testbooking_id}}, "true")';{% endif %}id="testbooking{{bookhistory.testbooking_id}}">Pay Now</button>
                                                     </td>
                                                     {%else%}
                                                     <td data-label="Report">
@@ -166,3 +168,70 @@
 </body>
 {%include "footer.html"%}
 </html>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    function paymentFunction(ids, status){
+        if (status=="false"){
+            alert("Please wait till your prescription is viewed by our doctors.");
+            
+        }else{
+            $.ajax({
+                type:"POST",
+                data: {
+                    action:"retreive_data",
+                    id : ids,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                   },
+                   dataType: "json",
+                   success: function(resp){
+                    
+                    if(resp['valid']){
+                    console.log(resp);  
+                    }
+                    var amount = parseInt(resp['amount']);
+
+
+                    var options = {
+                            key: resp['razorKey'],
+                            amount: amount, 
+                            currency: "INR",
+                            description: "Test Transaction",
+                            image: "{% static 'assets/img/invoice_logo.png' %}",
+                            order_id: resp["order_id"],
+                            callback_url: resp['callbackUrl'],
+                            redirect: true,
+                            theme: {
+                                "color": "#005aeb"
+                            },
+                            modal: { 
+                                escape: false,
+                                ondismiss: function()
+                                { 
+                                    $.ajax({
+                                    type: 'post',
+                                    headers: {
+                                        'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
+                                    },
+                                    data: {
+                                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                                    action:"payment_canceled",
+                                    obj_id:ids,
+                                    order_id:resp["order_id"],
+                                    },
+                                    dataType: 'json',
+                                    success: function (response) {
+                                    }
+                                    });
+                                }
+                            },
+                        };
+                        var rzp1 = new Razorpay(options);
+                        rzp1.open();
+                   }
+            });
+        }
+        
+        
+
+    }
+</script>
