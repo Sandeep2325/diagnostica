@@ -566,6 +566,9 @@ def healthpackageview(request,slug):
                      amount=amount,
                      payment_id=razorpay_order['id'],
                      payment_status=False).save()
+        ca = cart.objects.create(
+            
+        )
         """ data=cart.objects.filter(user=request.user)
         a=prescription_book.objects.create(
                 unique=uniquee,
@@ -645,9 +648,11 @@ def categoryblog(request,slug):
 #         "categories":tcategories
 #     }
 #     return render(request,"choose-test-list.html",context)
-@login_required(login_url="login/")   
+# @login_required(login_url="login/")   
 def prescriptionbookview(request):
     c=request.session.get("city")
+    if request.user.is_anonymous:
+        return HttpResponseRedirect(reverse("user-login"))
     # print(request.FILES)
     fm=prescriptionform()
     if request.method=="POST":
@@ -688,7 +693,7 @@ def prescriptionbookview(request):
                      payment_status=False).save()
         messages.success(request,"Your response is recorded successfully")
         return HttpResponseRedirect(reverse("booking-history"))
-        return render(request,"uploadprescriptions.html",{"fm":fm})
+        # return render(request,"uploadprescriptions.html",{"fm":fm})
     else:
         return render(request,"uploadprescriptions.html",{"fm":fm})
   
