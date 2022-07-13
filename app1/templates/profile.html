@@ -3,6 +3,35 @@
 {%load static %}
 
 <body onload="setAttr()">
+    <section class="user_profile_pic">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="bg-light-grey pt-5">
+                        <div class="card-body ">
+                            <div class="profile-pic-wrapper form-group">
+                                <div class="pic-holder">
+                                    <!-- uploaded pic shown here -->
+                                    <img id="profilePic" class="pic" src="{{profile.photo.url}}">
+                                    <label for="newProfilePhoto" class="upload-file-block">
+                                        <div class="text-center">
+                                            <div class="mb-2">
+                                                <i class="fa fa-camera fa-2x"></i>
+                                            </div>
+                                            <div class="text-uppercase">
+                                                Update <br /> Profile Photo
+                                            </div>
+                                        </div>
+                                    </label>
+                                    <Input class="uploadProfileInput" type="file" name="profile_pic"
+                                        id="newProfilePhoto" accept="image/*" style="display: none;" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
     <section class="section_profile pb-xl-5 pb-3">
         <div class="container">
             <div class="row">
@@ -68,7 +97,6 @@
                                         placeholder="Enter your address" type="address" name="address"
                                         value={{profile.address}} id="address">
                                 </div>
-
                             </div>
                             <div class=" px-3 px-xl-5">
                                 <button class="px-5 py-2 mb-5 bg-sky-blue br-5  fs-18  cl-dark-white br" type="submit"
@@ -80,7 +108,6 @@
             </div>
         </div>
     </section>
-
     {%include "footer.html"%}
 </body>
 {% comment %}
@@ -209,7 +236,70 @@
         document.getElementById("date").setAttribute("max", d1);
 
 
-    }
+    };
+    $(document).on("change", ".uploadProfileInput", function () {
+        var triggerInput = this;
+        var currentImg = $(this).closest(".pic-holder").find(".pic").attr("src");
+        var holder = $(this).closest(".pic-holder");
+        var wrapper = $(this).closest(".profile-pic-wrapper");
+        $(wrapper).find('[role="alert"]').remove();
+        triggerInput.blur();
+        var files = !!this.files ? this.files : [];
+        if (!files.length || !window.FileReader) {
+            return;
+        }
+        if (/^image/.test(files[0].type)) {
+            // only image file
+            var reader = new FileReader(); // instance of the FileReader
+            reader.readAsDataURL(files[0]); // read the local file
+
+            reader.onloadend = function () {
+                $(holder).addClass("uploadInProgress");
+                $(holder).find(".pic").attr("src", this.result);
+                $(holder).append(
+                    '<div class="upload-loader"><div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div></div>'
+                );
+
+                // Dummy timeout; call API or AJAX below
+                setTimeout(() => {
+                    $(holder).removeClass("uploadInProgress");
+                    $(holder).find(".upload-loader").remove();
+                    // If upload successful
+                    if (Math.random() < 0.9) {
+                        $(wrapper).append(
+                            '<div class="snackbar show" role="alert"><i class="fa fa-check-circle text-success"></i> Profile image updated successfully</div>'
+                        );
+
+                        // Clear input after upload
+                        $(triggerInput).val("");
+
+                        setTimeout(() => {
+                            $(wrapper).find('[role="alert"]').remove();
+                        }, 3000);
+                    } else {
+                        $(holder).find(".pic").attr("src", currentImg);
+                        $(wrapper).append(
+                            '<div class="snackbar show" role="alert"><i class="fa fa-times-circle text-danger"></i> There is an error while uploading! Please try again later.</div>'
+                        );
+
+                        // Clear input after upload
+                        $(triggerInput).val("");
+                        setTimeout(() => {
+                            $(wrapper).find('[role="alert"]').remove();
+                        }, 3000);
+                    }
+                }, 1500);
+            };
+        } else {
+            $(wrapper).append(
+                '<div class="alert alert-danger d-inline-block p-2 small" role="alert">Please choose the valid image.</div>'
+            );
+            setTimeout(() => {
+                $(wrapper).find('role="alert"').remove();
+            }, 3000);
+        }
+    });
+
 </script>
 
 </html>
