@@ -6,7 +6,7 @@
       <div class="home-banner py-5">
         <div class="container">
           <div class="row">
-            <div class="offset-lg-1 col-xxl-5 col-xl-6 col-lg-10 ">
+            <div class="col-xxl-5 col-xl-6 col-lg-10 ">
               {%if currentcity == None%}
               <h1 class="" id="cityName">Hello,</h1>
               {%else%}
@@ -29,7 +29,7 @@
           <p class="fs-18 font-bold home_health_p  ">View All</p>
         </div>
         {%for checkup in healthcheckup%}
-        <div class="col-lg-4 col-xl-4 col-xxl-3 col-md-6 py-xl-5 py-2 ">
+        <div class="col-lg-4 col-md-6 py-xl-5 py-2 ">
           <div class=" bg-light-grey br-10 h-100 health_check_height">
             <div class="position-relative ">
               <div class="batdge">{{checkup.discount}}% off</div>
@@ -50,22 +50,22 @@
               </div>
               <div class="position-relative">
                 <p class="mb-2 pt-2 fs-20 font-bold cl-light-blue">Price</p>
-                <div class="d-flex">
+                <div class="d-flex align-items-center">
                   {%if currentcity == "Bangalore"%}
-                  <h2 class="fs-25 font-bold cl-dark-blue home_price">₹{{checkup.pricel1}}</h2>
+                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price">₹{{checkup.pricel1}}</h2>
                   {%elif currentcity == "Chennai"%}
-                  <h2 class="fs-25 font-bold cl-dark-blue home_price">₹{{checkup.pricel2}}</h2>
+                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price">₹{{checkup.pricel2}}</h2>
                   {%elif currentcity == "Mumbai"%}
-                  <h2 class="fs-25 font-bold cl-dark-blue home_price">₹{{checkup.pricel2}}</h2>
+                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price">₹{{checkup.pricel2}}</h2>
                   {%elif currentcity == "Delhi"%}
-                  <h2 class="fs-25 font-bold cl-dark-blue home_price">₹{{checkup.pricel2}}</h2>
+                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price">₹{{checkup.pricel2}}</h2>
                   {%endif%}
                   <strike
-                    class="d-flex ps-xl-3 ps-2 align-items-center text-center fs-20 font-bold cl-light-blue health_price_disc">₹{{checkup.dpricel1}}</strike>
-                  <div class="  p-0 ">
-                    <a class=" test_now_button fs-16 cl-dark-blue font-bold py-2 px-4 br-20 position-absolute">Test
+                    class="ps-xl-3 ps-2 text-center fs-20 font-bold cl-light-blue health_price_disc">₹{{checkup.dpricel1}}</strike>
+                  <!-- <div class="  p-0 "> -->
+                    <a class="ps-xl-3 ps-2 test_now_button fs-16 cl-dark-blue font-bold py-2 px-4 br-20 position-absolute">Test
                       Now</a>
-                  </div>
+                  <!-- </div> -->
                 </div>
               </div>
             </div>
@@ -81,7 +81,7 @@
         {%for symptoms in healthsymptom%}
         
         <div class="col-xl-2 col-lg-4 col-md-4 col-12 py-2 ">
-          <div class=" px-3 {% cycle 'bg-light-blue' 'bg-light-orange' 'bg-light-green' 'bg-light-pink' %} text-center py-5 br-10">
+          <div class="symptoms px-3 {% cycle 'bg-light-blue' 'bg-light-orange' 'bg-light-green' 'bg-light-pink' %} text-center py-5 br-10">
             <img src="{{ symptoms.photo.url }}" alt="" class="img-fluid pb-3">
             <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold">{{symptoms.name}}</p>
           </div>
@@ -101,7 +101,7 @@
             <p class="fs-35 font-bold cl-dark-blue text-center m-0">{{package.package_name}}</p>
             <div class="d-flex justify-content-center align-content-center pt-4 mt-3">
               <div class="home_linear_border  ">
-                <div class="pt-5 mt-4">
+                <div class="">
                   <p
                     class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">
                     Price</p>
@@ -134,7 +134,7 @@
     </div>
   </section>
 
-  <section class="section_care">
+  <section class="section_care pb-4">
     <div class="container">
       <div class="">
         <div class="row">
@@ -153,7 +153,7 @@
                 <div class="col-lg-6">
                   <h1 class="fs-35 font-bold cl-dark-blue m-0">{{blog.title}}</h1>
                   <p class="m-0 fs-18 cl-dark-blue health_care_p pt-4 pb-5">{{blog.description|safe}}</p>
-                  <a href="{%url "blogsdetail" blog.slug %}"class="py-3 px-4 bg-dark-orange cl-dark-blue font-bold fs-16 br-30">READ MORE</a>
+                  <a href="{%url "blogsdetail" blog.slug %}" class="py-2 px-4 bg-dark-orange cl-dark-blue font-bold fs-16 br-30 d-inline-block">READ MORE</a>
                 </div>
               </div>
               
@@ -172,9 +172,9 @@
   <section class="section_about_span bg-light-grey mt-5" id="about">
     <div class="container">
       <div class="row py-lg-5 py-3">
-        <div class="col-lg-6 pe-lg-5 py-lg-5 py-3">
-          <h1 class="fs-40 font-bold cl-dark-blue py-lg-5">About Span</h1>
-          <p class="fs-30 font-regular cl-dark-brown m-0 pt-2">On December 1 2018, SPAN (www.spanhealth.com) took the
+        <div class="col-lg-6 pe-lg-5 pt-lg-5 py-3">
+          <h1 class="fs-40 font-bold cl-dark-blue pb-lg-4">About Span</h1>
+          <p class="fs-30 lh-30 font-regular cl-dark-brown m-0 pt-2">On December 1 2018, SPAN (www.spanhealth.com) took the
             first
             step towards
             making diagnostics a key vertical. The laboratories are located in Mumbai, Pune, Barshi, and Aurangabad.</p>
@@ -193,7 +193,7 @@
               <p class="fs-25 font-bold cl-dark-blue">VERIFIED CENTER</p>
             </div>
           </div>
-          <div class="row py-5">
+          <div class="row pb-5">
             <div class="col w-100 ">
               <h1 class="fs-40 cl-light-2-blue font-bold ">45</h1>
               <p class="fs-25 font-bold cl-dark-blue">CITIES</p>
@@ -254,28 +254,28 @@
           <div class="col-lg-6 col-md-12 py-4 ">
             <h1 class="fs-40 font-bold cl-dark-white pe-xxl-5 me-xxl-5">Helping Patients for around The Globe !!!</h1>
             <div class="row">
-              <div class="col-12 col-md-6 pe-lg-5 helper_header_col">
+              <div class="col-12 col-md-6 pe-lg-4 helper_header_col">
                 <div class="d-flex">
                   <i class="fa fa-comments-o help-book-icon" aria-hidden="true"></i>
                   <h4 class="healper_sub_header">Whats app</h4>
                 </div>
                 <p class="helping_contact">+91 97693 51301</p>
               </div>
-              <div class="col-12 col-md-6 pe-lg-5 helper_header_col">
+              <div class="col-12 col-md-6 pe-lg-4 helper_header_col">
                 <div class="d-flex">
                   <i class="fa fa-envelope-o help-book-icon" aria-hidden="true"></i>
                   <p class="healper_sub_header">Email Enquiry</p>
                 </div>
                 <div class="helping_contact">enquiry@spandiagno.com</div>
               </div>
-              <div class="col-12 col-md-6 pe-lg-5 helper_header_col">
+              <div class="col-12 col-md-6 pe-lg-4 helper_header_col">
                 <div class="d-flex">
                   <i class="fa fa-clock-o help-book-icon" aria-hidden="true"></i>
                   <h4 class="healper_sub_header">Opening Hours</h4>
                 </div>
                 <p class="helping_contact">Monday – Sunday 06:00 AM – 10:00 PM</p>
               </div>
-              <div class="col-12 col-md-6 pe-lg-5 helper_header_col">
+              <div class="col-12 col-md-6 pe-lg-4 helper_header_col">
                 <div class="d-flex">
                   <i class="fa fa-address-card-o  help-book-icon" aria-hidden="true"></i>
                   <h4 class="healper_sub_header">Contact Us</h4>
@@ -286,11 +286,11 @@
             </div>
           </div>
 
-          <div class="col-lg-6  py-4 px-lg-4">
+          <div class="col-lg-6 py-4">
             <form method= "post" id="homeForm">
               {%csrf_token%}
-              <div class="bg-dark-white px-lg-5 px-3 py-4 br-15">
-                <h1 class="fs-40 font-bold cl-dark-blue pb-lg-4">Book a Test Online</h1>
+              <div class="bg-dark-white px-lg-4 px-3 py-4 br-15">
+                <h1 class="fs-40 font-bold cl-dark-blue pt-2 pb-lg-4">Book a Test Online</h1>
                 <div class="row">
                   <div class="col-12 col-md-12 col-lg-6 pt-4">
                     <label class="fs-20 font-regular cl-dark-blue">First name</label>
@@ -301,16 +301,16 @@
                     <input class="w-100 br-5 mt-2" type="text" name="lastname" id="surname" maxlength="250" />
                   </div>
                   <div class="col-12 col-md-12 col-lg-6 pt-4">
-                    <label class="fs-20 font-regular cl-dark-blue">Phone Number</label>
+                    <label class="fs-20 font-regular cl-dark-blue">Phone Number<span class="cl-red ps-1">*</span></label>
                     <input class="w-100 br-5 mt-2" type="text" name="phone" id="phone" maxlength="250" />
                   </div>
                   <div class="col-12 col-md-12 col-lg-6 pt-4">
-                    <label class="fs-20 font-regular cl-dark-blue">Email Address</label>
+                    <label class="fs-20 font-regular cl-dark-blue">Email Address<span class="cl-red ps-1">*</span></label>
                     <input class="w-100 br-5 mt-2" type="email" name="email" id="email" maxlength="250" />
                   </div>
                   <div class="col-12 pt-4">
                     <label class="fs-20 font-regular cl-dark-blue">Select your Test Name</label>
-                    <select class="w-100 px-3 py-2 mt-2 br-5 cl-dark-blue fs-20 font-bold br bookhelper_select"
+                    <select class="w-100 mt-2 br-5 cl-dark-blue fs-20 br form-select bookhelper_select"
                       type="select" name="selectbookhelp">
                       <option selected="selected" class="opc-5"  disabled>Select
                         Test</option>
@@ -319,7 +319,7 @@
                       {%endfor%}
                     </select>
                   </div>
-                  <div class="col-12 py-4 mt-3"><button
+                  <div class="col-12 py-3 mt-4"><button
                       class="br px-4 py-3 fs-18 font-bold cl-dark-white bg-sky-blue br-5" type="submit">BOOK A TEST ONLINE</button>
                   </div>
                 </div>
@@ -333,18 +333,18 @@
   </section>
   <section>
     <div id="myModal" class="modal fade">
-      <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
-          <div class="modal-body">
+          <div class="modal-body px-2 px-sm-4 pb-3">
             <h4 class="fs-24 font-bold cl-dark-blue text-center py-3">Select City's</h4>
             <div class="home_modal_city_icon ">
               <div class="container">
-                <div class="row">
+                <div class="row justify-content-center gx-2 gx-sm-3">
                   {%for i in city%}
-                  <div class="col-lg-3 pt-3">
-                    <button class="cursor" id="city" name="{{i.cityname}}" onclick=myfunction("{{i.cityname}}")>
+                  <div class="col-4 col-sm-3 py-2 py-sm-3">
+                    <button class="cursor h-100 w-100" id="city" name="{{i.cityname}}" onclick=myfunction("{{i.cityname}}")>
                       <img src="{%static "images/city.png"%}" alt="" class="img-fluid">
-                      <h6 class="text-center">{{i.cityname}}</h6>
+                      <h6 class="text-break text-center">{{i.cityname}}</h6>
                     </button>
                   </div>
                   {%endfor%}

@@ -11,7 +11,7 @@
                         <div class="row">
                             <div class="col-lg-11 col-md-12 mx-auto py-lg-5">
                                 <div class="row">
-                                    <div class="col-xxl-5  col-xl-6 col-lg-6 mx-auto py-4  opc-5">
+                                    <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto py-4  opc-5">
                                         <div class="bg-sky-blue br-15 px-5 py-4 text-center ">
                                             <h2 class="cl-dark-white fs-30  font-bold mb-3 pb-2">Upload Prescription
                                             </h2>
@@ -22,7 +22,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-xxl-5  col-xl-6 col-lg-6 mx-auto py-4 ">
+                                    <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto py-4 ">
                                         <div class="bg-dark-green br-15 px-5 py-4 text-center ">
                                             <h2 class="cl-dark-white fs-30  font-bold mb-3 pb-2">Choose Test Lists
                                             </h2>
@@ -43,39 +43,39 @@
                                     {%csrf_token%}
                                     <div class="row py-lg-5 py-3">
 
-                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto">
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto">
                                             <h4 class="px-lg-0 px-3 font-bold cl-dark-blue">If Upload Prescription are selected
                                             </h4>
                                         </div>
                                         
-                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto"></div>
-                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto pt-4">
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto"></div>
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-4">
                                             <div class="px-lg-0 px-3 position-relative ">
                                                 <input class="w-100 bg-white br-5" placeholder="Choose File" type="file" name="file" id="file" />
                                                 <label class="folder_icon"><i class="fa fa-folder"
                                                     aria-hidden="true"></i></label>
                                             </div>
                                         </div>
-                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto"></div>
-                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto pt-3">
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto"></div>
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
                                             <div class="row ">
-                                                <div class="col-lg-6 ">
-                                                    <div class="bg-white px-lg-4 py-3 px-3 myself_other mx-3 mx-lg-0 mt-lg-0 mt-3">
+                                                <div class="col-6">
+                                                    <div class="bg-white myself_other ms-3 ms-lg-0 mt-lg-0 mt-3">
                                                         <input class="" type="radio" name="radio_self" id="myself" onClick="ckChange(this)"/>
-                                                        <label>My Self</label>
+                                                        <label for="myself">My Self</label>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-6">
-                                                    <div class="bg-white px-lg-4 py-3 px-3 myself_other mx-3 mx-lg-0 mt-lg-0 mt-3  ">
+                                                <div class="col-6">
+                                                    <div class="bg-white myself_other me-3 me-lg-0 mt-lg-0 mt-3  ">
                                                         <input class="" type="radio" name="radio_others" id="others" onClick="ckChange1(this)"/>
-                                                        <label>Others</label>
+                                                        <label for="others">Others</label>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto pt-3">
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
                                             <div class="px-lg-0 px-3 ">
-                                                <select class="w-100 py-3" type="select" name="option" id="option">
+                                                <select class="w-100 form-select myself_other" type="select" name="option" id="option">
                                                 <option selected="selected"  class="opc-5" disabled>Option</option>
                                                 <option value="m">Mother</option>
                                                 <option value="f">Father</option>
@@ -86,33 +86,33 @@
                                             </select>
                                             </div>
                                         </div>
-                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto pt-lg-5 pt-3 pb-3 ">
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-lg-5 pt-3 pb-3 ">
                                             <h4 class="px-lg-0 px-3 font-bold fs-24  cl-dark-blue m-0">Patient Information (It will be used on Reports)</h4>
                                         </div>
-                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto"></div>
-                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto pt-3">
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto"></div>
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
                                             <div class="px-lg-0 px-3">
                                                 <input class="w-100  br-5" placeholder="First Name" name="firstname" id="firstname" type="text" />
                                             </div>
                                         </div>
-                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto pt-3">
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
                                             <div class="px-lg-0 px-3">
                                                 <input class="w-100  br-5" placeholder="Last Name" name="lastname" id="lastname" type="text" />
                                             </div>
                                         </div>
-                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto pt-3">
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
                                             <div class="px-lg-0 px-3">
                                                 <input class="w-100  br-5" placeholder="Contact Number" name="phone" id="phone" type="text" />
                                             </div>
                                         </div>
-                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto pt-3">
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
                                             <div class="px-lg-0 px-3">
                                                 <input class="w-100  br-5" placeholder="Age" name="age" id="age" type="text" />
                                             </div>
                                         </div>
-                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto pt-3">
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
                                             <div class="px-lg-0 px-3">
-                                                <select class="w-100" type="select" name="gender" id="gender">
+                                                <select class="w-100 form-select myself_other" type="select" name="gender" id="gender">
                                                 <option selected="selected" class="opc-5" disabled>
                                                     Gender</option>
                                                     <option value="m">Male</option>
@@ -121,11 +121,11 @@
                                             </select>
                                             </div>
                                         </div>
-                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto"></div>
-                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto py-lg-5 py-3 ">
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto"></div>
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto py-lg-5 py-3 ">
                                             <button class="mx-lg-0 mx-3 prescription br bg-sky-blue br-5 cl-dark-white" type="submit" name="submit" id="submit">SUBMIT</button>
                                         </div>
-                                        <div class="col-xxl-5 col-xl-6 col-lg-6 mx-auto">
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto">
                                             <div class="px-lg-0 px-3">
                                                 <h3 class="fs-30 font-bold cl-dark-blue">How it Works</h3>
                                                 <p class="m-0 mb-1">1. Lorem ipsum dolor sit amet, consectetur adipiscing elit.

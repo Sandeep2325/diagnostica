@@ -27,9 +27,9 @@ html {
     font-family: Chivo-Regular;
 }
 
-@media (min-width: 1600px) {
+@media (min-width: 1200px) {
     .container {
-        max-width: 1630px !important;
+        max-width: 1230px !important;
     }
 }
 
@@ -85,36 +85,27 @@ html {
     font-size: 18px;
 }
 
-.fs-20 {
+.fs-20,
+.fs-22,
+.fs-24,
+.fs-25 {
     font-size: 20px;
 }
 
-.fs-22 {
-    font-size: 22px;
-}
-
-.fs-24 {
-    font-size: 24px;
-}
-
-.fs-25 {
+.fs-30 {
     font-size: 25px;
 }
 
-.fs-30 {
+.fs-35 {
     font-size: 30px;
 }
 
-.fs-35 {
+.fs-40 {
     font-size: 35px;
 }
 
-.fs-40 {
-    font-size: 40px;
-}
-
 .fs-48 {
-    font-size: 48px;
+    font-size: 40px;
 }
 
 
@@ -203,6 +194,10 @@ a {
     color: #333333;
 }
 
+.cl-red {
+    color: red;
+}
+
 
 /* background color */
 
@@ -273,7 +268,7 @@ textarea {
 .section_nav_bar {
     position: sticky;
     top: 0;
-    z-index: 1111;
+    z-index: 999;
 }
 
 .section_nav_bar .menu-center {
@@ -296,10 +291,11 @@ textarea {
     cursor: pointer;
 }
 
-.dropdown-menu {
-    position: static;
-    top: 10px !important;
-    left: -60px !important;
+.section_nav_bar .dropdown-menu {
+    top: 100px !important;
+    right: 0 !important;
+    transform: unset !important;
+    min-width: 12rem;
 }
 
 .dropdown-menu li {
@@ -393,7 +389,7 @@ textarea {
 }
 
 .section_footer .text_decoration_usefull a {
-    font-size: 24px;
+    font-size: 18px;
     color: #2B3147;
     letter-spacing: -0.48px;
     font-family: Chivo-regular;
@@ -428,7 +424,7 @@ textarea {
 }
 
 .section_footer .footer-policy {
-    font-size: 20px;
+    font-size: 18px;
 }
 
 .section_footer .text_decoration_policy {
@@ -483,7 +479,8 @@ textarea {
     color: orange;
 }
 
-.section_home_health_check .home_ul_li ul {
+.section_home_health_check .home_ul_li ul,
+.section_home_health_check .home_ul_li ol {
     padding-bottom: 45px;
     margin: 0px;
     padding-left: 20px;
@@ -495,10 +492,16 @@ textarea {
 .section_home_health_check .home_ul_li li {
     padding-bottom: 20px;
     font-size: 18px;
+    list-style: circle;
 }
 
 .section_home_health_check li::marker {
     color: transparent linear-gradient(325deg, #8200D4 0%, #04336A 100%) 0% 0% no-repeat padding-box !important;
+}
+
+.health_check_height,
+.health_hover {
+    transition: all .5s ease;
 }
 
 .health_check_height:hover {
@@ -507,7 +510,7 @@ textarea {
     filter: grayscale(0);
 }
 
-.section_synbrome img:hover {
+.section_synbrome .symptoms:hover img {
     transform: scale(1.05);
     -webkit-filter: grayscale(0);
     filter: grayscale(0);
@@ -568,8 +571,11 @@ textarea {
 }
 
 .section_health_pack .home_linear_border {
-    width: 250px;
-    height: 250px;
+    width: 210px;
+    height: 210px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: double 3px transparent;
     border-radius: 50%;
     background-image: linear-gradient(white, white), radial-gradient(circle at top left, #20C7BA, #1686F1);
@@ -583,41 +589,6 @@ textarea {
     border: none;
     padding: 0px 40px;
     color: #FFFFFF;
-}
-
-.section_health_pack .home_linear_border_2 {
-    width: 250px;
-    height: 250px;
-    border: 3px solid white;
-    border-radius: 50%;
-    background-image: linear-gradient(#20C7BA, #1686F1), radial-gradient(circle at top left, white, white);
-    background-origin: border-box;
-    background-clip: content-box, border-box;
-}
-
-.home_health_standard {
-    background: transparent linear-gradient(180deg, #20C7BA 0%, #1686F1 100%) 0% 0% no-repeat padding-box;
-}
-
-.home_pack_viewpack_2 {
-    background: white;
-    border: none;
-    padding: 0px 40px;
-}
-
-.home_health_premium {
-    background: transparent radial-gradient(closest-side at 50% 50%, #444A5F 0%, #2B3146 100%) 0% 0% no-repeat padding-box;
-    ;
-}
-
-.section_health_pack .home_linear_border_3 {
-    width: 250px;
-    height: 250px;
-    border: 3px solid white;
-    border-radius: 50%;
-    background-image: linear-gradient(#444A5F, #2B3146), radial-gradient(circle at top left, white, white);
-    background-origin: border-box;
-    background-clip: content-box, border-box;
 }
 
 .health_care_p {
@@ -640,7 +611,7 @@ textarea {
 .helping_book_test .helping-book-banner {
     background-image: url(../images/bg-book-helper.png);
     background-size: cover;
-    min-height: 780px;
+    min-height: 700px;
 }
 
 .helping_book_test .help-book-icon {
@@ -657,7 +628,7 @@ textarea {
 }
 
 .helping_book_test .helping_contact {
-    font-size: 20px;
+    font-size: 18px;
     font-family: Chivo-regular;
     color: white;
     padding-top: 20px;
@@ -669,9 +640,10 @@ textarea {
 
 .helping_book_test input,
 .bookhelper_select {
-    padding: 12px 20px;
+    padding: 12px 20px !important;
     outline: none;
-    border: 2px solid #DBDEEF;
+    border: 2px solid #DBDEEF !important;
+    color: #17235A;
 }
 
 
@@ -712,8 +684,10 @@ textarea {
     position: relative;
 }
 
-input::-webkit-input-placeholder {
-    opacity: 0.3;
+input::-webkit-input-placeholder,
+select::placeholder {
+    opacity: 0.8;
+    color: #17235A;
 }
 
 .opc-5 {
@@ -755,6 +729,13 @@ input::-webkit-input-placeholder {
     font-size: 20px !important;
 }
 
+.section_register.register .toggle-password-register {
+    right: 30px;
+}
+
+.section_register.register .change_password_eye{
+    right: 20px;
+}
 
 /*------------------- OTP------------------------ */
 
@@ -780,10 +761,13 @@ input::-webkit-input-placeholder {
 
 /* ----------------profile------------- */
 
-.section_profile input {
+.section_profile input,
+.select_option {
     border: none;
     outline: none;
-    border: 2px solid #DBDEEF;
+    padding: 10px 20px !important;
+    border: 2px solid #DBDEEF !important;
+    font-size: 18px !important;
 }
 
 .change_password_modal input {
@@ -917,7 +901,7 @@ input::-webkit-input-placeholder {
 .cart_table .coupon_apply {
     background-color: #2B3147;
     color: white;
-    padding: 17px 70px;
+    padding: 18px 70px;
 }
 
 .cart_table .sub_total {
@@ -943,10 +927,10 @@ input::-webkit-input-placeholder {
 }
 
 .cart_checkout_modal input,
-select {
-    padding: 12px 20px;
+.myself_other {
+    padding: 10px 20px !important;
     outline: none;
-    border: 2px solid #DBDEEF;
+    border: 2px solid #DBDEEF !important;
     margin-top: 20px;
 }
 
@@ -957,7 +941,7 @@ select {
     color: #2B3147;
     border-bottom: 3px solid #b8cad6;
     padding: 15px 0px;
-    width: 340px;
+    width: 250px;
     border-radius: 5px;
 }
 
@@ -1034,6 +1018,7 @@ table td {
         border: 0;
         border-bottom: none !important;
     }
+
     .section_booking_history table thead {
         border: none;
         clip: rect(0 0 0 0);
@@ -1044,17 +1029,20 @@ table td {
         position: absolute;
         width: 1px;
     }
+
     .section_booking_history table tr {
         border-bottom: 3px solid #ddd;
         display: block;
         margin-bottom: .625em;
     }
+
     .section_booking_history table td {
         border-bottom: 1px solid #ddd;
         display: block;
         font-size: .8em;
         text-align: right;
     }
+
     .section_booking_history table td::before {
         /*
       * aria-label has no advantage, it won't be read inside a table
@@ -1065,6 +1053,7 @@ table td {
         font-weight: bold;
         text-transform: uppercase;
     }
+
     .section_booking_history table td:last-child {
         border-bottom: 0;
     }
@@ -1076,9 +1065,10 @@ table td {
 .section_book-test-online input,
 select,
 .myself_other {
-    padding: 12px 20px;
+    padding: 10px 20px !important;
     outline: none;
-    border: 2px solid #DBDEEF;
+    border: 2px solid #DBDEEF !important;
+    color: #04336A;
 }
 
 .section_book-test-online .folder_icon {
@@ -1312,101 +1302,126 @@ textarea {
     .home-banner {
         min-height: 300px;
     }
+
     h1,
     .fs-40 {
         font-size: 26px !important;
     }
+
     h2,
     .fs-35 {
         font-size: 24px !important;
     }
+
     h3,
     .fs-30 {
         font-size: 18px !important;
     }
+
     h4,
     .fs-26 {
         font-size: 16px;
     }
+
     h5,
     .fs-20 {
         font-size: 14px;
     }
+
     label,
     .fs-20 {
         font-size: 16px !important;
     }
+
     p,
     .fs-18 {
         font-size: 16px !important;
     }
+
     button,
     .fs-18 {
         font-size: 16px !important;
     }
+
     .section_register h1 {
         padding-top: 15px;
     }
+
     .sub_header .sub_nav_bar {
         font-size: 14px;
     }
+
     .sub_header h1 {
         font-size: 25px;
     }
+
     .cart_table .table {
         display: block;
     }
+
     .helping_book_test .healper_sub_header {
         font-size: 16px;
     }
 }
 
 @media (max-width: 767.98px) {
+
     h1,
     .fs-40 {
         font-size: 28px;
     }
+
     h2,
     .fs-35 {
         font-size: 24px;
     }
+
     h3,
     .fs-30 {
         font-size: 20px;
     }
+
     h4,
     .fs-26 {
         font-size: 18px;
     }
+
     h5,
     .fs-20 {
         font-size: 16px;
     }
+
     label,
     .fs-20 {
         font-size: 16px;
     }
+
     p,
     .fs-18 {
         font-size: 16px;
     }
+
     button,
     .fs-18 {
         font-size: 16px;
     }
+
     .helping_book_test .helping_contact {
         font-size: 18px;
         padding-top: 0px;
     }
+
     .section_booking_history .tad_button {
         padding: 10px 20px;
         font-size: 16px;
     }
+
     .test-list-price p {
         display: flex;
         justify-content: left;
         align-content: left;
     }
+
     .section_footer .text_decoration_usefull a {
         font-size: 18px;
         color: #2B3147;
@@ -1414,50 +1429,62 @@ textarea {
         font-family: Chivo-regular;
         line-height: 36px;
     }
+
     .section_footer .footer_branch_text {
         font-size: 18px;
     }
+
     .section_footer .footer-policy {
         font-size: 18px;
     }
 }
 
 @media (max-width: 991.98px) {
+
     h1,
     .fs-40 {
         font-size: 35px;
     }
+
     h2,
     .fs-35 {
         font-size: 30px;
     }
+
     h3,
     .f-30 {
         font-size: 28px;
     }
+
     h4,
     .fs-26 {
         font-size: 18px;
     }
+
     h5,
     .fs-20 {
         font-size: 16px;
     }
+
     label,
     .fs-20 {
         font-size: 18px;
     }
+
     p,
     .fs-18 {
         font-size: 16px;
     }
+
     button,
     .fs-18 {
         font-size: 16px;
     }
+
     .helping_book_test .healper_sub_header {
         font-size: 18px;
     }
+
     .home-banner h1 {
         font-size: 40px;
         font-family: Chivo-regular;
@@ -1465,60 +1492,76 @@ textarea {
         padding: 25px 0px 30px 0px;
         margin: 0px;
     }
+
     .home-banner h2 {
         font-size: 35px;
         font-family: Chivo-bold;
         color: white;
     }
+
     .home_banner p {
         font-size: 18px;
         padding: 30px 0px 20px 0px;
     }
+
     .home_banner b {
         font-size: 18px;
     }
+
     .section_booking_history .tad_button {
         padding: 10px 20px;
         font-size: 16px;
     }
+
     .cart_table h1 {
         font-size: 25px;
         text-align: start !important;
     }
+
     .cart_table .cell {
         text-align: start !important;
         font-size: 20px !important;
     }
+
     .cart_table .wrapper {
         padding: 16px;
     }
+
     .cart_table h4 {
         font-size: 20px;
     }
+
     .cart_table .coupon_input {
         padding: 8px 10px;
     }
+
     .cart_table .coupon_apply {
-        padding: 8px 70px;
+        padding: 10px 25px !important;
     }
+
     .cart_table .cell {
         padding: 2px 16px;
         display: block;
     }
+
     .cart_table .test_row .row {
         padding: 14px 0 7px;
         display: block;
     }
+
     .cart_table .test_row .row.header {
         padding: 0;
         height: 6px;
     }
+
     .cart_table .test_row .row.header .cell {
         display: none;
     }
+
     .cart_table .test_row .row .cell {
         margin-bottom: 10px;
     }
+
     .cart_table .test_row .row .cell:before {
         margin-bottom: 3px;
         content: attr(data-title);
@@ -1533,51 +1576,69 @@ textarea {
 }
 
 @media (max-width: 1199.98px) {
+
     /* header */
     .section_nav_bar .menu-center ul li {
         text-align: left !important;
     }
+
     .change_password_eye {
         position: absolute;
         right: 24px;
         top: 22px;
     }
+
     .dropdown-menu {
         position: static !important;
         top: 200px !important;
         left: -60px !important;
         transform: unset !important;
     }
+
     .home_health_h1 {
         font-size: 25px;
     }
+
     .home_health_p {
         font-size: 16px;
     }
+
     .test_head {
         font-size: 20px;
     }
+
     .health_li {
         font-size: 16px;
     }
+
     .home_price {
         font-size: 24px;
     }
+
     .health_price_disc {
         font-size: 20px;
     }
+
     .home_health_symp_header {
         font-size: 25px;
     }
+
     .section_nav_bar .nav_button {
         display: none !important;
     }
+
     .nav_book_res {
         display: block !important;
     }
+
     .nav_cart_img {
         display: none !important;
     }
+
+    .cart_table .coupon_apply {
+        padding: 18px 30px;
+    }
+
     /*----------- Navber----------- */
     .section_nav_bar .nav_bar .logo-img {
         height: 50px;
@@ -1585,23 +1646,28 @@ textarea {
         float: left;
         margin: 25px 0px;
     }
+
     .section_nav_bar span {
         display: block;
         text-align: end;
         padding-top: 30px;
     }
+
     .section_nav_bar ul li {
         display: block;
         text-align: end;
         padding: 7px 20px;
     }
+
     .section_nav_bar ul {
         display: none;
     }
+
     .section_booking_history .tad_button {
         padding: 10px 20px;
         font-size: 20px;
     }
+
     .helper_header_col {
         padding-top: 30px;
     }
