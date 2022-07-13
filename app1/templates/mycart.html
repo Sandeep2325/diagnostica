@@ -65,8 +65,8 @@
                                                     <div class="row">
                                                         <div class="col-8 col-xl-7">
                                                             <input class="w-100 coupon_input" placeholder="Apply Coupon"
-                                                                id="coupon" name="coupon" type="coupon" />
-                                                                <button id="coupondelete">X</button>
+                                                                id="coupon" name="coupon" type="search" onsearch="coupRemove()"/>
+                                                                
                                                         </div>
                                                         <div class="col-4 col-xl-5 ps-0">
                                                             <button
@@ -121,6 +121,27 @@
                            {% comment %} {%csrf_token%} {% endcomment %}
                             <h3 class="fs-30 font-bold cl-dark-blue text-center">Patient Information</h3>
 
+                            
+                            <div class=" ">
+                                <select class="w-100 mt-3 form-select myself_other" type="select" name="option1" id="option1">
+                                    <option selected="selected" class="opc-5" disabled>Select Test For</option>
+                                    <option value="m">My-Self</option>
+                                    <option value="o">Others</option>
+                                </select>
+                            </div>
+                            <div class=" ">
+                                <select class="w-100 mt-3 form-select myself_other" type="select" name="option" id="option">
+                                    <option selected="selected" class="opc-5" disabled>Option</option>
+                                
+                                    <option value="m">Mother</option>
+                                    <option value="f">Father</option>
+                                    <option value="w">Wife</option>
+                                    <option value="s">Son</option>
+                                    <option value="s">Daughter</option>
+                                    <option value="s">Others</option>
+
+                                </select>
+                            </div>
                             <div>
                                 <input class="w-100  br-5 modal_input" placeholder="First Name" name="firstname" id="firstname"
                                     type="text" >
@@ -145,27 +166,6 @@
                                         <option value="o">Others</option>
                                 </select>
                             </div>
-                            <div class=" ">
-                                <select class="w-100 mt-3 form-select myself_other" type="select" name="option1" id="option1">
-                                    <option selected="selected" class="opc-5" disabled>Select Test For</option>
-                                    <option value="m">My-Self</option>
-                                    <option value="o">Others</option>
-                                </select>
-                            </div>
-                            <div class=" ">
-                                <select class="w-100 mt-3 form-select myself_other" type="select" name="option" id="option">
-                                    <option selected="selected" class="opc-5" disabled>Option</option>
-                                
-                                    <option value="m">Mother</option>
-                                    <option value="f">Father</option>
-                                    <option value="w">Wife</option>
-                                    <option value="s">Son</option>
-                                    <option value="s">Daughter</option>
-                                    <option value="s">Others</option>
-
-                                </select>
-                            </div>
-
                             <button class="mx-lg-0 mx-3 mt-4 prescription br bg-sky-blue br-5 cl-dark-white"
                                 type="submit" name="submit" id="checkout">SUBMIT</button>
                         {% comment %} </form> {% endcomment %}
@@ -177,7 +177,9 @@
 {%include "footer.html"%}
 </body>
 <script src="https://checkout.razorpay.com/v1/checkout.js">
-   
+</script>
+<script type = "text/javascript">
+ var AMOUNT=0;  
     $.validator.addMethod('filesize', function (value, element, param) {
         return this.optional(element) || (element.files[0].size <= param)
     }, 'File size must be less than {0}');
@@ -216,9 +218,17 @@
             form.submit();
         }
     });
-</script>
-<script type = "text/javascript">
 
+    $(document).ready(function(){
+        
+        var count =parseInt("{{datacount}}");
+        if(count!=0){
+          $("#checkout1").attr("disabled",false);  
+        }
+        else{
+            $("#checkout1").attr("disabled",true); 
+        }
+    })
     $("#delete").on("click", function(e){
         
         var idd = $(this).attr('name');
@@ -264,6 +274,7 @@
                    $(".discount").append(h4);
                 }
                 else if(resp['message']){
+                    AMOUNT = resp['total'];
                     var detail=`
                     
                    <div class="col-6" id="cleardetail">
@@ -285,30 +296,48 @@
                    //details
                    $("#details").append(detail);
                    $(".discount").append(h4);
-                   $("#coupon").prop('disabled', true);
+                  // $("#coupon").prop('disabled', true);
                    $("#cpnbtn").prop('disabled', true);
                 }
                },
            });
                 });
 
-$("#coupondelete").on('click',function(){
-    $("#cleardetail").remove()
-    window.location.reload()
+//$("#coupondelete").on('click',function(){
+ //   $("#cleardetail").remove()
+    //window.location.reload()
    
-})
+//})
 
 
 $("#option1").change(function(e){
+    console.log("{{data}}" )
     var opt = $(this).val();
     if(opt === "m"){
-    $("#option").attr("disabled", true);
-    }else{
+        $("#firstname").hide();
+        $("#lastname").hide();
+        $("#age").hide();
+        $("#gender").hide()
+        $("#phone").hide()
+        $(".error").empty();
+        //$("#lastname").attr("disabled", true);
+    $("#option").hide();
+    }else if(opt === "o"){
+        $("#firstname").show();
+        $("#lastname").show();
+        $("#age").show();
+        $("#gender").show()
+        $("#phone").show()
         $("#option").attr("disabled", false);
     }
 
 });
 
+function coupRemove(){
+    
+    //$("#cleardetail").remove()
+    window.location.reload()
+   }
 
 $(document).ready(function(){
     jQuery.validator.addMethod("name_regex", function (value, element) {
@@ -392,7 +421,14 @@ $(document).ready(function(){
                     var gender=$("#gender").val();
                     var option1=$("#option1").val();
                     var option=$("#option").val();
-
+                    var total;
+                    if(AMOUNT==0){
+                        tot="{{ razorpay_amount }}";
+                        total=parseInt(tot/100);
+                    }
+                    else{
+                        total=AMOUNT;
+                    }
                       $.ajax({
                            url: "{% url 'cart' %}",
                            type : "POST", 
@@ -414,7 +450,7 @@ $(document).ready(function(){
            
                                 key: "{{ razorpay_merchant_key }}",
                             
-                                amount: "{{ razorpay_amount }}",
+                                amount: total*100,
                                 currency: "{{ currency }}",
                                  
                                 // Your/store name.
@@ -448,58 +484,10 @@ $(document).ready(function(){
                                     }
                                 }
                               };
-
-                              var options = {
-                                key: "{{razorpay_key}}",
-                                amount: {{order.total_amount}}*100, 
-                                currency: "INR",
-                                name: "{{order.name}}",
-                                description: "Test Transaction",
-                                image: "{% static 'assets/img/invoice_logo.png' %}",
-                                order_id: "{{order.provider_order_id}}",
-                                callback_url: "{% url 'callback' %}",
-                                redirect: true,
-                                prefill: {
-                                    "name": "{{order.name}}"
-                                    },
-                                notes: {
-                                    "address": "Razorpay Corporate Office"
-                                },
-                                theme: {
-                                    "color": "#005aeb"
-                                },
-                                modal: { 
-                                    escape: false,
-                                    ondismiss: function()
-                                    { 
-                                        $.ajax({
-                                        url:"{% url 'orders:deleteOrderObj' %}",
-                                        type: 'post',
-                                        headers: {
-                                            'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
-                                        },
-                                        data: {
-                                          csrfmiddlewaretoken: '{{ csrf_token }}',
-                                          "cmd":"fetchAllAddress",
-                                          "id":"{{order.orderID}}",
-                                        },
-                                        dataType: 'json',
-                                        success: function (response) {
-                                        }
-                                        });
-                                    }
-                                },
-                                handler: function (response){
-                                    console.log(response)
-                                }
-                            };
                               var rzp1 = new Razorpay(options);
-                               
-                              // add event listener to the payment button.
-                           
-                                rzp1.open();
-                                e.preventDefault();
+                            rzp1.open();
 
+                             
                                 
                            },
                     

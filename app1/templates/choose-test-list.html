@@ -101,9 +101,9 @@
                                         {%endfor%}
                                     </div>
                                     </div>
-                                    <div class="text-center py-4 test-list-load-button">
-                                        <button class="py-3 px-5 br br-30 bg-dark-orange  fs-18 font-bold">Load
-                                            More</button>
+                                    <!--<div class="text-center py-4 test-list-load-button">
+                                        <button class="py-3 px-5 br br-30 bg-dark-orange  fs-18 font-bold" id="load_more">Load
+                                            More</button>-->
                                     </div>
                                 </div>
                             </div>
@@ -189,7 +189,7 @@
     });
 
 
-    $("#searched").on("change", function(e){
+    $("#searched").keyup(function(e){
 
         var searched = $(this).val();
         
@@ -198,6 +198,7 @@
                 type: "POST",
                 dataType: "json",
                 data: {
+                    "action":"search",
                     'searched':searched,
                     'csrfmiddlewaretoken':'{{ csrf_token }}',
                 },
@@ -228,6 +229,20 @@
             });
     });
    
+    $("#load_more").on("click", function(e){
+            $.ajax({
+                url: "{% url 'search' %}",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    'action':"load_more",
+                    'csrfmiddlewaretoken':'{{ csrf_token }}',
+                },
+                success: function(resp){
+                  console.log(resp);
+                }
+            });
+    });
     /*$("#addtocart").each(function(index){
         e.preventDefault();
         alert(index);
