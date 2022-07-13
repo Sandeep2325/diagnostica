@@ -1,5 +1,6 @@
 {%include "header.html"%}
 {%include "subheader.html"%}
+
 <body>
 
   <section class="section_health_pack section_health_pack_started">
@@ -14,63 +15,64 @@
                   <p
                     class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">
                     Price</p>
-                    {%if city == "Bangalore"%}
-                    <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.pricel1}}</h1>
-                    {%elif city == "Chennai"%}
-                    <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.pricel2}}</h1>
-                    {%elif city == "Mumbai"%}
-                    <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.pricel3}}</h1>
-                    {%elif city == "Delhi"%}
-                    <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.pricel4}}</h1>
-                    {%endif%}
+                  {%if city == "Bangalore"%}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.pricel1}}</h1>
+                  {%elif city == "Chennai"%}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.pricel2}}</h1>
+                  {%elif city == "Mumbai"%}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.pricel3}}</h1>
+                  {%elif city == "Delhi"%}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.pricel4}}</h1>
+                  {%endif%}
                   <p
                     class="d-flex justify-content-center align-content-center align-items-center m-0 fs-18 cl-dark-blue font-bold">
                     Includes {{package.testcount}}
                     Tests
                   </p>
-                  
+
                 </div>
-                
+
               </div>
-              
+
             </div>
-             <div class="d-flex justify-content-center pt-xl-5 pt-3">
-              <button class="home_pack_viewpack py-3 fs-16 font-bold br-50 " id="packagebuy" >BUY PACK</button>
-            </div> 
+            <div class="d-flex justify-content-center pt-xl-5 pt-3">
+              <button class="home_pack_viewpack py-3 fs-16 font-bold br-50 " id="packagebuy">BUY PACK</button>
+            </div>
           </div>
         </div>
         <div class="col-xl-9  col-lg-8 col-md-6 pt-3">
           <div class="py-lg-5  py-3 bg-light-grey br-30 ">
             <h1 class="fs-40 font-bold cl-dark-blue text-center pt-lg-3 m-0 pb-4">What’s Included in the
               Package</h1>
-            <h2 class="fs-35 font-regular cl-dark-blue text-center m-0 pb-lg-5 pb-4">Package includes {{package.testcount}} Tests
+            <h2 class="fs-35 font-regular cl-dark-blue text-center m-0 pb-lg-5 pb-4">Package includes
+              {{package.testcount}} Tests
             </h2>
             <div class="row px-5">
-                {%for test in package.test_name.all %}
-              <div class="col-xl-5 col-lg-6 col-md-12 h-100 ms-xl-5">
-                <div class="pack_include">
-                  <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}}</h3>
+              {%for test in package.test_name.all %}
+              <div class="col-12 h-100 ms-xl-5">
+                <div class="">
+                  <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.pricel1}}</h3>
                 </div>
-                <p class="py-4 ">{{test.description}}</p>
+                <p class="pb-4 pe-lg-5 ">{{test.description}}</p>
               </div>
-              
+
               {%endfor%}
               {% comment %} <div class="col-lg-5 col-md-12 h-100 mx-auto">
-                <div class="pack_include">
+                <div class="">
                   <h3 class="fs-30 font-bold cl-dark-blue cbc_test">FBS/RBS</h3>
                 </div>
                 <p class="py-4">A complete blood count (CBC) is a blood test used to evaluate your overall health and
                   detect a wide range of disorders, including anemia, infection and leukemia.</p>
               </div>
               <div class="col-lg-5 col-md-12 h-100 mx-auto">
-                <div class="pack_include">
+                <div class="">
                   <h3 class="fs-30 font-bold cl-dark-blue cbc_test">CBC</h3>
                 </div>
                 <p class="py-4">A complete blood count (CBC) is a blood test used to evaluate your overall health and
                   detect a wide range of disorders, including anemia, infection and leukemia.</p>
               </div>
               <div class="col-lg-5 col-md-12  h-100 mx-auto">
-                <div class="pack_include">
+                <div class="">
                   <h3 class="fs-30 font-bold cl-dark-blue cbc_test">FBS/RBS</h3>
                 </div>
                 <p class="py-4">A complete blood count (CBC) is a blood test used to evaluate your overall health and
@@ -82,7 +84,7 @@
             <h1 class="fs-40  cl-dark-blue font-bold home_health_symp_header">Other Packages</h1>
             {%for pack in packages%}
             <div class="col-xl-4  col-lg-6 col-md-12 pt-3 ">
-                
+
               <div class="py-5 bg-light-grey br-30 ">
                 <h2 class="fs-35 font-bold cl-dark-blue text-center m-0">{{pack.package_name}}</h2>
                 <div class="d-flex justify-content-center align-content-center pt-4 mt-3">
@@ -91,15 +93,15 @@
                       <p
                         class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">
                         Price</p>
-                        {%if city == "Bangalore"%}
-                        <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.pricel1}}</h1>
-                        {%elif city == "Chennai"%}
-                        <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.pricel2}}</h1>
-                        {%elif city == "Mumbai"%}
-                        <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.pricel3}}</h1>
-                        {%elif city == "Delhi"%}
-                        <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.pricel4}}</h1>
-                        {%endif%}
+                      {%if city == "Bangalore"%}
+                      <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.pricel1}}</h1>
+                      {%elif city == "Chennai"%}
+                      <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.pricel2}}</h1>
+                      {%elif city == "Mumbai"%}
+                      <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.pricel3}}</h1>
+                      {%elif city == "Delhi"%}
+                      <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.pricel4}}</h1>
+                      {%endif%}
                       <p
                         class="d-flex justify-content-center align-content-center align-items-center m-0 fs-18 cl-dark-blue font-bold">
                         Includes {{pack.testcount}}
@@ -109,14 +111,15 @@
                   </div>
                 </div>
                 <div class="d-flex justify-content-center pt-5">
-                    <a href="{%url "Health-package" pack.slug%}"><button class="home_pack_viewpack py-3 fs-16 font-bold br-50 ">VIEW PACK</button></a>
+                  <a href="{%url "Health-package" pack.slug%}"><button
+                      class="home_pack_viewpack py-3 fs-16 font-bold br-50 ">VIEW PACK</button></a>
                 </div>
               </div>
 
             </div>
             {%endfor%}
-           
-            
+
+
           </div>
         </div>
       </div>
@@ -124,10 +127,10 @@
   </section>
 
   {%include "footer.html"%}
- 
+
 </body>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script>
+<script>
   $.validator.addMethod('filesize', function (value, element, param) {
     return this.optional(element) || (element.files[0].size <= param)
   }, 'File size must be less than {0}');
@@ -149,51 +152,51 @@
       form.submit();
     }
   });
-$("#packagebuy").click(function(){
+  $("#packagebuy").click(function () {
     var options = {
-        key: "{{ razorpay_merchant_key }}",
-    
-        amount: "{{ razorpay_amount }}",
-        currency: "{{ currency }}",
-         
-        // Your/store name.
-        name: "Diagnostica Span",
-        order_id: "{{ razorpay_order_id }}",
-        callback_url: "{{ callback_url }}",
-        redirect:true
-      };
-    
-      // initialise razorpay with the options.
-      var rzp1 = new Razorpay(options);
-      // add event listener to the payment button.
-      //document.getElementById("packagebuy").onclick = function (e) 
-        rzp1.open();
-        e.preventDefault();
-      
-    });
+      key: "{{ razorpay_merchant_key }}",
 
-function packageebuy(){
-  var options = {
-    key: "{{ razorpay_merchant_key }}",
+      amount: "{{ razorpay_amount }}",
+      currency: "{{ currency }}",
 
-    amount: "{{ razorpay_amount }}",
-    currency: "{{ currency }}",
-     
-    // Your/store name.
-    name: "Diagnostica Span",
-    order_id: "{{ razorpay_order_id }}",
-    callback_url: "{{ callback_url }}",
-    redirect:true
-  };
+      // Your/store name.
+      name: "Diagnostica Span",
+      order_id: "{{ razorpay_order_id }}",
+      callback_url: "{{ callback_url }}",
+      redirect: true
+    };
 
-  // initialise razorpay with the options.
-  var rzp1 = new Razorpay(options);
-  // add event listener to the payment button.
-  //document.getElementById("packagebuy").onclick = function (e) 
+    // initialise razorpay with the options.
+    var rzp1 = new Razorpay(options);
+    // add event listener to the payment button.
+    //document.getElementById("packagebuy").onclick = function (e) 
     rzp1.open();
     e.preventDefault();
-  
-}
+
+  });
+
+  function packageebuy() {
+    var options = {
+      key: "{{ razorpay_merchant_key }}",
+
+      amount: "{{ razorpay_amount }}",
+      currency: "{{ currency }}",
+
+      // Your/store name.
+      name: "Diagnostica Span",
+      order_id: "{{ razorpay_order_id }}",
+      callback_url: "{{ callback_url }}",
+      redirect: true
+    };
+
+    // initialise razorpay with the options.
+    var rzp1 = new Razorpay(options);
+    // add event listener to the payment button.
+    //document.getElementById("packagebuy").onclick = function (e) 
+    rzp1.open();
+    e.preventDefault();
+
+  }
 </script>
 
 </html>

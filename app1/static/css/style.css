@@ -82,30 +82,30 @@ html {
 }
 
 .fs-18 {
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .fs-20,
 .fs-22,
-.fs-24,
-.fs-25 {
-    font-size: 20px;
+.fs-24 {
+    font-size: 16px;
 }
 
+.fs-25,
 .fs-30 {
-    font-size: 25px;
+    font-size: 18px;
 }
 
 .fs-35 {
-    font-size: 30px;
+    font-size: 20px;
 }
 
 .fs-40 {
-    font-size: 35px;
+    font-size: 25px;
 }
 
 .fs-48 {
-    font-size: 40px;
+    font-size: 30px;
 }
 
 
@@ -320,10 +320,10 @@ textarea {
 }
 
 .section_nav_bar .nav_bar .logo-img {
-    height: 50px;
-    width: 300px;
+    /* height: 50px; */
+    width: 200px;
     float: left;
-    margin-top: 25px;
+    margin-top: 35px;
     cursor: pointer;
 }
 
@@ -414,17 +414,18 @@ textarea {
 .section_footer .footer_sub_button {
     background-color: #2B3147;
     color: white;
-    font-size: 17px;
-    font-family: Chivo-bold;
+    font-size: 15px;
+    font-family: Chivo-regular;
     border: none;
 }
+
 
 .section_footer .text_dec_media {
     list-style: none;
 }
 
 .section_footer .footer-policy {
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .section_footer .text_decoration_policy {
@@ -442,55 +443,74 @@ textarea {
 .home-banner {
     background: url(../images/home_banner.png) no-repeat;
     background-size: cover;
-    min-height: 600px;
+    min-height: 450px;
     border-radius: 15px;
+    display: flex;
+    align-items: center;
 }
 
 .home-banner h1 {
-    font-size: 45px;
+    font-size: 35px;
     font-family: Chivo-regular;
     color: white;
-    padding: 30px 0px 30px 0px;
+    padding: 0px 0px 25px 0px;
 }
 
 .home-banner h2 {
-    font-size: 40px;
+    font-size: 25px;
     font-family: Chivo-bold;
     color: white;
 }
 
 .home_banner button {
-    font-size: 20px;
+    font-size: 16px;
     font-family: Chivo-bold;
     border: none;
     border-radius: 30px;
     background: #FDB42B;
     padding: 12px 30px;
+    /* transition: all 1s ease; */
+    animation: book 3s infinite;
+}
+
+@keyframes book {
+
+    0% {
+        transform: scale(0.9);
+    }
+
+    50% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(0.9);
+    }
 }
 
 .home_banner p {
-    font-size: 24px;
+    font-size: 18px;
     color: white;
-    padding: 50px 0px 40px 0px;
+    padding: 20px 0 30px 0;
 }
 
 .home_banner b {
-    font-size: 24px;
+    font-size: 18px;
     color: orange;
 }
 
 .section_home_health_check .home_ul_li ul,
 .section_home_health_check .home_ul_li ol {
-    padding-bottom: 45px;
+    padding-bottom: 25px;
     margin: 0px;
     padding-left: 20px;
     padding-top: 20px;
-    height: 230px;
+    height: 200px;
     overflow-y: hidden;
 }
 
 .section_home_health_check .home_ul_li li {
-    padding-bottom: 20px;
+    padding-bottom: 12px;
     font-size: 18px;
     list-style: circle;
 }
@@ -620,7 +640,7 @@ textarea {
 }
 
 .helping_book_test .healper_sub_header {
-    font-size: 24px;
+    font-size: 20px;
     font-family: Chivo-bold;
     color: white;
     padding-left: 20px;
@@ -628,14 +648,14 @@ textarea {
 }
 
 .helping_book_test .helping_contact {
-    font-size: 18px;
+    font-size: 16px;
     font-family: Chivo-regular;
     color: white;
     padding-top: 20px;
 }
 
 .helper_header_col {
-    padding-top: 100px;
+    padding-top: 30px;
 }
 
 .helping_book_test input,
@@ -733,7 +753,7 @@ select::placeholder {
     right: 30px;
 }
 
-.section_register.register .change_password_eye{
+.section_register.register .change_password_eye {
     right: 20px;
 }
 
@@ -1105,7 +1125,7 @@ select,
 }
 
 .choose_test_header h5 {
-    font-size: 24px;
+    font-size: 18px;
     font-family: Chivo-bold;
     color: #2B3147;
 }
@@ -1131,11 +1151,8 @@ select,
 }
 
 .cbc_test {
-    position: relative;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
+
     top: 60px;
 }
 
@@ -1296,6 +1313,70 @@ textarea {
 }
 
 
+
+/* ------------------scroll top----------------- */
+.scroll_top {
+    display: inline-block;
+    background-color: #FF9800;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    border-radius: 4px;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    transition: background-color .3s,
+        opacity .5s, visibility .5s;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1000;
+}
+
+.scroll_top::after {
+    content: "\f0aa";
+    font-family: FontAwesome;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 2em;
+    line-height: 50px;
+    color: #fff;
+}
+
+.scroll_top:hover {
+    cursor: pointer;
+    background-color: #333;
+}
+
+.scroll_top:active {
+    background-color: #555;
+}
+
+.scroll_top.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+/* -----------whatsapp--------------- */
+.whatsapp_float {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 40px;
+    left: 40px;
+    background-color: #25d366;
+    color: #FFF;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 30px;
+    box-shadow: 2px 2px 3px #999;
+    z-index: 100;
+}
+
+.my-float {
+    margin-top: 16px;
+}
+
 /* responsive media query */
 
 @media (max-width: 575.98px) {
@@ -1427,15 +1508,15 @@ textarea {
         color: #2B3147;
         letter-spacing: -0.48px;
         font-family: Chivo-regular;
-        line-height: 36px;
+        line-height: 25px;
     }
 
     .section_footer .footer_branch_text {
-        font-size: 18px;
+        font-size: 16px;
     }
 
     .section_footer .footer-policy {
-        font-size: 18px;
+        font-size: 16px;
     }
 }
 
