@@ -40,7 +40,7 @@
                 <h1 class="cl-dark-blue fs-35 font-bold test_head">{{checkup.package_title}}</h1>
               </div>
               <div class="home_ul_li ul-dot m-0">
-                  {{checkup.description|safe}}
+                  {{checkup.description|safe|slice:100}}...
               </div>
               <div class="position-relative">
                 <p class="my-2 pt-2 fs-20 font-bold cl-light-blue">Price</p>
@@ -67,10 +67,6 @@
           </div>
         </div>
         {%endfor%}
-<<<<<<< HEAD
-=======
-
->>>>>>> 5f8f97b73de9bbdc0cc8016f7d14c94d8c6be1a5
   </section>
   <section class="section_synbrome">
     <div class="container">
