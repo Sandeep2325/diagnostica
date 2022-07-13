@@ -22,11 +22,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-xl-3 col-lg-6 col-md-12 col-12">
-                    <div class="footer_image_logo pt-lg-5 mt-lg-5 pt-xl-4 pt-4">
+                    <div class="footer_image_logo py-4 py-lg-5 mt-lg-3">
                         <img src="{%static "images/image_logo.png"%}" alt="" class="img-fluid">
                     </div>
                 </div>
-                <div class="col-xl-3 col-lg-3  col-6 pt-xl-5 pt-3 ">
+                <div class="col-xl-3 col-lg-3  col-6 pt-xl-5 pt-3 ps-xl-5">
                     <h3 class="fs-30  footer_branches font-bold m-0">Branches</h3>
                     <ul class="p-0">
                         <li class="text_decoration font-bold pt-xl-4 pt-2">
@@ -68,9 +68,9 @@
                     {% comment %} <form action="javascript:void(0)" id="subscribes"> {% endcomment %}
                         <label class="footer_Subscribe_label" for="email">Enter Email Address</label>
                         <br>
-                        <input class="footer_Subscribe_input" id="emaill" name="email" type="email" maxlength="250">
+                        <input class="footer_Subscribe_input" id="emaill" name="email" type="email" maxlength="250" required>
                         <div class="d-flex justify-content-end" id="respp">
-                            <button class="footer_sub_button mt-3 py-3 px-5 br-50" id="newsletter"
+                            <button type="submit" class="footer_sub_button mt-3 py-3 px-5 br-50" id="newsletter"
                                 >SUBSCRIBE</button>
                         </div>
                         <div>
@@ -90,11 +90,11 @@
                     {% comment %} </form> {% endcomment %}
                 </div>
             </div>
-            <div class="row py-4">
-                <div class="col-lg-2 px-lg-0 footer-policy">Privacy Policy</div>
-                <div class="col-lg-2 px-lg-0 footer-policy">Terms of use</div>
-                <div class="col-lg-2 ps-lg-0 footer-policy">Payment & Refunds</div>
-                <div class="col-lg-6 ps-lg-0 footer-policy d-flex justify-content-end align-content-end pe-lg-5">© 2021
+            <div class="row py-4 mx-sm-0">
+                <div class="col-6 col-sm-4 col-lg-2 px-lg-0 footer-policy">Privacy Policy</div>
+                <div class="col-6 col-sm-4 col-lg-2 px-lg-0 footer-policy">Terms of use</div>
+                <div class="col-sm-4 col-lg-3 col-xl-2 ps-lg-0 footer-policy pt-2 pt-sm-0">Payment & Refunds</div>
+                <div class="col-xl-6 col-lg-5 ps-lg-0 footer-policy d-flex justify-content-end align-content-end pe-xl-5 pt-4 pt-lg-0">© 2021
                     Diagnostica
                     Span Private Limited</div>
             </div>

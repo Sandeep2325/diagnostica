@@ -63,20 +63,21 @@
                                                         Code
                                                     </h3>
                                                     <div class="row">
-                                                        <div class="col-lg-6 col-md-6">
-                                                            <input class="w-100 coupon_input about_carousel" placeholder="Apply Coupon"
+                                                        <div class="col-8 col-xl-7">
+                                                            <input class="w-100 coupon_input" placeholder="Apply Coupon"
                                                                 id="coupon" name="coupon" type="coupon" />
                                                                 <button id="coupondelete">X</button>
                                                         </div>
-                                                        <div class="col-6 col-md-6 pt-md-0 py-3">
+                                                        <div class="col-4 col-xl-5 ps-0">
                                                             <button
-                                                                class="coupon_apply br br-5 text-center fs-18 font-regular ms-xl-3" id="cpnbtn" >APPLY</button>
+                                                                class="coupon_apply br br-5 text-center fs-18 font-regular" id="cpnbtn" >APPLY</button>
                                                         </div>
                                                     </div>
                                                 {% comment %} </form> {% endcomment %}
                                             </div>
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-6 pt-4 pt-lg-0">
                                                 <div class="row text-center" id="details">
+
                                                     <div class="col-6">
                                                         <h4 class="fs-20 font-bold cl-dark-blue mb-3">Sub Total</h4>
                                                     </div>
@@ -111,8 +112,8 @@
     <section class="cart_checkout_modal" id ="infomodal">
         <div class="modal fade" id="cart_checkout_modal" tabindex="-1" aria-labelledby="cart_checkout_modalLabel"
             aria-hidden="true">
-            <div class="modal-dialog  modal-dialog-centered">
-                <div class="modal-content">
+            <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content  p-3 p-sm-4">
                     <div class="modal-body">
                         <button type="button" class="btn-close  close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
@@ -136,7 +137,7 @@
                                 <input class="w-100  br-5" placeholder="Age" name="age" id="age" type="text" />
                             </div>
                             <div>
-                                <select class="w-100 mt-3" type="select" name="gender" id="gender">
+                                <select class="w-100 mt-3 form-select myself_other" type="select" name="gender" id="gender">
                                     <option selected="selected" class="opc-5" disabled>
                                         Gender</option>
                                         <option value="m">Male</option>
@@ -145,14 +146,14 @@
                                 </select>
                             </div>
                             <div class=" ">
-                                <select class="w-100 py-3 mt-3" type="select" name="option1" id="option1">
+                                <select class="w-100 mt-3 form-select myself_other" type="select" name="option1" id="option1">
                                     <option selected="selected" class="opc-5" disabled>Select Test For</option>
                                     <option value="m">My-Self</option>
                                     <option value="o">Others</option>
                                 </select>
                             </div>
                             <div class=" ">
-                                <select class="w-100 py-3 mt-3" type="select" name="option" id="option">
+                                <select class="w-100 mt-3 form-select myself_other" type="select" name="option" id="option">
                                     <option selected="selected" class="opc-5" disabled>Option</option>
                                 
                                     <option value="m">Mother</option>
@@ -384,7 +385,6 @@ $(document).ready(function(){
     
         },
         submitHandler: function (form) {
-            //form.submit();
             var firstname=$("#firstname").val();
                     var lastname=$("#lastname").val();
                     var phone=$("#phone").val();
@@ -409,7 +409,6 @@ $(document).ready(function(){
                            dataType: "json",
                            success: function(resp){
                             
-                            console.log(resp);
                             $("#infomodal").hide();
                             var options = {
            
@@ -449,7 +448,51 @@ $(document).ready(function(){
                                     }
                                 }
                               };
-                              // initialise razorpay with the options.
+
+                              var options = {
+                                key: "{{razorpay_key}}",
+                                amount: {{order.total_amount}}*100, 
+                                currency: "INR",
+                                name: "{{order.name}}",
+                                description: "Test Transaction",
+                                image: "{% static 'assets/img/invoice_logo.png' %}",
+                                order_id: "{{order.provider_order_id}}",
+                                callback_url: "{% url 'callback' %}",
+                                redirect: true,
+                                prefill: {
+                                    "name": "{{order.name}}"
+                                    },
+                                notes: {
+                                    "address": "Razorpay Corporate Office"
+                                },
+                                theme: {
+                                    "color": "#005aeb"
+                                },
+                                modal: { 
+                                    escape: false,
+                                    ondismiss: function()
+                                    { 
+                                        $.ajax({
+                                        url:"{% url 'orders:deleteOrderObj' %}",
+                                        type: 'post',
+                                        headers: {
+                                            'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
+                                        },
+                                        data: {
+                                          csrfmiddlewaretoken: '{{ csrf_token }}',
+                                          "cmd":"fetchAllAddress",
+                                          "id":"{{order.orderID}}",
+                                        },
+                                        dataType: 'json',
+                                        success: function (response) {
+                                        }
+                                        });
+                                    }
+                                },
+                                handler: function (response){
+                                    console.log(response)
+                                }
+                            };
                               var rzp1 = new Razorpay(options);
                                
                               // add event listener to the payment button.
