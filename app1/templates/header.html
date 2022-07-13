@@ -29,16 +29,16 @@
                     <div class="menu-center">
                         <span onClick="toggleMenu()" id="open_icon">&#9776;</span>
                         <ul class="p-0 m-0" id="menu-box">
-                            <li class="pt-xl-0 pt-5 active "><a href="{%url 'Health-package' slug='basic'%}" class="nav_hov">Our
-                                    Services</a></li>
-                            <li><a href="{%url "packages"%}" class="nav_hov">Packages</a></li>
+                            <li class="active"><a href="{%url "packages"%}" class="nav_hov">Packages</a></li>
                             <li><a href="{%url "testselect"%}" class="nav_hov">Our Lab</a></li>
                             <li><a href="{%url "aboutus"%}" class="nav_hov">About Us</a></li>
                             <li><a href="{%url "contactus"%}" class="nav_hov">Contact Us</a></li>
-                            <li><a href="{%url "bookonline"%}" class="nav_button"><i class="fa fa-search pe-2"
+                            <li><a href="{%url "prescription-upload"%}" class="nav_button"><i class="fa fa-upload pe-2"
+                                aria-hidden="true"></i>Upload Prescription</a></li>
+                            <li><a href="{%url "testselect"%}" class="nav_button"><i class="fa fa-search pe-2"
                                         aria-hidden="true"></i>Book A
                                     Test
-                                    Online</a></li>
+                                    </a></li>
                             <li class="position-relative">
                                 <a class="cart-logo1" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                                     aria-expanded="false">

@@ -1,47 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-    {%load static%}
+{%load static%}
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diagnostic Span</title>
-    <link rel="stylesheet" href="{%static "css/style.css"%}">
-    <link rel="stylesheet" href="{%static "fontawesome/css/font-awesome.min.css"%}">
-    <link rel="stylesheet" href="{%static "css/bootstrap.min.css"%}">
-    <link rel="stylesheet" href="{%static "css/owl.carousel.min.css"%}">
-    <link rel="stylesheet" href="{%static "css/owl.theme.default.min.css"%}">
-    <script src="{%static "js/jquery-3.6.0.min.js"%}"></script>
-    <script src="{%static "js/bootstrap.bundle.min.js"%}"></script>
-    <script src="{%static "js/owl.carousel.min.js"%}"></script>
-    <script src="{%static "js/script.js"%}"></script>
+    <link rel="stylesheet" href="{%static " css/style.css"%}">
+    <link rel="stylesheet" href="{%static " fontawesome/css/font-awesome.min.css"%}">
+    <link rel="stylesheet" href="{%static " css/bootstrap.min.css"%}">
+    <link rel="stylesheet" href="{%static " css/owl.carousel.min.css"%}">
+    <link rel="stylesheet" href="{%static " css/owl.theme.default.min.css"%}">
+    <script src="{%static " js/jquery-3.6.0.min.js"%}"></script>
+    <script src="{%static " js/bootstrap.bundle.min.js"%}"></script>
+    <script src="{%static " js/owl.carousel.min.js"%}"></script>
+    <script src="{%static " js/script.js"%}"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 </head>
+
 <body>
+    <a id="button" class="scroll_top"></a>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <a href="https://api.whatsapp.com/send?phone=51955081075&text=Hola%21%20Quisiera%20m%C3%A1s%20informaci%C3%B3n%20sobre%20Varela%202."
+        class="whatsapp_float" target="_blank">
+        <i class="fa fa-whatsapp my-float"></i>
+    </a>
+
     <section class="section_footer ">
         <div class="container">
             <div class="row">
                 <div class="col-xl-3 col-lg-6 col-md-12 col-12">
                     <div class="footer_image_logo py-4 py-lg-5 mt-lg-3">
-                        <img src="{%static "images/image_logo.png"%}" alt="" class="img-fluid">
+                        <img src="{%static " images/image_logo.png"%}" alt="" class="img-fluid">
                     </div>
                 </div>
                 <div class="col-xl-3 col-lg-3  col-6 pt-xl-5 pt-3 ps-xl-5">
-                    <h3 class="fs-30  footer_branches font-bold m-0">Branches</h3>
+                    <h3 class="fs-30  footer_branches font-bold m-0 pb-3">Branches</h3>
                     <ul class="p-0">
-                        <li class="text_decoration font-bold pt-xl-4 pt-2">
+                        <li class="text_decoration font-bold pb-2">
                             <a class="footer_branch_text fs-24 ">Bangalore</a>
                         </li>
-                        <li class="text_decoration font-bold pt-xl-4 pt-2">
+                        <li class="text_decoration font-bold pb-2">
                             <a class="footer_branch_text fs-24 ">Chennai</a>
                         </li>
-                        <li class="text_decoration font-bold pt-xl-4 pt-2">
+                        <li class="text_decoration font-bold pb-2">
                             <a class="footer_branch_text fs-24 ">Mumbai</a>
                         </li>
                     </ul>
                 </div>
                 <div class="col-xl-3 col-lg-3 col-6 pt-xl-5 pt-3 subscription_div">
-                    <h3 class="fs-30 footer_branches font-bold m-0 pb-4">Useful Links</h3>
+                    <h3 class="fs-30 footer_branches font-bold m-0 pb-3">Useful Links</h3>
                     <ul class="p-0 ">
                         <li class="text_decoration_usefull font-regular">
                             <a href="{%url "aboutus"%}" class="">About us </a>
@@ -50,7 +60,7 @@
                             <a href="{%url "packages"%}" class="">Packages</a>
                         </li>
                         <li class="text_decoration_usefull font-regular">
-                            <a  href="{%url "contactus"%}"class="">Contact</a>
+                            <a href="{%url "contactus"%}"class="">Contact</a>
                         </li>
                         <li class="text_decoration_usefull font-regular">
                             <a class="">Franchisee Opportunities </a>
@@ -64,37 +74,41 @@
                     </ul>
                 </div>
                 <div class="col-xl-3 col-lg-5 pt-xl-5">
-                    <h3 class="fs-30 footer_branches font-bold m-0 pb-4">Subscribe</h3>
+                    <h3 class="fs-30 footer_branches font-bold m-0 pb-3">Subscribe</h3>
                     {% comment %} <form action="javascript:void(0)" id="subscribes"> {% endcomment %}
                         <label class="footer_Subscribe_label" for="email">Enter Email Address</label>
                         <br>
-                        <input class="footer_Subscribe_input" id="emaill" name="email" type="email" maxlength="250" required>
+                        <input class="footer_Subscribe_input" id="emaill" name="email" type="email" maxlength="250"
+                            required>
                         <div class="d-flex justify-content-end" id="respp">
-                            <button type="submit" class="footer_sub_button mt-3 py-3 px-5 br-50" id="newsletter"
-                                >SUBSCRIBE</button>
+                            <button type="submit" class="footer_sub_button mt-3 py-2 px-4 br-50"
+                                id="newsletter">SUBSCRIBE</button>
                         </div>
                         <div>
                             <h3 class="fs-30 footer_branches font-bold m-0 pt-4 mt-2">Social Media</h3>
                             <ul class="d-flex p-0 pt-3 ">
                                 <li class="text_dec_media pe-3"><a href="https://www.facebook.com/">
-                                        <img src="{%static "images/bg-facebook.png"%}" alt="" class="img-fluid">
+                                        <img src="{%static " images/bg-facebook.png"%}" alt="" class="img-fluid">
                                     </a></li>
                                 <li class="text_dec_media pe-3"><a href="https://www.twitter.com/">
-                                        <img src="{%static "images/bg-twitter.png"%}" alt="" class="img-fluid">
+                                        <img src="{%static " images/bg-twitter.png"%}" alt="" class="img-fluid">
                                     </a></li>
                                 <li class="text_dec_media pe-3"><a href="https://www.instagram.com/">
-                                        <img src="{%static "images/bg-insta.png"%}" alt="" class="img-fluid">
+                                        <img src="{%static " images/bg-insta.png"%}" alt="" class="img-fluid">
                                     </a></li>
                             </ul>
                         </div>
-                    {% comment %} </form> {% endcomment %}
+                        {% comment %}
+                    </form> {% endcomment %}
                 </div>
             </div>
             <div class="row py-4 mx-sm-0">
                 <div class="col-6 col-sm-4 col-lg-2 px-lg-0 footer-policy">Privacy Policy</div>
                 <div class="col-6 col-sm-4 col-lg-2 px-lg-0 footer-policy">Terms of use</div>
                 <div class="col-sm-4 col-lg-3 col-xl-2 ps-lg-0 footer-policy pt-2 pt-sm-0">Payment & Refunds</div>
-                <div class="col-xl-6 col-lg-5 ps-lg-0 footer-policy d-flex justify-content-end align-content-end pe-xl-5 pt-4 pt-lg-0">© 2021
+                <div
+                    class="col-xl-6 col-lg-5 ps-lg-0 footer-policy d-flex justify-content-end align-content-end pt-4 pt-lg-0">
+                    © 2022
                     Diagnostica
                     Span Private Limited</div>
             </div>
@@ -122,25 +136,42 @@
         },
     });
 
-    $("#newsletter").on("click", function(e){
+    $("#newsletter").on("click", function (e) {
         var email = $("#emaill").val();
-            $.ajax({
-                url: "{% url 'newsletter' %}",
-                type: "POST",
-                dataType: "json",
-                data: {
-                    'email':email,
-                    'csrfmiddlewaretoken':'{{ csrf_token }}',
-                },
-                success: function(resp){
-                    //alert(resp["email"])
-                  alert("Thank you for subscribing")
-                   //var h1=`<h5>Thank you for subscribing</h5>`
-                   //$("#respp").append(h1)
-                }
-            });
-        
+        $.ajax({
+            url: "{% url 'newsletter' %}",
+            type: "POST",
+            dataType: "json",
+            data: {
+                'email': email,
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+            },
+            success: function (resp) {
+                //alert(resp["email"])
+                alert("Thank you for subscribing")
+                //var h1=`<h5>Thank you for subscribing</h5>`
+                //$("#respp").append(h1)
+            }
+        });
+
         return false;
     });
+
+    var btn = $('#button');
+
+    $(window).scroll(function () {
+        if ($(window).scrollTop() > 300) {
+            btn.addClass('show');
+        } else {
+            btn.removeClass('show');
+        }
+    });
+
+    btn.on('click', function (e) {
+        e.preventDefault();
+        $('html, body').animate({ scrollTop: 0 }, '300');
+    });
+
 </script>
+
 </html>
