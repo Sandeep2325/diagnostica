@@ -8,11 +8,11 @@
         <div class="container">
             <div class="row">
                 <diV class="col-lg-12">
-                    <div class="bg-light-grey">
+                    <div class="bg-light-grey px-3">
                         <div class="row">
                             <div class="col-lg-11 col-md-12 mx-auto py-lg-5">
                                 <div class="row">
-                                    <div class="col-xxl-5  col-xl-6 col-lg-6 mx-auto py-4">
+                                    <div class="px-xl-4 col-lg-6 mx-auto py-4">
                                         <div class="bg-sky-blue br-15 px-5 py-4 text-center ">
                                             <h2 class="cl-dark-white fs-30  font-bold mb-3 pb-2">Upload Prescription
                                             </h2>
@@ -27,7 +27,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-xxl-5  col-xl-6 col-lg-6 mx-auto py-4 opc-5">
+                                    <div class="px-xl-4 col-lg-6 mx-auto py-4 opc-5">
                                         <div class="bg-dark-green br-15 px-5 py-4 text-center ">
                                             <h2 class="cl-dark-white fs-30  font-bold mb-3 pb-2">Choose Test Lists
                                             </h2>
@@ -43,19 +43,19 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-xl-11  mx-auto choose_test_header">
+                                    <div class="col-xl-11 mx-auto choose_test_header">
                                         {% comment %} <form method="get" action="{%url "search"%}" >
                                             {% csrf_token%} {% endcomment %}
                                         <div class="row">
                                            
-                                            <div class="col-lg-5 position-relative py-4 mx-lg-0 mx-2">
-                                                <input class="w-100 px-3 py-2 br br-5" id="searched" placeholder="Search" name="searched" />
+                                            <div class="col-lg-5 col-sm-6 position-relative py-4">
+                                                <input class="w-100 br br-5" id="searched" placeholder="Search" name="searched" />
                                                 {% comment %} <button  type="submit"class="br">  <i class="fa fa-search test-list-search" aria-hidden="true"></i></button> {% endcomment %}
                                             </div>
                                         {% comment %} </form> {% endcomment %}
-                                            <div class="col-lg-5 position-relative py-4 mx-lg-0 mx-2">
+                                            <div class="col-lg-5 col-sm-6 position-relative py-4">
                                                 <select
-                                                    class="w-50 px-3 py-2  br-5 cl-dark-blue fs-22 font-bold br select_option"
+                                                    class="br-5 cl-dark-blue fs-22 form-select br select_option"
                                                     type="select" name="" id="category">
                                                     <option selected="selected" class="opc-5" disabled>Select Category
                                                     </option>
