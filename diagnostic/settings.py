@@ -105,7 +105,7 @@ DATABASES = {
 #     }  
 # }
 
-# }
+
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
@@ -141,7 +141,8 @@ import os
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 MEDIA_URL = '/photos/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'photos/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'photos')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'photos/')
 STATIC_ROOT = os.path.join(BASE_DIR, 'app1/static')
 STATIC_URL = '/static/'
 RAZOR_KEY_ID = "rzp_test_JiD8eNtJ2aNwZr"

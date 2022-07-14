@@ -270,6 +270,7 @@ textarea {
     top: 0;
     z-index: 999;
 }
+
 .section_nav_bar .navbar-nav .nav-link {
     font-family: Chivo-Regular;
     font-size: 17px;
@@ -298,14 +299,18 @@ textarea {
     background-color: #17235A;
     color: white;
 }
+
 .section_nav_bar .dropdown-toggle::after {
     display: none;
 }
+
 .section_nav_bar .dropdown-menu[data-bs-popper] {
     top: 100%;
     right: 0;
     margin-top: 39px;
 }
+
+
 /* .section_nav_bar {
     position: sticky;
     top: 0;
@@ -459,7 +464,6 @@ textarea {
     border: none;
 }
 
-
 .section_footer .text_dec_media {
     list-style: none;
 }
@@ -514,15 +518,12 @@ textarea {
 }
 
 @keyframes book {
-
     0% {
         transform: scale(0.9);
     }
-
     50% {
         transform: scale(1);
     }
-
     100% {
         transform: scale(0.9);
     }
@@ -797,6 +798,7 @@ select::placeholder {
     right: 20px;
 }
 
+
 /*------------------- OTP------------------------ */
 
 .otp_digit_input {
@@ -997,6 +999,10 @@ select::placeholder {
 
 /* -----------------Booking History -------------- */
 
+#othersspop {
+    text-align: start!important;
+}
+
 .section_booking_history .tad_button {
     color: #2B3147;
     border-bottom: 3px solid #b8cad6;
@@ -1078,7 +1084,6 @@ table td {
         border: 0;
         border-bottom: none !important;
     }
-
     .section_booking_history table thead {
         border: none;
         clip: rect(0 0 0 0);
@@ -1089,20 +1094,17 @@ table td {
         position: absolute;
         width: 1px;
     }
-
     .section_booking_history table tr {
         border-bottom: 3px solid #ddd;
         display: block;
         margin-bottom: .625em;
     }
-
     .section_booking_history table td {
         border-bottom: 1px solid #ddd;
         display: block;
         font-size: .8em;
         text-align: right;
     }
-
     .section_booking_history table td::before {
         /*
       * aria-label has no advantage, it won't be read inside a table
@@ -1113,7 +1115,6 @@ table td {
         font-weight: bold;
         text-transform: uppercase;
     }
-
     .section_booking_history table td:last-child {
         border-bottom: 0;
     }
@@ -1192,7 +1193,6 @@ select,
 
 .cbc_test {
     display: flex;
-
     top: 60px;
 }
 
@@ -1353,8 +1353,8 @@ textarea {
 }
 
 
-
 /* ------------------scroll top----------------- */
+
 .scroll_top {
     display: inline-block;
     background-color: #FF9800;
@@ -1365,8 +1365,7 @@ textarea {
     position: fixed;
     bottom: 30px;
     right: 30px;
-    transition: background-color .3s,
-        opacity .5s, visibility .5s;
+    transition: background-color .3s, opacity .5s, visibility .5s;
     opacity: 0;
     visibility: hidden;
     z-index: 1000;
@@ -1398,6 +1397,7 @@ textarea {
 
 
 /* -----------whatsapp--------------- */
+
 .whatsapp_float {
     position: fixed;
     width: 60px;
@@ -1417,71 +1417,60 @@ textarea {
     margin-top: 16px;
 }
 
+
 /* responsive media query */
 
 @media (max-width: 575.98px) {
     .home-banner {
         min-height: 300px;
     }
-    .section_nav_bar .logo-img{
+    .section_nav_bar .logo-img {
         width: 175px;
     }
     h1,
     .fs-40 {
         font-size: 23px !important;
     }
-
     h2,
     .fs-35 {
         font-size: 20px !important;
     }
-
     h3,
     .fs-30 {
         font-size: 18px !important;
     }
-
     h4,
     .fs-26 {
         font-size: 16px;
     }
-
     h5,
     .fs-20 {
         font-size: 14px;
     }
-
     label,
     .fs-20 {
         font-size: 14px !important;
     }
-
     p,
     .fs-18 {
         font-size: 14px !important;
     }
-
     button,
     .fs-18 {
         font-size: 16px !important;
     }
-
     .section_register h1 {
         padding-top: 15px;
     }
-
     .sub_header .sub_nav_bar {
         font-size: 14px;
     }
-
     .sub_header h1 {
         font-size: 25px;
     }
-
     .cart_table .table {
         display: block;
     }
-
     .helping_book_test .healper_sub_header {
         font-size: 15px!important;
     }
@@ -1493,63 +1482,51 @@ textarea {
 }
 
 @media (max-width: 767.98px) {
-
     h1,
     .fs-40 {
         font-size: 28px;
     }
-
     h2,
     .fs-35 {
         font-size: 23px;
     }
-
     h3,
     .fs-30 {
         font-size: 20px;
     }
-
     h4,
     .fs-26 {
         font-size: 18px;
     }
-
     h5,
     .fs-20 {
         font-size: 16px;
     }
-
     label,
     .fs-20 {
         font-size: 16px;
     }
-
     p,
     .fs-18 {
         font-size: 16px;
     }
-
     button,
     .fs-18 {
         font-size: 16px;
     }
-
     .helping_book_test .helping_contact {
         font-size: 18px;
         padding-top: 0px;
     }
-
     .section_booking_history .tad_button {
         padding: 10px 20px;
         font-size: 16px;
     }
-
     .test-list-price p {
         display: flex;
         justify-content: left;
         align-content: left;
     }
-
     .section_footer .text_decoration_usefull a {
         font-size: 18px;
         color: #2B3147;
@@ -1557,71 +1534,57 @@ textarea {
         font-family: Chivo-regular;
         line-height: 25px;
     }
-
     .section_footer .footer_branch_text {
         font-size: 16px;
     }
-
     .section_footer .footer-policy {
         font-size: 16px;
     }
 }
 
 @media (max-width: 991.98px) {
-
     h1,
     .fs-40 {
         font-size: 23px;
     }
-
     h2,
     .fs-35 {
         font-size: 20px;
     }
-
     h3,
     .f-30 {
         font-size: 18px;
     }
-
     h4,
     .fs-26 {
         font-size: 16px;
     }
-
     h5,
     .fs-20 {
         font-size: 14px;
     }
-
     label,
     .fs-20 {
         font-size: 14px;
     }
-
     p,
     .fs-18 {
         font-size: 14px;
     }
-
     button,
     .fs-18 {
         font-size: 16px;
     }
-
     .helping_book_test .healper_sub_header {
         font-size: 18px;
     }
-
     .section_nav_bar .navbar-nav .nav-link {
         font-size: 15px;
         padding: 5px 10px;
     }
-
     .section_nav_bar .nav_button {
         margin: 7px 0px !important;
     }
-
     .home-banner h1 {
         font-size: 40px;
         font-family: Chivo-regular;
@@ -1629,76 +1592,60 @@ textarea {
         padding: 25px 0px 30px 0px;
         margin: 0px;
     }
-
     .home-banner h2 {
         font-size: 35px;
         font-family: Chivo-bold;
         color: white;
     }
-
     .home_banner p {
         font-size: 18px;
         padding: 30px 0px 20px 0px;
     }
-
     .home_banner b {
         font-size: 18px;
     }
-
     .section_booking_history .tad_button {
         padding: 10px 20px;
         font-size: 16px;
     }
-
     .cart_table h1 {
         font-size: 25px;
         text-align: start !important;
     }
-
     .cart_table .cell {
         text-align: start !important;
         font-size: 20px !important;
     }
-
     .cart_table .wrapper {
         padding: 16px;
     }
-
     .cart_table h4 {
         font-size: 20px;
     }
-
     .cart_table .coupon_input {
         padding: 8px 10px;
     }
-
     .cart_table .coupon_apply {
         padding: 10px 25px !important;
     }
-
     .cart_table .cell {
         padding: 2px 16px;
         display: block;
     }
-
     .cart_table .test_row .row {
         padding: 14px 0 7px;
         display: block;
     }
-
     .cart_table .test_row .row.header {
         padding: 0;
         height: 6px;
     }
-
     .cart_table .test_row .row.header .cell {
         display: none;
     }
-
     .cart_table .test_row .row .cell {
         margin-bottom: 10px;
     }
-
     .cart_table .test_row .row .cell:before {
         margin-bottom: 3px;
         content: attr(data-title);
@@ -1712,8 +1659,7 @@ textarea {
     }
 }
 
-
-@media (min-width: 992px) and  (max-width: 1199.98px) {
+@media (min-width: 992px) and (max-width: 1199.98px) {
     .section_nav_bar .navbar-nav .nav-link {
         font-size: 15px;
         padding: 5px 7px !important;
@@ -1728,69 +1674,76 @@ textarea {
 }
 
 @media (max-width: 1199.98px) {
-
     .change_password_eye {
         position: absolute;
         right: 24px;
         top: 22px;
     }
-
     .home_health_h1 {
         font-size: 25px;
     }
-
     .home_health_p {
         font-size: 16px;
     }
-
     .test_head {
         font-size: 20px;
     }
-
     .health_li {
         font-size: 16px;
     }
-
     .home_price {
         font-size: 24px;
     }
-
-    .health_price_disc {
-        font-size: 20px;
-    }
-
+    /* font-size:20px; */
     .home_health_symp_header {
         font-size: 25px;
     }
-
+    .section_nav_bar .nav_button {
+        display: none !important;
+    }
     .nav_book_res {
         display: block !important;
     }
-
     .nav_cart_img {
         display: none !important;
     }
-
     .cart_table .coupon_apply {
         padding: 18px 30px;
     }
-
+    /*----------- Navber----------- */
+    .section_nav_bar .nav_bar .logo-img {
+        height: 50px;
+        width: 250px;
+        float: left;
+        margin: 25px 0px;
+    }
+    .section_nav_bar span {
+        display: block;
+        text-align: end;
+        padding-top: 30px;
+    }
+    .section_nav_bar ul li {
+        display: block;
+        text-align: end;
+        padding: 7px 20px;
+    }
+    .section_nav_bar ul {
+        display: none;
+    }
     .section_booking_history .tad_button {
         padding: 10px 20px;
         font-size: 20px;
     }
-
     .helper_header_col {
         padding-top: 30px;
     }
 }
 
 @media (min-width: 1200px) {
-    .section_nav_bar  .nav_button.upload {
+    .section_nav_bar .nav_button.upload {
         min-width: 225px;
     }
-    
-    .section_nav_bar  .nav_button.book {
+    .section_nav_bar .nav_button.book {
         min-width: 150px;
     }
 }

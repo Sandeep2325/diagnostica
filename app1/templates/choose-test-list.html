@@ -3,7 +3,6 @@
 {%include "subheader.html"%}
 {%load static %}
 <body>
-
     <section class="section_book-test-online pb-5">
         <div class="container">
             <div class="row">
@@ -78,19 +77,19 @@
                                                 
                                                 {%if city == "Bangalore" %}
                                                 <div class="col-xl-3 col-md-2 test-list-price">
-                                                    <p>{{test.pricel1}}</p>
+                                                    <p>₹ {{test.pricel1}}</p>
                                                 </div>
                                                 {%elif city == "Chennai" %}
                                                 <div class="col-xl-3 col-md-2 test-list-price">
-                                                    <p>{{test.pricel2}}</p>
+                                                    <p>₹ {{test.pricel2}}</p>
                                                 </div>
                                                 {%elif city == "Mumbai" %}
                                                 <div class="col-xl-3 col-md-2 test-list-price">
-                                                    <p>{{test.pricel3}}</p>
+                                                    <p>₹ {{test.pricel3}}</p>
                                                 </div>
                                                 {%elif city == "Delhi" %}
                                                 <div class="col-xl-3 col-md-2 test-list-price">
-                                                    <p>{{test.pricel4}}</p>
+                                                    <p>₹ {{test.pricel4}}</p>
                                                 </div>
                                                 {%endif%}
                                                 <div class="col-xl-3 col-md-4 test-list-button"><button id="addtocart"
@@ -284,6 +283,10 @@
     });*/
 
    function myfunction(id){
+    if ("request.user.is_anonymous")
+    {
+        window.location.replace("{% url 'user-login' %}")
+    }
     $.ajax({
         url: "{% url 'addtocart' %}",
         type: "POST",

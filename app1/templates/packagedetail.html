@@ -163,7 +163,32 @@
       name: "Diagnostica Span",
       order_id: "{{ razorpay_order_id }}",
       callback_url: "{{ callback_url }}",
-      redirect: true
+      redirect: true,
+      modal: {                    
+        escape: false,
+        ondismiss: function()
+        { 
+          confirm("Want to close!!");
+
+            $.ajax({
+            url: "{% url 'razorpayclose' %}",
+            type: 'post',
+            headers: {
+                'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
+            },
+            data: {
+            "paymentid":"{{ razorpay_order_id }}",
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            "cmd":"fetchAllAddress",
+            "id":"{{order.orderID}}",
+            },
+            dataType: 'json',
+            success: function (response) {
+                
+            }
+            });
+        }
+    }
     };
 
     // initialise razorpay with the options.

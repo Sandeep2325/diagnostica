@@ -22,6 +22,7 @@ urlpatterns = [
     path("coupon",views.coupon,name="coupon"),
     path("category",views.categoryy,name="category"),
     path("prescription-upload/",views.prescriptionbookview,name="prescription-upload"),
+    path("othersdetail",views.othersdetail,name="othersdetail"),
     path("testselect",views.testselect,name="testselect"),
     path('delete/', views.destroy,name="destroy"),
     path('razorclose/',views.razorpayclose,name="razorpayclose"),

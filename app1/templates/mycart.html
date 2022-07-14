@@ -179,7 +179,8 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js">
 </script>
 <script type = "text/javascript">
- var AMOUNT=0;  
+ var AMOUNT=0; 
+
     $.validator.addMethod('filesize', function (value, element, param) {
         return this.optional(element) || (element.files[0].size <= param)
     }, 'File size must be less than {0}');
@@ -269,14 +270,15 @@
                 $(".discount").empty();
                 if (!resp['message']){
                    // alert("Invalid Coupon")
-                   var h4 =`<h4 class="fs-30 font-bold cl-dark-blue" id="total">Rs ${a}</h4>`;
+                   var h4 =`<h4 class="fs-30 font-bold cl-dark-blue" id="total"> ${a}</h4>`;
+                   alert("Invalid Coupon");
                    /* $('#output').html(data.msg) response message */
                    $(".discount").append(h4);
                 }
                 else if(resp['message']){
                     AMOUNT = resp['total'];
-                    var detail=`
                     
+                    var detail=`
                    <div class="col-6" id="cleardetail">
                         <h4 class="fs-20 font-bold cl-dark-blue mb-3">Discount(%)</h4>
                     </div>
@@ -410,11 +412,10 @@ $(document).ready(function(){
                 required: "Enter Age"
             }
     
-    
-    
         },
         submitHandler: function (form) {
             var firstname=$("#firstname").val();
+         
                     var lastname=$("#lastname").val();
                     var phone=$("#phone").val();
                     var age=$("#age").val();
@@ -427,6 +428,7 @@ $(document).ready(function(){
                         total=parseInt(tot/100);
                     }
                     else{
+                        
                         total=AMOUNT;
                     }
                       $.ajax({
@@ -444,22 +446,19 @@ $(document).ready(function(){
                            },
                            dataType: "json",
                            success: function(resp){
-                            
                             $("#infomodal").hide();
+                            console.log(total)
                             var options = {
-           
                                 key: "{{ razorpay_merchant_key }}",
-                            
-                                amount: total*100,
+                               // amount:AMOUNT ? AMOUNT :100,
+                                amount: total,
                                 currency: "{{ currency }}",
-                                 
                                 // Your/store name.
                                 name: "Diagnostica Span",
                                 order_id: "{{ razorpay_order_id }}",
                                 callback_url: "{{ callback_url }}",
                                 redirect:true,
                                 modal: { 
-                                   
                                     escape: false,
                                     ondismiss: function()
                                     { 
@@ -485,10 +484,7 @@ $(document).ready(function(){
                                 }
                               };
                               var rzp1 = new Razorpay(options);
-                            rzp1.open();
-
-                             
-                                
+                            rzp1.open();  
                            },
                     
                        });

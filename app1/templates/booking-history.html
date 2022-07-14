@@ -68,7 +68,12 @@
                                                 <tr>
                                                     <td data-label="ID">{{bookhistory.id}}</td>
                                                     <td data-label="Date">{{bookhistory.created}}</td>
+                                                   
+                                                    {%if bookhistory.patient_info == "others" %}
+                                                    <td data-label="Patient Info"><a id="otherspop1" data-bs-toggle="modal" data-bs-target="#otherspop" class="br bg-dark-white" onclick='othersfunc({{bookhistory.testbooking_id}})';>{{bookhistory.patient_info}}</a></td>
+                                                    {%else%}
                                                     <td data-label="Patient Info">{{bookhistory.patient_info}}</td>
+                                                    {%endif%}
                                                     <td data-label="Booking Type">{{bookhistory.booking_type}}</td>
                                                     <td data-label="Presciption">-</td>
                                                     <td data-label="Booking Details">{{bookhistory.bookingdetails}}</td>
@@ -92,7 +97,6 @@
                                                     {%else%}
                                                         <td data-label="Payment Status">Paid</td>
                                                     {%endif%}
-
                                                     {% comment %} <td data-label="Status">On Process</td> {% endcomment %}
                                                     {%if bookhistory.payment_status == False%}
                                                     <td data-label="Report"><button
@@ -162,7 +166,22 @@
             </div>
         </div>
     </section>
-
+    <section class="otherspop" id ="otherspop1">
+        <div class="modal fade" id="otherspop" tabindex="-1" aria-labelledby="otherspopLabel"
+            aria-hidden="true">
+            <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content p-sm-4">
+                    <div class="modal-body">
+                        <button type="button" class="btn-close  close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                            <div id="othersspop" >
+                                
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     
 </body>
 {%include "footer.html"%}
@@ -230,5 +249,42 @@
         
         
 
-    }
+    };
+
+   // $("#otherspop1").click(function(){
+        function othersfunc(e){
+        
+        $.ajax({
+            url: "{% url 'othersdetail' %}",
+            type: "POST",
+            dataType: "json",
+            data: {
+                'testid':e,
+                'csrfmiddlewaretoken':'{{ csrf_token }}',
+            },
+            success: function(resp){
+               
+              //  $("#choice").text(resp['otherschoice']);
+              // $("#firstname").text(resp['firstname']);
+              //$("#lastname").text(resp['lastname']);
+              //  $("#gender").text(resp['gender']);
+              //  $("#gender").text(resp['age']);
+             //   $("#gender").text(resp['phone']);
+             $("#othersspop").empty();
+             
+               var detail=` <h3 class="fs-20 font-bold cl-dark-blue text-center" id="choice">Others : ${resp['otherschoice']}</h3>
+               <h3 class="fs-20 font-bold cl-dark-blue text-center" id="fistname">Firstname : ${resp['firstname']}</h3>
+               <h3 class="fs-20 font-bold cl-dark-blue text-center" id="lastname">Lastname : ${resp['lastname']}</h3>
+               <h3 class="fs-20 font-bold cl-dark-blue text-center" id="gender">Gender : ${resp['gender']}</h3>
+
+               <h3 class="fs-20 font-bold cl-dark-blue text-center" id="age">Age : ${resp['age']}</h3>
+               <h3 class="fs-20 font-bold cl-dark-blue text-center" id="phone">Phone : ${resp['phone']}</h3>`
+               $("#othersspop").append(detail);
+               
+            }
+        });
+    
+    return false;
+}
+     // });
 </script>

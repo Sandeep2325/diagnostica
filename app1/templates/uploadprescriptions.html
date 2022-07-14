@@ -238,23 +238,33 @@
             form.submit();
         }
     });
-    function ckChange(ckType){
-        var ckName = document.getElementsByName(ckType.name);
-        var checked = document.getElementById(ckType.id);
-    
-        if (checked.checked) {
-            document.getElementById("others").checked = false;
-            var g = document.getElementById("option").disabled= true
-        }   
-    }
-    function ckChange1(ckType){
-        var ckName = document.getElementsByName(ckType.name);
-        var checked = document.getElementById(ckType.id);
-    
-        if (checked.checked) {
-            document.getElementById("myself").checked = false;
-            document.getElementById("option").disabled= false
-        }   
-    }
+
+  $("#myself").change(function(e){
+        console.log("{{data}}" )
+        var opt = $(this).val();
+       // $('#myCheckbox').prop('checked', true);
+        $("#others").prop("checked",false);
+            $("#firstname").hide();
+            $("#lastname").hide();
+            $("#phone").hide();
+            $("#gender").hide()
+            $("#age").hide();
+            $(".error").empty();
+            //$("#lastname").attr("disabled", true);
+        $("#option").hide();
+    });
+    $("#others").change(function(e){
+        console.log("{{data}}" )
+        var opt = $(this).val();
+        $("#myself").prop("checked",false);
+            $("#firstname").show();
+            $("#lastname").show();
+            $("#phone").show();
+            $("#gender").show()
+            $("#age").show();
+            $("#option").show();
+            $(".error").empty();
+
+    });
 </script>
 </html>
