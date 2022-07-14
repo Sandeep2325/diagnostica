@@ -7,7 +7,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="bg-light-grey pt-5">
+                    <div class="bg-light-grey pt-lg-5 pt-3">
                         <div class="card-body ">
                             <div class="profile-pic-wrapper form-group">
                                 <div class="pic-holder">
@@ -46,11 +46,6 @@
                         {{message}}
                         {%endfor%}
                         <div class="bg-light-grey px-xl-5">
-                            <div class="text-center py-xl-5 py-3 d-flex justify-content-center align-content-center">
-                                <div class="col-lg-2 ">
-                                    <img src="{%static " images/profile.png"%}" alt="" class="img-fluid">
-                                </div>
-                            </div>
                             <div class="row py-xl-5 px-xl-5 px-3">
                                 <div class="col-lg-4 pt-3">
                                     <label class="fs-18 cl-dark-blue font-regular" for="name">Name</label>
@@ -103,7 +98,7 @@
                                 </div>
                             </div>
                             <div class=" px-3 px-xl-5">
-                                <button class="px-5 py-2 mb-5 bg-sky-blue br-5  fs-18  cl-dark-white br" type="submit"
+                                <button class="px-5 py-2 mb-lg-5 mb-3 bg-sky-blue br-5  fs-18  cl-dark-white br" type="submit"
                                     value="submit">Submit</button>
                             </div>
                         </div>
@@ -137,16 +132,6 @@
       });
 </script> {% endcomment %}
 <script>
-    function toggleMenu() {
-        var menuBox = document.getElementById('menu-box');
-
-        if (menuBox.style.display == "block") {
-            menuBox.style.display = "none";
-        }
-        else {
-            menuBox.style.display = "block";
-        }
-    }
     jQuery.validator.addMethod("name_regex", function (value, element) {
         return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);
     }, "Enter valid name");

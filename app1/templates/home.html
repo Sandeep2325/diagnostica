@@ -4,7 +4,7 @@
 <body>
   <section class="home_banner pt-3 pb-lg-5">
     <div class="owl-carousel owl-theme home-banner-slider">
-      <div class="home-banner py-5">
+      <div class="home-banner pt-4 pb-5 py-sm-5">
         <div class="container">
           <div class="row">
             <div class="offset-xl-1 offset-xxl-1 col-xxl-5 col-xl-6 col-lg-10 ">
@@ -329,7 +329,7 @@
                     </select>
                   </div>
                   <div class="col-12 py-3 mt-4"><button
-                      class="br px-5 py-3 fs-18 font-bold cl-dark-white bg-sky-blue br-5" type="submit">Submit</button>
+                      class="br px-5 py-lg-3 py-2  fs-18 font-bold cl-dark-white bg-sky-blue br-5" type="submit">Submit</button>
                   </div>
                 </div>
               </div>
@@ -383,17 +383,6 @@ $(document).ready(function(){
     $('#myModal').modal('show');
    }
 });
-
-  function toggleMenu() {
-    var menuBox = document.getElementById('menu-box');
-
-    if (menuBox.style.display == "block") {
-      menuBox.style.display = "none";
-    }
-    else {
-      menuBox.style.display = "block";
-    }
-  }
   $("#health-care-slider").owlCarousel({
     loop: true,
     margin: 30,
@@ -467,8 +456,17 @@ $(document).ready(function(){
     items: 1.2,
     center: true,
     nav: false,
-    dots: false
-  })
+    dots: false,
+    responsive: {
+      0: {
+        margin: 8,
+      },
+
+      576: {
+        margin: 20,
+      },
+    },
+  });
 
   jQuery.validator.addMethod("name_regex", function (value, element) {
     return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);

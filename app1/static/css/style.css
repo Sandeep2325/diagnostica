@@ -829,7 +829,7 @@ select::placeholder {
     outline: none;
     padding: 10px 20px !important;
     border: 2px solid #DBDEEF !important;
-    font-size: 18px !important;
+    font-size: 16px !important;
 }
 
 .change_password_modal input {
@@ -949,7 +949,7 @@ select::placeholder {
     padding: 25px 20px;
     display: table-cell;
     word-wrap: break-word;
-    font-size: 20px;
+    font-size: 18px;
     font-family: Chivo-Regular;
     text-align: center;
 }
@@ -1479,6 +1479,14 @@ textarea {
         font-size: 14px!important;
         list-style: circle;
     }
+    
+.cart_table .cell {
+    font-size: 16px!important;
+}
+.section_profile input,
+.select_option {
+    font-size: 14px !important;
+}
 }
 
 @media (max-width: 767.98px) {
@@ -1540,6 +1548,10 @@ textarea {
     .section_footer .footer-policy {
         font-size: 16px;
     }
+    .section_profile input,
+.select_option {
+    font-size: 16px !important;
+}
 }
 
 @media (max-width: 991.98px) {
@@ -1614,7 +1626,7 @@ textarea {
     }
     .cart_table .cell {
         text-align: start !important;
-        font-size: 20px !important;
+        font-size: 18px;
     }
     .cart_table .wrapper {
         padding: 16px;

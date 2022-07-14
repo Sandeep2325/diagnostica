@@ -31,7 +31,7 @@
                                         text of the printing and typesetting industry.</p>
                                     <a href="{%url "testselect"%}">
                                         <div class="pb-4"> <button
-                                                class="bg-dark-orange px-4 py-3 fs-18 font-bold cl-dark-blue br-50 br mb-2">CHOOSE
+                                                class="bg-dark-orange px-4 py-3 fs-16 font-bold cl-dark-blue br-50 br mb-2">CHOOSE
                                                 HERE
                                             </button></div>
                                     </a>
@@ -46,8 +46,6 @@
 {%include "footer.html"%}
 </body>
 <script>
-    
-
     $.validator.addMethod('filesize', function (value, element, param) {
         return this.optional(element) || (element.files[0].size <= param)
     }, 'File size must be less than {0}');

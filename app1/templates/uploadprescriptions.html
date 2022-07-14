@@ -28,7 +28,7 @@
                                             </h2>
                                             <p class="cl-dark-white fs-18  font-regular ">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
                                             <a href="{%url "testselect"%}">
-                                                <div class="pb-4"> <button class="bg-dark-orange px-4 py-3 fs-18 font-bold cl-dark-blue br-50 br mb-2">CHOOSE
+                                                <div class="pb-4"> <button class="bg-dark-orange px-4 py-3 fs-16 font-bold cl-dark-blue br-50 br mb-2">CHOOSE
                                                         HERE
                                                     </button></div>
                                             </a>
@@ -44,8 +44,8 @@
                                     <div class="row py-lg-5 py-3">
 
                                         <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto">
-                                            <h4 class="px-lg-0 px-3 font-bold cl-dark-blue">If Upload Prescription are selected
-                                            </h4>
+                                            <h3 class="px-lg-0 px-3 fs-30 font-bold cl-dark-blue">If Upload Prescription are selected
+                                            </h3>
                                         </div>
                                         
                                         <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto"></div>
@@ -75,7 +75,7 @@
                                         </div>
                                         <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
                                             <div class="px-lg-0 px-3 ">
-                                                <select class="w-100 form-select myself_other" type="select" name="option" id="option">
+                                                <select class="w-100 form-select myself_other m-0" type="select" name="option" id="option">
                                                 <option selected="selected"  class="opc-5" disabled>Option</option>
                                                 <option value="m">Mother</option>
                                                 <option value="f">Father</option>
@@ -87,7 +87,7 @@
                                             </div>
                                         </div>
                                         <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-lg-5 pt-3 pb-3 ">
-                                            <h4 class="px-lg-0 px-3 font-bold fs-24  cl-dark-blue m-0">Patient Information (It will be used on Reports)</h4>
+                                            <h3 class="px-lg-0 px-3 font-bold fs-30  cl-dark-blue m-0">Patient Information (It will be used on Reports)</h3>
                                         </div>
                                         <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto"></div>
                                         <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
@@ -112,7 +112,7 @@
                                         </div>
                                         <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
                                             <div class="px-lg-0 px-3">
-                                                <select class="w-100 form-select myself_other" type="select" name="gender" id="gender">
+                                                <select class="w-100 form-select myself_other m-0" type="select" name="gender" id="gender">
                                                 <option selected="selected" class="opc-5" disabled>
                                                     Gender</option>
                                                     <option value="m">Male</option>
@@ -153,17 +153,6 @@
 {%include "footer.html"%}
 </body>
 <script>
-            function toggleMenu() {
-                var menuBox = document.getElementById('menu-box');
-
-                if (menuBox.style.display == "block") {
-                    menuBox.style.display = "none";
-                }
-                else {
-                    menuBox.style.display = "block";
-                }
-            }
-
     jQuery.validator.addMethod("name_regex", function (value, element) {
         return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);
     }, "Enter valid name");

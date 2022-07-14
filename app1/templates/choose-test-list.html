@@ -7,7 +7,7 @@
         <div class="container">
             <div class="row">
                 <diV class="col-lg-12">
-                    <div class="bg-light-grey px-3">
+                    <div class="bg-light-grey px-3 pb-lg-0 pb-4">
                         <div class="row">
                             <div class="col-lg-11 col-md-12 mx-auto py-lg-5">
                                 <div class="row">
@@ -34,7 +34,7 @@
                                                 text of the printing and typesetting industry.</p>
                                             <a>
                                                 <div class="pb-4"> <button
-                                                        class="bg-dark-orange px-4 py-3 fs-18 font-bold cl-dark-blue br-50 br mb-2">CHOOSE
+                                                        class="bg-dark-orange px-4 py-3 fs-16 font-bold cl-dark-blue br-50 br mb-2">CHOOSE
                                                         HERE
                                                     </button></div>
                                             </a>
@@ -54,7 +54,7 @@
                                         {% comment %} </form> {% endcomment %}
                                             <div class="col-lg-5 col-sm-6 position-relative py-4">
                                                 <select
-                                                    class="br-5 cl-dark-blue fs-22 form-select br select_option"
+                                                    class="br-5 cl-dark-blue fs-18 form-select br select_option"
                                                     type="select" name="" id="category">
                                                     <option selected="selected" class="opc-5" disabled>Select Category
                                                     </option>
@@ -115,16 +115,6 @@
     {%include "footer.html"%}
 </body>
 <script>
-    function toggleMenu() {
-        var menuBox = document.getElementById('menu-box');
-
-        if (menuBox.style.display == "block") {
-            menuBox.style.display = "none";
-        }
-        else {
-            menuBox.style.display = "block";
-        }
-    }
     $.validator.addMethod('filesize', function (value, element, param) {
         return this.optional(element) || (element.files[0].size <= param)
     }, 'File size must be less than {0}');
