@@ -1,11 +1,5 @@
 $(document).ready(function () {
-  // alert("went wrong");
-  const navToggle = document.querySelector(".navbar_toggle");
-  const links = document.querySelector(".main_nav");
-
-  navToggle.addEventListener("click", function () {
-    links.classList.toggle("show_nav");
-  });
+  // alert("went wrong")
 
   $("#health-care-slider").owlCarousel({
     loop: true,
