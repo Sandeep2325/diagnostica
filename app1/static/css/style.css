@@ -271,6 +271,54 @@ textarea {
     z-index: 999;
 }
 
+.section_nav_bar .navbar-nav .nav-link {
+    font-family: Chivo-Regular;
+    font-size: 17px;
+    color: #17235A;
+    padding: 0px 12px;
+}
+
+.section_nav_bar li {
+    display: unset;
+}
+
+.section_nav_bar .nav_link:hover {
+    border-bottom: 3px solid #FDB42B;
+}
+
+.section_nav_bar .nav_button {
+    padding: 7px 20px !important;
+    font-size: 16px !important;
+    border: 3px solid #17235A;
+    border-radius: 50px;
+    text-align: center;
+    margin: 0px 12px;
+}
+
+.nav_button.upload {
+    min-width: 225px;
+}
+
+.nav_button.book {
+    min-width: 150px;
+}
+
+.section_nav_bar .nav_button:hover {
+    background-color: #17235A;
+    color: white;
+}
+
+.section_nav_bar .dropdown-toggle::after {
+    display: none;
+}
+
+
+/* .section_nav_bar {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
 .section_nav_bar .menu-center {
     text-align: right;
 }
@@ -320,7 +368,6 @@ textarea {
 }
 
 .section_nav_bar .nav_bar .logo-img {
-    /* height: 50px; */
     width: 200px;
     float: left;
     margin-top: 35px;
@@ -355,7 +402,7 @@ textarea {
     display: block;
     position: static;
     top: 100px;
-}
+} */
 
 
 /*--------------- footer ----------------*/
@@ -1600,20 +1647,10 @@ textarea {
 }
 
 @media (max-width: 1199.98px) {
-    /* header */
-    .section_nav_bar .menu-center ul li {
-        text-align: left !important;
-    }
     .change_password_eye {
         position: absolute;
         right: 24px;
         top: 22px;
-    }
-    .dropdown-menu {
-        position: static !important;
-        top: 200px !important;
-        left: -60px !important;
-        transform: unset !important;
     }
     .home_health_h1 {
         font-size: 25px;
@@ -1630,9 +1667,7 @@ textarea {
     .home_price {
         font-size: 24px;
     }
-    .health_price_disc {
-        font-size: 20px;
-    }
+    /* font-size:20px; */
     .home_health_symp_header {
         font-size: 25px;
     }
@@ -1674,11 +1709,5 @@ textarea {
     }
     .helper_header_col {
         padding-top: 30px;
-    }
-}
-
-@media screen and (min-width: 1200px) and (max-width: 1400px) {
-    .section_nav_bar .nav_bar .logo-img {
-        width: 220px;
     }
 }

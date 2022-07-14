@@ -19,76 +19,59 @@
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 </head>
 <body>
-    <section class="section_nav_bar bg-light-grey">
+    <section class="section_nav_bar bg-light-grey py-4">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <a href="{%url "home"%}" class="nav_bar">
-                        <img src="{%static "images/image_logo.png"%}" alt="" class="img-fluid logo-img" />
-                    </a>
-                    <div class="menu-center">
-                        <span onClick="toggleMenu()" id="open_icon">&#9776;</span>
-                        <ul class="p-0 m-0" id="menu-box">
-                            <li class="active"><a href="{%url "packages"%}" class="nav_hov">Packages</a></li>
-                            <li><a href="{%url "testselect"%}" class="nav_hov">Our Lab</a></li>
-                            <li><a href="{%url "aboutus"%}" class="nav_hov">About Us</a></li>
-                            <li><a href="{%url "contactus"%}" class="nav_hov">Contact Us</a></li>
-                            <li><a href="{%url "prescription-upload"%}" class="nav_button"><i class="fa fa-upload pe-2"
-                                aria-hidden="true"></i>Upload Prescription</a></li>
-                            <li><a href="{%url "testselect"%}" class="nav_button"><i class="fa fa-search pe-2"
-                                        aria-hidden="true"></i>Book A
-                                    Test
-                                    </a></li>
-                            <li class="position-relative">
-                                <a class="cart-logo1" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                    <img src="{%static 'images/bg-user.png' %}" alt="" class="" />
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown" id="navBar">
-                                    {% if user.is_authenticated %}
-                                    <li class="p-0"><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
-                                    <br>
-                                    <li class="p-0"><a class="dropdown-item" href="{% url 'booking-history' %}">Booking History</a></li>
-                                    <br>
-                                    <li class="p-0"><a class="dropdown-item" href="{% url 'changepassword' %}">Change password</a></li>
-                                    <br>
-                                    <li class="p-0"><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
-                                    <br>
-                                    {% else %}
-                                    <li class="p-0"><a class="dropdown-item" href="{% url 'user-login' %}">Login</a></li>
-                                    <br>
-                                    <li class="p-0"><a class="dropdown-item" href="{% url 'Registration' %}">Register</a></li>
-                                    <br>
-                                    {% endif%}
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="{%url "cart"%}">
-                                    <img src="{%static "images/bg-cart.png"%}" alt="" class="" />
-                                </a>
-                            </li>
+            <nav class="navbar navbar-expand-lg">
+                <a class="navbar-brand" href="#"><img src="{%static "images/image_logo.png"%}" alt="" class="img-fluid logo-img" /></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarScroll">
+                <ul class="navbar-nav ms-auto my-2 my-lg-0 navbar-nav-scroll align-items-center">
+                    <li class="nav-item">
+                    <a class="nav-link active" href="{%url "packages"%}">Packages</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="{%url "testselect"%}">Our Lab</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link"  href="{%url "aboutus"%}">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="{%url "contactus"%}">Contact Us</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link nav_button upload" href="{%url "prescription-upload"%}"><i class="fa fa-upload pe-2"
+                        aria-hidden="true"></i>Upload Prescription</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link nav_button book" href="{%url "testselect"%}"><i class="fa fa-search pe-2"
+                        aria-hidden="true"></i>Book A
+                    Test</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{%static 'images/bg-user.png' %}" alt="" class="" />
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                            <!-- {% if user.is_authenticated %}   -->
+                            <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'booking-history' %}">Booking History</a></li>
+                            <li><a class="dropdown-item" href="{% url 'changepassword' %}">Change password</a></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                            <!-- {% else %} -->
+                            <li><a class="dropdown-item" href="{% url 'user-login' %}">Login</a></li>
+                            <li><a class="dropdown-item" href="{% url 'Registration' %}">Register</a></li>
+                            <!-- {% endif%} -->
                         </ul>
-                    </div>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="{%url "cart"%}"><img src="{%static "images/bg-cart.png"%}" alt="" class="" /></a>
+                    </li>
+                </ul>
                 </div>
-            </div>
+            </nav>
         </div>
     </section>
 </body>
-<script>
-    function toggleMenu() {
-        var menuBox = document.getElementById('menu-box');
-
-        if (menuBox.style.display == "block") {
-            menuBox.style.display = "none";
-        }
-        else {
-            menuBox.style.display = "block";
-        }
-    }
-$("#navbarDropdown").click(function(){
-    $("#navBar").addClass(" show");
-    $("#navBar").attr("data-popper-placement","bottom-end");
-    $("#navBar").attr("style","position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(1570px, 62px);");
-});
-</script>
 </html>
