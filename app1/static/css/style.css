@@ -1725,7 +1725,7 @@ textarea {
     .section_nav_bar ul li {
         display: block;
         text-align: end;
-        padding: 7px 20px;
+        padding: 7px 6px;
     }
     .section_nav_bar ul {
         display: none;
