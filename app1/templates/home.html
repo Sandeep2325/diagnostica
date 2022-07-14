@@ -76,7 +76,7 @@
 
         <div class="col-xl-2 col-lg-4 col-md-4 col-12 py-2 ">
           <div
-            class="symptoms px-3 {% cycle 'bg-light-blue' 'bg-light-orange' 'bg-light-green' 'bg-light-pink' %} text-center py-5 br-10">
+            class="symptoms px-3 {% cycle 'bg-light-blue' 'bg-light-orange' 'bg-light-green' 'bg-light-pink' %} text-center py-lg-5 py-3 br-10">
             <img src="{{ symptoms.photo.url }}" alt="" class="img-fluid pb-3">
             <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold">{{symptoms.name}}</p>
           </div>
@@ -89,12 +89,12 @@
   <section class="section_health_pack pb-3">
     <div class="container">
       <div class="row">
-        <h1 class="fs-40  cl-dark-blue font-bold home_health_symp_header py-4 m-0">Health Packages</h1>
+        <h1 class="fs-40  cl-dark-blue font-bold home_health_symp_header py-lg-4 m-0">Health Packages</h1>
         {%for package in healthpackage%}
         <div class="col-xl-3  col-lg-4 col-md-6 pt-3">
           <div class="py-5 bg-light-grey br-30 health_hover">
             <p class="fs-35 font-bold cl-dark-blue text-center m-0">{{package.package_name}}</p>
-            <div class="d-flex justify-content-center align-content-center pt-4 mt-3">
+            <div class="d-flex justify-content-center align-content-center pt-4 mt-lg-3">
               <div class="home_linear_border  ">
                 <div class="">
                   <p
@@ -117,7 +117,7 @@
                 </div>
               </div>
             </div>
-            <div class="d-flex justify-content-center pt-5">
+            <div class="d-flex justify-content-center pt-lg-5 pt-4">
               <a href="{%url "Health-package" package.slug%}"><button
                   class="home_pack_viewpack py-3 fs-16 font-bold br-50 ">VIEW PACK</button></a>
             </div>
@@ -134,7 +134,7 @@
     <div class="container">
       <div class="">
         <div class="row">
-          <h1 class="fs-40  cl-dark-blue font-bold home_health_symp_header m-0 py-5">Health Care</h1>
+          <h1 class="fs-40  cl-dark-blue font-bold home_health_symp_header m-0 py-lg-5  py-3">Health Care</h1>
 
           <div id="health-care-slider" class="col-lg-12 health-care-slider owl-carousel owl-theme">
             {%for blog in healthcareblog%}
@@ -213,8 +213,8 @@
   <section class="section_critical">
     <div class="container">
       <div class="row">
-        <h1 class="fs-40 font-bold cl-dark-blue py-5 m-0">Our CRITICAL services</h1>
-        <div class="col-lg-12 pb-5">
+        <h1 class="fs-40 font-bold cl-dark-blue py-lg-5 py-3 m-0">Our CRITICAL services</h1>
+        <div class="col-lg-12 pb-lg-5">
           <img src="{%static "images/bg-critical.png"%}" alt="" class="img-fluid">
         </div>
       </div>
@@ -225,7 +225,7 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
-          <h1 class="fs-40 font-bold cl-dark-blue py-4">Testimonials</h1>
+          <h1 class="fs-40 font-bold cl-dark-blue py-4 m-0">Testimonials</h1>
           <div id="testimonial_slider" class="owl-carousel owl-theme">
             {%for test in testimonial%}
             <div class=" bg-light-brown w-100 br-15 position-relative">
@@ -262,7 +262,7 @@
               <div class="col-12 col-md-6 pe-lg-4 helper_header_col">
                 <div class="d-flex align-items-center">
                   <i class="fa fa-envelope-o help-book-icon" aria-hidden="true"></i>
-                  <p class="healper_sub_header">Email Enquiry</p>
+                  <h4 class="healper_sub_header">Email Enquiry</p>
                 </div>
                 <div class="helping_contact">enquiry@spandiagno.com</div>
               </div>

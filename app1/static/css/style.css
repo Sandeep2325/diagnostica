@@ -294,20 +294,17 @@ textarea {
     margin: 0px 12px;
 }
 
-.nav_button.upload {
-    min-width: 225px;
-}
-
-.nav_button.book {
-    min-width: 150px;
-}
-
 .section_nav_bar .nav_button:hover {
     background-color: #17235A;
     color: white;
 }
 .section_nav_bar .dropdown-toggle::after {
     display: none;
+}
+.section_nav_bar .dropdown-menu[data-bs-popper] {
+    top: 100%;
+    right: 0;
+    margin-top: 39px;
 }
 /* .section_nav_bar {
     position: sticky;
@@ -1426,15 +1423,17 @@ textarea {
     .home-banner {
         min-height: 300px;
     }
-
+    .section_nav_bar .logo-img{
+        width: 175px;
+    }
     h1,
     .fs-40 {
-        font-size: 26px !important;
+        font-size: 23px !important;
     }
 
     h2,
     .fs-35 {
-        font-size: 24px !important;
+        font-size: 20px !important;
     }
 
     h3,
@@ -1454,12 +1453,12 @@ textarea {
 
     label,
     .fs-20 {
-        font-size: 16px !important;
+        font-size: 14px !important;
     }
 
     p,
     .fs-18 {
-        font-size: 16px !important;
+        font-size: 14px !important;
     }
 
     button,
@@ -1484,7 +1483,12 @@ textarea {
     }
 
     .helping_book_test .healper_sub_header {
-        font-size: 16px;
+        font-size: 15px!important;
+    }
+    .section_home_health_check .home_ul_li li {
+        padding-bottom: 12px;
+        font-size: 14px;
+        list-style: circle;
     }
 }
 
@@ -1497,7 +1501,7 @@ textarea {
 
     h2,
     .fs-35 {
-        font-size: 24px;
+        font-size: 23px;
     }
 
     h3,
@@ -1609,6 +1613,15 @@ textarea {
         font-size: 18px;
     }
 
+    .section_nav_bar .navbar-nav .nav-link {
+        font-size: 15px;
+        padding: 5px 10px;
+    }
+
+    .section_nav_bar .nav_button {
+        margin: 7px 0px !important;
+    }
+
     .home-banner h1 {
         font-size: 40px;
         font-family: Chivo-regular;
@@ -1699,6 +1712,21 @@ textarea {
     }
 }
 
+
+@media (min-width: 992px) and  (max-width: 1199.98px) {
+    .section_nav_bar .navbar-nav .nav-link {
+        font-size: 15px;
+        padding: 5px 7px !important;
+    }
+    .section_nav_bar .nav_button {
+        font-size: 14px !important;
+        margin: 0px 5px;
+    }
+    .section_nav_bar .dropdown-menu[data-bs-popper] {
+        margin-top: 22px;
+    }
+}
+
 @media (max-width: 1199.98px) {
 
     .change_password_eye {
@@ -1754,5 +1782,15 @@ textarea {
 
     .helper_header_col {
         padding-top: 30px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .section_nav_bar  .nav_button.upload {
+        min-width: 225px;
+    }
+    
+    .section_nav_bar  .nav_button.book {
+        min-width: 150px;
     }
 }
