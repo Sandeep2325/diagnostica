@@ -199,12 +199,6 @@ table.dataTable thead .sorting_desc_disabled::after {
     box-shadow: 0 0 5px #719ECE;
 }
 
-input:focus {
-    outline: none !important;
-    border-color: #DFF6FF;
-    box-shadow: 0 0 5px #719ECE;
-}
-
 .vTextField,
 .vLargeTextField,
 .vURLField,
@@ -226,16 +220,13 @@ input:focus {
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
-    color: #1d88f4;
+    color: #495057;
     background-color: #fff;
     background-clip: padding-box;
     border: 1px solid #ced4da;
     border-radius: .25rem;
-    /* box-shadow: inset 0 0 0 transparent; */
+    box-shadow: inset 0 0 0 transparent;
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-    outline: none !important;
-    border-color: #DFF6FF;
-    box-shadow: 0 0 5px #719ECE;
 }
 
 .vDateField,
@@ -249,7 +240,7 @@ input:focus {
     padding: 6px 12px;
     font-size: 14px;
     line-height: 1.42857143;
-    /* color: #555; */
+    color: #555;
     background-color: #fff;
     border: 1px solid #ccc;
 }
@@ -948,16 +939,4 @@ body.jazzmin-login-page {
 .navigator-top-nav+#content-main {
     float: left;
     width: 100%;
-}
-
-input:focus {
-    outline: none !important;
-    border-color: #DFF6FF;
-    box-shadow: 0 0 5px #719ECE;
-}
-
-textarea:focus {
-    outline: none !important;
-    border-color: #DFF6FF;
-    box-shadow: 0 0 5px #719ECE;
 }

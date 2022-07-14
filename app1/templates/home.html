@@ -46,17 +46,28 @@
                 <p class="my-2 pt-2 fs-20 font-bold cl-light-blue">Price</p>
                 <div class="d-flex align-items-center">
                   {%if currentcity == "Bangalore"%}
-                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price" id="price1">₹{{checkup.pricel1}}</h2>
+                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price" id="price1">₹{{checkup.dpricel1}}</h2>
                   {%elif currentcity == "Chennai"%}
-                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price" id="price">₹{{checkup.pricel2}}</h2>
+                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price" id="price">₹{{checkup.dpricel2}}</h2>
                   {%elif currentcity == "Mumbai"%}
-                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price" id="price">₹{{checkup.pricel2}}</h2>
+                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price" id="price">₹{{checkup.dpricel2}}</h2>
                   {%elif currentcity == "Delhi"%}
-                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price" id="price">₹{{checkup.pricel2}}</h2>
+                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price" id="price">₹{{checkup.dpricel2}}</h2>
                   {%endif%}
+                  {%if currentcity == "Bangalore"%}
                   <strike
-                    class="ps-xl-3 ps-2 text-center fs-20 font-bold cl-light-blue health_price_disc">₹{{checkup.dpricel1}}</strike>
-                  <!-- <div class="  p-0 "> -->
+                    class="ps-xl-3 ps-2 text-center fs-20 font-bold cl-light-blue health_price_disc">₹{{checkup.pricel1}}</strike>
+                    {%elif currentcity == "Chennai"%}
+                    <strike
+                    class="ps-xl-3 ps-2 text-center fs-20 font-bold cl-light-blue health_price_disc">₹{{checkup.pricel2}}</strike>
+                    {%elif currentcity == "Mumbai"%}
+                    <strike
+                    class="ps-xl-3 ps-2 text-center fs-20 font-bold cl-light-blue health_price_disc">₹{{checkup.pricel3}}</strike>
+                    {%elif currentcity == "Delhi"%}
+                    <strike
+                    class="ps-xl-3 ps-2 text-center fs-20 font-bold cl-light-blue health_price_disc">₹{{checkup.pricel4}}</strike>
+                 {%endif%}
+                    <!-- <div class="  p-0 "> -->
                   <a
                     class="ps-xl-3 ps-2 test_now_button fs-16 cl-dark-blue font-bold py-2 px-4 br-20 position-absolute" name={{checkup.slug}} id="testnow">Test
                     Now</a>
@@ -124,9 +135,7 @@
           </div>
         </div>
         {%endfor%}
-
       </div>
-
     </div>
   </section>
 

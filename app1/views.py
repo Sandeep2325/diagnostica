@@ -382,10 +382,7 @@ def booktestonline(request):
 from django.contrib.auth import logout
 def logout_request(request):
     logout(request)
-    print(request.session.get("city"))
-    
     request.session.delete("city")
-    print(request.session.get("city"))
     return redirect("/")
 def newsletter(request):
     if request.method=="POST":
@@ -415,13 +412,21 @@ def home(request):
             "currentcity":c,
             "tests":tests,
         }
-        print(c)
+        
         return render(request,'home.html',context)
     if request.POST.get("action") == "retreive_data":
-        print(request.POST['id'])
-        
+        currentcity=request.session.get("city")
+        slug=request.POST['id']
         context={}
-        amount=100
+        healthcheckup=healthcheckuppackages.objects.get(slug=slug)
+        if currentcity=="Bangalore":
+            amount=healthcheckup.dpricel1
+        elif currentcity=="Chennai":
+            amount=healthcheckup.dpricel2
+        elif currentcity=="Mumbai":
+            amount=healthcheckup.dpricel3
+        elif currentcity=="Delhi":
+            amount=healthcheckup.dpricel4
         client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
         razorpay_order = client.order.create(
                     {"amount": int(amount) * 100, "currency": "INR", "payment_capture": "1"}
@@ -436,6 +441,14 @@ def home(request):
         context['razorpay_amount'] = amount
         context['currency'] = currency
         context['callback_url'] = callback_url
+        bookhistory=book_history(
+            user=request.user,
+                     booking_type="Package",
+                     bookingdetails=slug,
+                     patient_info="Myself",
+                     amount=amount,
+                     payment_id=razorpay_order['id'],
+                     payment_status=False).save()
         return JsonResponse(context)
     else:
         testt=request.POST["selectbookhelp"]
@@ -472,23 +485,7 @@ def home(request):
                 "currentcity":c,
                 "tests":tests,
         }
-        amount=100
-        client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
-        razorpay_order = client.order.create(
-                    {"amount": int(amount) * 100, "currency": "INR", "payment_capture": "1"}
-        )
-        currency = 'INR'
-        razorpay_order_id = razorpay_order['id']
-        request.build_absolute_uri('/bands/?print=true')
-        callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
-        # callback_url = 'http://127.0.0.1:8000/paymenthandler/{}/{}/'.format(request.user.email,amount)
-        context['razorpay_order_id'] = razorpay_order_id
-        context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
-        context['razorpay_amount'] = amount
-        context['currency'] = currency
-        context['callback_url'] = callback_url
         return HttpResponseRedirect(reverse("cart"))
-
 def healthcheckupview(request,slug):
     c=request.session.get("city")
     city="Hyderabad"
@@ -515,8 +512,7 @@ def hpackagess(request):
         "city":city,
     }
     return render(request,'healthpackages.html',context)
-# @login_required(login_url="login/") 
-    
+
 def healthpackageview(request,slug):
     if request.user.is_anonymous:
         # return redirect("user-login")
@@ -548,7 +544,6 @@ def healthpackageview(request,slug):
             razorpay_order = client.order.create(
                     {"amount": 1* 100, "currency": "INR", "payment_capture": "1"}
             )
-        # request.session["order_id"]=razorpay_order['id']
         request.session['amount']=amount
         razorpay_order_id = razorpay_order['id']
         callback_url = callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
@@ -557,53 +552,15 @@ def healthpackageview(request,slug):
         context['razorpay_amount'] = amount
         context['currency'] = currency
         context['callback_url'] = callback_url
-        print("okkk")
         bookhistory=book_history(
             user=request.user,
-                     booking_type="Selected test",
-                     bookingdetails="Package",
+                     booking_type="Package",
+                     bookingdetails=slug,
                      patient_info="Myself",
                      amount=amount,
                      payment_id=razorpay_order['id'],
                      payment_status=False).save()
-        ca = cart.objects.create(
-            
-        )
-        """ data=cart.objects.filter(user=request.user)
-        a=prescription_book.objects.create(
-                unique=uniquee,
-                user=request.user,
-                                myself=True if others == "m" else False,
-                                others=True if others == "o" else False,
-                                others_choice=others_choice,
-                                firstname=firstname,
-                                lastname=lastname,
-                                contact=contact,
-                                age=age,
-                                gender=gender,
-                                location=c)
-        for j in data:
-            item=test.objects.get(id=j.items.id)
-            a.test_name.add(item)
-        data2=prescription_book.objects.get(unique=uniquee)
-        data1=cart.objects.filter(user=request.user)
-        a=[]
-        for i in data:
-            a.append(i.price)
-        def testname():
-            return ", ".join([
-                test.testt for test in data2.test_name.all()
-            ])
-        bookhistory=book_history(
-            user=request.user,
-            testbooking_id=data2.id,
-            patient_info="myself" if others==None else "others",
-                     booking_type="Selected test",
-                     bookingdetails=testname(),
-                     amount=sum(a),
-                     payment_id=request.session.get("order_id"),
-                     payment_status=False).save()
-        request.session.delete("order_id") """
+        print("booked")
         return render(request,'packagedetail.html',context)
     
 def healthsymptomview(request,slug):
@@ -650,54 +607,58 @@ def categoryblog(request,slug):
 #     return render(request,"choose-test-list.html",context)
 # @login_required(login_url="login/")   
 def prescriptionbookview(request):
-    c=request.session.get("city")
     if request.user.is_anonymous:
+        # return redirect("user-login")
         return HttpResponseRedirect(reverse("user-login"))
-    # print(request.FILES)
-    fm=prescriptionform()
-    if request.method=="POST":
-        print(request.POST)
-        prescription_file=request.FILES.get("file")
-        print()
-        myself=request.POST.get("radio_self")
-        others=request.POST.get('radio_others')
-        others_choice=request.POST.get("option")
-        firstname=request.POST.get('firstname')
-        lastname=request.POST.get('lastname')
-        contact=request.POST.get('phone')
-        age=request.POST.get('age')
-        gender=request.POST.get('gender')
-        unique = uuid.uuid4()
-        print(unique)
-        prescription_book(
-            user=request.user,
-            unique=unique,
-            prescription_file=prescription_file,
-                          myself=True if myself == "on" else False,
-                          others=True if others == "on" else False,
-                          others_choice=others_choice,
-                          firstname=firstname,
-                          lastname=lastname,
-                          contact=contact,
-                          age=age,
-                          gender=gender,
-                          location=c).save()
-        data=prescription_book.objects.get(unique=unique)
-        print(data)
-        book_history(
-            user=request.user,
-            testbooking_id=data.id,
-            patient_info="myself" if others==None else "others",
-                     booking_type="Prescription",
-                     bookingdetails="upload prescription",
-                     payment_status=False).save()
-        messages.success(request,"Your response is recorded successfully")
-        return HttpResponseRedirect(reverse("booking-history"))
-        # return render(request,"uploadprescriptions.html",{"fm":fm})
     else:
-        return render(request,"uploadprescriptions.html",{"fm":fm})
-  
-@login_required(login_url="login/")  
+        c=request.session.get("city")
+        if request.user.is_anonymous:
+            return HttpResponseRedirect(reverse("user-login"))
+        # print(request.FILES)
+        fm=prescriptionform()
+        if request.method=="POST":
+            print(request.POST)
+            prescription_file=request.FILES.get("file")
+            print()
+            myself=request.POST.get("radio_self")
+            others=request.POST.get('radio_others')
+            others_choice=request.POST.get("option")
+            firstname=request.POST.get('firstname')
+            lastname=request.POST.get('lastname')
+            contact=request.POST.get('phone')
+            age=request.POST.get('age')
+            gender=request.POST.get('gender')
+            unique = uuid.uuid4()
+            print(unique)
+            prescription_book(
+                user=request.user,
+                unique=unique,
+                prescription_file=prescription_file,
+                            myself=True if myself == "on" else False,
+                            others=True if others == "on" else False,
+                            others_choice=others_choice,
+                            firstname=firstname,
+                            lastname=lastname,
+                            contact=contact,
+                            age=age,
+                            gender=gender,
+                            location=c).save()
+            data=prescription_book.objects.get(unique=unique)
+            print(data)
+            book_history(
+                user=request.user,
+                testbooking_id=data.id,
+                patient_info="myself" if others==None else "others",
+                        booking_type="Prescription",
+                        bookingdetails="upload prescription",
+                        payment_status=False).save()
+            messages.success(request,"Your response is recorded successfully")
+            return HttpResponseRedirect(reverse("booking-history"))
+            # return render(request,"uploadprescriptions.html",{"fm":fm})
+        else:
+            return render(request,"uploadprescriptions.html",{"fm":fm})
+    
+
 def testselect(request):
     c=request.session.get("city")
     print("-----",city)
@@ -710,7 +671,6 @@ def testselect(request):
         "city":c,
     }
     if request.method=="POST":
-        
         # others=request.POST.get("myself")
         test_name=request.POST.getlist("test_name")
         myself=request.POST.get("myself")
@@ -754,7 +714,6 @@ from django.core.paginator import Paginator,EmptyPage, PageNotAnInteger
 razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
 @login_required(login_url="login/")    
 def cartt(request):
-    print(request.POST)
     # history=book_history.objects.none()
     if request.method=="POST":
         c=request.session.get("city")
@@ -767,11 +726,6 @@ def cartt(request):
         gender=request.POST.get('gender')
         global uniquee
         uniquee = uuid.uuid4()
-        print(firstname)
-        print(others)
-        print(others_choice)
-        print(gender)
-        print(firstname)
         data=cart.objects.filter(user=request.user)
         a=prescription_book.objects.create(
                 unique=uniquee,
@@ -800,56 +754,43 @@ def cartt(request):
         bookhistory=book_history(
             user=request.user,
             testbooking_id=data2.id,
-            patient_info="myself" if others==None else "others",
+            patient_info="Myself" if others == "m" else "others",
                      booking_type="Selected test",
                      bookingdetails=testname(),
                      amount=sum(a),
                      payment_id=request.session.get("order_id"),
                      payment_status=False).save()
         request.session.delete("order_id")
-        
+        # request.POST["firstname"]
+        # request.POST["lastname"]
+        # request.POST["phone"]
+        # request.POST["age"]
+        # request.POST["gender"]
+    
         return JsonResponse({"message":True})
     data=cart.objects.filter(user=request.user)
     p = Paginator(data, 5)
     page_number = request.GET.get('page')
-    try:
-        page_obj = p.get_page(page_number)  # returns the desired page object
-    except PageNotAnInteger:
-        page_obj = p.page(1)
-    except EmptyPage:
-        # if page is empty then return last page
-        page_obj = p.page(p.num_pages)
     a=[]
     for i in data:
         a.append(i.price)
     context={
         "data":data,
         "subtotal":sum(a),
-        'page_obj': page_obj,
+        'page_obj': data,
         "datacount":data.count(),
    }
     currency = 'INR'
-    
-    if request.session.get("couponamount")!=None:
-        amount=request.session.get("couponamount")
-        request.session.delete("couponamount")
-    else:
-        print("coupon is none")
-        amount=int(sum(a))
+    amount=int(sum(a))
     client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
     try:
         razorpay_order = client.order.create(
                 {"amount": int(amount) * 100, "currency": "INR", "payment_capture": "1"}
         )
-        request.session.delete("couponamount")
     except:
         razorpay_order = client.order.create(
                 {"amount": 1* 100, "currency": "INR", "payment_capture": "1"}
         )
-        request.session.delete("couponamount")
-    
-    print(request.session.get("couponamount"))
-    request.session.delete("couponamount")
     request.session["order_id"]=razorpay_order['id']
     request.session['amount']=amount
     razorpay_order_id = razorpay_order['id']
@@ -861,7 +802,28 @@ def cartt(request):
     context['razorpay_amount'] = amount
     context['currency'] = currency
     context['callback_url'] = callback_url
+    
     return render(request,"mycart.html",context)
+
+def othersdetail(request):
+    if request.method=="POST":
+        testid=request.POST["testid"]
+        print(testid)
+        detail=prescription_book.objects.get(id=int(testid))
+        print(detail.firstname)
+        if detail.others_choice=="m":
+            choice="Mother"
+        elif detail.others_choice=="f":
+            choice="Father"
+        elif detail.others_choice=="w":
+            choice="Wife"
+        elif detail.others_choice=="s":
+            choice="Son"
+        elif detail.others_choice=="d":
+            choice="Daughter"
+        elif detail.others_choice=="o":
+            choice="Other"
+        return JsonResponse({"message":True,"firstname":detail.firstname,"lastname":detail.lastname,"gender":detail.gender,"otherschoice":choice,"age":detail.age,"phone":detail.contact})
 @csrf_exempt
 def paymenthandler(request,str,amount):
     # if request.method =="POST":
@@ -899,6 +861,11 @@ def paymenthandler(request,str,amount):
                     messages.info(request, "Thank You, your Payment was successful")
                     return HttpResponseRedirect(reverse("booking-history"))
             else:
+                b=request.POST.get('error[metadata]')
+                c=json.loads(b)
+                print(c["order_id"])
+                a=book_history.objects.filter(payment_id=c["order_id"])
+                print("deleted")
                 error = request.POST.get('error[description]')
                 messages.error(request, error)
                 return HttpResponseRedirect(reverse("booking-history"))
@@ -926,23 +893,28 @@ def subscriptionview(request):
     else:
         form=subscriptionform
         return render(request,"home",{"form":form})
+
 def addtocart(request):
-    if request.method=="POST":
-        tests=test.objects.all()
-        pk=request.POST["pk"]
-        # print(pk)
-        # print(request.method)
-      
-        item=test.objects.get(id=pk)
-        data=cart.objects.filter(user=request.user,items=item)
-        print(data)
-        if data.exists():
-            return JsonResponse({"message":False})
-        cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel1).save()
-        # messages.success(request,"add to cart")
-        print("success")
-        return JsonResponse({"message":True})
-        # return JsonResponse({"message":"success"})
+    if request.user.is_anonymous:
+        # return redirect("user-login")
+        return HttpResponseRedirect(reverse("user-login"))
+    else:
+        if request.method=="POST":
+            tests=test.objects.all()
+            pk=request.POST["pk"]
+            # print(pk)
+            # print(request.method)
+        
+            item=test.objects.get(id=pk)
+            data=cart.objects.filter(user=request.user,items=item)
+            print(data)
+            if data.exists():
+                return JsonResponse({"message":False})
+            cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel1).save()
+            # messages.success(request,"add to cart")
+            print("success")
+            return JsonResponse({"message":True})
+            # return JsonResponse({"message":"success"})
 def categoryy(request):
     print(request.method)
     if request.method=="POST":
@@ -1012,9 +984,11 @@ def coupon(request):
 def razorpayclose(request):
     if request.method=="POST":
         paymentid=request.POST["paymentid"]
-        book_history.objects.filter(payment_id=paymentid).delete()
+        print(paymentid)
+        a=book_history.objects.filter(payment_id=paymentid)
+        a.delete()
+        print("deleted")
         return JsonResponse({"message":True})
-    
 def contactuss(request):
     if request.method=="POST":
         name=request.POST["name"]
@@ -1026,8 +1000,6 @@ def contactuss(request):
         # messages.success(request,"Your response submitted successfully")
         return render(request,"contactus.html")
     return render(request,"contactus.html") 
-
-
 # @login_required(login_url="login/")    
 # def bookinghistoryview(request):
 #     bookhistories=book_history.objects.filter(user=request.user).order_by('-created')

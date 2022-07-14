@@ -125,7 +125,7 @@ class categoryadmin(admin.ModelAdmin):
         return format_html(html)
     action_btn.short_description = "Action"
 class healthcheckup_admin(SummernoteModelAdmin):
-    list_display=["package_title","testname","testcount","pricel1","pricel2","pricel3","pricel4","pricel5","pricel6","dpricel1","dpricel2","dpricel3","dpricel4","dpricel5","dpricel6","discount","created","updated","action_btn"]    
+    list_display=["package_title","testname","testcount","pricel1","pricel2","pricel3","pricel4","dpricel1","dpricel2","dpricel3","dpricel4","discount","created","updated","action_btn"]    
     readonly_fields=["created","updated"]
     # list_editable=["location"]
     prepopulated_fields = {"slug": ("package_title",)}
@@ -149,7 +149,7 @@ class healthcheckup_admin(SummernoteModelAdmin):
         return format_html(html)
     action_btn.short_description = "Action"
 class healthpackage_admin(SummernoteModelAdmin):
-    list_display=["package_name","testname","pricel1","pricel2","pricel3","pricel4","pricel5","pricel6","created","updated","action_btn"]
+    list_display=["package_name","testname","pricel1","pricel2","pricel3","pricel4","created","updated","action_btn"]
     readonly_fields=["created","updated"]
     # list_editable=["location"]
     prepopulated_fields = {"slug": ("package_name",)}

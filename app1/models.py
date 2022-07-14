@@ -166,13 +166,9 @@ class prescription_book(models.Model):
         default="", null=True,blank=True
     )
     location=models.CharField(max_length=100,null=True,blank=True)
-    # slug = models.SlugField(null=True, unique=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
-    # def save(self, *args, **kwargs):  # new
-    #     if not self.slug:
-    #         self.slug = slugify(self.test_name)
-    #     return super().save(*args, **kwargs)
+
     def __str__(self):
         return "Prescription booking"
     class Meta:
@@ -203,17 +199,17 @@ class healthcheckuppackages(models.Model):
     # location=models.ForeignKey(city,null=True,on_delete=models.CASCADE,verbose_name="Location")
     # test_nos=models.CharField(max_length=100,null=True,blank=True,verbose_name="No of test")
     pricel1=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Banglore Price")
-    pricel2=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Mumbai Price")
-    pricel3=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Chennai Price")
-    pricel4=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Hyderabad Price")
-    pricel5=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Delhi Price")
-    pricel6=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Kolkata Price")
+    pricel2=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Chennai Price")
+    pricel3=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Mumbai Price")
+    pricel4=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Delhi Price")
+    # pricel5=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Delhi Price")
+    # pricel6=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Kolkata Price")
     dpricel1=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Banglore Discounted Price")
-    dpricel2=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Mumbai Discounted Price")
-    dpricel3=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Chennai DiscountedPrice")
-    dpricel4=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Hyderabad Discounted Price")
-    dpricel5=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Delhi DiscountedPrice")
-    dpricel6=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Kolkata Discounted Price")
+    dpricel2=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Chennai Discounted Price")
+    dpricel3=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Mumbai DiscountedPrice")
+    dpricel4=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Delhi Discounted Price")
+    # dpricel5=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Delhi DiscountedPrice")
+    # dpricel6=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Kolkata Discounted Price")
     description=models.TextField(null=True,blank=True,verbose_name="Description")
     # actual_price=models.IntegerField(null=True,blank=True,verbose_name="Actual Price(₹)")
     discount=models.DecimalField(max_digits=5, decimal_places=2, null=True, verbose_name='Discount(%)', validators=[
@@ -246,16 +242,7 @@ class healthpackages(models.Model):
     pricel4=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Hyderabad Price")
     pricel5=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Delhi Price")
     pricel6=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Kolkata Price")
-    # dpricel1=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Banglore Discounted Price")
-    # dpricel2=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Mumbai Discounted Price")
-    # dpricel3=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Chennai DiscountedPrice")
-    # dpricel4=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Hyderabad Discounted Price")
-    # dpricel5=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Delhi DiscountedPrice")
-    # dpricel6=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Kolkata Discounted Price")
-    # actual_price=models.IntegerField(null=True,blank=True)
-    # discount=models.DecimalField(max_digits=5, decimal_places=2, null=True, verbose_name='Discount(%)', validators=[
-    #     MinValueValidator(1), MaxValueValidator(99)])
-    # discounted_price=models.IntegerField(null=True,blank=True)
+
     slug = models.SlugField(null=True, unique=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
@@ -349,29 +336,20 @@ STATUS=[
 class book_history(models.Model):
     testbooking_id=models.IntegerField(null=True,blank=True)
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
-    #  = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    # patient_info=models.ForeignKey(cart2,null=True,blank=True,on_delete=models.CASCADE)
     patient_info=models.CharField(max_length=200,null=True,blank=True)
     booking_type=models.CharField(max_length=200,null=True,blank=True)
     bookingdetails=models.TextField(null=True,blank=True)
     amount=models.IntegerField(null=True,blank=True)
     payment_id=models.CharField(max_length=500,null=True,blank=True)
-    # test=models.ForeignKey(prescription_book,null=True,blank=True,on_delete=models.CASCADE)
-    # test1=models.CharField(max_length=200,null=True,blank=True)
     status = models.CharField(
         choices=STATUS,
         max_length=8,
         default="p", null=True
     )
     payment_status=models.BooleanField(default=False)
-    # slug = models.SlugField(null=True, unique=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
     report=models.FileField(upload_to="report",null=True,blank=True)
-    # def save(self, *args, **kwargs):  # new
-    #     if not self.slug:
-    #         self.slug = slugify(self.patient_info)
-    #     return super().save(*args, **kwargs)
     def __str__(self):
         return "Book History"
     class Meta:
@@ -445,5 +423,14 @@ class payment(models.Model):
         return self.paymentid
 
     class Meta:
-        verbose_name_plural="Payments"
+        verbose_name_plural="Payments History"
+class paymentids(models.Model):
+    orderid=models.CharField(max_length=200,null=True,blank=True),
+    paymentid=models.CharField(max_length=200,null=True,blank=True),
+    signatureid=models.CharField(max_length=500,null=True,blank=True),
+    
+    def __str__(self):
+        return self.paymentid
+    class Meta:
+        verbose_name_plural="Payment Ids"
 
