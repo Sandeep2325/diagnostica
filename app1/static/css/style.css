@@ -1487,7 +1487,7 @@ textarea {
     }
     .section_home_health_check .home_ul_li li {
         padding-bottom: 12px;
-        font-size: 14px;
+        font-size: 14px!important;
         list-style: circle;
     }
 }
