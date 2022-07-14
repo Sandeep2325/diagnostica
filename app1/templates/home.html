@@ -68,9 +68,9 @@
                     class="ps-xl-3 ps-2 text-center fs-20 font-bold cl-light-blue health_price_disc">₹{{checkup.pricel4}}</strike>
                  {%endif%}
                     <!-- <div class="  p-0 "> -->
-                  <a
-                    class="ps-xl-3 ps-2 test_now_button fs-16 cl-dark-blue font-bold py-2 px-4 br-20 position-absolute" name={{checkup.slug}} id="testnow">Test
-                    Now</a>
+                  <button
+                    class="ps-xl-3 ps-2 test_now_button fs-16 cl-dark-blue font-bold py-2 px-4 br-20 position-absolute br" onclick='testnow("{{checkup.slug}}")' name={{checkup.slug}} id="testnow">Test
+                    Now</button>
                   <!-- </div> -->
                 </div>
               </div>
@@ -553,9 +553,9 @@ $(document).ready(function(){
          };
 
 
-$("#testnow").click(function(){
+/*$("#testnow").click(function(){
   var id=$("#testnow").attr("name");
-
+console.log(id);
         $.ajax({
           url:"{% url 'home' %}",
           type:"POST",
@@ -605,8 +605,58 @@ $("#testnow").click(function(){
                   rzp1.open();
            }  
       });
-    });
-   
+    });*/
+   function testnow(e){
+    $.ajax({
+      url:"{% url 'home' %}",
+      type:"POST",
+      data: {
+          action:"retreive_data",
+          'id' :e,
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+         },
+         dataType: "json",
+         success: function(resp){
+          var options = {
+                  key: resp["razorpay_merchant_key"],
+                  amount: resp["razorpay_amount"], 
+                  currency: "INR",
+                  description: "Test Transaction",
+                  image: "{% static 'assets/img/invoice_logo.png' %}",
+                  order_id:resp["razorpay_order_id"],
+                  callback_url: resp["callback_url"],
+                  redirect: true,
+                  theme: {
+                      "color": "#005aeb"
+                  },
+                  modal: { 
+                      escape: false,
+                      ondismiss: function()
+                      { 
+                          confirm("Want to close!!")
+                          $.ajax({
+                            type: 'POST',
+                            headers: {
+                                'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val(),
+                            },
+                            data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                            action:"payment_canceled",
+                            obj_id:ids,
+                            order_id:"{{razorpay_order_id}}",
+                            },
+                            dataType: 'json',
+                            success: function (response) {
+                            }
+                          });
+                      }
+                  }
+              };
+              var rzp1 = new Razorpay(options);
+              rzp1.open();
+       }  
+  });
+   }
 </script>
 
 

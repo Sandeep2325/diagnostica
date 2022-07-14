@@ -417,6 +417,7 @@ def home(request):
     if request.POST.get("action") == "retreive_data":
         currentcity=request.session.get("city")
         slug=request.POST['id']
+        print(slug)
         context={}
         healthcheckup=healthcheckuppackages.objects.get(slug=slug)
         if currentcity=="Bangalore":
@@ -658,7 +659,7 @@ def prescriptionbookview(request):
         else:
             return render(request,"uploadprescriptions.html",{"fm":fm})
     
-
+@login_required(login_url="login/")  
 def testselect(request):
     c=request.session.get("city")
     print("-----",city)
@@ -918,13 +919,27 @@ def addtocart(request):
 def categoryy(request):
     print(request.method)
     if request.method=="POST":
+        city=request.session.get("city")
         pk=request.POST["pk"]
         b=[]
-        tests=test.objects.filter(categoryy__id=pk).values("id","testt","description","pricel1")
+        a={}
+        
+        tests=test.objects.filter(categoryy__id=pk)
         for tesst in tests:
-            tesst['pricel1'] = str(tesst['pricel1'])
-            print(tesst)
-            b.append(tesst)
+            a['id']=tesst.id
+            a['testt']=tesst.testt
+            a['description']=tesst.description
+            if city == "Bangalore":
+                a["pricel1"]=str(tesst.pricel1)
+            elif city== "Chennai":
+                a["pricel1"]=str(tesst.pricel2)
+            elif city== "Mumbai":
+                a["pricel1"]=str(tesst.pricel3)
+            elif city== "Delhi":
+                a["pricel1"]=str(tesst.pricel3)
+            # tesst['pricel1'] = str(tesst['pricel1'])
+            b.append(a)
+           
             # a["test"]=tesst.testt
             # a["description"]=tesst.description
             # a["pricel1"]=tesst.pricel1
@@ -938,6 +953,7 @@ def search(request):
             res = {"valid":True}
             return HttpResponse(json.dumps(res), content_type="application/json")
         else:
+            city=request.session.get("city")
             searched=request.GET.get('searched')
             searched=request.POST["searched"]
             tcategories=category.objects.all()
@@ -948,7 +964,14 @@ def search(request):
                 a["id"]=tesst.id
                 a["testt"]=tesst.testt
                 a["description"]=tesst.description
-                a["pricel1"]=str(tesst.pricel1)
+                if city == "Bangalore":
+                    a["pricel1"]=str(tesst.pricel1)
+                elif city== "Chennai":
+                    a["pricel1"]=str(tesst.pricel2)
+                elif city== "Mumbai":
+                    a["pricel1"]=str(tesst.pricel3)
+                elif city== "Delhi":
+                    a["pricel1"]=str(tesst.pricel3)
                 b.append(a)
             print(b)
             return JsonResponse(b,safe=False)
@@ -971,7 +994,7 @@ def coupon(request):
         coupon=request.POST.get("coupon")
         total=request.POST.get("total")
         try:
-            c=coupons.objects.get(couponcode=coupon)
+            c=coupons.objects.get(couponcode=coupon,status="a")
             c.discount
             discount=(float(total)*(int(c.discount)/100))
             # print(t)

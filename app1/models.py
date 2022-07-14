@@ -178,11 +178,14 @@ class prescription_book(models.Model):
 def testbookings(sender, instance, **kwargs):
     a=[]
     for i in instance.test_name.all():
-        # if i.location=="Banglore":
-        a.append(i.pricel1)
-        # else:
-        #     a.append(i.pricel2)
-            
+        if i.location=="Banglore":
+            a.append(i.pricel1)
+        elif i.location=="Chennai":
+            a.append(i.pricel2)
+        elif i.location=="Mumbai":
+            a.append(i.pricel3)
+        elif i.location=="Delhi":
+            a.append(i.pricel3)
     book_history.objects.filter(testbooking_id=instance.id).update(amount=sum(a))
     # print(bool(instance.prescription_file))
     if (instance.test_name.first()!=None) and (bool(instance.prescription_file)==True): 

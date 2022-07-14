@@ -161,8 +161,7 @@
                 success: function(resp){
                     $("#main-test-div").empty();
                    for(var i=0; i<resp.length ; i++){
-                    console.log(resp[i]["id"]);
-                    
+                    console.log(resp);
                     var divs = `<div class="bg-white br-5 px-4 py-3 mt-2">
                         <h5 class="fs-20 font-regular cl-dark-blue ">${resp[i]['testt']}</h5>
                         <div class="row">
@@ -170,10 +169,10 @@
                                 <p>${resp[i]['description']} </p>
                             </div>
                             <div class="col-xl-3 col-md-2 test-list-price">
-                                <p>${resp[i]['pricel1']}</p>
+                                <p>₹ ${resp[i]['pricel1']}</p>
                             </div>
                             <div class="col-xl-3 col-md-4 test-list-button"><button id="addtocart"
-                                    name=${resp[i]['id']} class="bg-sky-blue br br-5 cl-dark-white px-5 py-3">Add to
+                                    name=${resp[i]['id']} class="bg-sky-blue br br-5 cl-dark-white px-5 py-3" onclick=myfunction("${resp[i]['id']}")>Add to
                                     Cart</button></div>
                         </div>
                     </div>`;
@@ -204,7 +203,7 @@
                 success: function(resp){
                     $("#main-test-div").empty();
                    for(var i=0; i<resp.length ; i++){
-                    console.log(resp[i]['id']);
+                    
                     
                     var divs = `<div class="bg-white br-5 px-4 py-3 mt-2">
                         <h5 class="fs-20 font-regular cl-dark-blue ">${resp[i]['testt']}</h5>
@@ -213,10 +212,10 @@
                                 <p>${resp[i]['description']} </p>
                             </div>
                             <div class="col-xl-3 col-md-2 test-list-price">
-                                <p>${resp[i]['pricel1']}</p>
+                                <p>₹ ${resp[i]['pricel1']}</p>
                             </div>
                             <div class="col-xl-3 col-md-4 test-list-button"><button id="addtocart"
-                                name=${resp[i]['id']} class="bg-sky-blue br br-5 cl-dark-white px-5 py-3">Add to
+                                name=${resp[i]['id']} class="bg-sky-blue br br-5 cl-dark-white px-5 py-3" onclick=myfunction("${resp[i]['id']}")>Add to
                                     Cart</button></div>
                         </div>
                     </div>`;
@@ -242,51 +241,12 @@
                 }
             });
     });
-    /*$("#addtocart").each(function(index){
-        e.preventDefault();
-        alert(index);
-        $(this).click(function(){
-            alert("clicked");
-        });
-});
-
-
-    $("#addtocart").on("click", function(e){
-        alert();
-            $("#addtocart").each(function(index){
-                alert(index);
-        });
-      });*/
-
-     /* $("#addtocart").on("click", function(e){   
-        var idd = $(this).attr('name');
-        alert(idd);
-
-            $.ajax({
-                url: "{% url 'addtocart' %}",
-                type: "POST",
-                dataType: "json",
-                data: {
-                    'pk':idd,
-                    'csrfmiddlewaretoken':'{{ csrf_token }}',
-                },
-                success: function(resp){
-                    console.log(resp);
-                    if(!resp['message']){
-                        alert("Test Already Added");
-                    }else{
-                        alert("Test Added");
-                    }
-                    
-                },
-            });
-    });*/
-
+   
    function myfunction(id){
-    if ("request.user.is_anonymous")
-    {
-        window.location.replace("{% url 'user-login' %}")
-    }
+    //if ("request.user.is_anonymous")
+    //{
+    //    window.location.replace("{% url 'user-login' %}")
+    //}
     $.ajax({
         url: "{% url 'addtocart' %}",
         type: "POST",
