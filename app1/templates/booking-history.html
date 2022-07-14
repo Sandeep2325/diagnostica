@@ -102,8 +102,9 @@
                                                             {% else %}onclick='paymentFunction({{bookhistory.testbooking_id}}, "true")';{% endif %}id="testbooking{{bookhistory.testbooking_id}}">Pay Now</button>
                                                     </td>
                                                     {%else%}
+                                                    {%if bookhistory.report %}
                                                     <td data-label="Report">
-                                                        <a href="{% static "files/test bulk.csv"%}"
+                                                        <a href="{{bookhistory.report.url}}"
                                                         class="" download><button class="download br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue">Download
                                                         Now</button></a>
                                                 </td>
@@ -184,11 +185,8 @@
                    success: function(resp){
                     
                     if(resp['valid']){
-                    console.log(resp);  
                     }
                     var amount = parseInt(resp['amount']);
-
-
                     var options = {
                             key: resp['razorKey'],
                             amount: amount, 
@@ -205,6 +203,7 @@
                                 escape: false,
                                 ondismiss: function()
                                 { 
+                                    confirm("Want to close!!")
                                     $.ajax({
                                     type: 'post',
                                     headers: {

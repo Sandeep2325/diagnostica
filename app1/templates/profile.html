@@ -12,7 +12,11 @@
                             <div class="profile-pic-wrapper form-group">
                                 <div class="pic-holder">
                                     <!-- uploaded pic shown here -->
+                                    {% if profile.photo %}
                                     <img id="profilePic" class="pic" src="{{profile.photo.url}}">
+                                    {% else %}
+                                    <img id="profilePic" class="pic" src="https://www.kindpng.com/picc/m/252-2524695_dummy-profile-image-jpg-hd-png-download.png">
+                                    {% endif %}
                                     <label for="newProfilePhoto" class="upload-file-block">
                                         <div class="text-center">
                                             <div class="mb-2">

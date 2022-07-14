@@ -27,6 +27,8 @@ from xhtml2pdf import pisa
 from django.views import View
 import razorpay
 
+global OBJ_COUNT
+OBJ_COUNT = 0
 
 def dashboard(request):
     test=prescription_book.objects.all().count()
@@ -39,7 +41,6 @@ def dashboard(request):
         "prescription_bookings":prescription_bookings,
         "packages":packages,
     }
-    # print(context)
     return HttpResponse(json.dumps(context),content_type="application/json")
 def aboutus(request):
     return render (request,"aboutus.html")
@@ -416,42 +417,77 @@ def home(request):
         }
         print(c)
         return render(request,'home.html',context)
-    
-    
-    testt=request.POST["selectbookhelp"]
-    tes=test.objects.get(id=testt)
-    firtname=request.POST["firstname"]
-    lastname=request.POST["lastname"]
-    phone=request.POST["phone"]
-    email=request.POST["email"]
-    print(testt)
-    if c == "Bangalore":
-        cart.objects.create(user=request.user,items=tes,categoryy=tes.categoryy,price=tes.pricel1).save()
-    elif c == "Chennai":
-        cart.objects.create(user=request.user,items=tes,categoryy=tes.categoryy,price=tes.pricel2).save()
-    elif c == "Mumbai":
-        cart.objects.create(user=request.user,items=tes,categoryy=tes.categoryy,price=tes.pricel3).save()
-    elif c == "Delhi":
-        cart.objects.create(user=request.user,items=tes,categoryy=tes.categoryy,price=tes.pricel3).save()
-
-    cit=city.objects.all()
-    tests=test.objects.all()
-    healthcheckup=healthcheckuppackages.objects.all()[0:4]
-    healthpackage=healthpackages.objects.all()
-    healthsymptom=healthsymptoms.objects.all()
-    healthcareblog=healthcareblogs.objects.all()
-    testimonial=testimonials.objects.all()
-    context={
-            "healthcheckup":healthcheckup,
-            "healthpackage":healthpackage,
-            "healthsymptom":healthsymptom,
-            "testimonial":testimonial,
-            "healthcareblog":healthcareblog,
-            "city":cit,
-            "currentcity":c,
-            "tests":tests,
-    }
-    return HttpResponseRedirect(reverse("cart"))
+    if request.POST.get("action") == "retreive_data":
+        print(request.POST['id'])
+        
+        context={}
+        amount=100
+        client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+        razorpay_order = client.order.create(
+                    {"amount": int(amount) * 100, "currency": "INR", "payment_capture": "1"}
+        )
+        currency = 'INR'
+        razorpay_order_id = razorpay_order['id']
+        request.build_absolute_uri('/bands/?print=true')
+        callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
+        # callback_url = 'http://127.0.0.1:8000/paymenthandler/{}/{}/'.format(request.user.email,amount)
+        context['razorpay_order_id'] = razorpay_order_id
+        context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
+        context['razorpay_amount'] = amount
+        context['currency'] = currency
+        context['callback_url'] = callback_url
+        return JsonResponse(context)
+    else:
+        testt=request.POST["selectbookhelp"]
+        tes=test.objects.get(id=testt)
+        firtname=request.POST["firstname"]
+        lastname=request.POST["lastname"]
+        phone=request.POST["phone"]
+        email=request.POST["email"]
+        print(testt)
+        if c == "Bangalore":
+            cart.objects.create(user=request.user,items=tes,categoryy=tes.categoryy,price=tes.pricel1).save()
+        elif c == "Chennai":
+            cart.objects.create(user=request.user,items=tes,categoryy=tes.categoryy,price=tes.pricel2).save()
+        elif c == "Mumbai":
+            cart.objects.create(user=request.user,items=tes,categoryy=tes.categoryy,price=tes.pricel3).save()
+        elif c == "Delhi":
+            cart.objects.create(user=request.user,items=tes,categoryy=tes.categoryy,price=tes.pricel3).save()
+        print(request.POST)
+        print(request.POST['id'])
+        cit=city.objects.all()
+        tests=test.objects.all()
+        healthcheckup=healthcheckuppackages.objects.all()[0:4]
+        healthpackage=healthpackages.objects.all()
+        healthsymptom=healthsymptoms.objects.all()
+        healthcareblog=healthcareblogs.objects.all()
+        testimonial=testimonials.objects.all()
+        context={
+                "healthcheckup":healthcheckup,
+                "healthpackage":healthpackage,
+                "healthsymptom":healthsymptom,
+                "testimonial":testimonial,
+                "healthcareblog":healthcareblog,
+                "city":cit,
+                "currentcity":c,
+                "tests":tests,
+        }
+        amount=100
+        client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+        razorpay_order = client.order.create(
+                    {"amount": int(amount) * 100, "currency": "INR", "payment_capture": "1"}
+        )
+        currency = 'INR'
+        razorpay_order_id = razorpay_order['id']
+        request.build_absolute_uri('/bands/?print=true')
+        callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
+        # callback_url = 'http://127.0.0.1:8000/paymenthandler/{}/{}/'.format(request.user.email,amount)
+        context['razorpay_order_id'] = razorpay_order_id
+        context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
+        context['razorpay_amount'] = amount
+        context['currency'] = currency
+        context['callback_url'] = callback_url
+        return HttpResponseRedirect(reverse("cart"))
 
 def healthcheckupview(request,slug):
     c=request.session.get("city")
@@ -530,6 +566,9 @@ def healthpackageview(request,slug):
                      amount=amount,
                      payment_id=razorpay_order['id'],
                      payment_status=False).save()
+        ca = cart.objects.create(
+            
+        )
         """ data=cart.objects.filter(user=request.user)
         a=prescription_book.objects.create(
                 unique=uniquee,
@@ -609,9 +648,11 @@ def categoryblog(request,slug):
 #         "categories":tcategories
 #     }
 #     return render(request,"choose-test-list.html",context)
-@login_required(login_url="login/")   
+# @login_required(login_url="login/")   
 def prescriptionbookview(request):
     c=request.session.get("city")
+    if request.user.is_anonymous:
+        return HttpResponseRedirect(reverse("user-login"))
     # print(request.FILES)
     fm=prescriptionform()
     if request.method=="POST":
@@ -652,7 +693,7 @@ def prescriptionbookview(request):
                      payment_status=False).save()
         messages.success(request,"Your response is recorded successfully")
         return HttpResponseRedirect(reverse("booking-history"))
-        return render(request,"uploadprescriptions.html",{"fm":fm})
+        # return render(request,"uploadprescriptions.html",{"fm":fm})
     else:
         return render(request,"uploadprescriptions.html",{"fm":fm})
   
@@ -669,6 +710,7 @@ def testselect(request):
         "city":c,
     }
     if request.method=="POST":
+        
         # others=request.POST.get("myself")
         test_name=request.POST.getlist("test_name")
         myself=request.POST.get("myself")
@@ -783,8 +825,9 @@ def cartt(request):
     context={
         "data":data,
         "subtotal":sum(a),
-        'page_obj': page_obj
-    }
+        'page_obj': page_obj,
+        "datacount":data.count(),
+   }
     currency = 'INR'
     
     if request.session.get("couponamount")!=None:
@@ -804,7 +847,7 @@ def cartt(request):
                 {"amount": 1* 100, "currency": "INR", "payment_capture": "1"}
         )
         request.session.delete("couponamount")
-    del request.session['couponamount']
+    
     print(request.session.get("couponamount"))
     request.session.delete("couponamount")
     request.session["order_id"]=razorpay_order['id']
@@ -918,23 +961,28 @@ def categoryy(request):
     
 def search(request):
     if request.method=="POST":
-        searched=request.GET.get('searched')
-        searched=request.POST["searched"]
-        tcategories=category.objects.all()
-        b=[]
-        a={}
-        tests=test.objects.filter(testt__icontains=searched)
-        for tesst in tests:
-            a["id"]=tesst.id
-            a["testt"]=tesst.testt
-            a["description"]=tesst.description
-            a["pricel1"]=str(tesst.pricel1)
-            b.append(a)
-        print(b)
-        return JsonResponse(b,safe=False)
-        return render(request,"choose-test-list.html",context)
+        if request.POST.get("action") == "load_more":
+            # objs = test.objects.filter().values("testt","description", "pricel1")
+            res = {"valid":True}
+            return HttpResponse(json.dumps(res), content_type="application/json")
+        else:
+            searched=request.GET.get('searched')
+            searched=request.POST["searched"]
+            tcategories=category.objects.all()
+            b=[]
+            a={}
+            tests=test.objects.filter(testt__icontains=searched)
+            for tesst in tests:
+                a["id"]=tesst.id
+                a["testt"]=tesst.testt
+                a["description"]=tesst.description
+                a["pricel1"]=str(tesst.pricel1)
+                b.append(a)
+            print(b)
+            return JsonResponse(b,safe=False)
     else:
-        return render(request,"choose-test-list.html")    
+        return render(request,"choose-test-list.html") 
+       
 def destroy(request): 
     if request.method=="POST":
         pk=request.POST["pk"]
@@ -1124,7 +1172,6 @@ class BookingHistoryPay(View):
             "testbooking":testbooking,
         }
         return render(request,"booking-history.html",context)
-
     def post(self, request, *args, **kwargs):
         if request.POST.get("action") == "retreive_data":
             mod = book_history.objects.get(testbooking_id=request.POST.get('id'))
