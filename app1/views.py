@@ -295,14 +295,10 @@ def otpforgotpassword(request):
             User.objects.filter(
                             email=email_address
             ).update(password=hash_pwd)
-            # user_instance = User.objects.get(username=user)
-            # User.objects.create(
-            #                 user = user_instance,phone_number=p_number
-            # )
+            
             request.session.delete('otp')
             request.session.delete('email')
             request.session.delete('password')
-            # messages.success(request,'Password changed successfully!!')
             return redirect('user-login')
         else:
             messages.error(request,'Wrong OTP')
@@ -458,6 +454,7 @@ from django.contrib.auth import logout
 def logout_request(request):
     logout(request)
     request.session.delete("city")
+    request.session.delete("cartt")
     return redirect("/")
 def newsletter(request):
     if request.method=="POST":
@@ -1453,7 +1450,6 @@ def healthcheckupadd(request):
                     checkk.append(str(labtest.id))
                     request.session['cartt']['checkup']=checkk
                 print( request.session['cartt'],"AAGIN")
-            
                 request.session.modified = True
                 return JsonResponse({"message":True})
             elif request.POST.get("action") == "healthpackage":
