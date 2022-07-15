@@ -243,7 +243,7 @@
                 <i class="fa fa-quote-left testimonial_quote text-center py-4" aria-hidden="true"></i>
                 <p class="fs-18 font-regular">{{test.description}}</p>
                 <div>
-                  <img src="{{test.photo.url}}" alt="" class="img-fluid test_img">
+                  <img src="{{test.photo.url}}" alt="" class="img-fluid test_img br-50">
                 </div>
                 <p class="fs-18 font-bold py-4">{{test.username}}</p>
               </div>
@@ -618,10 +618,10 @@ console.log(id);
       },
       success: function(resp){
           console.log(resp);
-          //if(resp['message']="login"){
-            //alert("please login to add")
-          //}
-           if(!resp['message']){
+          if(resp['message']==="login"){
+            alert("please login to add")
+          }
+          else if(!resp['message']){
               alert("Test Already Added");
           }else{
               alert("Test Added");

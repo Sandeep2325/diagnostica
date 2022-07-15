@@ -119,6 +119,12 @@
 
     $("#newsletter").on("click", function (e) {
         var email = $("#emaill").val();
+
+        if (email == "") {
+                        $("#emaill").html("Please enter Email.");
+                        $("#emaill").focus();
+                        return false;
+                    } else {                         
         $.ajax({
             url: "{% url 'newsletter' %}",
             type: "POST",
@@ -134,7 +140,7 @@
                 //$("#respp").append(h1)
             }
         });
-
+                    }
         return false;
     });
 

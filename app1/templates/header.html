@@ -1,11 +1,11 @@
 {% load static %}
 
 <body>
-    <section class="section_nav_bar bg-light-grey py-sm-3 py-xl-4">
+    <section class="section_nav_bar bg-light-grey py-1 py-sm-2 py-lg-3 py-xl-4">
         <div class="container">
             <nav class="navbar navbar-expand-lg">
                 <a class="navbar-brand"  href="{%url "home"%}"><img src="{%static "images/image_logo.png"%}" alt="" class="img-fluid logo-img" /></a>
-                <ul class="mb-0 ps-0 ms-auto navbar-nav-scroll align-items-center d-flex d-lg-none">
+                <ul class="mb-0 ps-0 ms-auto d-flex d-lg-none align-items-center">
                     <li class="nav-item dropdown">
                         <a class="pe-2 dropdown-toggle " href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="{%static 'images/bg-user.png' %}" alt="" class="" />
@@ -27,7 +27,7 @@
                     </li>
                 </ul>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"><i class="fa fa-compress header_tgl_btn" aria-hidden="true"></i></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarScroll">
                     <ul class="navbar-nav ms-auto my-2 my-lg-0 navbar-nav-scroll align-items-lg-center">

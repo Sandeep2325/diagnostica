@@ -381,7 +381,7 @@ def userLogin(request):
         else:
             messages.error(request,'Email or password is wrong')
     return render(request,'login.html')
-@login_required(login_url="login/")  
+
 def booktestonline(request):
     return render(request,"book-test-online.html")
 from django.contrib.auth import logout
@@ -521,7 +521,6 @@ def hpackagess(request):
 
 def healthpackageview(request,slug):
     if request.user.is_anonymous:
-        # return redirect("user-login")
         return HttpResponseRedirect(reverse("user-login"))
     else:
         c=request.session.get("city")
@@ -664,7 +663,7 @@ def prescriptionbookview(request):
         else:
             return render(request,"uploadprescriptions.html",{"fm":fm})
         
-@login_required(login_url="login/")  
+# @login_required(login_url="login/")  
 def testselect(request):
     c=request.session.get("city")
     print("-----",city)
@@ -678,6 +677,7 @@ def testselect(request):
     }
     if request.method=="POST":
         # others=request.POST.get("myself")
+        print(request.POST)
         test_name=request.POST.getlist("test_name")
         myself=request.POST.get("myself")
         others=request.POST.get('others')
@@ -686,7 +686,7 @@ def testselect(request):
         lastname=request.POST.get('lastname')
         contact=request.POST.get('contact')
         age=request.POST.get('age')
-        gender=request.POST.get('gender')
+        gender=request.POST['gender']
         unique = uuid.uuid4()
         a=prescription_book.objects.create(
             unique=unique,
@@ -730,6 +730,8 @@ def cartt(request):
         contact=request.POST.get('phone')
         age=request.POST.get('age')
         gender=request.POST.get('gender')
+        address=request.POST['address']
+        print(address)
         global uniquee
         uniquee = uuid.uuid4()
         data=cart.objects.filter(user=request.user)
@@ -746,6 +748,8 @@ def cartt(request):
                                 gender=gender,
                                 location=c)
         data2=prescription_book.objects.get(unique=uniquee)
+        if others=="m":
+            User.objects.filter(email=request.user.email).update(first_name=firstname,last_name=lastname,phone_no=contact,age=age,address=address)
         data1=cart.objects.filter(user=request.user)
         a=[]
         for i in data:
@@ -913,11 +917,21 @@ def subscriptionview(request):
     else:
         form=subscriptionform
         return render(request,"home",{"form":form})
+from functools import wraps
 
+def ajax_login_required(view_func):
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return view_func(request, *args, **kwargs)
+        Jsonn = json.dumps({ 'not_authenticated': True })
+        return HttpResponse(Jsonn, content_type='application/json')
+    return wrapper
+# @ajax_login_required
 def addtocart(request):
     if request.user.is_anonymous:
         # return redirect("user-login")
-        return HttpResponseRedirect(reverse("user-login"))
+        return JsonResponse({"message":"login"})
     else:
         if request.method=="POST":
             tests=test.objects.all()
@@ -943,6 +957,7 @@ def addtocart(request):
             print("success")
             return JsonResponse({"message":True})
             # return JsonResponse({"message":"success"})
+
 def categoryy(request):
     print(request.method)
     if request.method=="POST":
@@ -950,8 +965,11 @@ def categoryy(request):
         pk=request.POST["pk"]
         b=[]
         a={}
+        b.append(a)
         tests=test.objects.filter(categoryy__id=pk)
+        # print(tests)
         for tesst in tests:
+            print(tesst.id)
             a['id']=tesst.id
             a['testt']=tesst.testt
             a['description']=tesst.description
@@ -963,13 +981,17 @@ def categoryy(request):
                 a["pricel1"]=str(tesst.pricel3)
             elif city== "Delhi":
                 a["pricel1"]=str(tesst.pricel3)
+            print(a)
             # tesst['pricel1'] = str(tesst['pricel1'])
-            b.append(a)
+            # print(tesst.testt)
+            # b.append(a)
+            
            
             # a["test"]=tesst.testt
             # a["description"]=tesst.description
             # a["pricel1"]=tesst.pricel1
             # b.append(a)
+       
         return JsonResponse(b,safe=False)
     
 def search(request):
@@ -998,7 +1020,7 @@ def search(request):
                     a["pricel1"]=str(tesst.pricel3)
                 elif city== "Delhi":
                     a["pricel1"]=str(tesst.pricel3)
-                b.append(a)
+            b.append(a)
             print(b)
             return JsonResponse(b,safe=False)
     else:
@@ -1053,46 +1075,50 @@ def contactuss(request):
 
 def healthcheckupadd(request):
     cityy=request.session.get("city")
-    if request.method=="POST":
-        if request.POST.get("action") == "healthcheckup":
-            print(request.POST)
-            print(request.user.is_anonymous)
-           
-            # if request.user.is_anonymous==True:
-            #     return JsonResponse({"message":"login"})
-            # else:
-            slug=request.POST["slug"]
-            labtest=healthcheckuppackages.objects.get(slug=slug)
-            cartt=cart.objects.filter(user=request.user,labtest=labtest)
-            if cartt.exists():
-                return JsonResponse({"message":False})
-            if cityy=="Bangalore":
-                cart.objects.create(user=request.user,labtest=labtest,price=labtest.dpricel1).save()
-            elif cityy=="Chennai": 
-                cart.objects.create(user=request.user,labtest=labtest,price=labtest.dpricel2).save()
-            elif cityy == "Mumbai":
-                cart.objects.create(user=request.user,labtest=labtest,price=labtest.dpricel3).save()
-            elif cityy == "Delhi":
-                cart.objects.create(user=request.user,labtest=labtest,price=labtest.dpricel4).save()
-                # messages.success(request,"add to cart")
+    if request.user.is_anonymous:
+        # return redirect("user-login")
+        return JsonResponse({"message":"login"})
+    else:
+        if request.method=="POST":
+            if request.POST.get("action") == "healthcheckup":
+                print(request.POST)
+                print(request.user.is_anonymous)
             
-            return JsonResponse({"message":True})
-        elif request.POST.get("action") == "healthpackage":
-            slug=request.POST["slug"]
-            package=healthpackages.objects.get(slug=slug)
-            cartt=cart.objects.filter(user=request.user,packages=package)
-            if cartt.exists():
-                return JsonResponse({"message":False})
-            if cityy=="Bangalore":
-                cart.objects.create(user=request.user,packages=package,price=package.pricel1).save()
-            elif cityy=="Chennai": 
-                cart.objects.create(user=request.user,packages=package,price=package.pricel2).save()
-            elif cityy == "Mumbai":
-                cart.objects.create(user=request.user,packages=package,price=package.pricel3).save()
-            elif cityy == "Delhi":
-                cart.objects.create(user=request.user,packages=package,price=package.pricel4).save()
-            return JsonResponse({"message":True})
-        #cart.objects.create(labtest=data,price=data.)
+                # if request.user.is_anonymous==True:
+                #     return JsonResponse({"message":"login"})
+                # else:
+                slug=request.POST["slug"]
+                labtest=healthcheckuppackages.objects.get(slug=slug)
+                cartt=cart.objects.filter(user=request.user,labtest=labtest)
+                if cartt.exists():
+                    return JsonResponse({"message":False})
+                if cityy=="Bangalore":
+                    cart.objects.create(user=request.user,labtest=labtest,price=labtest.dpricel1).save()
+                elif cityy=="Chennai": 
+                    cart.objects.create(user=request.user,labtest=labtest,price=labtest.dpricel2).save()
+                elif cityy == "Mumbai":
+                    cart.objects.create(user=request.user,labtest=labtest,price=labtest.dpricel3).save()
+                elif cityy == "Delhi":
+                    cart.objects.create(user=request.user,labtest=labtest,price=labtest.dpricel4).save()
+                    # messages.success(request,"add to cart")
+                
+                return JsonResponse({"message":True})
+            elif request.POST.get("action") == "healthpackage":
+                slug=request.POST["slug"]
+                package=healthpackages.objects.get(slug=slug)
+                cartt=cart.objects.filter(user=request.user,packages=package)
+                if cartt.exists():
+                    return JsonResponse({"message":False})
+                if cityy=="Bangalore":
+                    cart.objects.create(user=request.user,packages=package,price=package.pricel1).save()
+                elif cityy=="Chennai": 
+                    cart.objects.create(user=request.user,packages=package,price=package.pricel2).save()
+                elif cityy == "Mumbai":
+                    cart.objects.create(user=request.user,packages=package,price=package.pricel3).save()
+                elif cityy == "Delhi":
+                    cart.objects.create(user=request.user,packages=package,price=package.pricel4).save()
+                return JsonResponse({"message":True})
+            #cart.objects.create(labtest=data,price=data.)
 
 def faqs(request):
     faqss=faq.objects.all()

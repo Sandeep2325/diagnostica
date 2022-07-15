@@ -270,6 +270,9 @@ textarea {
     top: 0;
     z-index: 999;
 }
+.header_tgl_btn{
+    font-size: 30px!important;
+}
 
 .section_nav_bar .navbar-nav .nav-link {
     font-family: Chivo-Regular;
@@ -307,6 +310,7 @@ textarea {
 .section_nav_bar .dropdown-menu[data-bs-popper] {
     top: 100%;
     right: 0;
+    left: unset;
     margin-top: 39px;
 }
 
@@ -988,7 +992,7 @@ select::placeholder {
     margin: 10vh auto 0px auto
 }
 
-.cart_checkout_modal input,
+.cart_checkout_modal input, textarea,
 .myself_other {
     padding: 10px 20px !important;
     outline: none;
@@ -1072,7 +1076,7 @@ table td {
 }
 
 .section_booking_history table .t_head {
-    font-size: 20px;
+    font-size: 16px;
     font-family: Chivo-Regular;
     color: white;
     text-align: left;
@@ -1479,14 +1483,16 @@ textarea {
         font-size: 14px!important;
         list-style: circle;
     }
-    
-.cart_table .cell {
-    font-size: 16px!important;
-}
-.section_profile input,
-.select_option {
-    font-size: 14px !important;
-}
+    .section_nav_bar .dropdown-menu[data-bs-popper] {
+        margin-top: 15px !important;
+    }
+    .cart_table .cell {
+        font-size: 16px!important;
+    }
+    .section_profile input,
+    .select_option {
+        font-size: 14px !important;
+    }
 }
 
 @media (max-width: 767.98px) {
@@ -1593,6 +1599,9 @@ textarea {
     .section_nav_bar .navbar-nav .nav-link {
         font-size: 15px;
         padding: 5px 10px;
+    }
+    .section_nav_bar .dropdown-menu[data-bs-popper] {
+        margin-top: 21px;
     }
     .section_nav_bar .nav_button {
         margin: 7px 0px !important;
@@ -1710,9 +1719,6 @@ textarea {
     .home_health_symp_header {
         font-size: 25px;
     }
-    .section_nav_bar .nav_button {
-        display: none !important;
-    }
     .nav_book_res {
         display: block !important;
     }
@@ -1728,19 +1734,6 @@ textarea {
         width: 250px;
         float: left;
         margin: 25px 0px;
-    }
-    .section_nav_bar span {
-        display: block;
-        text-align: end;
-        padding-top: 30px;
-    }
-    .section_nav_bar ul li {
-        display: block;
-        text-align: end;
-        padding: 7px 6px;
-    }
-    .section_nav_bar ul {
-        display: none;
     }
     .section_booking_history .tad_button {
         padding: 10px 20px;

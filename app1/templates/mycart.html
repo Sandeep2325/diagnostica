@@ -183,6 +183,9 @@
                                         <option value="o">Others</option>
                                 </select>
                             </div>
+                            <div>
+                                <textarea rows="2" class="w-100 myself_other br-5" placeholder="Address" name="address1" id="address" type="text" ></textarea>
+                            </div>
                             <button class="mx-lg-0 mx-3 mt-4 prescription br bg-sky-blue br-5 cl-dark-white"
                                 type="submit" name="submit" id="checkout">SUBMIT</button>
                         {% comment %} </form> {% endcomment %}
@@ -297,15 +300,10 @@
                     AMOUNT = resp['total'];
                     
                     var detail=`
-                   <div class="col-6" id="cleardetail">
-                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Discount(%)</h4>
-                    </div>
-                    <div class="col-6" id="cleardetail">
-                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">${resp['percent']}</h4>
-                    </div>
+                   
                     
                     <div class="col-6" id="cleardetail">
-                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Discount Price</h4>
+                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Discount Price(${resp['percent']}%)</h4>
                     </div>
                     <div class="col-6" id="cleardetail">
                         <h4 class="fs-20 font-bold cl-dark-blue mb-3">Rs. ${resp['discount']}</h4>
@@ -341,30 +339,23 @@ $("#option1").change(function(e){
         },
         dataType: "json",
         success: function(resp){
-
-            /*address: null
-contact: "7412589632"
-firstname: "admin"
-gender: "choose"
-lastname: "admin"*/
+            
         $("#firstname").val(resp['firstname']);
         $("#lastname").val(resp['lastname']);
         $("#age").val(resp['age']);
         $("#gender").val(resp['gender']);
         $("#phone").val(resp['contact']);
-           
+        $("#address").val(resp['address']);
         }
     })
-    
-    
 }
     else if(opt === "o"){
-      
         $("#firstname").val('');
         $("#lastname").val('');
         $("#age").val('');
-        $("#gender").val('')
-        $("#phone").val('')
+        $("#gender").val('');
+        $("#phone").val('');
+        $("address").val('');
         $("#option").show();
     }
 
@@ -419,6 +410,10 @@ $(document).ready(function(){
             'gender': {
                 required: true,
             },
+            'address': {
+                required: true,
+                minlength: 1,
+            },
         },
     
         messages: {
@@ -444,12 +439,16 @@ $(document).ready(function(){
             },
             'age': {
                 required: "Enter Age"
+            },
+            'address': {
+                required: "Enter Address"
             }
     
         },
         submitHandler: function (form) {
             a=$("#total").text();
             
+       
             var firstname=$("#firstname").val();
                     var lastname=$("#lastname").val();
                     var phone=$("#phone").val();
@@ -457,6 +456,7 @@ $(document).ready(function(){
                     var gender=$("#gender").val();
                     var option1=$("#option1").val();
                     var option=$("#option").val();
+                    var address=$("#address").val();
                     var total;
                     if(AMOUNT==0){
                         
@@ -480,7 +480,8 @@ $(document).ready(function(){
                             "gender":gender,
                             "option1":option1,
                             "option":option,
-                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                            "address":address,
+                            csrfmiddlewaretoken:'{{ csrf_token }}',
                            },
                            dataType: "json",
                            success: function(resp){
