@@ -617,11 +617,8 @@ console.log(id);
           'csrfmiddlewaretoken':'{{ csrf_token }}',
       },
       success: function(resp){
-          console.log(resp);
-          if(resp['message']==="login"){
-            alert("please login to add")
-          }
-          else if(!resp['message']){
+          
+          if(!resp['message']){
               alert("Test Already Added");
           }else{
               alert("Test Added");

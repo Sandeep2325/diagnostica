@@ -38,7 +38,7 @@
                                                 <div class="cell" data-title=" S.No">
                                                     {{ forloop.counter }}
                                                 </div>
-                                                {%if cart.items == None and cart.packages == None%}
+                                                {% comment %} {%if cart.items == None and cart.packages == None%}
                                                 <div class="cell" data-title="Test Name">
                                                     {{cart.labtest}}
                                                 </div>
@@ -50,7 +50,10 @@
                                                 <div class="cell" data-title="Test Name">
                                                     {{cart.items}}
                                                 </div>
-                                                {%endif%}
+                                                {%endif%} {% endcomment %}
+                                                <div class="cell" data-title="Test Name">
+                                                    {{cart.test}}
+                                                </div>
                                                 {%if cart.categoryy == None%}
                                                 <div class="cell" data-title="Category Name">
                                                     -
@@ -64,7 +67,7 @@
                                                     {% comment %} href="{%url "destroy" cart.id%}" {% endcomment %}
                                                     {% comment %} <a href="{% url "destroy" cart.id%}" class="link-delete text-danger" ><i class="fa fa-trash cursor" aria-hidden="true"></i></a> {% endcomment %}
                                                    {% comment %} <button  class="link-delete br" ><i class="fa fa-trash cursor" aria-hidden="true"></i></button> {% endcomment %}
-                                                <button  name={{cart.id}} id="delete"  type="button" class="link-delete br"><i class="fa fa-trash cursor" aria-hidden="true"></i></button>
+                                                <button  name="{{cart.id}}" id="delete" onclick="deletefunc('{{cart.id}}-{{cart.cat}}')" type="button" class="link-delete br"><i class="fa fa-trash cursor" aria-hidden="true"></i></button>
                                                 </div>
                                                 <div class="cell" data-title="Price">
                                                    Rs. {{cart.price}}
@@ -251,7 +254,13 @@
             $("#checkout1").attr("disabled",true); 
         }
     })
-    $("#delete").on("click", function(e){
+    $('#cart_checkout_modal').on('shown.bs.modal', function (e) {
+       
+        if("{{ user.is_authenticated }}"==="False"){
+            window.location.replace("{% url 'user-login' %}");
+        }
+      })
+    $("#delete1").on("click", function(e){
         
         var idd = $(this).attr('name');
         
@@ -272,6 +281,42 @@
         
         return false;
     });
+function deletefunc(e){
+//  $("#delete").on("click", function(e){ 
+        alert();
+        var idd = $(this).attr('name');
+            $.ajax({
+                url: "{% url 'cartsessiondelete' %}",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    'action':'forsession',
+                    'pk':e,
+                    'csrfmiddlewaretoken':'{{ csrf_token }}',
+                },
+                success: function(resp){
+                   console.log(resp)
+                   window.location.reload();
+                }
+            });
+            a=$("#delete").attr("name");
+            $.ajax({
+                url: "{% url 'cartsessiondelete' %}",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    'action':'fordatabse',
+                    'pk':a,
+                    'csrfmiddlewaretoken':'{{ csrf_token }}',
+                },
+                success: function(resp){
+                   console.log(resp)
+                   window.location.reload();
+                }
+            });
+        return false;
+   // });
+}
     $('#cpnbtn').on('click', function(e){
         var a=$("#total").text();
 
@@ -446,9 +491,9 @@ $(document).ready(function(){
     
         },
         submitHandler: function (form) {
+           
             a=$("#total").text();
             
-       
             var firstname=$("#firstname").val();
                     var lastname=$("#lastname").val();
                     var phone=$("#phone").val();

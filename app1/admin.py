@@ -364,7 +364,7 @@ admin.site.register(coupons,couponadmin)
 from django.contrib.auth.models import Group
 admin.site.unregister(Group)
 # admin.site.register(dummycart)
-# admin.site.register(cart,cartadmin)
+admin.site.register(cart,cartadmin)
 
 
 

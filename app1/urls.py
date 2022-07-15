@@ -57,4 +57,5 @@ urlpatterns = [
     # path('change-password/<slug:uid>/',views.change_password,name="change-password"),
     path('payment/', payments.payment, name='payment'),
     path('paymenthandler/<str:str>/<str:amount>/', views.paymenthandler, name='paymenthandler'),
+    path("cartsessiondelete",views.cartsessiondelete,name="cartsessiondelete"),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

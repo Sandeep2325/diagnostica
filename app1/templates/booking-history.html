@@ -57,7 +57,7 @@
                                                     <td class="t_head" scope="col">Date</td>
                                                     <td class="t_head" scope="col">Patient Info</td>
                                                     <td class="t_head" scope="col">Booking Type</td>
-                                                    <td class="t_head" scope="col">Prescription</td>
+                                                    {% comment %} <td class="t_head" scope="col">Prescription</td> {% endcomment %}
                                                     <td class="t_head" scope="col">Booking Details</td>
                                                     <td class="t_head" scope="col">Amount</td>
                                                     <td class="t_head" scope="col">Payment Status</td>
@@ -78,7 +78,7 @@
                                                     <td data-label="Patient Info">{{bookhistory.patient_info}}</td>
                                                     {%endif%}
                                                     <td data-label="Booking Type">{{bookhistory.booking_type}}</td>
-                                                    <td data-label="Presciption">-</td>
+                                                    {% comment %} <td data-label="Presciption">-</td> {% endcomment %}
                                                     <td data-label="Booking Details">{{bookhistory.bookingdetails}}</td>
                                                     
                                                         <!-- <div class="w-100 cl-dark-blue bg-dark-green fs-12 br-5">ABC,

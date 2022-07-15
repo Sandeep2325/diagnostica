@@ -29,7 +29,9 @@ import razorpay
 
 global OBJ_COUNT
 OBJ_COUNT = 0
-
+checkk=[]
+teest=[]
+packagee=[]
 def dashboard(request):
     test=prescription_book.objects.all().count()
     test_bookings=prescription_book.objects.exclude(test_name__isnull=True,prescription_file__isnull=False).count()
@@ -375,8 +377,76 @@ def userLogin(request):
         password = request.POST['password']
         print(password)
         user = authenticate(request,username=username,password=password)
+        a=request.session.get("cartt")
+        print(a)
+        
         if user is not None:
             login(request,user)
+            a=request.session.get("cartt")
+            city=request.session.get("city")
+    # print(a.get("checkup"))
+    
+            chckupp=healthcheckuppackages.objects.filter(id__in=a.get("checkup"))
+            package=healthpackages.objects.filter(id__in=a.get("package"))
+            tessst=test.objects.filter(id__in=a.get("selecttest"))
+            # context["chckupp"]=chckupp
+            # context["package"]=package
+            # context["tessst"]=tessst
+            
+            # cart.objects.create(user=request.user,items=tes,categoryy=tes.categoryy,price=tes.pricel1).save()
+            # print(chckupp)
+            # print(package)
+            # print(tessst)
+            for j in chckupp:
+                
+                if city=="Bangalore":
+                    price=str(j.dpricel1)
+                   
+                elif city == "Chennai":
+                    price=str(j.dpricel1)
+                   
+                elif city == "Mumbai":
+                    price=str(j.dpricel1)
+                   
+                elif city == "Delhi":
+                    price=str(j.dpricel1)
+                    
+                cart.objects.create(user=request.user,labtest=j,price=price).save()
+               
+                
+            for j in package:
+                
+                if city=="Bangalore":
+                   
+                    price=str(j.pricel1)
+                elif city == "Chennai":
+                    
+                    price=str(j.pricel1)
+                elif city == "Mumbai":
+                    
+                    price=str(j.pricel1)
+                elif city == "Delhi":
+                    
+                    price=str(j.pricel1)
+                cart.objects.create(user=request.user,packages=j,price=price).save()
+               
+                
+            for j in tessst:
+                print("--------",j)
+                if city=="Bangalore":
+                    price=str(j.pricel1)
+                    
+                elif city == "Chennai":
+                    price=str(j.pricel1)
+                  
+                elif city == "Mumbai":
+                    price=str(j.pricel1)
+                   
+                elif city == "Delhi":
+                    price=str(j.pricel1)
+                    print("--------",j)
+                cart.objects.create(user=request.user,items=j,price=price,categoryy=j.categoryy).save()
+               
             return redirect('/')
         else:
             messages.error(request,'Email or password is wrong')
@@ -392,10 +462,18 @@ def logout_request(request):
 def newsletter(request):
     if request.method=="POST":
         email=request.POST["email"]
+        data=subscription.objects.filter(email=email)
+        if data.exists():
+            return JsonResponse({"message":False})
         subscription.objects.create(email=email).save()
         return JsonResponse({"message":True,"email":email})
     # return render(request,"footer.html")
 def home(request):
+    request.session['cartt']={
+        "checkup":[],
+        "package":[],
+        "selecttest":[]
+       }
     print(request.session.get("city"))
     c=request.session.get("city")
     print(".....",request.user)
@@ -419,61 +497,43 @@ def home(request):
         }
         
         return render(request,'home.html',context)
-    if request.POST.get("action") == "retreive_data":
-        currentcity=request.session.get("city")
-        slug=request.POST['id']
-        print(slug)
-        context={}
-        healthcheckup=healthcheckuppackages.objects.get(slug=slug)
-        if currentcity=="Bangalore":
-            amount=healthcheckup.dpricel1
-        elif currentcity=="Chennai":
-            amount=healthcheckup.dpricel2
-        elif currentcity=="Mumbai":
-            amount=healthcheckup.dpricel3
-        elif currentcity=="Delhi":
-            amount=healthcheckup.dpricel4
-        client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
-        razorpay_order = client.order.create(
-                    {"amount": int(amount) * 100, "currency": "INR", "payment_capture": "1"}
-        )
-        currency = 'INR'
-        razorpay_order_id = razorpay_order['id']
-        request.build_absolute_uri('/bands/?print=true')
-        callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
-        # callback_url = 'http://127.0.0.1:8000/paymenthandler/{}/{}/'.format(request.user.email,amount)
-        context['razorpay_order_id'] = razorpay_order_id
-        context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
-        context['razorpay_amount'] = amount
-        context['currency'] = currency
-        context['callback_url'] = callback_url
-        bookhistory=book_history(
-            user=request.user,
-                     booking_type="Package",
-                     bookingdetails=slug,
-                     patient_info="Myself",
-                     amount=amount,
-                     payment_id=razorpay_order['id'],
-                     payment_status=False).save()
-        return JsonResponse(context)
-    else:
+    # if request.POST.get("action") == "retreive_data":
+    #     currentcity=request.session.get("city")
+    #     slug=request.POST['id']
+    #     print(slug)
+    #     context={}
+    #     healthcheckup=healthcheckuppackages.objects.get(slug=slug)
+    #     if currentcity=="Bangalore":
+    #         amount=healthcheckup.dpricel1
+    #     elif currentcity=="Chennai":
+    #         amount=healthcheckup.dpricel2
+    #     elif currentcity=="Mumbai":
+    #         amount=healthcheckup.dpricel3
+    #     elif currentcity=="Delhi":
+    #         amount=healthcheckup.dpricel4
+        
+        
+    #     return JsonResponse(context)
+    # else:
+    if request.method=="POST":
         testt=request.POST["selectbookhelp"]
         tes=test.objects.get(id=testt)
         firtname=request.POST["firstname"]
         lastname=request.POST["lastname"]
         phone=request.POST["phone"]
         email=request.POST["email"]
-        print(testt)
-        if c == "Bangalore":
-            cart.objects.create(user=request.user,items=tes,categoryy=tes.categoryy,price=tes.pricel1).save()
-        elif c == "Chennai":
-            cart.objects.create(user=request.user,items=tes,categoryy=tes.categoryy,price=tes.pricel2).save()
-        elif c == "Mumbai":
-            cart.objects.create(user=request.user,items=tes,categoryy=tes.categoryy,price=tes.pricel3).save()
-        elif c == "Delhi":
-            cart.objects.create(user=request.user,items=tes,categoryy=tes.categoryy,price=tes.pricel3).save()
-        
-        # print(request.POST['id'])
+        message = '{} from {} category from {}'.format(tes.testt,tes.categoryy,c)
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = ["sandeep.nexevo@gmail.com"]
+        message = message
+        subject = "You have a test query" 
+        send_mail(
+                    subject,
+                    message,
+                    email_from,
+                    recipient_list,
+                    fail_silently=False,
+            )
         cit=city.objects.all()
         tests=test.objects.all()
         healthcheckup=healthcheckuppackages.objects.all()[0:4]
@@ -491,7 +551,7 @@ def home(request):
                 "currentcity":c,
                 "tests":tests,
         }
-        return HttpResponseRedirect(reverse("cart"))
+        return HttpResponseRedirect(reverse("home"))
 def healthcheckupview(request,slug):
     c=request.session.get("city")
     city="Hyderabad"
@@ -520,9 +580,6 @@ def hpackagess(request):
     return render(request,'healthpackages.html',context)
 
 def healthpackageview(request,slug):
-    if request.user.is_anonymous:
-        return HttpResponseRedirect(reverse("user-login"))
-    else:
         c=request.session.get("city")
         package=healthpackages.objects.get(slug=slug)
         packages=healthpackages.objects.exclude(slug=slug)
@@ -551,22 +608,71 @@ def healthpackageview(request,slug):
             )
         request.session['amount']=amount
         razorpay_order_id = razorpay_order['id']
-        callback_url = callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
+        # callback_url = callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
         context['razorpay_order_id'] = razorpay_order_id
         context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
         context['razorpay_amount'] = amount
         context['currency'] = currency
-        context['callback_url'] = callback_url
-        bookhistory=book_history(
-            user=request.user,
-                     booking_type="Package",
-                     bookingdetails=slug,
-                     patient_info="Myself",
-                     amount=amount,
-                     payment_id=razorpay_order['id'],
-                     payment_status=False).save()
+        # context['callback_url'] = callback_url
+        # bookhistory=book_history(
+        #     user=request.user,
+        #              booking_type="Package",
+        #              bookingdetails=slug,
+        #              patient_info="Myself",
+        #              amount=amount,
+        #              payment_id=razorpay_order['id'],
+        #              payment_status=False).save()
         print("booked")
         return render(request,'packagedetail.html',context)
+
+# def healthpackageview(request,slug):
+#     if request.user.is_anonymous:
+#         return HttpResponseRedirect(reverse("user-login"))
+#     else:
+#         c=request.session.get("city")
+#         package=healthpackages.objects.get(slug=slug)
+#         packages=healthpackages.objects.exclude(slug=slug)
+#         context={
+#             "package":package,
+#             "packages":packages,
+#             "city":c
+#         }
+#         currency = 'INR'
+#         if c == "Bangalore":
+#             amount=int(package.pricel1)
+#         elif c == "Chennai":
+#             amount=int(package.pricel2)
+#         elif c == "Mumbai":
+#             amount=int(package.pricel3)
+#         elif c == "Delhi":
+#             amount=int(package.pricel4)
+#         client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+#         try:
+#             razorpay_order = client.order.create(
+#                     {"amount": int(amount) * 100, "currency": "INR", "payment_capture": "1"}
+#             )
+#         except Exception as e:
+#             razorpay_order = client.order.create(
+#                     {"amount": 1* 100, "currency": "INR", "payment_capture": "1"}
+#             )
+#         request.session['amount']=amount
+#         razorpay_order_id = razorpay_order['id']
+#         callback_url = callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
+#         context['razorpay_order_id'] = razorpay_order_id
+#         context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
+#         context['razorpay_amount'] = amount
+#         context['currency'] = currency
+#         context['callback_url'] = callback_url
+#         bookhistory=book_history(
+#             user=request.user,
+#                      booking_type="Package",
+#                      bookingdetails=slug,
+#                      patient_info="Myself",
+#                      amount=amount,
+#                      payment_id=razorpay_order['id'],
+#                      payment_status=False).save()
+#         print("booked")
+#         return render(request,'packagedetail.html',context)
     
 def healthsymptomview(request,slug):
     c=request.session.get("city")
@@ -718,7 +824,7 @@ def testselect(request):
     return render(request,"choose-test-list.html",context)
 from django.core.paginator import Paginator,EmptyPage, PageNotAnInteger
 razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
-@login_required(login_url="login/")    
+# @login_required(login_url="login/")    
 def cartt(request):
     # history=book_history.objects.none()
     if request.method=="POST":
@@ -764,13 +870,13 @@ def cartt(request):
                 test.testt for test in data1
             ])
         strr=[]
-        for test in data1:
-            if test.items == None and test.packages == None:
-                strr.append(test.labtest.package_title)
-            elif test.items == None and test.labtest == None:
-                strr.append(test.packages.package_name)
+        for tesst in data1:
+            if tesst.items == None and tesst.packages == None:
+                strr.append(tesst.labtest.package_title)
+            elif tesst.items == None and tesst.labtest == None:
+                strr.append(tesst.packages.package_name)
             else:
-                strr.append(test.items.testt)
+                strr.append(tesst.items.testt)
         listToStr = ','.join(map(str, strr))
         # str1 = " " 
         # for i in str:
@@ -817,17 +923,291 @@ def cartt(request):
                      payment_id=razorpay_order_id,
                      payment_status=False).save()
         return JsonResponse({"message":True,"razorpay_key":settings.RAZOR_KEY_ID,"currency":currency,"razorpayorder":razorpay_order_id,"callback":callback_url})
-    data=cart.objects.filter(user=request.user)
-    a=[]
-    for i in data:
-        a.append(i.price)
-    context={
-            "data":data,
-           "subtotal":sum(a),
-            "datacount":data.count(),
-            }
-    return render(request,"mycart.html",context)
+    # data1=cart.objects.filter(user=request.user)
+    # a=[]
+    # for i in data1:
+    #     a.append(i.price)
+    # context={
+    #         "data":data1,
+    #        "subtotal":sum(a),
+    #         "datacount":data1.count(),
+    #         }
+    # print(request.session.get("cartt"))
+    a=request.session.get("cartt")
+    print(request.user.is_anonymous)
+    if request.user.is_anonymous==True:
+        chckupp=healthcheckuppackages.objects.filter(id__in=a.get("checkup"))
+        package=healthpackages.objects.filter(id__in=a.get("package"))
+        tessst=test.objects.filter(id__in=a.get("selecttest"))
+       
+        data= []
+        city=request.session.get("city")
+        for j in chckupp:
+            da={}
+            da['cat']="checkup"
+            da["id"]=j.id
+            da["test"]=j.package_title
+            if city == "Bangalore":
+                da["price"]=str(j.dpricel1)
+            elif city == "Chennai":
+                da["price"]=str(j.dpricel2)
+            elif city == "Mumbai":
+                da["price"]=str(j.dpricel3)
+            elif city == "Delhi":
+                da["price"]=str(j.dpricel4)
+            data.append(da)
+        for j in package:
+            da={}
+            da['cat']="package"
+            da["id"]=j.id
+            da["test"]=j.package_name
+            if city == "Bangalore":
+                da["price"]=str(j.pricel1)
+            elif city == "Chennai":
+                da["price"]=str(j.pricel2)
+            elif city == "Mumbai":
+                da["price"]=str(j.pricel3)
+            elif city == "Delhi":
+                da["price"]=str(j.pricel4)
+            data.append(da)
 
+        for j in tessst:
+            da={}
+            da['cat']="selecttest"
+            da["id"]=j.id
+            da["test"]=j.testt
+            if city == "Bangalore":
+                da["price"]=str(j.pricel1)
+            elif city == "Chennai":
+                da["price"]=str(j.pricel2)
+            elif city == "Mumbai":
+                da["price"]=str(j.pricel3)
+            elif city == "Delhi":
+                da["price"]=str(j.pricel4)
+            da["categoryy"]=j.categoryy
+            data.append(da)
+        print(data)
+        a=[]
+        for i in data:
+            print(i["price"])
+            a.append(float(i["price"]))
+        context={
+            "data":data,
+            "subtotal":sum(a)
+        }
+        return render(request,"mycart.html",context) 
+    
+    elif request.user.is_anonymous == False:
+        # try:
+        data=[]
+        for i in cart.objects.filter(user=request.user):
+            if i.items == None and i.labtest == None:
+                da={}
+                da['id']=i.id
+                da['test']=i.packages
+                da['price']=str(i.price)
+                data.append(da)
+            elif i.items == None and i.packages == None:
+                da={}
+                da['id']=i.id
+                da['test']=i.labtest
+                da['price']=str(i.price)
+                data.append(da)
+            elif i.labtest == None and i.packages == None: 
+                da={}
+                da['id']=i.id
+                da['test']=i.items
+                da['price']=str(i.price)  
+                da["categoryy"]=i.categoryy
+                data.append(da)
+        
+        a=[]
+        for i in data:
+            print(i["price"])
+            a.append(float(i["price"]))
+        context={
+            "data":data,
+            "subtotal":sum(a)
+        }
+        print("------",data)
+        return render(request,"mycart.html",context)
+        # except:
+        #     return render(request,"mycart.html")
+    
+
+def cartsessiondelete(request):
+    if request.method=="POST":
+        if request.POST.get("action")=="forsession":
+        # if request.user.is_anonymous==True:
+            id=request.POST["pk"]
+            s=id.split("-")
+            a=request.session.get("cartt")
+            b=a.get(s[1])
+            print(b)
+            if s[0] in b:
+                
+                b=a.get(s[1])
+                print("-----------------------",s[1])
+                b.remove(s[0])
+                print(b)
+                print("-------------------------")
+                return JsonResponse({"message":True})
+        elif request.POST.get("action")=="fordatabse":
+        # elif request.user.is_anonymous == False:
+            pk=request.POST["pk"]
+            print(pk)
+            a = cart.objects.get(id=pk)  
+            print(a)
+            a.delete()  
+            print("deleted")
+            # return redirect("cart")
+            return JsonResponse({"message":"success"})
+        # elif request.POST.get("action")=="fordatabse":
+        #     if request.user.is_anonymous==True:
+        #         id=request.POST["pk"]
+        #         s=id.split("-")
+        #         a=request.session.get("cartt")
+        #         b=a.get(s[1])
+        #         print(b)
+        #         if s[0] in b:
+                    
+        #             b=a.get(s[1])
+        #             print("-----------------------",s[1])
+        #             b.remove(s[0])
+        #             print(b)
+        #             print("-------------------------")
+        #             return JsonResponse({"message":True})
+        #     elif request.user.is_anonymous == False:
+        #         pk=request.POST["pk"]
+        #         print(pk)
+        #         a = cart.objects.get(id=pk)  
+        #         print(a)
+        #         a.delete()  
+        #         print("deleted")
+        #         # return redirect("cart")
+        #         return JsonResponse({"message":"success"})
+@login_required(login_url="login/")    
+def cartt1(request):
+    # history=book_history.objects.none()
+    if request.method=="POST":
+        c=request.session.get("city")
+        others=request.POST.get('option1')
+        others_choice=request.POST.get("option")
+        firstname=request.POST.get('firstname')
+        lastname=request.POST.get('lastname')
+        contact=request.POST.get('phone')
+        age=request.POST.get('age')
+        gender=request.POST.get('gender')
+        address=request.POST['address']
+        print(address)
+        global uniquee
+        uniquee = uuid.uuid4()
+        data=cart.objects.filter(user=request.user)
+        a=prescription_book.objects.create(
+                unique=uniquee,
+                user=request.user,
+                                myself=True if others == "m" else False,
+                                others=True if others == "o" else False,
+                                others_choice=others_choice,
+                                firstname=firstname,
+                                lastname=lastname,
+                                contact=contact,
+                                age=age,
+                                gender=gender,
+                                location=c)
+        data2=prescription_book.objects.get(unique=uniquee)
+        if others=="m":
+            User.objects.filter(email=request.user.email).update(first_name=firstname,last_name=lastname,phone_no=contact,age=age,address=address)
+        data1=cart.objects.filter(user=request.user)
+        a=[]
+        for i in data:
+            a.append(i.price)
+        def testname():
+            return ", ".join([
+                test.testt for test in data2.test_name.all()
+            ])
+            
+        def testname():
+            return ",".join([
+                test.testt for test in data1
+            ])
+        strr=[]
+        for tesst in data1:
+            if tesst.items == None and test.packages == None:
+                strr.append(tesst.labtest.package_title)
+            elif tesst.items == None and test.labtest == None:
+                strr.append(tesst.packages.package_name)
+            else:
+                strr.append(tesst.items.testt)
+        listToStr = ','.join(map(str, strr))
+        # str1 = " " 
+        # for i in str:
+        #     str1 += i
+        request.session.delete("order_id")
+        data=cart.objects.filter(user=request.user)
+        a=[]
+        for i in data:
+            a.append(i.price)
+        context={}
+        amount=request.POST["amount"]
+       
+        currency = 'INR'
+        # amount=int(sum(a))
+        client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+        try:
+            razorpay_order = client.order.create(
+                {"amount": int(amount) * 100, "currency": "INR", "payment_capture": "1"}
+            )
+        except:
+            razorpay_order = client.order.create(
+                    {"amount": 1* 100, "currency": "INR", "payment_capture": "1"}
+            )
+        
+        request.session["order_id"]=razorpay_order['id']
+        # request.session['amount']=amount
+        razorpay_order_id = razorpay_order['id']
+        print("-----",razorpay_order_id)
+        request.build_absolute_uri('/bands/?print=true')
+        callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
+        # callback_url = 'http://127.0.0.1:8000/paymenthandler/{}/{}/'.format(request.user.email,amount)
+        context['razorpay_order_id'] = razorpay_order_id
+        context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
+        context['razorpay_amount'] = amount
+        context['currency'] = currency
+        context['callback_url'] = callback_url
+        bookhistory=book_history(
+            user=request.user,
+            testbooking_id=data2.id,
+            patient_info="Myself" if others == "m" else "others",
+                     booking_type="Selected test",
+                     bookingdetails=listToStr,
+                     amount=sum(a),
+                     payment_id=razorpay_order_id,
+                     payment_status=False).save()
+        return JsonResponse({"message":True,"razorpay_key":settings.RAZOR_KEY_ID,"currency":currency,"razorpayorder":razorpay_order_id,"callback":callback_url})
+    # data=cart.objects.filter(user=request.user)
+    # a=[]
+    # for i in data:
+    #     a.append(i.price)
+    # context={
+    #         "data":data,
+    #        "subtotal":sum(a),
+    #         "datacount":data.count(),
+    #         }
+    # print(request.session.get("cartt"))
+    a=request.session.get("cartt")
+    # print(a.get("checkup"))
+    context={}
+    chckupp=healthcheckuppackages.objects.filter(id__in=a.get("checkup"))
+    package=healthpackages.objects.filter(id__in=a.get("package"))
+    tessst=test.objects.filter(id__in=a.get("selecttest"))
+    context["chckupp"]=chckupp
+    context["package"]=package
+    context["tessst"]=tessst
+    for i in [chckupp,package,package]:
+        for j in i:
+            print(j)
+    return render(request,"mycart.html",context)
 def othersdetail(request):
     if request.method=="POST":
         testid=request.POST["testid"]
@@ -919,44 +1299,39 @@ def subscriptionview(request):
         return render(request,"home",{"form":form})
 from functools import wraps
 
-def ajax_login_required(view_func):
-    @wraps(view_func)
-    def wrapper(request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return view_func(request, *args, **kwargs)
-        Jsonn = json.dumps({ 'not_authenticated': True })
-        return HttpResponse(Jsonn, content_type='application/json')
-    return wrapper
-# @ajax_login_required
+
 def addtocart(request):
-    if request.user.is_anonymous:
-        # return redirect("user-login")
-        return JsonResponse({"message":"login"})
-    else:
         if request.method=="POST":
-            tests=test.objects.all()
-            pk=request.POST["pk"]
             cityy=request.session.get("city")
-            # print(pk)
-            # print(request.method)
-        
-            item=test.objects.get(id=pk)
-            data=cart.objects.filter(user=request.user,items=item)
-            print(data)
-            if data.exists():
-                return JsonResponse({"message":False})
-            if cityy=="Bangalore":
-                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel1).save()
-            elif cityy=="Chennai": 
-                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel2).save()
-            elif cityy == "Mumbai":
-                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel3).save()
-            elif cityy == "Delhi":
-                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel4).save()
-            # messages.success(request,"add to cart")
-            print("success")
-            return JsonResponse({"message":True})
-            # return JsonResponse({"message":"success"})
+            if request.user.is_anonymous == True:
+                pk=request.POST["pk"]
+                item=test.objects.get(id=pk)
+                
+                if str(item.id) in request.session['cartt']['selecttest']:
+                    return JsonResponse({"message":False})
+                else:
+                    print("iiiiii")
+                    teest.append(str(item.id))
+                    request.session['cartt']['selecttest']=teest
+                print( request.session['cartt'],"AAGIN")
+                request.session.modified = True
+                return JsonResponse({"message":True})
+            elif request.user.is_anonymous==False:
+                pk=request.POST["pk"]
+                item=test.objects.get(id=pk)
+                data=cart.objects.filter(items=item)
+                if data.exists():
+                   return JsonResponse({"message":False}) 
+                if cityy=="Bangalore":
+                    cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel1).save()
+                elif cityy=="Chennai":
+                    cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel2).save()
+                elif cityy=="Mumbai":
+                    cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel3).save()
+                elif cityy=="Delhi":
+                    cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel4).save()
+                return JsonResponse({"message":True})
+
 
 def categoryy(request):
     print(request.method)
@@ -964,12 +1339,13 @@ def categoryy(request):
         city=request.session.get("city")
         pk=request.POST["pk"]
         b=[]
-        a={}
-        b.append(a)
+        
+        
         tests=test.objects.filter(categoryy__id=pk)
         # print(tests)
         for tesst in tests:
-            print(tesst.id)
+            a={}
+            
             a['id']=tesst.id
             a['testt']=tesst.testt
             a['description']=tesst.description
@@ -982,16 +1358,7 @@ def categoryy(request):
             elif city== "Delhi":
                 a["pricel1"]=str(tesst.pricel3)
             print(a)
-            # tesst['pricel1'] = str(tesst['pricel1'])
-            # print(tesst.testt)
-            # b.append(a)
-            
-           
-            # a["test"]=tesst.testt
-            # a["description"]=tesst.description
-            # a["pricel1"]=tesst.pricel1
-            # b.append(a)
-       
+            b.append(a)
         return JsonResponse(b,safe=False)
     
 def search(request):
@@ -1006,21 +1373,22 @@ def search(request):
             searched=request.POST["searched"]
             tcategories=category.objects.all()
             b=[]
-            a={}
             tests=test.objects.filter(testt__icontains=searched)
             for tesst in tests:
+                a={}
+                
                 a["id"]=tesst.id
                 a["testt"]=tesst.testt
                 a["description"]=tesst.description
                 if city == "Bangalore":
                     a["pricel1"]=str(tesst.pricel1)
-                elif city== "Chennai":
+                if city== "Chennai":
                     a["pricel1"]=str(tesst.pricel2)
-                elif city== "Mumbai":
+                if city== "Mumbai":
                     a["pricel1"]=str(tesst.pricel3)
-                elif city== "Delhi":
+                if city== "Delhi":
                     a["pricel1"]=str(tesst.pricel3)
-            b.append(a)
+                b.append(a)
             print(b)
             return JsonResponse(b,safe=False)
     else:
@@ -1036,7 +1404,6 @@ def destroy(request):
         print("deleted")
         # return redirect("cart")
         return JsonResponse({"message":"success"})
-        # return JsonResponse({"message": "Wrong request"})
 def coupon(request):
     if request.method=="POST":
         coupon=request.POST.get("coupon")
@@ -1051,7 +1418,6 @@ def coupon(request):
             return JsonResponse({"message":True,"total":totall,"percent":c.discount,"discount":"{:.2f}".format(discount)})
         except:
             return JsonResponse({"message":False})
-        # return redirect("/")
 def razorpayclose(request):
     if request.method=="POST":
         paymentid=request.POST["paymentid"]
@@ -1072,54 +1438,71 @@ def contactuss(request):
         # messages.success(request,"Your response submitted successfully")
         return render(request,"contactus.html")
     return render(request,"contactus.html") 
-
 def healthcheckupadd(request):
     cityy=request.session.get("city")
-    if request.user.is_anonymous:
-        # return redirect("user-login")
-        return JsonResponse({"message":"login"})
-    else:
-        if request.method=="POST":
+    if request.method=="POST":
+        if request.user.is_anonymous==True:
             if request.POST.get("action") == "healthcheckup":
-                print(request.POST)
-                print(request.user.is_anonymous)
-            
-                # if request.user.is_anonymous==True:
-                #     return JsonResponse({"message":"login"})
-                # else:
                 slug=request.POST["slug"]
                 labtest=healthcheckuppackages.objects.get(slug=slug)
-                cartt=cart.objects.filter(user=request.user,labtest=labtest)
-                if cartt.exists():
+            
+                if str(labtest.id) in request.session['cartt']['checkup']:
                     return JsonResponse({"message":False})
-                if cityy=="Bangalore":
-                    cart.objects.create(user=request.user,labtest=labtest,price=labtest.dpricel1).save()
-                elif cityy=="Chennai": 
-                    cart.objects.create(user=request.user,labtest=labtest,price=labtest.dpricel2).save()
-                elif cityy == "Mumbai":
-                    cart.objects.create(user=request.user,labtest=labtest,price=labtest.dpricel3).save()
-                elif cityy == "Delhi":
-                    cart.objects.create(user=request.user,labtest=labtest,price=labtest.dpricel4).save()
-                    # messages.success(request,"add to cart")
-                
+                # request.session['cartt']['checkup'] += [str(labtest.id)]
+                else:
+                    checkk.append(str(labtest.id))
+                    request.session['cartt']['checkup']=checkk
+                print( request.session['cartt'],"AAGIN")
+            
+                request.session.modified = True
                 return JsonResponse({"message":True})
             elif request.POST.get("action") == "healthpackage":
                 slug=request.POST["slug"]
                 package=healthpackages.objects.get(slug=slug)
-                cartt=cart.objects.filter(user=request.user,packages=package)
-                if cartt.exists():
+                request.session['cartt'].update({"package":[]})
+                if str(package.id) in request.session['cartt']['package']:
                     return JsonResponse({"message":False})
-                if cityy=="Bangalore":
-                    cart.objects.create(user=request.user,packages=package,price=package.pricel1).save()
-                elif cityy=="Chennai": 
-                    cart.objects.create(user=request.user,packages=package,price=package.pricel2).save()
-                elif cityy == "Mumbai":
-                    cart.objects.create(user=request.user,packages=package,price=package.pricel3).save()
-                elif cityy == "Delhi":
-                    cart.objects.create(user=request.user,packages=package,price=package.pricel4).save()
+                else:
+                    packagee.append(str(package.id))
+                    request.session['cartt']['package']=packagee
+                print( request.session['cartt'],"AAGIN")
+                request.session.modified = True
                 return JsonResponse({"message":True})
-            #cart.objects.create(labtest=data,price=data.)
-
+        if request.user.is_anonymous==False:
+            city=request.session.get('city')
+            if request.POST.get("action") == "healthcheckup":
+                slug=request.POST["slug"]
+                labtest=healthcheckuppackages.objects.get(slug=slug)
+                data=cart.objects.filter(labtest=labtest)
+                if data.exists():
+                    return JsonResponse({"message":False})
+                else:
+                    if city=="Bangalore":
+                        cart.objects.create(user=request.user,labtest=labtest,price=labtest.dpricel1).save()
+                    elif city == "Chennai":
+                        cart.objects.create(user=request.user,labtest=labtest,price=labtest.dpricel2).save()
+                    elif city == "Mumbai":
+                        cart.objects.create(user=request.user,labtest=labtest,price=labtest.dpricel3).save()
+                    elif city == "Delhi":
+                        cart.objects.create(user=request.user,labtest=labtest,price=labtest.dpricel4).save()
+                    return JsonResponse({"message":True})
+            elif request.POST.get("action") == "healthpackage":
+                slug=request.POST["slug"]
+                package=healthpackages.objects.get(slug=slug)
+                data=cart.objects.filter(packages=package)
+                if data.exists():
+                    return JsonResponse({"message":False})
+                else:
+                    if city=="Bangalore":
+                        cart.objects.create(user=request.user,packages=package,price=package.pricel1).save()
+                    elif city == "Chennai":
+                        cart.objects.create(user=request.user,packages=package,price=package.pricel2).save()
+                    elif city == "Mumbai":
+                        cart.objects.create(user=request.user,packages=package,price=package.pricel3).save()
+                    elif city == "Delhi":
+                        cart.objects.create(user=request.user,packages=package,price=package.pricel4).save()
+                    return JsonResponse({"message":True})
+        #cart.objects.create(labtest=data,price=data.)
 def faqs(request):
     faqss=faq.objects.all()
     return render(request,"faq.html",{"faqs":faqss})

@@ -134,10 +134,12 @@
                 'csrfmiddlewaretoken': '{{ csrf_token }}',
             },
             success: function (resp) {
-                //alert(resp["email"])
-                alert("Thank you for subscribing")
-                //var h1=`<h5>Thank you for subscribing</h5>`
-                //$("#respp").append(h1)
+                if (!resp["message"]){
+                    alert("Already Subscribed Thank you!!")
+                }
+                else{
+                    alert("Thank you for Subscribing!")
+                }
             }
         });
                     }
