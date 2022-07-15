@@ -437,7 +437,7 @@ class paymentids(models.Model):
         return self.paymentid
     class Meta:
         verbose_name_plural="Payment Ids"
-class dummycart(models.Model):
-    name=models.CharField(max_length=500,null=True,blank=True)
-    category=models.CharField(max_length=500,null=True,blank=True)
-    price=models.CharField(max_length=10,null=True,blank=True)
+# class dummycart(models.Model):
+#     name=models.CharField(max_length=500,null=True,blank=True)
+#     category=models.CharField(max_length=500,null=True,blank=True)
+#     price=models.CharField(max_length=10,null=True,blank=True)
