@@ -89,27 +89,27 @@ AUTH_USER_MODEL = 'app1.User'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-DATABASES = {  
-    'default': {  
-        'ENGINE': 'django.db.backends.mysql',  
-        'NAME': 'diagnospan',  
-        'USER': 'root',  
-        'PASSWORD': 'Sandeep@8105',  
-        'HOST': 'localhost',  
-        'PORT': '3306',  
-        
-    }  
-}  
 # DATABASES = {  
 #     'default': {  
 #         'ENGINE': 'django.db.backends.mysql',  
 #         'NAME': 'diagnospan',  
 #         'USER': 'root',  
-#         'PASSWORD': 'mySqlServer@#$432',  
+#         'PASSWORD': 'Sandeep@8105',  
 #         'HOST': 'localhost',  
-#         'PORT': '3306',   
+#         'PORT': '3306',  
+        
 #     }  
-# }
+# }  
+DATABASES = {  
+    'default': {  
+        'ENGINE': 'django.db.backends.mysql',  
+        'NAME': 'diagnospan',  
+        'USER': 'root',  
+        'PASSWORD': 'mySqlServer@#$432',  
+        'HOST': 'localhost',  
+        'PORT': '3306',   
+    }  
+}
 
 
 # Password validation
