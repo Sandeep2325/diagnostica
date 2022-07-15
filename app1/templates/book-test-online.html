@@ -1,7 +1,10 @@
-{%include "header.html"%}
-{%include "subheader.html"%}
-{%load static%}
+{% extends "index.html" %}
+{% load static %}
+
+{%block content%}
 <body>
+    {%include "header.html"%}
+{%include "subheader.html"%}
     <section class="section_book-test-online mb-4">
         <div class="container">
             <div class="row">
@@ -69,4 +72,4 @@
     });
 </script>
 
-</html>
+{%endblock%}

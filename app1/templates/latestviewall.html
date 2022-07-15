@@ -1,8 +1,9 @@
-{%load static %}
-{%include "header.html"%}
-{%include "subheader.html"%}
+{% extends "index.html" %}
+{% load static %}
+{%block content%}
 <body>
-    
+    {%include "header.html"%}
+{%include "subheader.html"%}
     <section class="section_home_health_check">
         <div class="container">
             <div class="row">
@@ -58,8 +59,4 @@
     </section>
 {%include "footer.html"%}
 </body>
-<script>
-    
-</script>
-
-</html>
+{%endblock%}

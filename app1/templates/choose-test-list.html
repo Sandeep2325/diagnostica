@@ -1,8 +1,9 @@
-
+{% extends "index.html" %}
+{% load static %}
+{%block content%}
+<body>
 {%include "header.html"%}
 {%include "subheader.html"%}
-{%load static %}
-<body>
     <section class="section_book-test-online pb-5">
         <div class="container">
             <div class="row">
@@ -114,6 +115,7 @@
     </section>
     {%include "footer.html"%}
 </body>
+
 <script>
     $.validator.addMethod('filesize', function (value, element, param) {
         return this.optional(element) || (element.files[0].size <= param)
@@ -257,5 +259,4 @@
     });
    }
 </script>
-
-</html>
+{%endblock%}

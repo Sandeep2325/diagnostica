@@ -1,7 +1,10 @@
-{% include "header.html"%}
-{%include "subheader.html"%}
-{%load static %}
+{% extends "index.html" %}
+{% load static %}
+
+{%block content%}
 <body>
+    {% include "header.html"%}
+{%include "subheader.html"%}
     <section class="section_booking_history pb-5 mb-5">
         <div class="container">
             {% if messages %}
@@ -185,7 +188,7 @@
     
 </body>
 {%include "footer.html"%}
-</html>
+
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
     function paymentFunction(ids, status){
@@ -288,3 +291,4 @@
 }
      // });
 </script>
+{%endblock%}

@@ -1,8 +1,10 @@
-{%include "header.html"%}
-{%include "subheader.html"%}
-{%load static %}
+{% extends "index.html" %}
+{% load static %}
+{%block content%}
 
 <body onload="setAttr()">
+    {%include "header.html"%}
+{%include "subheader.html"%}
     <section class="user_profile_pic">
         <div class="container">
             <div class="row">
@@ -290,5 +292,4 @@
     });
 
 </script>
-
-</html>
+{%endblock%}

@@ -1,7 +1,10 @@
-{%include "header.html"%}
-{%include "subheader.html"%}
+{% extends "index.html" %}
+{% load static %}
+{%block content%}
 
 <body>
+  {%include "header.html"%}
+{%include "subheader.html"%}
   <section class="section_health_pack section_health_pack_started">
     <div class="container">
       <div class="row">
@@ -35,7 +38,7 @@
 
             </div>
             <div class="d-flex justify-content-center pt-xl-5 pt-3">
-              <button class="home_pack_viewpack py-3 fs-16 font-bold br-50 " id="packagebuy">BUY PACK</button>
+              <button class="home_pack_viewpack py-3 fs-16 font-bold br-50 " id="packagebuy" name="{{package.slug}}">BUY PACK</button>
             </div>
           </div>
         </div>
@@ -152,79 +155,37 @@
     }
   });
   $("#packagebuy").click(function () {
-    var options = {
-      key: "{{ razorpay_merchant_key }}",
-
-      amount: "{{ razorpay_amount }}",
-      currency: "{{ currency }}",
-
-      // Your/store name.
-      name: "Diagnostica Span",
-      order_id: "{{ razorpay_order_id }}",
-      callback_url: "{{ callback_url }}",
-      redirect: true,
-      modal: {                    
-        escape: false,
-        ondismiss: function()
-        { 
-          confirm("Want to close!!");
-
-            $.ajax({
-            url: "{% url 'razorpayclose' %}",
-            type: 'post',
-            headers: {
-                'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
-            },
-            data: {
-            "paymentid":"{{ razorpay_order_id }}",
-            csrfmiddlewaretoken: '{{ csrf_token }}',
-            "cmd":"fetchAllAddress",
-            "id":"{{order.orderID}}",
-            },
-            dataType: 'json',
-            success: function (response) {
-                
-            }
-            });
+   
+   a=$(this).attr("name");
+   
+   $.ajax({
+    url: "{% url 'healthcheckupadd' %}",
+    type: "POST",
+    dataType: "json",
+    data: {
+      'action':"healthpackage",
+        'slug':a,
+        'csrfmiddlewaretoken':'{{ csrf_token }}',
+    },
+    success: function(resp){
+        console.log(resp);
+        //if(resp['message']="login"){
+          //alert("please login to add")
+        //}
+         if(!resp['message']){
+            alert("Test Already Added");
+        }else{
+            alert("Test Added");
         }
-    }
-    };
-
-    // initialise razorpay with the options.
-    var rzp1 = new Razorpay(options);
-    // add event listener to the payment button.
-    //document.getElementById("packagebuy").onclick = function (e) 
-    rzp1.open();
-    e.preventDefault();
-
+        
+    },
+});
   });
 
-  function packageebuy() {
-    var options = {
-      key: "{{ razorpay_merchant_key }}",
-
-      amount: "{{ razorpay_amount }}",
-      currency: "{{ currency }}",
-
-      // Your/store name.
-      name: "Diagnostica Span",
-      order_id: "{{ razorpay_order_id }}",
-      callback_url: "{{ callback_url }}",
-      redirect: true
-    };
-
-    // initialise razorpay with the options.
-    var rzp1 = new Razorpay(options);
-    // add event listener to the payment button.
-    //document.getElementById("packagebuy").onclick = function (e) 
-    rzp1.open();
-    e.preventDefault();
-
-  }
+ 
   //$("#navbarScrollingDropdown")   
-  $(".dropdown-toggle").on('click'.function(){
-    $("#navbarScrollingDropdown").attr("class","show");
-   });
+  //$(".dropdown-toggle").on('click'.function(){
+   // $("#navbarScrollingDropdown").attr("class","show");
+   //});
 </script>
-
-</html>
+{%endblock%}
