@@ -93,18 +93,18 @@ $(document).ready(function() {
 });
 
 
-$(".DropDownToggle").click(function() {
+// $(".DropDownToggle").click(function() {
 
-    if ($(this).attr("aria-expanded") == true) {
+//     if ($(this).attr("aria-expanded") == true) {
 
-        $(this).attr("aria-expanded", false)
-        $(this).removeClass("show");
-        $("#ulDropDown").removeClass("show");
+//         $(this).attr("aria-expanded", false)
+//         $(this).removeClass("show");
+//         $("#ulDropDown").removeClass("show");
 
-    } else {
-        $(this).attr("aria-expanded", true);
-        $(this).addClass("show");
-        $("#ulDropDown").addClass("show");
-    }
+//     } else {
+//         $(this).attr("aria-expanded", true);
+//         $(this).addClass("show");
+//         $("#ulDropDown").addClass("show");
+//     }
 
-});
+// });

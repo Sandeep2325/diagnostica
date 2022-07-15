@@ -166,6 +166,9 @@
                                         <option value="o">Others</option>
                                 </select>
                             </div>
+                            <div>
+                                <textarea rows="2" class="w-100 myself_other br-5" placeholder="Address" name="address" id="address" type="text" ></textarea>
+                            </div>
                             <button class="mx-lg-0 mx-3 mt-4 prescription br bg-sky-blue br-5 cl-dark-white"
                                 type="submit" name="submit" id="checkout">SUBMIT</button>
                         {% comment %} </form> {% endcomment %}
@@ -386,6 +389,10 @@ $(document).ready(function(){
             'gender': {
                 required: true,
             },
+            'address': {
+                required: true,
+                minlength: 1,
+            },
         },
     
         messages: {
@@ -411,6 +418,9 @@ $(document).ready(function(){
             },
             'age': {
                 required: "Enter Age"
+            },
+            'address': {
+                required: "Enter Address"
             }
     
         },
