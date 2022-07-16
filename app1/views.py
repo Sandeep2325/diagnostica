@@ -670,7 +670,11 @@ def healthpackageview(request,slug):
 #                      payment_status=False).save()
 #         print("booked")
 #         return render(request,'packagedetail.html',context)
-    
+def testdetails(request):
+    if request.method=="POST":
+            id=request.POST["id"]
+            a=book_history.objects.get(id=id)
+            return JsonResponse({"message":a.bookingdetails})
 def healthsymptomview(request,slug):
     c=request.session.get("city")
     data=healthsymptoms.objects.filter(slug=slug)

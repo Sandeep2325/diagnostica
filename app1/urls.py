@@ -49,6 +49,7 @@ urlpatterns = [
     path('login/',views.userLogin, name="user-login"),
     path("changepasswordotp/",views.changepasswordotp,name="changepasswordotp"),
     path("passwordcheck",views.passwordcheck,name="passwordcheck"),
+    path("testdetails",views.testdetails,name="testdetails"),
     # path('login/otp/',views.otpLogin, name="otp-login"),
     # path('logout/',auth_view.LogoutView.as_view(template_name='logout.html')),
     # path('email-verify/', views.email_verification, name="email-verify"),

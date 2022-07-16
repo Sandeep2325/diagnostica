@@ -1,6 +1,7 @@
 {% extends "index.html" %}
 {% load static %}
 {%block content%}
+
 <body>
   {%include 'header.html'%}
   <section class="home_banner pt-3 pb-lg-5">
@@ -158,7 +159,9 @@
                 </div>
                 <div class="col-lg-6">
                   <h1 class="fs-35 font-bold cl-dark-blue m-0">{{blog.title}}</h1>
-                  <p class="m-0 fs-18 cl-dark-blue health_care_p pb-3">{{blog.description|safe}}</p>
+                  
+                  <p class="m-0 fs-18 cl-dark-blue health_care_p pb-3" >{{blog.description|safe}}</p>
+
                   <a href="{%url "blogsdetail" blog.slug %}"
                     class="py-2 px-4 bg-dark-orange cl-dark-blue font-bold fs-16 br-30 d-inline-block">READ MORE</a>
                 </div>
