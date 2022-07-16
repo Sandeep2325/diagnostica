@@ -963,59 +963,72 @@ def cartt(request):
        
         data= []
         city=request.session.get("city")
-        for j in chckupp:
-            da={}
-            da['cat']="checkup"
-            da["id"]=j.id
-            da["test"]=j.package_title
-            if city == "Bangalore":
-                da["price"]=str(j.dpricel1)
-            elif city == "Chennai":
-                da["price"]=str(j.dpricel2)
-            elif city == "Mumbai":
-                da["price"]=str(j.dpricel3)
-            elif city == "Delhi":
-                da["price"]=str(j.dpricel4)
-            data.append(da)
-        for j in package:
-            da={}
-            da['cat']="package"
-            da["id"]=j.id
-            da["test"]=j.package_name
-            if city == "Bangalore":
-                da["price"]=str(j.pricel1)
-            elif city == "Chennai":
-                da["price"]=str(j.pricel2)
-            elif city == "Mumbai":
-                da["price"]=str(j.pricel3)
-            elif city == "Delhi":
-                da["price"]=str(j.pricel4)
-            data.append(da)
-
-        for j in tessst:
-            da={}
-            da['cat']="selecttest"
-            da["id"]=j.id
-            da["test"]=j.testt
-            if city == "Bangalore":
-                da["price"]=str(j.pricel1)
-            elif city == "Chennai":
-                da["price"]=str(j.pricel2)
-            elif city == "Mumbai":
-                da["price"]=str(j.pricel3)
-            elif city == "Delhi":
-                da["price"]=str(j.pricel4)
-            da["categoryy"]=j.categoryy
-            data.append(da)
-        print(data)
+        try:
+            for j in chckupp:
+                da={}
+                da['cat']="checkup"
+                da["id"]=j.id
+                da["test"]=j.package_title
+                if city == "Bangalore":
+                    da["price"]=str(j.dpricel1)
+                elif city == "Chennai":
+                    da["price"]=str(j.dpricel2)
+                elif city == "Mumbai":
+                    da["price"]=str(j.dpricel3)
+                elif city == "Delhi":
+                    da["price"]=str(j.dpricel4)
+                data.append(da)
+        except:
+            pass
+        try:
+            for j in package:
+                da={}
+                da['cat']="package"
+                da["id"]=j.id
+                da["test"]=j.package_name
+                if city == "Bangalore":
+                    da["price"]=str(j.pricel1)
+                elif city == "Chennai":
+                    da["price"]=str(j.pricel2)
+                elif city == "Mumbai":
+                    da["price"]=str(j.pricel3)
+                elif city == "Delhi":
+                    da["price"]=str(j.pricel4)
+                data.append(da)
+        except:
+            pass
+        try:
+            for j in tessst:
+                da={}
+                da['cat']="selecttest"
+                da["id"]=j.id
+                da["test"]=j.testt
+                if city == "Bangalore":
+                    da["price"]=str(j.pricel1)
+                elif city == "Chennai":
+                    da["price"]=str(j.pricel2)
+                elif city == "Mumbai":
+                    da["price"]=str(j.pricel3)
+                elif city == "Delhi":
+                    da["price"]=str(j.pricel4)
+                da["categoryy"]=j.categoryy
+                data.append(da)
+            print(data)
+        except:
+            pass
         a=[]
-        for i in data:
-            print(i["price"])
-            a.append(float(i["price"]))
-        context={
+        try:
+            for i in data:
+                print(i["price"])
+                a.append(float(i["price"]))
+            context={
             "data":data,
             "subtotal":sum(a)
         }
+        except:
+            context={
+                
+            }
         return render(request,"mycart.html",context) 
     
     elif request.user.is_anonymous == False:
