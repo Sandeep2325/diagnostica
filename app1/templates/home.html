@@ -34,7 +34,7 @@
         <div class="col-lg-4 col-md-6 pt-xl-4 pb-xl-5 py-2 ">
           <div class=" bg-light-grey br-10 h-100 health_check_height">
             <div class="position-relative ">
-              <div class="batdge">{{checkup.discount}}% off</div>
+              <div class="batdge">{{checkup.discount}}% off </div>
             </div>
             <div class="px-xl-4 px-3 py-5 bg-light-grey br-10">
               <h1 class="pt-3 font-bold fs-35 cl-light-blue test_head">{{checkup.testcount}}+ Tests</h1>
@@ -43,6 +43,7 @@
               </div>
               <div class="home_ul_li ul-dot m-0 health_care_">
                 {{checkup.description|safe}}
+                {{checkup.id}}
               </div>
               <div class="position-relative">
                 <p class="my-2 pt-2 fs-20 font-bold cl-light-blue">Price</p>
@@ -71,7 +72,7 @@
                  {%endif%}
                     <!-- <div class="  p-0 "> -->
                   <button
-                    class="ps-xl-3 ps-2 test_now_button fs-16 cl-dark-blue font-bold py-2 px-4 br-20 position-absolute br" onclick='testnow("{{checkup.slug}}")' name={{checkup.slug}} id="testnow">Test
+                    class="ps-xl-3 ps-2 test_now_button fs-16 cl-dark-blue font-bold py-2 px-4 br-20 position-absolute br" onclick='testnow("{{checkup.id}}")' name={{checkup.slug}} id="testnow">Test
                     Now</button>
                   <!-- </div> -->
                 </div>
@@ -606,14 +607,14 @@ console.log(id);
       });
     });*/
    function testnow(e){
-    
+    //localStorage.setItem("healthcheckup",[e]);
     $.ajax({
       url: "{% url 'healthcheckupadd' %}",
       type: "POST",
       dataType: "json",
       data: {
         'action':"healthcheckup",
-          'slug':e,
+          'ids':e,
           'csrfmiddlewaretoken':'{{ csrf_token }}',
       },
       success: function(resp){
@@ -627,6 +628,36 @@ console.log(id);
       },
   });
    }
+   function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+  }
+
+    function uuidv4() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    let device = getCookie('device');
+
+    if (device == null || device == undefined){
+        device = uuidv4()
+    }
+
+    document.cookie ='device=' + device + ";domain=;path=/";
 
 
 

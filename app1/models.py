@@ -1,5 +1,4 @@
-import email
-from tabnanny import verbose
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import PermissionsMixin
@@ -321,6 +320,7 @@ class cart(models.Model):
     packages=models.ForeignKey(healthpackages,null=True,blank=True,on_delete=models.CASCADE)
     categoryy=models.ForeignKey(category,null=True,blank=True,on_delete=models.SET_NULL)
     price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
+    device = models.CharField(_("Device"), max_length=200,null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
     

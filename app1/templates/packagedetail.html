@@ -38,7 +38,7 @@
 
             </div>
             <div class="d-flex justify-content-center pt-xl-5 pt-3">
-              <button class="home_pack_viewpack py-3 fs-16 font-bold br-50 " id="packagebuy" name="{{package.slug}}">BUY PACK</button>
+              <button class="home_pack_viewpack py-3 fs-16 font-bold br-50 " id="packagebuy" name="{{package.id}}">BUY PACK</button>
             </div>
           </div>
         </div>
@@ -164,7 +164,7 @@
     dataType: "json",
     data: {
       'action':"healthpackage",
-        'slug':a,
+        'ids':a,
         'csrfmiddlewaretoken':'{{ csrf_token }}',
     },
     success: function(resp){

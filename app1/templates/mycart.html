@@ -65,7 +65,7 @@
                                                 {%endif%}
                                                 <div class="cell" data-title="">
                                                     
-                                                <button   id="delete" name="{{cart.id}}" onclick="deletefunc('{{cart.id}}-{{cart.cat}}')" type="button" class="link-delete br"><i class="fa fa-trash cursor" aria-hidden="true"></i></button>
+                                                <button   id="delete" name="{{cart.id}}" onclick="deletefunc('{{cart.id}}')" type="button" class="link-delete br"><i class="fa fa-trash cursor" aria-hidden="true"></i></button>
                                                 {% comment %} <button  name="{{cart.id}}"  id="delete1" type="button" class="link-delete br"><i class="fa fa-trash cursor" aria-hidden="true"></i>a</button> {% endcomment %}
                                                 </div>
                                                 
@@ -302,7 +302,6 @@ function deletefunc(e){
                 data: {
                     'action':'forsession',
                     'pk':e,
-                    "cart":a,
                     'csrfmiddlewaretoken':'{{ csrf_token }}',
                 },
                 success: function(resp){
