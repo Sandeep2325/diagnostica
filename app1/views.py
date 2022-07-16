@@ -1030,28 +1030,43 @@ def cartsessiondelete(request):
         if request.POST.get("action")=="forsession":
         # if request.user.is_anonymous==True:
             id=request.POST["pk"]
-            s=id.split("-")
-            a=request.session.get("cartt")
-            b=a.get(s[1])
-            print(b)
-            if s[0] in b:
-                
+            try:
+                s=id.split("-")
+                a=request.session.get("cartt")
                 b=a.get(s[1])
-                print("-----------------------",s[1])
-                b.remove(s[0])
                 print(b)
-                print("-------------------------")
-                return JsonResponse({"message":True})
-        elif request.POST.get("action")=="fordatabse":
-        # elif request.user.is_anonymous == False:
-            pk=request.POST["pk"]
-            print(pk)
-            a = cart.objects.get(id=pk)  
-            print(a)
-            a.delete()  
-            print("deleted")
-            # return redirect("cart")
-            return JsonResponse({"message":"success"})
+                if s[0] in b:
+                    b=a.get(s[1])
+                    print("-----------------------",s[1])
+                    b.remove(s[0])
+                    print(b)
+                    print("-------------------------")
+            except:
+                pass
+            car=request.POST["cart"]
+            print(car)
+            try:
+                a = cart.objects.get(id=car)  
+            
+                print(a)
+                a.delete()  
+                print("deleted")
+                
+                
+            except:
+                pass
+                
+            return JsonResponse({"message":True})    
+        # elif request.POST.get("action")=="fordatabse":
+        # # elif request.user.is_anonymous == False:
+        #     pk=request.POST["pk"]
+        #     print(pk)
+        #     a = cart.objects.get(id=pk)  
+        #     print(a)
+        #     a.delete()  
+        #     print("deleted")
+        #     # return redirect("cart")
+        #     return JsonResponse({"message":"success"})
         # elif request.POST.get("action")=="fordatabse":
         #     if request.user.is_anonymous==True:
         #         id=request.POST["pk"]

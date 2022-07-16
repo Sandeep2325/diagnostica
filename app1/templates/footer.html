@@ -134,6 +134,7 @@
                 'csrfmiddlewaretoken': '{{ csrf_token }}',
             },
             success: function (resp) {
+                $("#emaill").val('');
                 if (!resp["message"]){
                     alert("Already Subscribed Thank you!!")
                 }

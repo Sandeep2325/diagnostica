@@ -285,6 +285,7 @@ function deletefunc(e){
 //  $("#delete").on("click", function(e){ 
         
         var idd = $(this).attr('name');
+        a=$("#delete").attr("name");
             $.ajax({
                 url: "{% url 'cartsessiondelete' %}",
                 type: "POST",
@@ -292,6 +293,7 @@ function deletefunc(e){
                 data: {
                     'action':'forsession',
                     'pk':e,
+                    "cart":a,
                     'csrfmiddlewaretoken':'{{ csrf_token }}',
                 },
                 success: function(resp){
@@ -299,7 +301,8 @@ function deletefunc(e){
                    window.location.reload();
                 }
             });
-            a=$("#delete").attr("name");
+
+         /*   a=$("#delete").attr("name");
             $.ajax({
                 url: "{% url 'cartsessiondelete' %}",
                 type: "POST",
@@ -313,7 +316,7 @@ function deletefunc(e){
                    console.log(resp)
                    window.location.reload();
                 }
-            });
+            });*/
         return false;
    // });
 }
