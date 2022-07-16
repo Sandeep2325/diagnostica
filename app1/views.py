@@ -383,18 +383,16 @@ def userLogin(request):
             try:
                 chckupp=healthcheckuppackages.objects.filter(id__in=a.get("checkup"))
             except:
-                package=healthpackages.objects.filter(id__in=a.get("package"))
-                tessst=test.objects.filter(id__in=a.get("selecttest"))
+                pass
             try:
                 package=healthpackages.objects.filter(id__in=a.get("package"))
             except:
-                chckupp=healthcheckuppackages.objects.filter(id__in=a.get("checkup"))
-                tessst=test.objects.filter(id__in=a.get("selecttest"))
+                pass
             try:
                 tessst=test.objects.filter(id__in=a.get("selecttest"))
             except:
-                package=healthpackages.objects.filter(id__in=a.get("package"))
-                chckupp=healthcheckuppackages.objects.filter(id__in=a.get("checkup"))
+                pass
+            
             # context["chckupp"]=chckupp
             # context["package"]=package
             # context["tessst"]=tessst
@@ -403,55 +401,60 @@ def userLogin(request):
             # print(chckupp)
             # print(package)
             # print(tessst)
-            for j in chckupp:
-                
-                if city=="Bangalore":
-                    price=str(j.dpricel1)
-                   
-                elif city == "Chennai":
-                    price=str(j.dpricel1)
-                   
-                elif city == "Mumbai":
-                    price=str(j.dpricel1)
-                   
-                elif city == "Delhi":
-                    price=str(j.dpricel1)
+            try:
+                for j in chckupp:
                     
-                cart.objects.create(user=request.user,labtest=j,price=price).save()
-               
-                
-            for j in package:
-                
-                if city=="Bangalore":
-                   
-                    price=str(j.pricel1)
-                elif city == "Chennai":
+                    if city=="Bangalore":
+                        price=str(j.dpricel1)
                     
-                    price=str(j.pricel1)
-                elif city == "Mumbai":
+                    elif city == "Chennai":
+                        price=str(j.dpricel1)
                     
-                    price=str(j.pricel1)
-                elif city == "Delhi":
+                    elif city == "Mumbai":
+                        price=str(j.dpricel1)
                     
-                    price=str(j.pricel1)
-                cart.objects.create(user=request.user,packages=j,price=price).save()
-               
-                
-            for j in tessst:
-                print("--------",j)
-                if city=="Bangalore":
-                    price=str(j.pricel1)
+                    elif city == "Delhi":
+                        price=str(j.dpricel1)
+                        
+                    cart.objects.create(user=request.user,labtest=j,price=price).save()
+            except:
+                pass   
+            try:    
+                for j in package:
                     
-                elif city == "Chennai":
-                    price=str(j.pricel1)
-                  
-                elif city == "Mumbai":
-                    price=str(j.pricel1)
-                   
-                elif city == "Delhi":
-                    price=str(j.pricel1)
+                    if city=="Bangalore":
+                    
+                        price=str(j.pricel1)
+                    elif city == "Chennai":
+                        
+                        price=str(j.pricel1)
+                    elif city == "Mumbai":
+                        
+                        price=str(j.pricel1)
+                    elif city == "Delhi":
+                        
+                        price=str(j.pricel1)
+                    cart.objects.create(user=request.user,packages=j,price=price).save()
+            except:
+                pass   
+            try:    
+                for j in tessst:
                     print("--------",j)
-                cart.objects.create(user=request.user,items=j,price=price,categoryy=j.categoryy).save()
+                    if city=="Bangalore":
+                        price=str(j.pricel1)
+                        
+                    elif city == "Chennai":
+                        price=str(j.pricel1)
+                    
+                    elif city == "Mumbai":
+                        price=str(j.pricel1)
+                    
+                    elif city == "Delhi":
+                        price=str(j.pricel1)
+                        print("--------",j)
+                    cart.objects.create(user=request.user,items=j,price=price,categoryy=j.categoryy).save()
+            except:
+                pass
             next = request.POST.get('next', '/')
             return HttpResponseRedirect(next)  
             # return redirect('/')
@@ -633,54 +636,7 @@ def healthpackageview(request,slug):
         print("booked")
         return render(request,'packagedetail.html',context)
 
-# def healthpackageview(request,slug):
-#     if request.user.is_anonymous:
-#         return HttpResponseRedirect(reverse("user-login"))
-#     else:
-#         c=request.session.get("city")
-#         package=healthpackages.objects.get(slug=slug)
-#         packages=healthpackages.objects.exclude(slug=slug)
-#         context={
-#             "package":package,
-#             "packages":packages,
-#             "city":c
-#         }
-#         currency = 'INR'
-#         if c == "Bangalore":
-#             amount=int(package.pricel1)
-#         elif c == "Chennai":
-#             amount=int(package.pricel2)
-#         elif c == "Mumbai":
-#             amount=int(package.pricel3)
-#         elif c == "Delhi":
-#             amount=int(package.pricel4)
-#         client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
-#         try:
-#             razorpay_order = client.order.create(
-#                     {"amount": int(amount) * 100, "currency": "INR", "payment_capture": "1"}
-#             )
-#         except Exception as e:
-#             razorpay_order = client.order.create(
-#                     {"amount": 1* 100, "currency": "INR", "payment_capture": "1"}
-#             )
-#         request.session['amount']=amount
-#         razorpay_order_id = razorpay_order['id']
-#         callback_url = callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
-#         context['razorpay_order_id'] = razorpay_order_id
-#         context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
-#         context['razorpay_amount'] = amount
-#         context['currency'] = currency
-#         context['callback_url'] = callback_url
-#         bookhistory=book_history(
-#             user=request.user,
-#                      booking_type="Package",
-#                      bookingdetails=slug,
-#                      patient_info="Myself",
-#                      amount=amount,
-#                      payment_id=razorpay_order['id'],
-#                      payment_status=False).save()
-#         print("booked")
-#         return render(request,'packagedetail.html',context)
+
 def testdetails(request):
     if request.method=="POST":
             id=request.POST["id"]
