@@ -549,9 +549,18 @@ textarea {
     padding-bottom: 25px;
     margin: 0px;
     padding-left: 20px;
+    height: 200px;
+    overflow-y: hidden;
+}
+
+.section_home_health_check  .health_care_{
+    padding-bottom: 25px;
+    margin: 0px;
+    padding-left: 20px;
     padding-top: 20px;
     height: 200px;
     overflow-y: hidden;
+    border-bottom: 1px solid #17235A;
 }
 
 .section_home_health_check .home_ul_li li {
