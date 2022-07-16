@@ -263,11 +263,11 @@ class socialmediaadmin(admin.ModelAdmin):
     #     return super().has_add_permission(request)
 from django.utils.translation import gettext_lazy as _
 class UserAdmin(OriginalUserAdmin): 
-    list_display = ['username','email',"phone_no",'location','dob','gender','address','date_joined']
+    list_display = ['username','email',"phone_no",'location','age','gender','address','date_joined']
     # list_editable=['is_confirmed']
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        (_('Personal info'), {'fields': ('photo','first_name','last_name', 'email',"phone_no",'location','dob','gender','address')}),
+        (_('Personal info'), {'fields': ('photo','first_name','last_name', 'email',"phone_no",'location','age','gender','address')}),
     )
     def action_btn(self, obj):
         html = "<div class='field-action_btn d-flex m-8'> <a class='fa fa-edit ml-2' href='/admin/app1/user/" + \
@@ -363,7 +363,8 @@ admin.site.register(coupons,couponadmin)
 # admin.site.register(pricee,priceadmin)
 from django.contrib.auth.models import Group
 admin.site.unregister(Group)
-# admin.site.register(cart,cartadmin)
+# admin.site.register(dummycart)
+admin.site.register(cart,cartadmin)
 
 
 

@@ -58,7 +58,7 @@ class User(AbstractUser,PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     phone_no = models.CharField(max_length=10, null=True, unique=True,verbose_name="Mobile number")
     location=models.CharField(max_length=200,null=True,blank=True)
-    dob=models.CharField(max_length=50,blank=True,null=True)
+    age=models.CharField(max_length=50,blank=True,null=True)
     address=models.TextField(null=True,blank=True)
     gender = models.CharField(
         choices=GENDER_CHOICES,
@@ -178,13 +178,13 @@ class prescription_book(models.Model):
 def testbookings(sender, instance, **kwargs):
     a=[]
     for i in instance.test_name.all():
-        if i.location=="Banglore":
+        if instance.location=="Bangalore":
             a.append(i.pricel1)
-        elif i.location=="Chennai":
+        elif instance.location=="Chennai":
             a.append(i.pricel2)
-        elif i.location=="Mumbai":
+        elif instance.location=="Mumbai":
             a.append(i.pricel3)
-        elif i.location=="Delhi":
+        elif instance.location=="Delhi":
             a.append(i.pricel3)
     book_history.objects.filter(testbooking_id=instance.id).update(amount=sum(a))
     # print(bool(instance.prescription_file))
@@ -317,9 +317,10 @@ class testimonials(models.Model):
 class cart(models.Model):
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
     items=models.ForeignKey(test,null=True,blank=True,on_delete=models.CASCADE)
+    labtest=models.ForeignKey(healthcheckuppackages,null=True,blank=True,on_delete=models.CASCADE)
+    packages=models.ForeignKey(healthpackages,null=True,blank=True,on_delete=models.CASCADE)
     categoryy=models.ForeignKey(category,null=True,blank=True,on_delete=models.SET_NULL)
     price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
-    # slug = models.SlugField(null=True, unique=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
     
@@ -436,4 +437,7 @@ class paymentids(models.Model):
         return self.paymentid
     class Meta:
         verbose_name_plural="Payment Ids"
-
+# class dummycart(models.Model):
+#     name=models.CharField(max_length=500,null=True,blank=True)
+#     category=models.CharField(max_length=500,null=True,blank=True)
+#     price=models.CharField(max_length=10,null=True,blank=True)

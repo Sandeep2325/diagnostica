@@ -1,7 +1,8 @@
-{%load static%}
-{%include "header.html"%}
-
+{% extends "index.html" %}
+{% load static %}
+{%block content%}
 <body>
+  {%include 'header.html'%}
   <section class="home_banner pt-3 pb-lg-5">
     <div class="owl-carousel owl-theme home-banner-slider">
       <div class="home-banner pt-4 pb-5 py-sm-5">
@@ -602,57 +603,80 @@ console.log(id);
       });
     });*/
    function testnow(e){
+    
     $.ajax({
-      url:"{% url 'home' %}",
-      type:"POST",
+      url: "{% url 'healthcheckupadd' %}",
+      type: "POST",
+      dataType: "json",
       data: {
-          action:"retreive_data",
-          'id' :e,
-          csrfmiddlewaretoken: '{{ csrf_token }}',
-         },
-         dataType: "json",
-         success: function(resp){
-          var options = {
-                  key: resp["razorpay_merchant_key"],
-                  amount: resp["razorpay_amount"], 
-                  currency: "INR",
-                  description: "Test Transaction",
-                  image: "{% static 'assets/img/invoice_logo.png' %}",
-                  order_id:resp["razorpay_order_id"],
-                  callback_url: resp["callback_url"],
-                  redirect: true,
-                  theme: {
-                      "color": "#005aeb"
-                  },
-                  modal: { 
-                      escape: false,
-                      ondismiss: function()
-                      { 
-                          confirm("Want to close!!")
-                          $.ajax({
-                            type: 'POST',
-                            headers: {
-                                'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val(),
-                            },
-                            data: {
-                            csrfmiddlewaretoken: '{{ csrf_token }}',
-                            action:"payment_canceled",
-                            obj_id:ids,
-                            order_id:"{{razorpay_order_id}}",
-                            },
-                            dataType: 'json',
-                            success: function (response) {
-                            }
-                          });
-                      }
-                  }
-              };
-              var rzp1 = new Razorpay(options);
-              rzp1.open();
-       }  
+        'action':"healthcheckup",
+          'slug':e,
+          'csrfmiddlewaretoken':'{{ csrf_token }}',
+      },
+      success: function(resp){
+          
+          if(!resp['message']){
+              alert("Test Already Added");
+          }else{
+              alert("Test Added");
+          }
+          
+      },
   });
    }
+
+
+
+
+  /* $.ajax({
+    url:"{% url 'home' %}",
+    type:"POST",
+    data: {
+        action:"retreive_data",
+        'id' :e,
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+       },
+       dataType: "json",
+       success: function(resp){
+        var options = {
+                key: resp["razorpay_merchant_key"],
+                amount: resp["razorpay_amount"], 
+                currency: "INR",
+                description: "Test Transaction",
+                image: "{% static 'assets/img/invoice_logo.png' %}",
+                order_id:resp["razorpay_order_id"],
+                callback_url: resp["callback_url"],
+                redirect: true,
+                theme: {
+                    "color": "#005aeb"
+                },
+                modal: { 
+                    escape: false,
+                    ondismiss: function()
+                    { 
+                        confirm("Want to close!!")
+                        $.ajax({
+                          type: 'POST',
+                          headers: {
+                              'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val(),
+                          },
+                          data: {
+                          csrfmiddlewaretoken: '{{ csrf_token }}',
+                          action:"payment_canceled",
+                          obj_id:ids,
+                          order_id:"{{razorpay_order_id}}",
+                          },
+                          dataType: 'json',
+                          success: function (response) {
+                          }
+                        });
+                    }
+                }
+            };
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
+     }  
+});*/
 </script>
 
-
-</html>
+{% endblock %}

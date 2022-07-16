@@ -1,8 +1,10 @@
+{% extends "index.html" %}
+{% load static %}
 
-{%include "header.html"%}
-{%include "subheader.html"%}
-{%load static%}
+{%block content%}
 <body>
+    {%include 'header.html'%}
+    {%include 'subheader.html' %}
     <section class="cart_table">
         <div class="container">
             <div class="row ">
@@ -30,22 +32,42 @@
                                                     Price
                                                 </div>
                                             </div>
+                                            
 {%for cart in data%}
                                             <div class="row">
                                                 <div class="cell" data-title=" S.No">
                                                     {{ forloop.counter }}
                                                 </div>
+                                                {% comment %} {%if cart.items == None and cart.packages == None%}
+                                                <div class="cell" data-title="Test Name">
+                                                    {{cart.labtest}}
+                                                </div>
+                                                {%elif cart.items == None and cart.labtest == None%}
+                                                <div class="cell" data-title="Test Name">
+                                                    {{cart.packages}}
+                                                </div>
+                                                {%else%}
                                                 <div class="cell" data-title="Test Name">
                                                     {{cart.items}}
                                                 </div>
+                                                {%endif%} {% endcomment %}
+                                                <div class="cell" data-title="Test Name">
+                                                    {{cart.test}}
+                                                </div>
+                                                {%if cart.categoryy == None%}
+                                                <div class="cell" data-title="Category Name">
+                                                    -
+                                                </div>
+                                                {%else%}
                                                 <div class="cell" data-title="Category Name">
                                                     {{cart.categoryy}}
                                                 </div>
+                                                {%endif%}
                                                 <div class="cell" data-title="">
                                                     {% comment %} href="{%url "destroy" cart.id%}" {% endcomment %}
                                                     {% comment %} <a href="{% url "destroy" cart.id%}" class="link-delete text-danger" ><i class="fa fa-trash cursor" aria-hidden="true"></i></a> {% endcomment %}
                                                    {% comment %} <button  class="link-delete br" ><i class="fa fa-trash cursor" aria-hidden="true"></i></button> {% endcomment %}
-                                                <button  name={{cart.id}} id="delete"  type="button" class="link-delete br"><i class="fa fa-trash cursor" aria-hidden="true"></i></button>
+                                                <button  name="{{cart.id}}" id="delete" onclick="deletefunc('{{cart.id}}-{{cart.cat}}')" type="button" class="link-delete br"><i class="fa fa-trash cursor" aria-hidden="true"></i></button>
                                                 </div>
                                                 <div class="cell" data-title="Price">
                                                    Rs. {{cart.price}}
@@ -104,7 +126,6 @@
                         <button 
                             class="float-end fs-18 font-bold cl-dark-white br br-5 bg-sky-blue py-3 my-lg-5 my-3 px-5 br"  data-bs-toggle="modal" data-bs-target="#cart_checkout_modal" type="button" id="checkout1">CHECKOUT</button>
                     </div>
-                    
                 </div>
             </div>
         </div>
@@ -139,7 +160,6 @@
                                     <option value="s">Son</option>
                                     <option value="s">Daughter</option>
                                     <option value="s">Others</option>
-
                                 </select>
                             </div>
                             <div>
@@ -167,7 +187,7 @@
                                 </select>
                             </div>
                             <div>
-                                <textarea rows="2" class="w-100 myself_other br-5" placeholder="Address" name="address" id="address" type="text" ></textarea>
+                                <textarea rows="2" class="w-100 myself_other br-5" placeholder="Address" name="address1" id="address" type="text" ></textarea>
                             </div>
                             <button class="mx-lg-0 mx-3 mt-4 prescription br bg-sky-blue br-5 cl-dark-white"
                                 type="submit" name="submit" id="checkout">SUBMIT</button>
@@ -234,7 +254,13 @@
             $("#checkout1").attr("disabled",true); 
         }
     })
-    $("#delete").on("click", function(e){
+    $('#cart_checkout_modal').on('shown.bs.modal', function (e) {
+       
+        if("{{ user.is_authenticated }}"==="False"){
+            window.location.replace("{% url 'user-login' %}");
+        }
+      })
+    $("#delete1").on("click", function(e){
         
         var idd = $(this).attr('name');
         
@@ -255,6 +281,42 @@
         
         return false;
     });
+function deletefunc(e){
+//  $("#delete").on("click", function(e){ 
+        alert();
+        var idd = $(this).attr('name');
+            $.ajax({
+                url: "{% url 'cartsessiondelete' %}",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    'action':'forsession',
+                    'pk':e,
+                    'csrfmiddlewaretoken':'{{ csrf_token }}',
+                },
+                success: function(resp){
+                   console.log(resp)
+                   window.location.reload();
+                }
+            });
+            a=$("#delete").attr("name");
+            $.ajax({
+                url: "{% url 'cartsessiondelete' %}",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    'action':'fordatabse',
+                    'pk':a,
+                    'csrfmiddlewaretoken':'{{ csrf_token }}',
+                },
+                success: function(resp){
+                   console.log(resp)
+                   window.location.reload();
+                }
+            });
+        return false;
+   // });
+}
     $('#cpnbtn').on('click', function(e){
         var a=$("#total").text();
 
@@ -283,15 +345,10 @@
                     AMOUNT = resp['total'];
                     
                     var detail=`
-                   <div class="col-6" id="cleardetail">
-                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Discount(%)</h4>
-                    </div>
-                    <div class="col-6" id="cleardetail">
-                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">${resp['percent']}</h4>
-                    </div>
+                   
                     
                     <div class="col-6" id="cleardetail">
-                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Discount Price</h4>
+                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Discount Price(${resp['percent']}%)</h4>
                     </div>
                     <div class="col-6" id="cleardetail">
                         <h4 class="fs-20 font-bold cl-dark-blue mb-3">Rs. ${resp['discount']}</h4>
@@ -314,33 +371,42 @@
     //window.location.reload()
    
 //})
-
-
 $("#option1").change(function(e){
-    console.log("{{data}}" )
     var opt = $(this).val();
+    console.log("{{data}}" )
     if(opt === "m"){
-        $("#firstname").hide();
-        $("#lastname").hide();
-        $("#age").hide();
-        $("#gender").hide()
-        $("#phone").hide()
-        $(".error").empty();
-        //$("#lastname").attr("disabled", true);
-    $("#option").hide();
-    }else if(opt === "o"){
-        $("#firstname").show();
-        $("#lastname").show();
-        $("#age").show();
-        $("#gender").show()
-        $("#phone").show()
-        $("#option").attr("disabled", false);
+        $("#option").hide();
+    $.ajax({
+        url:"{% url 'userinfo' %}",
+        method:"get",
+        data:{
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+        },
+        dataType: "json",
+        success: function(resp){
+            
+        $("#firstname").val(resp['firstname']);
+        $("#lastname").val(resp['lastname']);
+        $("#age").val(resp['age']);
+        $("#gender").val(resp['gender']);
+        $("#phone").val(resp['contact']);
+        $("#address").val(resp['address']);
+        }
+    })
+}
+    else if(opt === "o"){
+        $("#firstname").val('');
+        $("#lastname").val('');
+        $("#age").val('');
+        $("#gender").val('');
+        $("#phone").val('');
+        $("address").val('');
+        $("#option").show();
     }
 
 });
 
 function coupRemove(){
-    
     //$("#cleardetail").remove()
     window.location.reload()
    }
@@ -425,18 +491,23 @@ $(document).ready(function(){
     
         },
         submitHandler: function (form) {
+           
+            a=$("#total").text();
+            
             var firstname=$("#firstname").val();
-         
                     var lastname=$("#lastname").val();
                     var phone=$("#phone").val();
                     var age=$("#age").val();
                     var gender=$("#gender").val();
                     var option1=$("#option1").val();
                     var option=$("#option").val();
+                    var address=$("#address").val();
                     var total;
                     if(AMOUNT==0){
-                        tot="{{ razorpay_amount }}";
-                        total=parseInt(tot/100);
+                        
+                        total=parseInt(a.split("Rs.")[1]);
+                        //total=parseInt(tot/100);
+                        console.log(total)
                     }
                     else{
                         
@@ -446,6 +517,7 @@ $(document).ready(function(){
                            url: "{% url 'cart' %}",
                            type : "POST", 
                            data: {
+                            "amount":total,
                             "firstname" : firstname,
                             "lastname":lastname,
                             "phone":phone,
@@ -453,21 +525,23 @@ $(document).ready(function(){
                             "gender":gender,
                             "option1":option1,
                             "option":option,
-                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                            "address":address,
+                            csrfmiddlewaretoken:'{{ csrf_token }}',
                            },
                            dataType: "json",
                            success: function(resp){
+                            console.log(resp)
                             $("#infomodal").hide();
-                            console.log(total)
+                            
                             var options = {
-                                key: "{{ razorpay_merchant_key }}",
+                                key: resp["razorpay_key"],
                                // amount:AMOUNT ? AMOUNT :100,
                                 amount: total,
-                                currency: "{{ currency }}",
+                                currency: resp["currency"],
                                 // Your/store name.
                                 name: "Diagnostica Span",
-                                order_id: "{{ razorpay_order_id }}",
-                                callback_url: "{{ callback_url }}",
+                                order_id: resp["razorpayorder"],
+                                callback_url: resp["callback"],
                                 redirect:true,
                                 modal: { 
                                     escape: false,
@@ -477,13 +551,13 @@ $(document).ready(function(){
                                         url: "{% url 'razorpayclose' %}",
                                         type: 'post',
                                         headers: {
+                                            
                                             'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
                                         },
                                         data: {
-                                        "paymentid":"{{ razorpay_order_id }}",
+                                        "paymentid":resp["razorpayorder"],
                                         csrfmiddlewaretoken: '{{ csrf_token }}',
-                                        "cmd":"fetchAllAddress",
-                                        "id":"{{order.orderID}}",
+                                        
                                         },
                                         dataType: 'json',
                                         success: function (response) {
@@ -503,10 +577,8 @@ $(document).ready(function(){
     });
    
    
-});
-
-     
+}); 
     </script>
-</html>
+{%endblock%}
 
 

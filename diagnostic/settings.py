@@ -70,19 +70,25 @@ TEMPLATES = [
         },
     },
 ]
-
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.core.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.request",
+)
 WSGI_APPLICATION = 'diagnostic.wsgi.application'
 AUTH_USER_MODEL = 'app1.User'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 # DATABASES = {  
 #     'default': {  
 #         'ENGINE': 'django.db.backends.mysql',  
@@ -94,16 +100,16 @@ DATABASES = {
         
 #     }  
 # }  
-# DATABASES = {  
-#     'default': {  
-#         'ENGINE': 'django.db.backends.mysql',  
-#         'NAME': 'diagnospan',  
-#         'USER': 'root',  
-#         'PASSWORD': 'mySqlServer@#$432',  
-#         'HOST': 'localhost',  
-#         'PORT': '3306',   
-#     }  
-# }
+DATABASES = {  
+    'default': {  
+        'ENGINE': 'django.db.backends.mysql',  
+        'NAME': 'diagnospan',  
+        'USER': 'root',  
+        'PASSWORD': 'mySqlServer@#$432',  
+        'HOST': 'localhost',  
+        'PORT': '3306',   
+    }  
+}
 
 
 # Password validation
@@ -158,7 +164,7 @@ EMAIL_HOST_USER = "gowdasandeep8105@gmail.com"
 # EMAIL_HOST_PASSWORD = 'Sandeep@1234'
 EMAIL_HOST_PASSWORD = 'atkzlpfgzcvpdhai'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
+SESSION_SAVE_EVERY_REQUEST =True
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
     "site_title": "Diagnostica Span",

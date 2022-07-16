@@ -1,6 +1,9 @@
-{%include "header.html"%}
-{%include "subheader.html"%}
+{% extends "index.html" %}
+{% load static %}
+{%block content%}
 <body>
+    {%include "header.html"%}
+{%include "subheader.html"%}
     <section class="section_faq pb-5">
         <div class="container">
             <div class="row ">
@@ -36,4 +39,4 @@
     {%include "footer.html"%}
 </body>
 
-</html>
+{%endblock%}
