@@ -1742,15 +1742,30 @@ def invoice(request,orderid):
 
 class BookingHistoryPay(View):
     def get(self, request,*args, **kwargs):
-        bookhistories=book_history.objects.filter(user=request.user).order_by('-created')
-        payments=payment.objects.filter(user=request.user).order_by('-date')
+        his = []
+        bookhistories=book_history.objects.filter(user=request.user).order_by('created')
         testbooking=prescription_book.objects.filter(user=request.user)
+        payments=payment.objects.filter(user=request.user).order_by('-date')
+        for i in bookhistories:
+            testbooking=prescription_book.objects.get(id=i.testbooking_id)
+            hi = {}
+            hi["id"] = i.id
+            hi["created"] = i.created
+            hi["patient_info"] = i.patient_info
+            hi["testbooking_id"] = i.testbooking_id
+            hi["patient_info"] = i.patient_info
+            hi["booking_type"] = i.booking_type
+            hi["bookingdetails"] = i.bookingdetails
+            hi['prescription'] = testbooking.prescription_file
+            his.append(hi)
         context={
-            "bookhistories":bookhistories,
+            "bookhistories":his,
             "payments":payments,
             "testbooking":testbooking,
         }
         return render(request,"booking-history.html",context)
+
+
     def post(self, request, *args, **kwargs):
         if request.POST.get("action") == "retreive_data":
             mod = book_history.objects.get(testbooking_id=request.POST.get('id'))

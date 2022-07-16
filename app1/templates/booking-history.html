@@ -79,7 +79,7 @@
                                                     {%endif%}
                                                     <td data-label="Booking Type">{{bookhistory.booking_type}}</td>
                                                     {% comment %} <td data-label="Presciption">-</td> {% endcomment %}
-                                                    <td data-label="Booking Details"><a id="testdetails" name="{{bookhistory.id}}" data-bs-toggle="modal" data-bs-target="#testdetaill" class="br bg-dark-white cursor" onclick='testdetail({{bookhistory.id}})';>{{bookhistory.bookingdetails|truncatechars:10}}</a></td>
+                                                    <td data-label="Booking Details"><a target="_blank" href={{bookhistory.prescription.url}} class="br bg-dark-white cursor" >{{bookhistory.bookingdetails}}</a></td>
                                                     
                                                     
 
@@ -303,9 +303,12 @@
     return false;
 }
 
+function testdetail(id){
+alert("OK");
+}
 
  
-$("#testdetails").click(function(){
+/*$("#testdetails").click(function(){
     a=$(this).attr("name");
   
     $.ajax({
@@ -327,7 +330,7 @@ $("#testdetails").click(function(){
         }
     });
   });
-
+*/
 
 </script>
 {%endblock%}
