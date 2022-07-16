@@ -341,14 +341,14 @@ def profilee(request):
         phone=request.POST.get("phone")
         gender=request.POST.get("gender")
         location=request.POST.get("location")
-        dob=request.POST.get("date")
+        age=request.POST.get("age")
         address=request.POST.get("address")
         User.objects.filter(email=request.user.email).update(username=name,
                                                              email=email,
                                                              phone_no=phone,
                                                              gender=gender,
                                                              location=location,
-                                                             dob=dob,
+                                                             age=age,
                                                              address=address)
         
         messages.success(request,"Profile updated Successfully")
@@ -380,11 +380,21 @@ def userLogin(request):
             login(request,user)
             a=request.session.get("cartt")
             city=request.session.get("city")
-    # print(a.get("checkup"))
-    
-            chckupp=healthcheckuppackages.objects.filter(id__in=a.get("checkup"))
-            package=healthpackages.objects.filter(id__in=a.get("package"))
-            tessst=test.objects.filter(id__in=a.get("selecttest"))
+            try:
+                chckupp=healthcheckuppackages.objects.filter(id__in=a.get("checkup"))
+            except:
+                package=healthpackages.objects.filter(id__in=a.get("package"))
+                tessst=test.objects.filter(id__in=a.get("selecttest"))
+            try:
+                package=healthpackages.objects.filter(id__in=a.get("package"))
+            except:
+                chckupp=healthcheckuppackages.objects.filter(id__in=a.get("checkup"))
+                tessst=test.objects.filter(id__in=a.get("selecttest"))
+            try:
+                tessst=test.objects.filter(id__in=a.get("selecttest"))
+            except:
+                package=healthpackages.objects.filter(id__in=a.get("package"))
+                chckupp=healthcheckuppackages.objects.filter(id__in=a.get("checkup"))
             # context["chckupp"]=chckupp
             # context["package"]=package
             # context["tessst"]=tessst
@@ -442,8 +452,9 @@ def userLogin(request):
                     price=str(j.pricel1)
                     print("--------",j)
                 cart.objects.create(user=request.user,items=j,price=price,categoryy=j.categoryy).save()
-               
-            return redirect('/')
+            next = request.POST.get('next', '/')
+            return HttpResponseRedirect(next)  
+            # return redirect('/')
         else:
             messages.error(request,'Email or password is wrong')
     return render(request,'login.html')
@@ -717,58 +728,58 @@ def categoryblog(request,slug):
 #         "categories":tcategories
 #     }
 #     return render(request,"choose-test-list.html",context)
-# @login_required(login_url="login/")   
+@login_required(login_url="/login/")   
 def prescriptionbookview(request):
+    # if request.user.is_anonymous:
+    #     # return redirect("user-login")
+    #     return HttpResponseRedirect(reverse("user-login"))
+    # else:
+    c=request.session.get("city")
     if request.user.is_anonymous:
-        # return redirect("user-login")
         return HttpResponseRedirect(reverse("user-login"))
+    # print(request.FILES)
+    fm=prescriptionform()
+    if request.method=="POST":
+        print(request.POST)
+        prescription_file=request.FILES.get("file")
+        print()
+        myself=request.POST.get("radio_self")
+        others=request.POST.get('radio_others')
+        others_choice=request.POST.get("option")
+        firstname=request.POST.get('firstname')
+        lastname=request.POST.get('lastname')
+        contact=request.POST.get('phone')
+        age=request.POST.get('age')
+        gender=request.POST.get('gender')
+        unique = uuid.uuid4()
+        print(unique)
+        prescription_book(
+            user=request.user,
+            unique=unique,
+            prescription_file=prescription_file,
+                        myself=True if myself == "on" else False,
+                        others=True if others == "on" else False,
+                        others_choice=others_choice,
+                        firstname=firstname,
+                        lastname=lastname,
+                        contact=contact,
+                        age=age,
+                        gender=gender,
+                        location=c).save()
+        data=prescription_book.objects.get(unique=unique)
+        print(data)
+        book_history(
+            user=request.user,
+            testbooking_id=data.id,
+            patient_info="myself" if others==None else "others",
+                    booking_type="Prescription",
+                    bookingdetails="upload prescription",
+                    payment_status=False).save()
+        messages.success(request,"Your response is recorded successfully")
+        return HttpResponseRedirect(reverse("booking-history"))
+        # return render(request,"uploadprescriptions.html",{"fm":fm})
     else:
-        c=request.session.get("city")
-        if request.user.is_anonymous:
-            return HttpResponseRedirect(reverse("user-login"))
-        # print(request.FILES)
-        fm=prescriptionform()
-        if request.method=="POST":
-            print(request.POST)
-            prescription_file=request.FILES.get("file")
-            print()
-            myself=request.POST.get("radio_self")
-            others=request.POST.get('radio_others')
-            others_choice=request.POST.get("option")
-            firstname=request.POST.get('firstname')
-            lastname=request.POST.get('lastname')
-            contact=request.POST.get('phone')
-            age=request.POST.get('age')
-            gender=request.POST.get('gender')
-            unique = uuid.uuid4()
-            print(unique)
-            prescription_book(
-                user=request.user,
-                unique=unique,
-                prescription_file=prescription_file,
-                            myself=True if myself == "on" else False,
-                            others=True if others == "on" else False,
-                            others_choice=others_choice,
-                            firstname=firstname,
-                            lastname=lastname,
-                            contact=contact,
-                            age=age,
-                            gender=gender,
-                            location=c).save()
-            data=prescription_book.objects.get(unique=unique)
-            print(data)
-            book_history(
-                user=request.user,
-                testbooking_id=data.id,
-                patient_info="myself" if others==None else "others",
-                        booking_type="Prescription",
-                        bookingdetails="upload prescription",
-                        payment_status=False).save()
-            messages.success(request,"Your response is recorded successfully")
-            return HttpResponseRedirect(reverse("booking-history"))
-            # return render(request,"uploadprescriptions.html",{"fm":fm})
-        else:
-            return render(request,"uploadprescriptions.html",{"fm":fm})
+        return render(request,"uploadprescriptions.html",{"fm":fm})
         
 # @login_required(login_url="login/")  
 def testselect(request):

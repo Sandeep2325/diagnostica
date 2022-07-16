@@ -5,7 +5,7 @@
 <body>
     {% include "header.html"%}
 {%include "subheader.html"%}
-    <section class="section_booking_history pb-5 mb-5">
+    <section class="section_booking_history pb-5 mb-5" >
         <div class="container">
             {% if messages %}
             
@@ -50,7 +50,7 @@
    
                                     <div class="pb-lg-5 pb-3 tab-pane fade show active" id="pills-home" role="tabpanel"
                                         aria-labelledby="pills-home-tab" tabindex="0">
-                                        <table>
+                                        <table id ="bookinghistorytable">
                                             <thead>
                                                 <tr>
                                                     <td class="t_head" scope="col">ID</td>
@@ -264,7 +264,9 @@
         
 
     };
+//if("{{bookhistories}}"){
 
+//}
    // $("#otherspop1").click(function(){
         function othersfunc(e){
         
@@ -322,7 +324,6 @@ $("#testdetails").click(function(){
            var a= `<p>${splitted_str[i]}</p>`
            $("#testdetaills").append(a)
           }
-        
         }
     });
   });

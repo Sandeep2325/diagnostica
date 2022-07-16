@@ -257,7 +257,7 @@
     $('#cart_checkout_modal').on('shown.bs.modal', function (e) {
        
         if("{{ user.is_authenticated }}"==="False"){
-            window.location.replace("{% url 'user-login' %}");
+            window.location.replace("{% url 'user-login' %}?next={% url 'cart' %}");
         }
       })
     $("#delete1").on("click", function(e){
@@ -575,8 +575,6 @@ $(document).ready(function(){
                        });
         }
     });
-   
-   
 }); 
     </script>
 {%endblock%}

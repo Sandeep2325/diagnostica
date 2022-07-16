@@ -56,6 +56,9 @@
                                             <a href="{%url "forgot-password"%}" class="col-lg-4 col-md-6 col-12 text-lg-end text-md-end cl-dark-blue fs-16 font-regular cursor">
                                                 Forgot Password?</a>
                                         </div>
+                                        {% if request.GET.next%}
+                                        <input type="hidden" name="next" value="{{ request.GET.next }}">
+                                        {% endif %}
                                         <div class="pt-3">
                                             <button class=" fs-18 font-bold cl-dark-white py-lg-3 py-2 px-5 bg-sky-blue br-5 br" type="submit" value="submit">Login</button>
                                         </div>
