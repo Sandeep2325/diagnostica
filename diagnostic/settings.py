@@ -99,8 +99,7 @@ AUTH_USER_MODEL = 'app1.User'
 #         'PORT': '3306',  
         
 #     }  
-# }  
-
+# } 
 DATABASES = {  
     'default': {  
         'ENGINE': 'django.db.backends.mysql',  

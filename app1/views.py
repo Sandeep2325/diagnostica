@@ -948,9 +948,18 @@ def cartt(request):
     a=request.session.get("cartt")
     print(request.user.is_anonymous)
     if request.user.is_anonymous==True:
-        chckupp=healthcheckuppackages.objects.filter(id__in=a.get("checkup"))
-        package=healthpackages.objects.filter(id__in=a.get("package"))
-        tessst=test.objects.filter(id__in=a.get("selecttest"))
+        try:
+            chckupp=healthcheckuppackages.objects.filter(id__in=a.get("checkup"))
+        except:
+            pass
+        try:
+            package=healthpackages.objects.filter(id__in=a.get("package"))
+        except:
+            pass
+        try:
+            tessst=test.objects.filter(id__in=a.get("selecttest"))
+        except:
+            pass
        
         data= []
         city=request.session.get("city")
