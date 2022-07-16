@@ -1043,19 +1043,17 @@ def cartsessiondelete(request):
                     print("-------------------------")
             except:
                 pass
-            car=request.POST["cart"]
-            print(car)
+            
             try:
+                car=request.POST["cart"]
+                print(car)
                 a = cart.objects.get(id=car)  
             
                 print(a)
                 a.delete()  
                 print("deleted")
-                
-                
             except:
                 pass
-                
             return JsonResponse({"message":True})    
         # elif request.POST.get("action")=="fordatabse":
         # # elif request.user.is_anonymous == False:
@@ -1401,13 +1399,20 @@ def search(request):
        
 def destroy(request): 
     if request.method=="POST":
-        pk=request.POST["pk"]
-        print(pk)
-        a = cart.objects.get(id=pk)  
-        print(a)
-        a.delete()  
-        print("deleted")
-        # return redirect("cart")
+        car=request.POST["cart"]
+        print(car)
+        try:
+            a = cart.objects.get(id=car)  
+            
+            print(a)
+            a.delete()  
+            print("deleted")
+                
+                
+        except:
+            pass
+                
+            # return JsonResponse({"message":True})
         return JsonResponse({"message":"success"})
 def coupon(request):
     if request.method=="POST":

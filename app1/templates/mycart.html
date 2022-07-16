@@ -64,17 +64,16 @@
                                                 </div>
                                                 {%endif%}
                                                 <div class="cell" data-title="">
-                                                    {% comment %} href="{%url "destroy" cart.id%}" {% endcomment %}
-                                                    {% comment %} <a href="{% url "destroy" cart.id%}" class="link-delete text-danger" ><i class="fa fa-trash cursor" aria-hidden="true"></i></a> {% endcomment %}
-                                                   {% comment %} <button  class="link-delete br" ><i class="fa fa-trash cursor" aria-hidden="true"></i></button> {% endcomment %}
-                                                <button  name="{{cart.id}}" id="delete" onclick="deletefunc('{{cart.id}}-{{cart.cat}}')" type="button" class="link-delete br"><i class="fa fa-trash cursor" aria-hidden="true"></i></button>
+                                                    
+                                                <button   id="delete" name="{{cart.id}}" onclick="deletefunc('{{cart.id}}-{{cart.cat}}')" type="button" class="link-delete br"><i class="fa fa-trash cursor" aria-hidden="true"></i></button>
+                                                {% comment %} <button  name="{{cart.id}}"  id="delete1" type="button" class="link-delete br"><i class="fa fa-trash cursor" aria-hidden="true"></i>a</button> {% endcomment %}
                                                 </div>
+                                                
                                                 <div class="cell" data-title="Price">
                                                    Rs. {{cart.price}}
                                                 </div>
                                             </div>
-{%endfor%}
-                                       
+{%endfor%}                           
                                         </div> 
                                         <div class="row py-4">
                                             <div class="col-lg-6">
@@ -260,6 +259,15 @@
             window.location.replace("{% url 'user-login' %}?next={% url 'cart' %}");
         }
       })
+
+      //if("{{ user.is_authenticated }}"==="True"){
+        
+      //  $("#delete").hide()
+      //  }
+       // else{
+            
+      //      $("#delete1").hide()
+      //  }
     $("#delete1").on("click", function(e){
         
         var idd = $(this).attr('name');
@@ -281,11 +289,12 @@
         
         return false;
     });
+
 function deletefunc(e){
 //  $("#delete").on("click", function(e){ 
         
         var idd = $(this).attr('name');
-        a=$("#delete").attr("name");
+       a=$("#delete").attr("name");
             $.ajax({
                 url: "{% url 'cartsessiondelete' %}",
                 type: "POST",
