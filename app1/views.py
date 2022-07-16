@@ -1747,7 +1747,10 @@ class BookingHistoryPay(View):
         testbooking=prescription_book.objects.filter(user=request.user)
         payments=payment.objects.filter(user=request.user).order_by('-date')
         for i in bookhistories:
-            testbooking=prescription_book.objects.get(id=i.testbooking_id)
+            try:
+                testbooking=prescription_book.objects.get(id=i.testbooking_id)
+            except:
+                hi['prescription'] = None
             hi = {}
             hi["id"] = i.id
             hi["created"] = i.created
