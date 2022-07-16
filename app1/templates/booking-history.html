@@ -79,7 +79,7 @@
                                                     {%endif%}
                                                     <td data-label="Booking Type">{{bookhistory.booking_type}}</td>
                                                     {% comment %} <td data-label="Presciption">-</td> {% endcomment %}
-                                                    <td data-label="Booking Details"><a target="_blank" href={{bookhistory.prescription.url}} class="br bg-dark-white cursor" >{{bookhistory.bookingdetails}}</a></td>
+                                                    <td data-label="Booking Details"><a target="_blank" href={% if bookhistory.prescription %}{{bookhistory.prescription.url}} {% endif %}class="br bg-dark-white cursor" >{{bookhistory.bookingdetails}}</a></td>
                                                     
                                                     
 
