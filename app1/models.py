@@ -110,7 +110,7 @@ class category(models.Model):
     class Meta:
         verbose_name_plural = "Test Category"
 class test(models.Model):
-    testt=models.CharField(max_length=200,null=True,blank=True,verbose_name="Test")
+    testt=models.TextField(null=True,blank=True,verbose_name="Test")
     description=models.TextField(null=True,blank=True)
     categoryy=models.ForeignKey(category,null=True,blank=True,on_delete=models.CASCADE)
     is_active=models.BooleanField(default=True,verbose_name="Is Active?")
