@@ -12,7 +12,7 @@
                         <div class="row">
                             <div class="col-lg-11 col-md-12 mx-auto py-lg-5">
                                 <div class="row">
-                                    <div class="px-xl-4 col-lg-6 mx-auto py-4">
+                                    <div class="px-xl-4 col-lg-6 mx-auto py-4  opc-5">
                                         <div class="bg-sky-blue br-15 px-5 py-4 text-center ">
                                             <h2 class="cl-dark-white fs-40  font-bold mb-3 pb-2">Upload Prescription
                                             </h2>
@@ -27,7 +27,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="px-xl-4 col-lg-6 mx-auto py-4 opc-5">
+                                    <div class="px-xl-4 col-lg-6 mx-auto py-4">
                                         <div class="bg-dark-green br-15 px-5 py-4 text-center ">
                                             <h2 class="cl-dark-white fs-40  font-bold mb-3 pb-2">Choose Test Lists
                                             </h2>
@@ -51,14 +51,14 @@
                                                 <select
                                                     class="br-5 cl-dark-blue fs-18 form-select br select_option"
                                                     type="select" name="" id="category">
-                                                    <option selected="selected" class="opc-5" disabled>Select Category
-                                                    </option>
+                                                    <option selected class="opc-5" value="all">All Category</option>
                                                     
                                                     {%for category in categories%}
                                                     <option  value={{category.id}}>{{category.categoryy}}</option>
                                                     {%endfor%}
                                                 </select>
                                             </div>
+
                                             <div class="col-lg-5 col-sm-6 position-relative py-4">
                                                 <input class="w-100 br br-5" id="searched" placeholder="Search" name="searched" maxlength="250" />
                                                 {% comment %} <button  type="submit"class="br">  <i class="fa fa-search test-list-search" aria-hidden="true"></i></button> {% endcomment %}
@@ -150,9 +150,9 @@
                     'csrfmiddlewaretoken':'{{ csrf_token }}',
                 },
                 success: function(resp){
+                    if(resp.length >0){
                     $("#main-test-div").empty();
-                   for(var i=0; i<resp.length ; i++){
-                    console.log(resp);
+                    for(var i=0; i<resp.length ; i++){
                     var divs = `<div class="bg-white br-5 px-4 py-3 mt-2">
                         <h5 class="fs-20 font-regular cl-dark-blue ">${resp[i]['testt']}</h5>
                         <div class="row">
@@ -170,6 +170,14 @@
                     $("#main-test-div").append(divs);
 
                    }
+                }else{
+                    $("#main-test-div").empty();
+                    var divs = `<div class="bg-white br-5 px-4 py-3 mt-2">
+                        <center><h5 class="fs-20 font-regular cl-dark-blue ">No Test Result Found....</h5></center>
+                    
+                    </div>`;
+                    $("#main-test-div").append(divs);
+                }
                   
                 }
             });
@@ -192,9 +200,10 @@
                     'csrfmiddlewaretoken':'{{ csrf_token }}',
                 },
                 success: function(resp){
+                    if(resp.length>0){
+
                     $("#main-test-div").empty();
                    for(var i=0; i<resp.length ; i++){
-                    
                     var divs = `<div class="bg-white br-5 px-4 py-3 mt-2">
                         <h5 class="fs-20 font-regular cl-dark-blue ">${resp[i]['testt']}</h5>
                         <div class="row">
@@ -210,8 +219,15 @@
                         </div>
                     </div>`;
                     $("#main-test-div").append(divs);
-
-                   }
+                    }
+                }else{
+                    $("#main-test-div").empty();
+                    var divs = `<div class="bg-white br-5 px-4 py-3 mt-2">
+                        <center><h5 class="fs-20 font-regular cl-dark-blue ">No Test Result Found....</h5></center>
+                    
+                    </div>`;
+                    $("#main-test-div").append(divs);
+                }
                   
                 }
             });
@@ -247,6 +263,7 @@
                 alert("Test Already Added");
             }else{
                 alert("Test Added");
+                window.location.reload();
             }
             
         },

@@ -55,7 +55,7 @@ def aboutus(request):
 
 
 def cityy(request):
-    city=request.POST["city"]
+    city=request.POST.get("city")
     request.session["city"]=city
     return JsonResponse({"message":True,"city":city})
     # if request.method =="GET":
@@ -478,6 +478,7 @@ def newsletter(request):
         return JsonResponse({"message":True,"email":email})
     # return render(request,"footer.html")
 def home(request):
+    deviceCookie = request.COOKIES.get('device')
     c=request.session.get("city")
     if request.method =="GET":
         cit=city.objects.all()
@@ -487,6 +488,11 @@ def home(request):
         healthsymptom=healthsymptoms.objects.all()
         healthcareblog=healthcareblogs.objects.all()
         testimonial=testimonials.objects.all()
+        if request.user.is_anonymous:
+            d = cart.objects.filter(device = deviceCookie)
+        else:
+            d = cart.objects.filter(user = request.user)
+        request.session['cart_count'] = d.count()
         context={
             "healthcheckup":healthcheckup,
             "healthpackage":healthpackage,
@@ -612,6 +618,7 @@ def healthpackageview(request,slug):
             )
         request.session['amount']=amount
         razorpay_order_id = razorpay_order['id']
+        
         # callback_url = callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
         context['razorpay_order_id'] = razorpay_order_id
         context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
@@ -772,7 +779,7 @@ def testselect(request):
             elif c == "Mumbai":
                 cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel3).save()   
             elif c == "Delhi":
-                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel4).save() 
+                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel4).save()
         messages.success(request,"Your booking added to cart successfully")
         return render(request,"choose-test-list.html",context)
     return render(request,"choose-test-list.html",context)
@@ -782,7 +789,7 @@ razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KE
 
 
 def cartt(request):
-    deviceCookie = request.COOKIES['device']
+    deviceCookie = request.COOKIES.get('device')
     if not request.user.is_anonymous:
         d = cart.objects.filter(device = deviceCookie).update(user=request.user)
     # history=book_history.objects.none()
@@ -946,6 +953,10 @@ def cartt(request):
             "data":data,
             "subtotal":sum(a)
         }
+    if request.user.is_anonymous:
+        request.session['cart_count']= cart.objects.filter(device = deviceCookie).count()
+    else:
+        request.session['cart_count']= cart.objects.filter(user = request.user).count()
     return render(request,"mycart.html",context)
         # except:
         #     return render(request,"mycart.html")
@@ -959,6 +970,10 @@ def cartsessiondelete(request):
            Q(device=deviceCookie, id = to_del)|
            Q(user=request.user if not request.user.is_anonymous else None, id = to_del)
             ).delete()
+        if request.user.is_anonymous:
+            request.session['cart_count']= cart.objects.filter(device = deviceCookie).count()
+        else:
+            request.session['cart_count']= cart.objects.filter(user = request.user).count()
         return JsonResponse({"message":True})
 
 
@@ -1241,6 +1256,10 @@ def addtocart(request):
             #         cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel3).save()
             #     elif cityy=="Delhi":
             #         cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel4).save()
+        if request.user.is_anonymous:
+            request.session['cart_count']= cart.objects.filter(device = deviceCookie).count()
+        else:
+            request.session['cart_count']= cart.objects.filter(user = request.user).count()
         return JsonResponse(RES)
 
 
@@ -1250,11 +1269,16 @@ def categoryy(request):
         pk=request.POST["pk"]
         searched_name = request.POST.get("searched")
         b=[]
-        if searched_name:
-            tests=test.objects.filter(categoryy__id=pk, testt__icontains = searched_name)
+
+        if pk != "all":
+            if searched_name:
+                tests=test.objects.filter(categoryy__id=pk, testt__icontains = searched_name)
+            else:
+                tests=test.objects.filter(categoryy__id=pk)
         else:
-            tests=test.objects.filter(categoryy__id=pk)
-        # print(tests)
+            tests=test.objects.all()
+
+
         for tesst in tests:
             a={}
             
@@ -1279,19 +1303,23 @@ def search(request):
             res = {"valid":True}
             return HttpResponse(json.dumps(res), content_type="application/json")
         else:
+            print(request.POST)
             city=request.session.get("city")
-            searched=request.GET.get('searched')
-            searched=request.POST["searched"]
+
+            searched=request.POST.get('searched')
             req_cat = request.POST.get("cat")
-            if req_cat:
-                tcategories=category.objects.filter(id=req_cat)
+            print(searched)
+            if req_cat != "all":
+                if searched:
+                    tests=test.objects.filter(categoryy__id=req_cat, testt__icontains = searched)
+                else:
+                    tests=test.objects.filter(categoryy__id=req_cat)
             else:
-                tcategories=category.objects.all()
+                tests=test.objects.filter(testt__icontains=searched)
+
             b=[]
-            tests=test.objects.filter(testt__icontains=searched)
             for tesst in tests:
                 a={}
-                
                 a["id"]=tesst.id
                 a["testt"]=tesst.testt
                 a["description"]=tesst.description
@@ -1443,7 +1471,10 @@ def healthcheckupadd(request):
                 )
                 res = {"message":created}
                 RES = res
-
+        if request.user.is_anonymous:
+            request.session['cart_count']= cart.objects.filter(device = deviceCookie).count()
+        else:
+            request.session['cart_count']= cart.objects.filter(user = request.user).count()
 
         return JsonResponse(RES)
         # if request.user.is_anonymous==True:
@@ -1705,4 +1736,8 @@ class HealthSymptoms(View):
                 price=healthSympObj.bengaluru_price,
                 )
         res = {"message":created}
+        if request.user.is_anonymous:
+            request.session['cart_count']= cart.objects.filter(device = deviceCookie).count()
+        else:
+            request.session['cart_count']= cart.objects.filter(user = request.user).count()
         return HttpResponse(json.dumps(res), content_type="application/json")

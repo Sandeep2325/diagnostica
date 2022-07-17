@@ -1,4 +1,5 @@
 
+from distutils.command.upload import upload
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import PermissionsMixin
@@ -22,7 +23,7 @@ from django.dispatch import receiver
 #     uuid = models.UUIDField(default=uuid.uuid4,editable=False)
 class city(models.Model):
     cityname=models.CharField(max_length=200,null=True,blank=True)
-    city_icon = models.ImageField(upload_to="photos/icons/", null=True, blank=True)
+    city_icon= models.ImageField(upload_to = "photos/icons/", null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
     def __str__(self):
