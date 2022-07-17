@@ -56,7 +56,7 @@ class testadmin(admin.ModelAdmin):
                     for l in input_iterator:
                         yield l.decode('utf-8')
 
-                reader = csv.DictReader(decode_utf8(request.FILES['csv_upload']))
+                reader = csv.DictReader(decode_utf8(request.FILES['csv_upload']), encoding='cp1252')
                 for row in reader:
                     des = re.sub(r"</?\[\d+>", "", row.get("Description"))
                     try:
