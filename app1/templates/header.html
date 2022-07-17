@@ -54,7 +54,7 @@
                         </li>
                         <li class="nav-item dropdown d-lg-block d-none">
                             <a class="nav-link dropdown-toggle DropDownToggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="{%static 'images/bg-user.png' %}" alt="" class="" />
+                                <img src="{%static 'images/bg-user.png' %}" alt="" class="w-20" />
                             </a>
                             <ul class="dropdown-menu" id="ulDropDown" aria-labelledby="navbarScrollingDropdown">
                               {% if user.is_authenticated %} 
@@ -69,7 +69,16 @@
                             </ul>
                         </li>
                         <li class="nav-item d-lg-block d-none">
-                        <a class="nav-link" href="{%url "cart"%}"><img src="{%static "images/bg-cart.png"%}" alt="" class="" /></a>
+                        <a class="nav-link" href="{%url "cart"%}">
+                            <img src="{%static "images/bg-cart.png"%}" alt="" class="w-22" />
+                            <sup>
+                                {% if request.session.cart_count %}
+                                <div class="cart_indication">{{request.session.cart_count|default:"0"}}</div>
+                                {% else %}
+                                <div class="cart_indication">0</div>
+                                {% endif %}
+                            </sup>
+                        </a>
                         </li>
                     </ul>
                 </div>

@@ -1,3 +1,17 @@
+.cart_indication{
+    width: 20px;
+    height: 20px;
+    background: #17235A;
+    position: absolute;
+    top: -20px;
+    right: -15px;
+    border-radius: 50%;
+    text-align: center;
+    vertical-align: middle;
+    color: #fff;
+    font-size: 12px;
+}
+
 .signup-form {
     width: 450px;
     margin-left: 450px;
