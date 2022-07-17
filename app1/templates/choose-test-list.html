@@ -141,13 +141,14 @@
 
     $("#category").on("change", function(e){
         var idd = $(this).val();
-        
+        var searched = $("#searched").val();
             $.ajax({
                 url: "{% url 'category' %}",
                 type: "POST",
                 dataType: "json",
                 data: {
                     'pk':idd,
+                    "searched":searched,
                     'csrfmiddlewaretoken':'{{ csrf_token }}',
                 },
                 success: function(resp){
@@ -181,6 +182,7 @@
 
     $("#searched").keyup(function(e){
         var searched = $(this).val();
+        var cat = $("#category").val();
             $.ajax({
                 url: "{% url 'search' %}",
                 type: "POST",
@@ -188,6 +190,7 @@
                 data: {
                     "action":"search",
                     'searched':searched,
+                    "cat":cat,
                     'csrfmiddlewaretoken':'{{ csrf_token }}',
                 },
                 success: function(resp){
