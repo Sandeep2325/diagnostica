@@ -1,6 +1,6 @@
 import re
 from django.shortcuts import render,redirect
-from .forms import UserProfileForm,UserRegistrationForm, forgotpasswordform, prescriptionform, selectedtestform, subscriptionform
+from .forms import UserProfileForm,UserRegistrationForm, forgotpasswordform, prescriptionform, subscriptionform
 from django.contrib.auth.hashers import make_password
 import random
 # from django.contrib.auth.models import User
@@ -77,7 +77,6 @@ def cityy(request):
     
 def Registration(request):
     if request.method == "POST":
-        print("dataa")
         fm = UserRegistrationForm(request.POST)
         up = UserProfileForm(request.POST)
         # if fm.is_valid():
@@ -122,7 +121,6 @@ def otpRegistration(request):
         u_otp3 = request.POST['digit-3']
         u_otp4 = request.POST['digit-4']
         a=str(u_otp1)+str(u_otp2)+str(u_otp3)+str(u_otp4)
-        print(a)
         otp = request.session.get('otp')
         user = request.session['username']
         # hash_pwd=request.session.get('password')
@@ -174,7 +172,6 @@ def changepassword(request):
       conpassword=request.POST["confirmpassword"]
        
       otp = random.randint(1000,9999)
-      print(otp)
       email_address = request.user.email
       a=authenticate(request,username=request.user.email,password=password)
       if a == None:
@@ -238,7 +235,6 @@ def changepasswordotp(request):
         u_otp3 = request.POST['digit-3']
         u_otp4 = request.POST['digit-4']
         a=str(u_otp1)+str(u_otp2)+str(u_otp3)+str(u_otp4)
-        print(a)
         otp = request.session.get('otp')
         
         # user = request.session['username']
@@ -292,7 +288,6 @@ def otpforgotpassword(request):
         u_otp3 = request.POST['digit-3']
         u_otp4 = request.POST['digit-4']
         a=str(u_otp1)+str(u_otp2)+str(u_otp3)+str(u_otp4)
-        print(a)
         otp = request.session.get('otp')
         # user = request.session['username']
         # hash_pwd=request.session.get('password')
@@ -332,15 +327,13 @@ def forgotresendotp(request):
     )
     messages.success(request,"resend otp sent")
     return redirect('/forgotpassword/otp/') 
+
 def userinfo(request):
    a= request.user
-   print(a)
    
    return JsonResponse({"message":True,"firstname":a.first_name,"lastname":a.last_name,"contact":a.phone_no,"gender":a.gender,"address":a.address,"age":a.age}) 
 def profilee(request):
     profile=User.objects.get(email=request.user.email)
-    print(profile.email)
-    print(profile.address)
     context={
         "profile":profile,
     }
@@ -378,12 +371,9 @@ def userLogin(request):
     if request.method == "POST":
         username = request.POST['email']
         request.session["emaill"]=username
-        print(username)
         password = request.POST['password']
-        print(password)
         user = authenticate(request,username=username,password=password)
         a=request.session.get("cartt")
-        print(a)
         
         if user is not None:
             login(request,user)
@@ -699,9 +689,7 @@ def prescriptionbookview(request):
     # print(request.FILES)
     fm=prescriptionform()
     if request.method=="POST":
-        print(request.POST)
         prescription_file=request.FILES.get("file")
-        print()
         myself=request.POST.get("radio_self")
         others=request.POST.get('radio_others')
         others_choice=request.POST.get("option")
@@ -711,7 +699,6 @@ def prescriptionbookview(request):
         age=request.POST.get('age')
         gender=request.POST.get('gender')
         unique = uuid.uuid4()
-        print(unique)
         prescription_book(
             user=request.user,
             unique=unique,
@@ -726,7 +713,6 @@ def prescriptionbookview(request):
                         gender=gender,
                         location=c).save()
         data=prescription_book.objects.get(unique=unique)
-        print(data)
         book_history(
             user=request.user,
             testbooking_id=data.id,
@@ -743,10 +729,8 @@ def prescriptionbookview(request):
 # @login_required(login_url="login/")  
 def testselect(request):
     c=request.session.get("city")
-    print("-----",city)
     tcategories=category.objects.all()
     tests=test.objects.all()
-    print(request.method)
     context={
         "tests":tests,
         "categories":tcategories,
@@ -754,7 +738,6 @@ def testselect(request):
     }
     if request.method=="POST":
         # others=request.POST.get("myself")
-        print(request.POST)
         test_name=request.POST.getlist("test_name")
         myself=request.POST.get("myself")
         others=request.POST.get('others')
@@ -1058,7 +1041,6 @@ def cartt1(request):
         request.session["order_id"]=razorpay_order['id']
         # request.session['amount']=amount
         razorpay_order_id = razorpay_order['id']
-        print("-----",razorpay_order_id)
         request.build_absolute_uri('/bands/?print=true')
         callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
         # callback_url = 'http://127.0.0.1:8000/paymenthandler/{}/{}/'.format(request.user.email,amount)
@@ -1144,7 +1126,6 @@ def paymenthandler(request,str,amount):
             usr=User.objects.get(email=str)
             paymentid=request.POST.get("razorpay_payment_id")
             if paymentid:
-                print(request.POST)
                 if verify_signature(request.POST):
                     transid=request.POST["razorpay_order_id"]
                     cart.objects.filter(user=usr).delete()
@@ -1158,14 +1139,11 @@ def paymenthandler(request,str,amount):
             else:
                 b=request.POST.get('error[metadata]')
                 c=json.loads(b)
-                print(c["order_id"])
                 a=book_history.objects.filter(payment_id=c["order_id"])
-                print("deleted")
                 error = request.POST.get('error[description]')
                 messages.error(request, error)
                 return HttpResponseRedirect(reverse("booking-history"))
     except Exception as e:
-        print(e)
         messages.error(request, e)
         return HttpResponseRedirect(reverse("booking-history"))
 
@@ -1176,7 +1154,7 @@ def subscriptionview(request):
             email=request.POST.get("email")
             template_name = 'email.html'
             msg=EmailMessage(
-            'Prakash Electricals',
+            'Diagnotica',
             render_to_string(template_name),
             settings.EMAIL_HOST_USER,
             [email],
@@ -1267,14 +1245,15 @@ def addtocart(request):
 
 
 def categoryy(request):
-    print(request.method)
     if request.method=="POST":
         city=request.session.get("city")
         pk=request.POST["pk"]
+        searched_name = request.POST.get("searched")
         b=[]
-        
-        
-        tests=test.objects.filter(categoryy__id=pk)
+        if searched_name:
+            tests=test.objects.filter(categoryy__id=pk, testt__icontains = searched_name)
+        else:
+            tests=test.objects.filter(categoryy__id=pk)
         # print(tests)
         for tesst in tests:
             a={}
@@ -1290,7 +1269,6 @@ def categoryy(request):
                 a["pricel1"]=str(tesst.pricel3)
             elif city== "Delhi":
                 a["pricel1"]=str(tesst.pricel3)
-            print(a)
             b.append(a)
         return JsonResponse(b,safe=False)
     
@@ -1304,7 +1282,11 @@ def search(request):
             city=request.session.get("city")
             searched=request.GET.get('searched')
             searched=request.POST["searched"]
-            tcategories=category.objects.all()
+            req_cat = request.POST.get("cat")
+            if req_cat:
+                tcategories=category.objects.filter(id=req_cat)
+            else:
+                tcategories=category.objects.all()
             b=[]
             tests=test.objects.filter(testt__icontains=searched)
             for tesst in tests:
@@ -1322,7 +1304,6 @@ def search(request):
                 if city== "Delhi":
                     a["pricel1"]=str(tesst.pricel3)
                 b.append(a)
-            print(b)
             return JsonResponse(b,safe=False)
     else:
         return render(request,"choose-test-list.html") 
@@ -1330,15 +1311,9 @@ def search(request):
 def destroy(request): 
     if request.method=="POST":
         car=request.POST["cart"]
-        print(car)
         try:
             a = cart.objects.get(id=car)  
-            
-            print(a)
             a.delete()  
-            print("deleted")
-                
-                
         except:
             pass
                 
@@ -1361,11 +1336,8 @@ def coupon(request):
 def razorpayclose(request):
     if request.method=="POST":
         paymentid=request.POST["paymentid"]
-        print(paymentid)
         a=book_history.objects.filter(payment_id=paymentid)
-        print(a)
         a.delete()
-        print("deleted")
         return JsonResponse({"message":True})
 def contactuss(request):
     if request.method=="POST":
@@ -1551,7 +1523,6 @@ def html_to_pdf(template_src, context_dict={}):
 
 def invoice(request,orderid):
     order=book_history.objects.get(payment_id=orderid)
-    print(order)
     payments=payment.objects.get(transid=orderid)
     
     # print(data)
@@ -1576,7 +1547,6 @@ def invoice(request,orderid):
             }
     template_name='invoice.html'
     pdf = html_to_pdf(template_name,context_dict)
-    print(pdf)
     return FileResponse(pdf,as_attachment=True,filename="invoice.pdf",content_type='application/pdf') 
 
 # def otpLogin(request):
