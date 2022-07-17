@@ -59,4 +59,8 @@ urlpatterns = [
     path('payment/', payments.payment, name='payment'),
     path('paymenthandler/<str:str>/<str:amount>/', views.paymenthandler, name='paymenthandler'),
     path("cartsessiondelete",views.cartsessiondelete,name="cartsessiondelete"),
+
+    path("health-symptoms/<slug:slug>/",views.HealthSymptoms.as_view(),name="health_symptoms"),
+
+
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

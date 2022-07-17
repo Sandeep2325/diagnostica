@@ -1,0 +1,172 @@
+{% extends "index.html" %}
+{% load static %}
+{%block content%}
+
+<body>
+  {%include "header.html"%}
+{%include "subheader.html"%}
+  <section class="section_health_pack section_health_pack_started">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-3  col-lg-4 col-md-6 pt-3">
+          <div class="py-lg-5 py-3 bg-light-grey br-30 ">
+            <h2 class="fs-35 font-bold cl-dark-blue text-center m-0">{{currentObj.name}}</h2>
+            <div class="d-flex justify-content-center align-content-center pt-xl-4 mt-3">
+              <div class="home_linear_border  ">
+                <div class="">
+                  <p
+                    class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">
+                    Price</p>
+                  
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{currentObj.bengaluru_price}}</h1>
+                  
+                  <p
+                    class="d-flex justify-content-center align-content-center align-items-center m-0 fs-18 cl-dark-blue font-bold">
+                    Includes {{currentObj.test_name.all.count}}
+                    Tests
+                  </p>
+
+                </div>
+
+              </div>
+
+            </div>
+            <div class="d-flex justify-content-center pt-xl-5 pt-3">
+              <button class="home_pack_viewpack py-3 fs-16 font-bold br-50 " id="packagebuy" name="{{currentObj.id}}">BUY PACK</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-9  col-lg-8 col-md-6 pt-3">
+          <div class="py-lg-5  py-3 bg-light-grey br-30 ">
+            <h1 class="fs-40 font-bold cl-dark-blue text-center pt-lg-3 m-0 pb-4">What’s Included in the Health Symptoms Package</h1>
+            <h2 class="fs-35 font-regular cl-dark-blue text-center m-0 pb-lg-5 pb-4">Package includes
+              {{currentObj.test_name.all.count}} Tests
+            </h2>
+            <div class="row px-5">
+              {%for test in currentObj.test_name.all %}
+              <div class="col-12 h-100 ms-xl-5">
+                <div class="">
+                  <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.pricel1}}</h3>
+                </div>
+                <p class="pb-4 pe-lg-5 ">{{test.description}}</p>
+              </div>
+
+              {%endfor%}
+              {% comment %} <div class="col-lg-5 col-md-12 h-100 mx-auto">
+                <div class="">
+                  <h3 class="fs-30 font-bold cl-dark-blue cbc_test">FBS/RBS</h3>
+                </div>
+                <p class="py-4">A complete blood count (CBC) is a blood test used to evaluate your overall health and
+                  detect a wide range of disorders, including anemia, infection and leukemia.</p>
+              </div>
+              <div class="col-lg-5 col-md-12 h-100 mx-auto">
+                <div class="">
+                  <h3 class="fs-30 font-bold cl-dark-blue cbc_test">CBC</h3>
+                </div>
+                <p class="py-4">A complete blood count (CBC) is a blood test used to evaluate your overall health and
+                  detect a wide range of disorders, including anemia, infection and leukemia.</p>
+              </div>
+              <div class="col-lg-5 col-md-12  h-100 mx-auto">
+                <div class="">
+                  <h3 class="fs-30 font-bold cl-dark-blue cbc_test">FBS/RBS</h3>
+                </div>
+                <p class="py-4">A complete blood count (CBC) is a blood test used to evaluate your overall health and
+                  detect a wide range of disorders, including anemia, infection and leukemia.</p>
+              </div> {% endcomment %}
+            </div>
+          </div>
+          <div class="row bg-white py-5">
+            <h1 class="fs-40  cl-dark-blue font-bold home_health_symp_header">Other Health Symptoms</h1>
+            {%for pack in others %}
+            <div class="col-xl-4  col-lg-6 col-md-12 pt-3 ">
+
+              <div class="py-5 bg-light-grey br-30 ">
+                <h2 class="fs-35 font-bold cl-dark-blue text-center m-0">{{pack.name}}</h2>
+                <div class="d-flex justify-content-center align-content-center pt-4 mt-3">
+                  <div class="home_linear_border  ">
+                    <div>
+                      <p
+                        class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">
+                        Price</p>
+                      <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.bengaluru_price}}</h1>
+                      
+                      <p
+                        class="d-flex justify-content-center align-content-center align-items-center m-0 fs-18 cl-dark-blue font-bold">
+                        Includes {{pack.test_name.all.count}}
+                        Tests
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-center pt-5">
+                  <a href={% url 'health_symptoms' pack.slug %}><button
+                      class="home_pack_viewpack py-3 fs-16 font-bold br-50 ">VIEW PACK</button></a>
+                </div>
+              </div>
+
+            </div>
+            {%endfor%}
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%include "footer.html"%}
+
+</body>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  $.validator.addMethod('filesize', function (value, element, param) {
+    return this.optional(element) || (element.files[0].size <= param)
+  }, 'File size must be less than {0}');
+  $("#subscribes").validate({
+    rules: {
+      'email': {
+        required: true,
+        email: true
+      },
+    },
+
+    messages: {
+      'email': {
+        required: "Enter email ID",
+        email: "Please enter a valid email address!"
+      },
+    },
+    submitHandler: function (form) {
+      form.submit();
+    }
+  });
+  $("#packagebuy").click(function () {
+   
+   a=$(this).attr("name");
+   
+   $.ajax({
+    type: "POST",
+    dataType: "json",
+    data: {
+        'ids':a,
+        'csrfmiddlewaretoken':'{{ csrf_token }}',
+    },
+    success: function(resp){
+
+        if(!resp['message']){
+            alert("Test Already Added");
+        }else{
+            alert("Test Added");
+        }
+        
+    },
+});
+  });
+
+ 
+  //$("#navbarScrollingDropdown")   
+  //$(".dropdown-toggle").on('click'.function(){
+   // $("#navbarScrollingDropdown").attr("class","show");
+   //});
+</script>
+{%endblock%}

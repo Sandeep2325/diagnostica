@@ -844,14 +844,27 @@ def cartt(request):
             return ",".join([
                 test.testt for test in data1
             ])
+
         strr=[]
         for tesst in data1:
-            if tesst.items == None and tesst.packages == None:
-                strr.append(tesst.labtest.package_title)
-            elif tesst.items == None and tesst.labtest == None:
+            if tesst.packages:
                 strr.append(tesst.packages.package_name)
-            else:
+
+            elif tesst.labtest:
+                strr.append(tesst.labtest.package_title)
+
+            elif tesst.healthsymptoms:
+                strr.append(tesst.healthsymptoms.name)
+
+            elif tesst.items: 
                 strr.append(tesst.items.testt)
+                print(tesst)
+            # if tesst.items == None and tesst.packages == None:
+            #     strr.append(tesst.labtest.package_title)
+            # elif tesst.items == None and tesst.labtest == None:
+            #     strr.append(tesst.packages.package_name)
+            # else:
+            #     strr.append(tesst.items.testt)
         listToStr = ','.join(map(str, strr))
         # str1 = " " 
         # for i in str:
@@ -909,141 +922,43 @@ def cartt(request):
     # print(request.session.get("cartt"))
     a=request.session.get("cartt")
     
-    c = cart.objects.filter(device=deviceCookie)
+    if not request.user.is_anonymous:
+        c = cart.objects.filter(user=request.user)
+    else:
+        c = cart.objects.filter(device=deviceCookie)
     data=[]
     for i in c:
-        if i.items == None and i.labtest == None:
-            da={}
-            da['id']=i.id
-            da['test']=i.packages
-            da['price']=str(i.price)
-            da["categoryy"]="Packages"
-            data.append(da)
-        elif i.items == None and i.packages == None:
+        if i.items == None and i.labtest:
             da={}
             da['id']=i.id
             da['test']=i.labtest
             da['price']=str(i.price)
             da["categoryy"]="Health Checks & Lab Tests"
             data.append(da)
-        elif i.labtest == None and i.packages == None: 
+        elif i.items == None and i.packages:
+            da={}
+            da['id']=i.id
+            da['test']=i.packages
+            da['price']=str(i.price)
+            da["categoryy"]="Packages"
+            data.append(da)
+        elif i.healthsymptoms:
+            da={}
+            da['id']=i.id
+            da['test']=i.healthsymptoms.name
+            da['price']=str(i.price)  
+            da["categoryy"]="Health Symptoms Pack"
+            data.append(da)
+        elif i.items: 
             da={}
             da['id']=i.id
             da['test']=i.items
             da['price']=str(i.price)  
-            da["categoryy"]=i.categoryy
+            da["categoryy"]=i.items.categoryy
             data.append(da)
         
-    a=[]
-    for i in data:
-        a.append(float(i["price"]))
-    # if request.user.is_anonymous==True:
-    #     try:
-    #         chckupp=healthcheckuppackages.objects.filter(id__in=a.get("checkup"))
-    #     except:
-    #         pass
-    #     try:
-    #         package=healthpackages.objects.filter(id__in=a.get("package"))
-    #     except:
-    #         pass
-    #     try:
-    #         tessst=test.objects.filter(id__in=a.get("selecttest"))
-    #     except:
-    #         pass
-       
-    #     data= []
-    #     city=request.session.get("city")
-    #     try:
-    #         for j in chckupp:
-    #             da={}
-    #             da['cat']="checkup"
-    #             da["id"]=j.id
-    #             da["test"]=j.package_title
-    #             if city == "Bangalore":
-    #                 da["price"]=str(j.dpricel1)
-    #             elif city == "Chennai":
-    #                 da["price"]=str(j.dpricel2)
-    #             elif city == "Mumbai":
-    #                 da["price"]=str(j.dpricel3)
-    #             elif city == "Delhi":
-    #                 da["price"]=str(j.dpricel4)
-    #             data.append(da)
-    #     except:
-    #         pass
-    #     try:
-    #         for j in package:
-    #             da={}
-    #             da['cat']="package"
-    #             da["id"]=j.id
-    #             da["test"]=j.package_name
-    #             if city == "Bangalore":
-    #                 da["price"]=str(j.pricel1)
-    #             elif city == "Chennai":
-    #                 da["price"]=str(j.pricel2)
-    #             elif city == "Mumbai":
-    #                 da["price"]=str(j.pricel3)
-    #             elif city == "Delhi":
-    #                 da["price"]=str(j.pricel4)
-    #             data.append(da)
-    #     except:
-    #         pass
-    #     try:
-    #         for j in tessst:
-    #             da={}
-    #             da['cat']="selecttest"
-    #             da["id"]=j.id
-    #             da["test"]=j.testt
-    #             if city == "Bangalore":
-    #                 da["price"]=str(j.pricel1)
-    #             elif city == "Chennai":
-    #                 da["price"]=str(j.pricel2)
-    #             elif city == "Mumbai":
-    #                 da["price"]=str(j.pricel3)
-    #             elif city == "Delhi":
-    #                 da["price"]=str(j.pricel4)
-    #             da["categoryy"]=j.categoryy
-    #             data.append(da)
-    #     except:
-    #         pass
-    #     a=[]
-    #     try:
-    #         for i in data:
-    #             a.append(float(i["price"]))
-    #         context={
-    #         "data":data,
-    #         "subtotal":sum(a)
-    #     }
-    #     except:
-    #         context={}
-    #     return render(request,"mycart.html",context) 
-    
-    # elif request.user.is_anonymous == False:
-    #     # try:
-    #     data=[]
-    #     for i in cart.objects.filter(user=request.user):
-    #         if i.items == None and i.labtest == None:
-    #             da={}
-    #             da['id']=i.id
-    #             da['test']=i.packages
-    #             da['price']=str(i.price)
-    #             data.append(da)
-    #         elif i.items == None and i.packages == None:
-    #             da={}
-    #             da['id']=i.id
-    #             da['test']=i.labtest
-    #             da['price']=str(i.price)
-    #             data.append(da)
-    #         elif i.labtest == None and i.packages == None: 
-    #             da={}
-    #             da['id']=i.id
-    #             da['test']=i.items
-    #             da['price']=str(i.price)  
-    #             da["categoryy"]=i.categoryy
-    #             data.append(da)
-        
-    #     a=[]
-    #     for i in data:
-    #         a.append(float(i["price"]))
+    a=[float(i["price"]) for i in data]
+
     context={
             "data":data,
             "subtotal":sum(a)
@@ -1188,9 +1103,8 @@ def cartt1(request):
 def othersdetail(request):
     if request.method=="POST":
         testid=request.POST["testid"]
-        print(testid)
         detail=prescription_book.objects.get(id=int(testid))
-        print(detail.firstname)
+        choice = ""
         if detail.others_choice=="m":
             choice="Mother"
         elif detail.others_choice=="f":
@@ -1760,15 +1674,17 @@ class BookingHistoryPay(View):
             hi["booking_type"] = i.booking_type
             hi["bookingdetails"] = i.bookingdetails
             hi['prescription'] = testbooking.prescription_file
+            hi['payment_status'] = i.payment_status
+            hi['report'] = i.report
+            hi['amount'] = i.amount
             his.append(hi)
+
         context={
             "bookhistories":his,
             "payments":payments,
             "testbooking":testbooking,
         }
         return render(request,"booking-history.html",context)
-
-
     def post(self, request, *args, **kwargs):
         if request.POST.get("action") == "retreive_data":
             mod = book_history.objects.get(testbooking_id=request.POST.get('id'))
@@ -1795,3 +1711,28 @@ class BookingHistoryPay(View):
             mod.save()
             to_return = {"valid":True}
         return HttpResponse(json.dumps(to_return), content_type="application/json")
+
+
+class HealthSymptoms(View):
+    def get(self, request, *args,**kwargs):
+        currentSymptom = kwargs['slug']
+        currentObj = healthsymptoms.objects.get(slug = currentSymptom)
+        obj = healthsymptoms.objects.exclude(slug = currentSymptom)
+
+        res = {
+            "currentObj":currentObj,
+            "others":obj,
+        }
+        return render(request, "health_symptoms_details.html", res)
+    
+    def post(self, request, *args,**kwargs):
+        deviceCookie = request.COOKIES['device']
+        healthSympObj = healthsymptoms.objects.get(id=request.POST.get('ids'))
+        obj, created = cart.objects.get_or_create(
+                device = deviceCookie,
+                healthsymptoms = healthSympObj,
+                user = request.user if not request.user.is_anonymous else None,
+                price=healthSympObj.bengaluru_price,
+                )
+        res = {"message":created}
+        return HttpResponse(json.dumps(res), content_type="application/json")

@@ -78,9 +78,12 @@
                                                     <td data-label="Patient Info">{{bookhistory.patient_info}}</td>
                                                     {%endif%}
                                                     <td data-label="Booking Type">{{bookhistory.booking_type}}</td>
-                                                    {% comment %} <td data-label="Presciption">-</td> {% endcomment %}
-                                                    <td data-label="Booking Details"><a target="_blank" {% if bookhistory.prescription %}href={{bookhistory.prescription.url}}{% endif %} class="br bg-dark-white cursor" >{{bookhistory.bookingdetails}}</a></td>
                                                     
+                                                    {% if bookhistory.prescription %}
+                                                    <td data-label="Booking Details"><a  target="blank" href="{{ bookhistory.prescription.url}}">{{bookhistory.bookingdetails}}</a></td>
+                                                    {% else %}
+                                                    <td data-label="Booking Details"><a id="testdetails" name="{{bookhistory.id}}" data-bs-toggle="modal" data-bs-target="#testdetaill" class="br bg-dark-white cursor" onclick='testdetail({{bookhistory.id}})';>{{bookhistory.bookingdetails|truncatechars:30}}</a></td>
+                                                    {% endif %}
                                                     
 
                                                     {%if bookhistory.amount == None%}
@@ -89,13 +92,13 @@
                                                         <td data-label="Amount">₹ {{bookhistory.amount}}</td>
                                                     {%endif%}
 
-                                                    {%if bookhistory.payment_status == False%}
+                                                    {%if not bookhistory.payment_status%}
                                                         <td data-label="Payment Status">Not paid</td>
                                                     {%else%}
                                                         <td data-label="Payment Status">Paid</td>
                                                     {%endif%}
                                                     {% comment %} <td data-label="Status">On Process</td> {% endcomment %}
-                                                    {%if bookhistory.payment_status == False%}
+                                                    {%if  bookhistory.payment_status == False%}
                                                     <td data-label="Report"><button
                                                             class="br br-5 fs-16 font-bold bg-dark-green cl-dark-white download text-center paynow-btn" 
                                                             {% if bookhistory.amount == None %}
@@ -188,6 +191,7 @@
                     <div class="modal-body">
                         <button type="button" class="btn-close  close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
+                            
                             <div id="testdetaills" >
                                 
                         </div>
@@ -303,12 +307,9 @@
     return false;
 }
 
-function testdetail(id){
-alert("OK");
-}
 
  
-/*$("#testdetails").click(function(){
+$("#testdetails").click(function(){
     a=$(this).attr("name");
   
     $.ajax({
@@ -330,7 +331,7 @@ alert("OK");
         }
     });
   });
-*/
+
 
 </script>
 {%endblock%}

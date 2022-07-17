@@ -265,8 +265,10 @@ class healthsymptoms(models.Model):
     symptoms=models.TextField(null=True,blank=True)
     test_name=models.ManyToManyField(test)
     slug = models.SlugField(null=True, unique=True)
+    bengaluru_price = models.CharField(max_length=10,blank=True,null=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
+
     def __str__(self):
         return self.name
     class Meta:
@@ -319,6 +321,7 @@ class cart(models.Model):
     labtest=models.ForeignKey(healthcheckuppackages,null=True,blank=True,on_delete=models.CASCADE)
     packages=models.ForeignKey(healthpackages,null=True,blank=True,on_delete=models.CASCADE)
     categoryy=models.ForeignKey(category,null=True,blank=True,on_delete=models.SET_NULL)
+    healthsymptoms = models.ForeignKey(healthsymptoms, verbose_name=_("Health Symptoms"), on_delete=models.SET_NULL, null=True, blank=True)
     price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
     device = models.CharField(_("Device"), max_length=200,null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)

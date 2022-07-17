@@ -89,11 +89,13 @@
         {%for symptoms in healthsymptom%}
 
         <div class="col-xl-2 col-lg-4 col-md-4 col-12 py-2 ">
+          <a href={% url 'health_symptoms' symptoms.slug %}>  
           <div
             class="symptoms px-3 {% cycle 'bg-light-blue' 'bg-light-orange' 'bg-light-green' 'bg-light-pink' %} text-center py-lg-5 py-3 br-10">
             <img src="{{ symptoms.photo.url }}" alt="" class="img-fluid pb-3">
             <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold">{{symptoms.name}}</p>
           </div>
+        </a>
         </div>
         {%endfor%}
       </div>
@@ -302,13 +304,11 @@
                 <h1 class="fs-40 font-bold cl-dark-blue pt-2 pb-lg-4">Request a Call Back</h1>
                 <div class="row">
                   <div class="col-12 col-md-12 col-lg-6 pt-4">
-                    <label class="fs-20 font-regular cl-dark-blue">First name<span
-                      class="cl-red ps-1">*</span></label>
+                    <label class="fs-20 font-regular cl-dark-blue">First name</label>
                     <input class="w-100  br-5 mt-2" type="text" name="firstname" id="name" maxlength="250" />
                   </div>
                   <div class="col-12 col-md-12 col-lg-6 pt-4">
-                    <label class="fs-20 font-regular cl-dark-blue">Last name<span
-                      class="cl-red ps-1">*</span></label>
+                    <label class="fs-20 font-regular cl-dark-blue">Last name</label>
                     <input class="w-100 br-5 mt-2" type="text" name="lastname" id="surname" maxlength="250" />
                   </div>
                   <div class="col-12 col-md-12 col-lg-6 pt-4">
@@ -484,12 +484,12 @@ $(document).ready(function(){
   $("#homeForm").validate({
     rules: {
 
-      'firstname': {
+      'name': {
         required: true,
         minlength: 1,
         name_regex: true,
       },
-      'lastname': {
+      'surname': {
         required: true,
         minlength: 1,
         name_regex: true,
@@ -508,11 +508,11 @@ $(document).ready(function(){
 
     messages: {
 
-      'firstname': {
+      'name': {
         required: "Enter first name",
       },
-      'lastname': {
-        required: "Enter last name",
+      'surname': {
+        required: "Enter  name",
       },
       'email': {
         required: "Enter email ID",

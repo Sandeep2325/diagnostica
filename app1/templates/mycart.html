@@ -305,6 +305,7 @@ function deletefunc(e){
                     'csrfmiddlewaretoken':'{{ csrf_token }}',
                 },
                 success: function(resp){
+                   console.log(resp)
                    window.location.reload();
                 }
             });
