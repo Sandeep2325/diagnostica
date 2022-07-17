@@ -7,7 +7,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.core.validators import RegexValidator
 import uuid
 from django.core.mail import send_mail
 from django.conf import settings
@@ -23,6 +22,7 @@ from django.dispatch import receiver
 #     uuid = models.UUIDField(default=uuid.uuid4,editable=False)
 class city(models.Model):
     cityname=models.CharField(max_length=200,null=True,blank=True)
+    city_icon = models.ImageField(upload_to="photos/icons/", null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
     def __str__(self):
@@ -116,10 +116,12 @@ class test(models.Model):
     # price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
     pricel1=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Banglore Price")
     pricel2=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Mumbai Price")
-    pricel3=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Chennai Price")
-    pricel4=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Hyderabad Price")
-    pricel5=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Delhi Price")
-    pricel6=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Kolkata Price")
+    pricel3=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="bhopal Price")
+    pricel4=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="nanded Price")
+    pricel5=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="pune Price")
+    pricel6=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="barshi Price")
+    pricel7=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="aurangabad Price")
+
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     # slug = models.SlugField(null=True, unique=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
@@ -201,15 +203,21 @@ class healthcheckuppackages(models.Model):
     # location=models.ForeignKey(city,null=True,on_delete=models.CASCADE,verbose_name="Location")
     # test_nos=models.CharField(max_length=100,null=True,blank=True,verbose_name="No of test")
     pricel1=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Banglore Price")
-    pricel2=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Chennai Price")
-    pricel3=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Mumbai Price")
-    pricel4=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Delhi Price")
+    pricel2=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Mumbai Price")
+    pricel3=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="bhopal Price")
+    pricel4=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="nanded Price")
+    pricel5=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="pune Price")
+    pricel6=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="barshi Price")
+    pricel7=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="aurangabad Price")
     # pricel5=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Delhi Price")
     # pricel6=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Kolkata Price")
     dpricel1=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Banglore Discounted Price")
-    dpricel2=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Chennai Discounted Price")
+    dpricel2=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="bhopal Discounted Price")
     dpricel3=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Mumbai DiscountedPrice")
-    dpricel4=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Delhi Discounted Price")
+    dpricel4=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="nanded Discounted Price")
+    dpricel5=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="pune Discounted Price")
+    dpricel6=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="barshi Discounted Price")
+    dpricel7=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="aurangabad Discounted Price")
     # dpricel5=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Delhi DiscountedPrice")
     # dpricel6=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Kolkata Discounted Price")
     description=models.TextField(null=True,blank=True,verbose_name="Description")
@@ -240,10 +248,11 @@ class healthpackages(models.Model):
     description=models.TextField(null=True,blank=True,verbose_name="Description")
     pricel1=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Banglore Price")
     pricel2=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Mumbai Price")
-    pricel3=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Chennai Price")
-    pricel4=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Hyderabad Price")
-    pricel5=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Delhi Price")
-    pricel6=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Kolkata Price")
+    pricel3=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="bhopal Price")
+    pricel4=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="nanded Price")
+    pricel5=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="pune Price")
+    pricel6=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="barshi Price")
+    pricel7=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="aurangabad Price")
 
     slug = models.SlugField(null=True, unique=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)

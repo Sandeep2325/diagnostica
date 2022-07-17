@@ -47,12 +47,6 @@
                                         {% comment %} <form method="get" action="{%url "search"%}" >
                                             {% csrf_token%} {% endcomment %}
                                         <div class="row">
-                                           
-                                            <div class="col-lg-5 col-sm-6 position-relative py-4">
-                                                <input class="w-100 br br-5" id="searched" placeholder="Search" name="searched" maxlength="250" />
-                                                {% comment %} <button  type="submit"class="br">  <i class="fa fa-search test-list-search" aria-hidden="true"></i></button> {% endcomment %}
-                                            </div>
-                                        {% comment %} </form> {% endcomment %}
                                             <div class="col-lg-5 col-sm-6 position-relative py-4">
                                                 <select
                                                     class="br-5 cl-dark-blue fs-18 form-select br select_option"
@@ -64,6 +58,10 @@
                                                     <option  value={{category.id}}>{{category.categoryy}}</option>
                                                     {%endfor%}
                                                 </select>
+                                            </div>
+                                            <div class="col-lg-5 col-sm-6 position-relative py-4">
+                                                <input class="w-100 br br-5" id="searched" placeholder="Search" name="searched" maxlength="250" />
+                                                {% comment %} <button  type="submit"class="br">  <i class="fa fa-search test-list-search" aria-hidden="true"></i></button> {% endcomment %}
                                             </div>
                                         </div>
                                         <div id="main-test-div">
