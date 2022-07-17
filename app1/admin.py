@@ -61,7 +61,7 @@ class testadmin(admin.ModelAdmin):
                     des = re.sub(r"</?\[\d+>", "", row.get("Description"))
                     try:
                         categoryy=category.objects.get(pk=row.get("category_id"))
-                        created = test.objects.create(
+                        obj, created = test.objects.get_or_create(
                                 testt=row["Tests"],
                                 categoryy=categoryy,
                                 pricel1=row.get("price l1") if row.get("price l1") else None,
