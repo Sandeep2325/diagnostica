@@ -1269,6 +1269,7 @@ def categoryy(request):
         pk=request.POST["pk"]
         searched_name = request.POST.get("searched")
         b=[]
+
         if pk != "all":
             if searched_name:
                 tests=test.objects.filter(categoryy__id=pk, testt__icontains = searched_name)
@@ -1276,7 +1277,8 @@ def categoryy(request):
                 tests=test.objects.filter(categoryy__id=pk)
         else:
             tests=test.objects.all()
-        # print(tests)
+
+
         for tesst in tests:
             a={}
             
@@ -1303,6 +1305,7 @@ def search(request):
         else:
             print(request.POST)
             city=request.session.get("city")
+
             searched=request.POST.get('searched')
             req_cat = request.POST.get("cat")
             print(searched)

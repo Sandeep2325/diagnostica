@@ -16,6 +16,7 @@ from django.contrib.admin.views.main import ChangeList
 # Register your models here.
 class cityadmin(admin.ModelAdmin):
     list_display=["cityname","created","updated"]
+    readonly_fields = ["cityname"]
 class testadmin(admin.ModelAdmin):
     list_display=["testt","categoryy","pricel1","pricel2","pricel3","pricel4","pricel5","pricel6","is_active","created","updated","action_btn"]
     list_editable=["is_active"]
