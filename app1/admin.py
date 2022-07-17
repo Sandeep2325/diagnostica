@@ -1,4 +1,3 @@
-from tokenize import group
 from django.contrib import admin
 from app1.models import *
 from django.urls import path
@@ -13,6 +12,8 @@ from django.utils.html import format_html
 from django_summernote.admin import SummernoteModelAdmin
 from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
+import csv
+import re
 # Register your models here.
 class cityadmin(admin.ModelAdmin):
     list_display=["cityname","created","updated"]
@@ -49,23 +50,27 @@ class testadmin(admin.ModelAdmin):
                     messages.warning(
                         request, 'The wrong file type was uploaded')
                     return HttpResponseRedirect(request.path_info)
-                file_data = csv_file.read().decode("utf-8")
-                csv_data = file_data.split("\r\n")
-                print(csv_data[0])
-                for x in csv_data[1:]:
-                    fields = x.split(",")
+
+            
+                def decode_utf8(input_iterator):
+                    for l in input_iterator:
+                        yield l.decode('utf-8')
+
+                reader = csv.DictReader(decode_utf8(request.FILES['csv_upload']))
+                for row in reader:
+                    des = re.sub(r"</?\[\d+>", "", row.get("Description"))
                     try:
+                        categoryy=category.objects.get(pk=row.get("category_id"))
                         created = test.objects.create(
-                            testt=fields[0],
-                            categoryy=category.objects.get(pk=(fields[1])),
-                            pricel1=fields[2],
-                            pricel2=fields[3],
-                            pricel3=fields[4],
-                            pricel4=fields[5],
-                            pricel5=fields[6],
-                            pricel6=fields[7],
-                            description=fields[8],)
-                        created.save()
+                                testt=row["Tests"],
+                                categoryy=categoryy,
+                                pricel1=row.get("price l1") if row.get("price l1") else None,
+                                pricel2=row.get("price l2") if row.get("price l2") else None,
+                                pricel3=row.get("price l3") if row.get("price l3") else None,
+                                pricel4=row.get("price l4") if row.get("price l4") else None,
+                                pricel5=row.get("price l5") if row.get("price l5") else None,
+                                pricel6=row.get("price l6") if row.get("price l6") else None,
+                                description=des)
                     except IndexError:
                         pass
                     except (IntegrityError):
@@ -79,6 +84,7 @@ class testadmin(admin.ModelAdmin):
             form = CsvImportForm()
             data = {"form": form}
             return render(request, "admin/app1/csv_upload.html", data)
+
 class prescriptionbookadmin(admin.ModelAdmin):
     list_display=["users","testname","myself","others","others_choice","firstname","lastname","contact","age","gender","prescription_file","created","updated","action_btn"]        
     readonly_fields=["user","myself","others","others_choice","firstname","lastname","contact","age","gender","unique","created","updated","location"]
