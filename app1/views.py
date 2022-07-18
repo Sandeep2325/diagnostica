@@ -81,7 +81,8 @@ def Registration(request):
         up = UserProfileForm(request.POST)
         # if fm.is_valid():
         e = request.POST['email']
-        u = request.POST['name']
+        f = request.POST['firstname']
+        l = request.POST['lastname']
         p = request.POST['confirmpassword']
         user=User.objects.filter(email=e)
         if user.exists():
@@ -89,7 +90,8 @@ def Registration(request):
             return render(request,'register.html')
         else:
             request.session['email'] = e
-            request.session['username'] = u
+            request.session['firstname'] = f
+            request.session['lastname'] = l
             request.session['password'] = p
             p_number = request.POST['phone']
             request.session['number'] = p_number
@@ -97,11 +99,12 @@ def Registration(request):
             request.session['otp'] = otp
                 # message = f'your otp is {otp}'
                 # send_otp(p_number,message)
-            message = f'Welcome your otp is {otp} '
+            message=f'Hello {f},\nThank you for choosing us ,Your OTP is {otp}'
+            # message = f'Welcome your otp is {otp} '
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [e]
             message = message
-            subject = "OTP" 
+            subject = "DIGNOSTICA SPAN OTP Confirmation" 
             send_mail(
                     subject,
                     message,
@@ -122,7 +125,8 @@ def otpRegistration(request):
         u_otp4 = request.POST['digit-4']
         a=str(u_otp1)+str(u_otp2)+str(u_otp3)+str(u_otp4)
         otp = request.session.get('otp')
-        user = request.session['username']
+        firstname = request.session['firstname']
+        lastname = request.session['lastname']
         # hash_pwd=request.session.get('password')
         hash_pwd = make_password(request.session.get('password'))
         p_number = request.session.get('number')
@@ -130,13 +134,15 @@ def otpRegistration(request):
 
         if int(a) == otp:
             User.objects.create(
-                            username = user,
+                            first_name = firstname,
+                            last_name=lastname,
                             email=email_address,
                             phone_no=p_number,
                             password=hash_pwd
             )
             request.session.delete('otp')
-            request.session.delete('user')
+            request.session.delete('firstname')
+            request.session.delete('lastname')
             request.session.delete('email')
             request.session.delete('password')
             request.session.delete('phone_number')
@@ -151,11 +157,11 @@ def resendotp(request):
     email_address = request.session.get('email')
     otp = random.randint(1000,9999)
     request.session['otp'] = otp
-    message = f'Welcome your resend otp is {otp} '
+    message = f'Hello , \n Welcome your Resend OTP is {otp} '
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [email_address]
     message = message
-    subject = "OTP" 
+    subject = "DIGNOSTICA SPAN" 
     send_mail(
             subject,
             message,
@@ -165,27 +171,28 @@ def resendotp(request):
     )
     messages.success(request,"resend otp sent")
     return redirect('/registration/otp/')
-
+@login_required(login_url="/login/")
 def changepassword(request):
     if request.method=="POST":
       password=request.POST["currentPassword"]
       conpassword=request.POST["confirmpassword"]
-       
       otp = random.randint(1000,9999)
       email_address = request.user.email
       a=authenticate(request,username=request.user.email,password=password)
       if a == None:
+          print("invalid")
           messages.info(request,"Invalid password")
           return render (request,"changepassword.html")
       else:
+        print("true")
         request.session["ppassword"]=password 
         request.session["conpassword"]=conpassword
         request.session['otp'] = otp
-        message = f'Welcome your resend otp is {otp} '
+        message = f'Hello,\nWelcome your Change Password OTP is {otp} '
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [email_address]
         message = message
-        subject = "OTP" 
+        subject = "DIGNOSTICA SPAN" 
         send_mail(
                 subject,
                 message,
@@ -203,6 +210,7 @@ def forgotpassword(request):
             # u = fm.cleaned_data['password']
         p = request.POST['confirmpassword']
         user=User.objects.filter(email=e)
+        
         if user.exists():
             request.session['email'] = e
             request.session['password'] = p
@@ -211,11 +219,11 @@ def forgotpassword(request):
             request.session['otp'] = otp
                 # message = f'your otp is {otp}'
                 # send_otp(p_number,message)
-            message = f'Welcome your forgot password otp is {otp} '
+            message = f'Hello ,\n Welcome your forgot password otp is {otp} '
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [e]
             message = message
-            subject = "OTP" 
+            subject = "DIAGNOSTICA SPAN" 
             send_mail(
                     subject,
                     message,
@@ -228,6 +236,7 @@ def forgotpassword(request):
             messages.error(request,"Email is not registered")
             return render(request,"forgotpassword.html")
     return render(request,"forgotpassword.html")
+  
 def changepasswordotp(request):
     if request.method == "POST":
         u_otp1 = request.POST['digit-1']
@@ -239,15 +248,17 @@ def changepasswordotp(request):
         
         # user = request.session['username']
         # hash_pwd=request.session.get('password')
-        hash_pwd = make_password(request.session.get('password'))
+        # hash_pwd = make_password(request.session.get('password'))
         # p_number = request.session.get('number')
         email_address = request.session.get('email') 
         password=request.session.get("ppassword")
+        print(password)
         # request.session.get("newpassword")
         newpassword=make_password(request.session.get("conpassword"))
+        print(request.session.get("conpassword"))
         if int(a) == otp:
             data = User.objects.filter(
-                            email=request.user.email,password=password)
+                            email=request.user.email)
             if data.exists():
                 data = User.objects.filter(
                             email=request.user.email).update(password=newpassword)
@@ -255,12 +266,14 @@ def changepasswordotp(request):
             # User.objects.create(
             #                 user = user_instance,phone_number=p_number
             # )
-            request.session.delete("ppassword")
+                request.session.delete("ppassword")
             # request.session.delete("newpassword")
-            request.session.delete("conpassword")
-            print("changed successfully")
-            # messages.success(request,'Password changed successfully!!')
-            return redirect('home')
+                request.session.delete("conpassword")
+                print("changed successfully")
+                messages.success(request,'Password changed successfully!! Please Login Again.')
+                return redirect('home')
+            else:
+                print("not exists")
         else:
             messages.error(request,'Wrong OTP')
     return render(request,'otpforgot.html')    
@@ -279,8 +292,6 @@ def passwordcheck(request):
         except Exception as e: 
             print(e)
             return JsonResponse({"message":False})
-
-              
 def otpforgotpassword(request):
     if request.method == "POST":
         u_otp1 = request.POST['digit-1']
@@ -332,12 +343,16 @@ def userinfo(request):
    a= request.user
    
    return JsonResponse({"message":True,"firstname":a.first_name,"lastname":a.last_name,"contact":a.phone_no,"gender":a.gender,"address":a.address,"age":a.age}) 
+@login_required(login_url="/login/")
 def profilee(request):
     profile=User.objects.get(email=request.user.email)
     context={
         "profile":profile,
     }
     if request.method=="POST":
+        
+        # profile_pic=request.POST.Files
+        profilepic=request.FILES.get("profile_pic")
         name=request.POST.get("name")
         email=request.POST.get("email")
         phone=request.POST.get("phone")
@@ -345,13 +360,18 @@ def profilee(request):
         location=request.POST.get("location")
         age=request.POST.get("age")
         address=request.POST.get("address")
-        User.objects.filter(email=request.user.email).update(username=name,
-                                                             email=email,
-                                                             phone_no=phone,
-                                                             gender=gender,
-                                                             location=location,
-                                                             age=age,
-                                                             address=address)
+        print(request.FILES)
+        print(profilepic, type(profilepic))
+        a=User.objects.get(email=request.user.email)
+        a.photo=profilepic
+        a.username=name
+        a.email=email
+        a.phone_no=phone
+        a.gender=gender
+        a.location=location
+        a.age=age
+        a.address=address
+        a.save()
         
         messages.success(request,"Profile updated Successfully")
         profile=User.objects.get(email=request.user.email)
@@ -372,93 +392,100 @@ def userLogin(request):
         username = request.POST['email']
         request.session["emaill"]=username
         password = request.POST['password']
-        user = authenticate(request,username=username,password=password)
-        a=request.session.get("cartt")
-        
-        if user is not None:
-            login(request,user)
+        try:
+            a=User.objects.get(email=username)
+            print(a)
+            user = authenticate(request,username=username,password=password)
             a=request.session.get("cartt")
-            city=request.session.get("city")
-            try:
-                chckupp=healthcheckuppackages.objects.filter(id__in=a.get("checkup"))
-            except:
-                pass
-            try:
-                package=healthpackages.objects.filter(id__in=a.get("package"))
-            except:
-                pass
-            try:
-                tessst=test.objects.filter(id__in=a.get("selecttest"))
-            except:
-                pass
+        
             
-            # context["chckupp"]=chckupp
-            # context["package"]=package
-            # context["tessst"]=tessst
-            
-            # cart.objects.create(user=request.user,items=tes,categoryy=tes.categoryy,price=tes.pricel1).save()
-            # print(chckupp)
-            # print(package)
-            # print(tessst)
-            try:
-                for j in chckupp:
-                    
-                    if city=="Bangalore":
-                        price=str(j.dpricel1)
-                    
-                    elif city == "Chennai":
-                        price=str(j.dpricel1)
-                    
-                    elif city == "Mumbai":
-                        price=str(j.dpricel1)
-                    
-                    elif city == "Delhi":
-                        price=str(j.dpricel1)
+            if user is not None:
+                login(request,user)
+                a=request.session.get("cartt")
+                city=request.session.get("city")
+                try:
+                    chckupp=healthcheckuppackages.objects.filter(id__in=a.get("checkup"))
+                except:
+                    pass
+                try:
+                    package=healthpackages.objects.filter(id__in=a.get("package"))
+                except:
+                    pass
+                try:
+                    tessst=test.objects.filter(id__in=a.get("selecttest"))
+                except:
+                    pass
+                
+                # context["chckupp"]=chckupp
+                # context["package"]=package
+                # context["tessst"]=tessst
+                
+                # cart.objects.create(user=request.user,items=tes,categoryy=tes.categoryy,price=tes.pricel1).save()
+                # print(chckupp)
+                # print(package)
+                # print(tessst)
+                try:
+                    for j in chckupp:
                         
-                    cart.objects.create(user=request.user,labtest=j,price=price).save()
-            except:
-                pass   
-            try:    
-                for j in package:
-                    
-                    if city=="Bangalore":
-                    
-                        price=str(j.pricel1)
-                    elif city == "Chennai":
+                        if city=="Bangalore":
+                            price=str(j.dpricel1)
                         
-                        price=str(j.pricel1)
-                    elif city == "Mumbai":
+                        elif city == "Chennai":
+                            price=str(j.dpricel1)
                         
-                        price=str(j.pricel1)
-                    elif city == "Delhi":
+                        elif city == "Mumbai":
+                            price=str(j.dpricel1)
                         
-                        price=str(j.pricel1)
-                    cart.objects.create(user=request.user,packages=j,price=price).save()
-            except:
-                pass   
-            try:    
-                for j in tessst:
-                    print("--------",j)
-                    if city=="Bangalore":
-                        price=str(j.pricel1)
+                        elif city == "Delhi":
+                            price=str(j.dpricel1)
+                            
+                        cart.objects.create(user=request.user,labtest=j,price=price).save()
+                except:
+                    pass   
+                try:    
+                    for j in package:
                         
-                    elif city == "Chennai":
-                        price=str(j.pricel1)
-                    
-                    elif city == "Mumbai":
-                        price=str(j.pricel1)
-                    
-                    elif city == "Delhi":
-                        price=str(j.pricel1)
+                        if city=="Bangalore":
+                        
+                            price=str(j.pricel1)
+                        elif city == "Chennai":
+                            
+                            price=str(j.pricel1)
+                        elif city == "Mumbai":
+                            
+                            price=str(j.pricel1)
+                        elif city == "Delhi":
+                            
+                            price=str(j.pricel1)
+                        cart.objects.create(user=request.user,packages=j,price=price).save()
+                except:
+                    pass   
+                try:    
+                    for j in tessst:
                         print("--------",j)
-                    cart.objects.create(user=request.user,items=j,price=price,categoryy=j.categoryy).save()
-            except:
-                pass
-            next = request.POST.get('next', '/')
-            return HttpResponseRedirect(next)  
-            # return redirect('/')
-        else:
-            messages.error(request,'Email or password is wrong')
+                        if city=="Bangalore":
+                            price=str(j.pricel1)
+                            
+                        elif city == "Chennai":
+                            price=str(j.pricel1)
+                        
+                        elif city == "Mumbai":
+                            price=str(j.pricel1)
+                        
+                        elif city == "Delhi":
+                            price=str(j.pricel1)
+                            print("--------",j)
+                        cart.objects.create(user=request.user,items=j,price=price,categoryy=j.categoryy).save()
+                except:
+                    pass
+                next = request.POST.get('next', '/')
+                return HttpResponseRedirect(next)  
+                # return redirect('/')
+            else:
+                messages.error(request,'Invalid Password')
+        except:
+            messages.error(request,'Email ID is not registered')
+    
     return render(request,'login.html')
 
 def booktestonline(request):
@@ -1012,15 +1039,7 @@ def cartt1(request):
         a=[]
         for i in data:
             a.append(i.price)
-        def testname():
-            return ", ".join([
-                test.testt for test in data2.test_name.all()
-            ])
-            
-        def testname():
-            return ",".join([
-                test.testt for test in data1
-            ])
+     
         strr=[]
         for tesst in data1:
             if tesst.items == None and test.packages == None:
@@ -1261,7 +1280,6 @@ def addtocart(request):
         else:
             request.session['cart_count']= cart.objects.filter(user = request.user).count()
         return JsonResponse(RES)
-
 
 def categoryy(request):
     if request.method=="POST":
@@ -1655,7 +1673,10 @@ def invoice(request,orderid):
 #     return render(request,'change-password.html')
 
 
-class BookingHistoryPay(View):
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+class BookingHistoryPay(LoginRequiredMixin,View):
+    login_url = '/login/'
     def get(self, request,*args, **kwargs):
         his = []
         bookhistories=book_history.objects.filter(user=request.user).order_by('created')
@@ -1741,3 +1762,9 @@ class HealthSymptoms(View):
         else:
             request.session['cart_count']= cart.objects.filter(user = request.user).count()
         return HttpResponse(json.dumps(res), content_type="application/json")
+def error_404_view(request, exception):
+   
+    # we add the path to the the 404.html file
+    # here. The name of our HTML file is 404.html
+    # return render(request, '404.html')
+    return HttpResponse("404 Not Found")

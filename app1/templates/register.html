@@ -3,6 +3,20 @@
 {%block content%}
 <body>
     {%include 'header.html'%}
+    <section class="sub_header py-xl-4 py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="d-flex ">
+                        <p class="m-0 fs-18 font-regular cl-dark-blue opc-5 pe-1 sub_nav_bar"><a
+                                href="{%url "home"%}">Home</a></p>
+                        /
+                        <p class="m-0 fs-18 font-regular cl-dark-blue ps-1 sub_nav_bar">Register</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 <section class="section_register register pb-5">
     <div class="container">
         <div class="row">
@@ -15,19 +29,25 @@
                                 <h1 class="fs-40 font-bold cl-dark-blue pt-5 mb-4">
                                     Register Now
                                 </h1>
-                                {%for message in messages%}
-                                {{message}}
-                                {%endfor%}
+                                
                                 <p class="fs18 font-regular cl-dark-blue opc-5 pb-4 m-0 pe-xl-5">
                                     Lorem Ipsum is simply dummy text of the printing and
                                     typesetting industry.
                                 </p>
                                 <div class="">
-                                    <label class="fs-20 font-bold cl-dark-blue" for="name">Name</label>
+                                    <label class="fs-20 font-bold cl-dark-blue" for="firstname">First Name</label>
                                     <br />
                                     <div class="pt-2">
                                         <input class="w-100 px-4 py-2 register_input br-5 m-0"
-                                            placeholder="Enter Your Name" id="name" name="name" type="text" maxlength="250"/>
+                                            placeholder="Enter Your Name" id="firstname" name="firstname" type="text" maxlength="250"/>
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <label class="fs-20 font-bold cl-dark-blue" for="lastname">Last Name</label>
+                                    <br />
+                                    <div class="pt-2">
+                                        <input class="w-100 px-4 py-2 register_input br-5 m-0"
+                                            placeholder="Enter Your Name" id="lastname" name="lastname" type="text" maxlength="250"/>
                                     </div>
                                 </div>
                                 <div class="pt-3">
@@ -95,6 +115,15 @@
     </div>
 </section>
 </body>
+{% if messages %}
+{% for message in messages %}
+<script>
+  $(document).ready(function(){
+    alert('{{message}}');
+  });
+</script>
+{%endfor%}
+{% endif %}
 <script>
     $(document).on('click', '.toggle-password-register', function () {
 

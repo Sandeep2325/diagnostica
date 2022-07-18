@@ -29,9 +29,9 @@
                                     <div>
                                         <h1 class="fs-40 font-bold cl-dark-blue pt-lg-0 pt-3 m-0 ">Login</h1>
                                         <p class="fs-18 font-regular cl-dark-blue m-0 py-xl-5 py-3">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-{%for message in messages%}
-<label class="error">{{message}}</label>
-{%endfor%}
+{% comment %} {%for message in messages%}
+<label >{{message}}</label>
+{%endfor%} {% endcomment %}
                                         <div class="row">
                                             <div class="col-lg-6 pb-xl-0 pb-3">
                                                 <label class="fs-20 font-bold cl-dark-blue pb-2" for="email">Email
@@ -84,8 +84,6 @@
 </body>
 
 <script>
-  
-
     $(document).on('click', '.toggle-password', function() {
 
         $(this).toggleClass("fa-eye fa-eye-slash");
@@ -93,8 +91,6 @@
         var input = $("#password");
         input.attr('type') === 'password' ? input.attr('type', 'text') : input.attr('type', 'password')
     });
-
-
 
     $.validator.addMethod('filesize', function(value, element, param) {
         return this.optional(element) || (element.files[0].size <= param)
