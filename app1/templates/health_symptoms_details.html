@@ -30,9 +30,27 @@
                   <p
                     class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">
                     Price</p>
-                  
+{% comment %}                   
                   <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{currentObj.bengaluru_price}}</h1>
-                  
+                   {% endcomment %}
+                  {%if city == envcity.Bangalore%}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{currentObj.Banglore_price}}</h1>
+                  {%elif city == envcity.Mumbai %}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{currentObj.Mumbai_price}}</h1>
+                  {%elif city == envcity.Bhophal %}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{currentObj.bhopal_price}}</h1>
+                  {%elif city == envcity.Nanded %}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{currentObj.nanded_price}}</h1>
+                  {%elif city == envcity.Pune %}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{currentObj.pune_price}}</h1>
+                  {%elif city == envcity.Barshi %}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{currentObj.barshi_price}}</h1>
+                  {%elif city == envcity.Aurangabad %}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{currentObj.aurangabad_price}}</h1>
+{%endif%}
+
+
+
                   <p
                     class="d-flex justify-content-center align-content-center align-items-center m-0 fs-18 cl-dark-blue font-bold">
                     Includes {{currentObj.test_name.all.count}}
@@ -57,13 +75,62 @@
             </h2>
             <div class="row px-5">
               {%for test in currentObj.test_name.all %}
+              {% if city == envcity.Bangalore%}
               <div class="col-12 h-100 ms-xl-5">
                 <div class="">
-                  <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.pricel1}}</h3>
+                  <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.Banglore_price}}</h3>
                 </div>
                 <p class="pb-4 pe-lg-5 ">{{test.description}}</p>
               </div>
 
+              {% elif city == envcity.Mumbai%}
+              <div class="col-12 h-100 ms-xl-5">
+                <div class="">
+                  <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.Mumbai_price}}</h3>
+                </div>
+                <p class="pb-4 pe-lg-5 ">{{test.description}}</p>
+              </div>
+
+              {% elif city == envcity.Bhophal%}
+              <div class="col-12 h-100 ms-xl-5">
+                <div class="">
+                  <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.bhopal_price}}</h3>
+                </div>
+                <p class="pb-4 pe-lg-5 ">{{test.description}}</p>
+              </div>
+
+              {% elif city == envcity.Nanded%}
+              <div class="col-12 h-100 ms-xl-5">
+                <div class="">
+                  <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.nanded_price}}</h3>
+                </div>
+                <p class="pb-4 pe-lg-5 ">{{test.description}}</p>
+              </div>
+
+              {% elif city == envcity.Pune%}
+              <div class="col-12 h-100 ms-xl-5">
+                <div class="">
+                  <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.pune_price}}</h3>
+                </div>
+                <p class="pb-4 pe-lg-5 ">{{test.description}}</p>
+              </div>
+
+              {% elif city == envcity.Barshi%}
+              <div class="col-12 h-100 ms-xl-5">
+                <div class="">
+                  <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.barshi_price}}</h3>
+                </div>
+                <p class="pb-4 pe-lg-5 ">{{test.description}}</p>
+              </div>
+
+              {% elif city == envcity.Aurangabad%}
+              <div class="col-12 h-100 ms-xl-5">
+                <div class="">
+                  <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.aurangabad_price}}</h3>
+                </div>
+                <p class="pb-4 pe-lg-5 ">{{test.description}}</p>
+              </div>
+{%endif%}
               {%endfor%}
               {% comment %} <div class="col-lg-5 col-md-12 h-100 mx-auto">
                 <div class="">
@@ -101,8 +168,21 @@
                       <p
                         class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">
                         Price</p>
-                      <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.bengaluru_price}}</h1>
-                      
+                        {%if city == envcity.Bangalore%}
+                      <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.Banglore_price}}</h1>
+                      {%elif city == envcity.Mumbai %}
+                      <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.Mumbai_price}}</h1>
+                      {%elif city == envcity.Bhophal %}
+                      <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.bhopal_price}}</h1>
+                      {%elif city == envcity.Nanded %}
+                      <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.nanded_price}}</h1>
+                      {%elif city == envcity.Pune %}
+                      <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.pune_price}}</h1>
+                      {%elif city == envcity.Barshi %}
+                      <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.barshi_price}}</h1>
+                      {%elif city == envcity.Aurangabad %}
+                      <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.aurangabad_price}}</h1>
+{%endif%}
                       <p
                         class="d-flex justify-content-center align-content-center align-items-center m-0 fs-18 cl-dark-blue font-bold">
                         Includes {{pack.test_name.all.count}}

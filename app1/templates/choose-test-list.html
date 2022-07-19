@@ -86,22 +86,37 @@
                                                 <div class="col-xl-6 col-md-6 test-list">
                                                     <p> {{test.description}} </p>
                                                 </div>
+                                              
                                                 
-                                                {%if city == "Bangalore" %}
+                                                {%if city == envcity.Bangalore %}
                                                 <div class="col-xl-3 col-md-2 test-list-price">
-                                                    <p>₹ {{test.pricel1}}</p>
+                                                    <p>₹ {{test.Banglore_price}}</p>
                                                 </div>
-                                                {%elif city == "Chennai" %}
+                                                {%elif city == envcity.Mumbai %}
                                                 <div class="col-xl-3 col-md-2 test-list-price">
-                                                    <p>₹ {{test.pricel2}}</p>
+                                                    <p>₹ {{test.Mumbai_price}}</p>
                                                 </div>
-                                                {%elif city == "Mumbai" %}
+                                                {%elif city == envcity.Bhophal %}
                                                 <div class="col-xl-3 col-md-2 test-list-price">
-                                                    <p>₹ {{test.pricel3}}</p>
+                                                    <p>₹ {{test.bhopal_price}}</p>
                                                 </div>
-                                                {%elif city == "Delhi" %}
+                                                {%elif city == envcity.Nanded %}
                                                 <div class="col-xl-3 col-md-2 test-list-price">
-                                                    <p>₹ {{test.pricel4}}</p>
+                                                    <p>₹ {{test.nanded_price}}</p>
+                                                </div>
+
+
+                                                {%elif city == envcity.Pune %}
+                                                <div class="col-xl-3 col-md-2 test-list-price">
+                                                    <p>₹ {{test.pune_price}}</p>
+                                                </div>
+                                                {%elif city == envcity.Barshi %}
+                                                <div class="col-xl-3 col-md-2 test-list-price">
+                                                    <p>₹ {{test.barshi_price}}</p>
+                                                </div>
+                                                {%elif city == envcity.Aurangabad %}
+                                                <div class="col-xl-3 col-md-2 test-list-price">
+                                                    <p>₹ {{test.aurangabad_price}}</p>
                                                 </div>
                                                 {%endif%}
                                                 <div class="col-xl-3 col-md-4 test-list-button"><button id="addtocart"

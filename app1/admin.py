@@ -19,7 +19,7 @@ class cityadmin(admin.ModelAdmin):
     list_display=["cityname","created","updated"]
     # readonly_fields = ["cityname"]
 class testadmin(admin.ModelAdmin):
-    list_display=["testt","categoryy","pricel1","pricel2","pricel3","pricel4","pricel5","pricel6","is_active","created","updated","action_btn"]
+    list_display=["testt","categoryy","Banglore_price","Mumbai_price","bhopal_price","nanded_price","pune_price","barshi_price","aurangabad_price","is_active","created","updated","action_btn"]
     list_editable=["is_active"]
     list_filter = ('categoryy', 'is_active')
     search_fields = ('testt', 'categoryy__categoryy')
@@ -132,7 +132,7 @@ class categoryadmin(admin.ModelAdmin):
         return format_html(html)
     action_btn.short_description = "Action"
 class healthcheckup_admin(SummernoteModelAdmin):
-    list_display=["package_title","testname","testcount","pricel1","pricel2","pricel3","pricel4","dpricel1","dpricel2","dpricel3","dpricel4","discount","created","updated","action_btn"]    
+    list_display=["package_title","testname","testcount","Banglore_price","Mumbai_price","bhopal_price","nanded_price","pune_price","barshi_price","aurangabad_price","dBanglore_price","dMumbai_price","dbhopal_price","dnanded_price",'dpune_price','dbarshi_price','daurangabad_price',"discount","created","updated","action_btn"]    
     readonly_fields=["created","updated"]
     # list_editable=["location"]
     prepopulated_fields = {"slug": ("package_title",)}
@@ -156,7 +156,7 @@ class healthcheckup_admin(SummernoteModelAdmin):
         return format_html(html)
     action_btn.short_description = "Action"
 class healthpackage_admin(SummernoteModelAdmin):
-    list_display=["package_name","testname","pricel1","pricel2","pricel3","pricel4","created","updated","action_btn"]
+    list_display=["package_name","testname","Banglore_price","Mumbai_price","bhopal_price","nanded_price","pune_price","barshi_price","aurangabad_price","created","updated","action_btn"]
     readonly_fields=["created","updated"]
     # list_editable=["location"]
     prepopulated_fields = {"slug": ("package_name",)}

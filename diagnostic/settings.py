@@ -1,9 +1,11 @@
 
 from pathlib import Path
+import environ
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -15,6 +17,7 @@ SECRET_KEY = 'django-insecure-q6^hx14a=lgi46rai+=20-31f7&-sfp@5tb7i+yf*f%f8xoz-=
 DEBUG = True
 
 ALLOWED_HOSTS = ["162.240.55.20","127.0.0.1"]
+env = environ.Env()
 
 
 # Application definition
@@ -101,7 +104,6 @@ DATABASES = {
         'PORT': '3306',   
     }  
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators

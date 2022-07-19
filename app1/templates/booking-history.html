@@ -95,7 +95,7 @@
                                                     {% if bookhistory.prescription %}
                                                     <td data-label="Booking Details"><a  target="blank" href="{{ bookhistory.prescription.url}}">{{bookhistory.bookingdetails}}</a></td>
                                                     {% else %}
-                                                    <td data-label="Booking Details"><a id="testdetails" name="{{bookhistory.id}}" data-bs-toggle="modal" data-bs-target="#testdetaill" class="br bg-dark-white cursor" onclick='testdetail({{bookhistory.id}})';>{{bookhistory.bookingdetails|truncatechars:30}}</a></td>
+                                                    <td data-label="Booking Details"><a id="testdetails" name="{{bookhistory.id}}" data-bs-toggle="modal" data-bs-target="#testdetaill" class="br bg-dark-white cursor" onclick='testfunc({{bookhistory.id}})';>{{bookhistory.bookingdetails}}</a></td>
                                                     {% endif %}
                                                     
 
@@ -229,7 +229,7 @@
 </script>
 {%endfor%}
 {% endif %}
-<script>
+
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
     $(document).ready(function(){
@@ -320,7 +320,7 @@
     };
 
         function othersfunc(e){
-        
+      
         $.ajax({
             url: "{% url 'othersdetail' %}",
             type: "POST",
@@ -345,26 +345,25 @@
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="gender">Gender : ${resp['gender']}</h3>
 
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="age">Age : ${resp['age']}</h3>
-               <h3 class="fs-20 font-bold cl-dark-blue text-center" id="phone">Phone : ${resp['phone']}</h3>`
+               <h3 class="fs-20 font-bold cl-dark-blue text-center" id="phone">Mobile No : ${resp['phone']}</h3>`
                $("#othersspop").append(detail);
                
             }
         });
     
-    return false;
+
 }
 
 
  
-$("#testdetails").click(function(){
-    a=$(this).attr("name");
-    alert(a);
+
+    function testfunc(e){
     $.ajax({
         url: "{% url 'testdetails' %}",
         type: "POST",
         dataType: "json",
         data: {
-            'id':a,
+            'id':e,
             'csrfmiddlewaretoken':'{{ csrf_token }}',
         },
         success: function(resp){
@@ -378,11 +377,9 @@ $("#testdetails").click(function(){
           }
         }
     });
-  });
+}
 
- // $('#testdetaill').on('hidden.bs.modal', function () {
-    //alert();
-    //$("#testdetaills").empty();
- // })
+
+
 </script>
 {%endblock%}

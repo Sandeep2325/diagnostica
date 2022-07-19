@@ -53,27 +53,47 @@
               <div class="position-relative">
                 <p class="my-2 pt-2 fs-20 font-bold cl-light-blue">Price</p>
                 <div class="d-flex align-items-center">
-                  {%if currentcity == "Bangalore"%}
-                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price" id="price1">₹{{checkup.dpricel1}}</h2>
-                  {%elif currentcity == "Chennai"%}
-                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price" id="price">₹{{checkup.dpricel2}}</h2>
-                  {%elif currentcity == "Mumbai"%}
-                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price" id="price">₹{{checkup.dpricel2}}</h2>
-                  {%elif currentcity == "Delhi"%}
-                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price" id="price">₹{{checkup.dpricel2}}</h2>
+                  {%if currentcity == envcity.Bangalore%}
+                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price" id="price1">₹{{checkup.dBanglore_price}}</h2>
+                  {%elif currentcity == envcity.Mumbai%}
+                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price" id="price">₹{{checkup.dMumbai_price}}</h2>
+                  {%elif currentcity == envcity.Bhophal%}
+                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price" id="price">₹{{checkup.dbhopal_price}}</h2>
+                  {%elif currentcity == envcity.Nanded%}
+                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price" id="price">₹{{checkup.dnanded_price}}</h2>
+                  
+                  {%elif currentcity == envcity.Pune%}
+                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price" id="price">₹{{checkup.dpune_price}}</h2>
+                  {%elif currentcity == envcity.Barshi%}
+                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price" id="price">₹{{checkup.dbarshi_price}}</h2>
+                  {%elif currentcity == envcity.Aurangabad%}
+                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price" id="price">₹{{checkup.daurangabad_price}}</h2>
+                  
                   {%endif%}
-                  {%if currentcity == "Bangalore"%}
+
+
+                  {%if currentcity == envcity.Bangalore%}
                   <strike
-                    class="ps-xl-3 ps-2 text-center fs-20 font-bold cl-light-blue health_price_disc">₹{{checkup.pricel1}}</strike>
-                    {%elif currentcity == "Chennai"%}
+                    class="ps-xl-3 ps-2 text-center fs-20 font-bold cl-light-blue health_price_disc">₹{{checkup.Banglore_price}}</strike>
+                    {%elif currentcity == envcity.Mumbai%}
                     <strike
-                    class="ps-xl-3 ps-2 text-center fs-20 font-bold cl-light-blue health_price_disc">₹{{checkup.pricel2}}</strike>
-                    {%elif currentcity == "Mumbai"%}
+                    class="ps-xl-3 ps-2 text-center fs-20 font-bold cl-light-blue health_price_disc">₹{{checkup.Mumbai_price}}</strike>
+                    {%elif currentcity == envcity.Bhophal%}
                     <strike
-                    class="ps-xl-3 ps-2 text-center fs-20 font-bold cl-light-blue health_price_disc">₹{{checkup.pricel3}}</strike>
-                    {%elif currentcity == "Delhi"%}
+                    class="ps-xl-3 ps-2 text-center fs-20 font-bold cl-light-blue health_price_disc">₹{{checkup.bhopal_price}}</strike>
+                    {%elif currentcity == envcity.Nanded%}
                     <strike
-                    class="ps-xl-3 ps-2 text-center fs-20 font-bold cl-light-blue health_price_disc">₹{{checkup.pricel4}}</strike>
+                    class="ps-xl-3 ps-2 text-center fs-20 font-bold cl-light-blue health_price_disc">₹{{checkup.nanded_price}}</strike>
+
+                    {%elif currentcity == envcity.Pune%}
+                    <strike
+                    class="ps-xl-3 ps-2 text-center fs-20 font-bold cl-light-blue health_price_disc">₹{{checkup.pune_price}}</strike>
+                    {%elif currentcity == envcity.Barshi%}
+                    <strike
+                    class="ps-xl-3 ps-2 text-center fs-20 font-bold cl-light-blue health_price_disc">₹{{checkup.barshi_price}}</strike>
+                    {%elif currentcity == envcity.Aurangabad%}
+                    <strike
+                    class="ps-xl-3 ps-2 text-center fs-20 font-bold cl-light-blue health_price_disc">₹{{checkup.aurangabad_price}}</strike>
                  {%endif%}
                     <!-- <div class="  p-0 "> -->
                   <button
@@ -121,14 +141,20 @@
                   <p
                     class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">
                     Price</p>
-                  {%if currentcity == "bangalore"%}
-                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.pricel1}}</h1>
-                  {%elif currentcity == "Chennai"%}
-                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.pricel2}}</h1>
-                  {%elif currentcity == "Mumbai"%}
-                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.pricel3}}</h1>
-                  {%elif currentcity == "Delhi"%}
-                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.pricel4}}</h1>
+                  {%if currentcity == envcity.Bangalore%}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.Banglore_price}}</h1>
+                  {%elif currentcity == envcity.Mumbai%}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.Mumbai_price}}</h1>
+                  {%elif currentcity == envcity.Bhophal%}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.bhopal_price}}</h1>
+                  {%elif currentcity == envcity.Nanded%}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.nanded_price}}</h1>
+                  {%elif currentcity == envcity.Pune%}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.pune_price}}</h1>
+                  {%elif currentcity == envcity.Barshi%}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.barshi_price}}</h1>
+                  {%elif currentcity == envcity.Aurangabad%}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.aurangabad_price}}</h1>
                   {%endif%}
                   <p
                     class="d-flex justify-content-center align-content-center align-items-center m-0 fs-18 cl-dark-blue font-bold">

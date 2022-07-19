@@ -58,9 +58,9 @@
                 
                     {%csrf_token%}
                     <div class="col-lg-12 ">
-                        {%for message in messages%}
+                        {% comment %} {%for message in messages%}
                         {{message}}
-                        {%endfor%}
+                        {%endfor%} {% endcomment %}
                         <div class="bg-light-grey px-xl-5 profile-br-2">
                             <div class="row py-xl-5 px-xl-5 px-3">
                                 <div class="col-lg-4 pt-3">
@@ -78,7 +78,7 @@
                                 <div class="col-lg-4 pt-3">
                                     <label class="fs-18 cl-dark-blue font-regular" for="email">Email ID</label>
                                     <input class="w-100 mt-2 form_input"
-                                        placeholder="Enter your email" type="email" name="email" id="email" disabled
+                                        placeholder="Enter your email" type="email" name="email" id="email" readonly 
                                         value={{profile.email}} maxlength="250">
                                 </div>
                                 <div class="col-lg-4 pt-3">
@@ -93,11 +93,11 @@
                                         type="select" name="gender" id="gender">
                                         <option selected="selected" class="opc-5" disabled>Select Gender</option>
                                         {% if  profile.gender == "m" %}
-                                        <option selected="selected" class="opc-5" value="m">Male</option>
+                                        <option selected="selected" class="opc-5" value="m" readonly>Male</option>
                                         {% elif profile.gender == "f" %}
-                                        <option selected="selected" class="opc-5"value="f">Female</option>
+                                        <option selected="selected" class="opc-5"value="f" readonly>Female</option>
                                         {% elif profile.gender == "o" %}
-                                        <option selected="selected" class="opc-5" value="o">Others</option>
+                                        <option selected="selected" class="opc-5" value="o" readonly>Others</option>
                                         {% endif %}
                                         <option value="m">Male</option>
                                         <option value="f">Female</option>
@@ -106,11 +106,16 @@
                                     <!-- <input class=" w-100 mt-2 form_input  "> -->
                                 </div>
                                 <div class=" col-lg-4 pt-3">
-                                    <label class="fs-18 cl-dark-blue font-regular" for="gender">Location</label>
+                                    <label class="fs-18 cl-dark-blue font-regular" for="location">Location</label>
 
                                     <select class="w-100 mt-2    form-select "
-                                        type="select" name="gender" id="gender">
-                                        <option selected="selected" class="opc-5" disabled>Location</option>
+                                        type="select" name="location" id="location">
+                                        {%if profile.location == None%}
+                                        <option selected="selected" class="opc-5" disabled>Select Location</option>
+                                        {%else%}
+                                        <option selected="selected" class="opc-5" value="{{profile.location.id}}" readonly>{{profile.location}}</option>
+                                        {%endif%}
+                                        
                                         {%for city in cityy%}
                                         <option value="{{city.id}}">{{city.cityname}}</option>
                                         {%endfor%}
@@ -123,17 +128,34 @@
                                     <input class="w-100 mt-2 form_input " type="date"
                                         value={{profile.dob}} name="date" id="date" maxlength="250">
                                 </div> {% endcomment %}
+                                {%if profile.age == None%}
+                                <div class="col-lg-4 pt-3">
+                                    <label class="fs-18 cl-dark-blue font-regular" for="date">Age</label>
+                                    <input class="w-100 mt-2 form_input " type="text"
+                                         name="age" id="text" maxlength="3">
+                                </div>
+                                {%else%}
                                 <div class="col-lg-4 pt-3">
                                     <label class="fs-18 cl-dark-blue font-regular" for="date">Age</label>
                                     <input class="w-100 mt-2 form_input " type="text"
                                         value={{profile.age}} name="age" id="text" maxlength="3">
                                 </div>
+                                {%endif%}
+           
+                                {% if profile.address == None%}
+                                <div class="col-lg-12 pt-3 1">
+                                    <label class="fs-18 cl-dark-blue font-regular" for="address">Address</label>
+                                    <input class="w-100 h-100 mt-2 form_input " type="text"
+                                        placeholder="Enter your address" type="address" name="address" id="address" maxlength="250">
+                                </div>
+                                {%else%}
                                 <div class="col-lg-12 pt-3">
                                     <label class="fs-18 cl-dark-blue font-regular" for="address">Address</label>
                                     <input class="w-100 h-100 mt-2 form_input " type="text"
                                         placeholder="Enter your address" type="address" name="address"
                                         value={{profile.address}} id="address" maxlength="250">
                                 </div>
+                                {% endif %}
                             </div>
                             <div class="col-lg-4 pt-3 px-3 px-xl-5 mt-xl-3 mt-5">
                                 <button class="px-5 py-2 mb-lg-5 mb-3 bg-sky-blue br-5  fs-18  cl-dark-white br" type="submit"
@@ -170,6 +192,18 @@
       
       });
 </script> {% endcomment %}
+{% if messages %}
+{% for message in messages %}
+<script>
+  $(document).ready(function(){
+    
+    swal('{{message}}');
+    //window.location.reload();
+    
+  });
+</script>
+{%endfor%}
+{% endif %}
 <script>
     jQuery.validator.addMethod("name_regex", function (value, element) {
         return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);
@@ -212,7 +246,6 @@
             'age': {
                 required: true,
                 //greaterThan: true
-
             },
             'address': {
                 required: true,
