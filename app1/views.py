@@ -754,7 +754,8 @@ def prescriptionbookview(request):
                     booking_type="Prescription",
                     bookingdetails="upload prescription",
                     payment_status=False).save()
-        messages.success(request,"Your response is recorded successfully")
+        messages.success(
+            request, "Thankyou for your booking!, Our admin team will get back to you shortly.")
         return HttpResponseRedirect(reverse("booking-history"))
         # return render(request,"uploadprescriptions.html",{"fm":fm})
     else:
@@ -1121,6 +1122,7 @@ def othersdetail(request):
         testid=request.POST["testid"]
         detail=prescription_book.objects.get(id=int(testid))
         choice = ""
+        gender=""
         if detail.others_choice=="m":
             choice="Mother"
         elif detail.others_choice=="f":
@@ -1133,7 +1135,13 @@ def othersdetail(request):
             choice="Daughter"
         elif detail.others_choice=="o":
             choice="Other"
-        return JsonResponse({"message":True,"firstname":detail.firstname,"lastname":detail.lastname,"gender":detail.gender,"otherschoice":choice,"age":detail.age,"phone":detail.contact})
+        if detail.gender== 'f':
+            gender="Female"
+        elif detail.gender == 'm':
+            gender="Male"
+        else:
+            gender='Others'
+        return JsonResponse({"message":True,"firstname":detail.firstname,"lastname":detail.lastname,"gender":gender,"otherschoice":choice,"age":detail.age,"phone":detail.contact})
 @csrf_exempt
 def paymenthandler(request,str,amount):
     # if request.method =="POST":
@@ -1163,12 +1171,12 @@ def paymenthandler(request,str,amount):
                 if verify_signature(request.POST):
                     transid=request.POST["razorpay_order_id"]
                     cart.objects.filter(user=usr).delete()
-                    payment.objects.create(user=usr,paymentid=paymentid,transid=transid,amount=amount).save()
                     history=book_history.objects.get(payment_id=transid)
                     history.payment_status=True
                     history.save()
+                    payment.objects.create(user=usr,paymentid=paymentid,transid=transid,amount=amount,booking_id=history.id).save()
                     request.session.delete("amount")
-                    messages.info(request, "Thank You, your Payment was successful")
+                    messages.info(request, "Thankyou for making payment our team will come and collect the sample soon.")
                     return HttpResponseRedirect(reverse("booking-history"))
             else:
                 b=request.POST.get('error[metadata]')

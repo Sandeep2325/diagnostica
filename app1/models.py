@@ -145,6 +145,7 @@ STATUS_CHOICES1 = (
 STATUS_CHOICES = (
     ('m', 'Male'),
     ('f', 'Female'),
+    ('o','Others')
 )   
 class prescription_book(models.Model):
     unique=models.UUIDField(null=True,blank=True)
@@ -371,6 +372,35 @@ class book_history(models.Model):
         return "Book History"
     class Meta:
         verbose_name_plural="Booking Histories"
+
+
+@receiver(post_save, sender=book_history)
+def reportresponse(sender, instance, **kwargs):
+  
+    # print(bool(instance.prescription_file))
+    if (instance.payment_status== True) and (bool(instance.report) == True):
+        print("sent")
+        send_mail(str("DIAGNOSTICA SPAN TEST REPORT"),
+                  ("Hello,\n Your Report is Added to your dashboard,Please Checkit out"),
+                  settings.EMAIL_HOST_USER,
+                  [instance.user.email],
+                  fail_silently=False)
+
+
+# m2m_changed.connect(testbookings, sender=prescription_book.test_name.through)
+class payment(models.Model):
+    booking_id=models.CharField(max_length=50,null=True,blank=True)
+    user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
+    paymentid=models.CharField(max_length=400,null=True,blank=True)
+    transid=models.CharField(max_length=400,null=True,blank=True)
+    date=models.DateTimeField(auto_now_add=True,max_length=30,null=True,blank=True)
+    amount=models.CharField(max_length=50,null=True,blank=True)
+
+    def __str__(self):
+        return self.paymentid
+
+    class Meta:
+        verbose_name_plural="Payments History"
 class subscription(models.Model):
     email=models.EmailField(max_length=255,null=True,blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
@@ -429,18 +459,7 @@ class contactus(models.Model):
         return self.fullname
     class Meta:
         verbose_name_plural="Contact us form"
-class payment(models.Model):
-    user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
-    paymentid=models.CharField(max_length=400,null=True,blank=True)
-    transid=models.CharField(max_length=400,null=True,blank=True)
-    date=models.DateTimeField(auto_now_add=True,max_length=30,null=True,blank=True)
-    amount=models.CharField(max_length=50,null=True,blank=True)
 
-    def __str__(self):
-        return self.paymentid
-
-    class Meta:
-        verbose_name_plural="Payments History"
 class paymentids(models.Model):
     orderid=models.CharField(max_length=200,null=True,blank=True),
     paymentid=models.CharField(max_length=200,null=True,blank=True),
