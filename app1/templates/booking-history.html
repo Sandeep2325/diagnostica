@@ -218,15 +218,7 @@
     
 </body>
 {%include "footer.html"%}
-{% if messages %}
-{% for message in messages %}
-<script>
-    
-    swal('{{message}}')
-    
-</script>
-{%endif}
-{%endfor}
+
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
     function paymentFunction(ids, status){

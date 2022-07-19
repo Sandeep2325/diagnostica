@@ -92,7 +92,7 @@
                                                 </div>
                                                 <div class="col-6">
                                                     <div class="bg-white myself_other me-3 me-lg-0 mt-lg-0 mt-3  form_input">
-                                                        <input class="form_input" type="radio" name="radio_others" id="others" onClick="ckChange1(this)"/>
+                                                        <input class="form_input" checked type="radio" name="radio_others" id="others" onClick="ckChange1(this)"/>
                                                         <label for="others">Others</label>
                                                     </div>
                                                 </div>
@@ -100,8 +100,8 @@
                                         </div>
                                         <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3"> </div>
                                         <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-lg-5 pt-3 pb-3 ">
-                                            <h3 class="px-lg-0 px-3 font-bold fs-30  cl-dark-blue m-0">Patient Information (It will be used on Reports)</h3>
-                                        </div>
+                                            <h3 class="px-lg-0 px-3 font-bold fs-30  cl-dark-blue m-0" id="PatientInformation">Patient Information (It will be used on Reports)</h3>
+                                        </div> 
                                         <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto"></div>
                                         <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
                                             <div class="px-lg-0 px-3 ">
@@ -116,7 +116,7 @@
                                             </select>
                                             </div>
                                         </div>
-                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto"></div>
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3"></div>
                                         <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
                                             <div class="px-lg-0 px-3">
                                                 <input class="w-100  form_input" placeholder="First Name" name="firstname" id="firstname" type="text" maxlength="250"/>
@@ -147,11 +147,16 @@
                                             </select>
                                             </div>
                                         </div>
-                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto"></div>
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3"> </div>
+                                        <div class="px-xl-4 col-12 mx-auto pt-3">
+                                            <div class="px-lg-0 px-3">
+                                                <textarea class="w-100  form_input" rows="2" placeholder="Address" name="address" id="address" type="text" maxlength="250"></textarea>
+                                            </div>
+                                        </div>
                                         <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto py-lg-5 py-3 ">
                                             <button class="mx-lg-0 mx-3 globalsubmitbutton " type="submit" name="submit" id="submit">SUBMIT</button>
                                         </div>
-                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto">
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-lg-5">
                                             <div class="px-lg-0 px-3">
                                                 <h3 class="fs-30 font-bold cl-dark-blue">How it Works</h3>
                                                 <p class="m-0 mb-1">1. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -222,11 +227,12 @@
             'gender': {
                 required: true,
             },
+            'address':{
+                required:true
+            }
         },
 
         messages: {
-            
-
             'file': {
                 required: "This field is required."
             },
@@ -244,6 +250,9 @@
                 required: "This field is required."
             },
             'age': {
+                required: "This field is required." 
+            },
+            'address': {
                 required: "This field is required." 
             }
 
@@ -265,6 +274,7 @@
             $("#gender").hide()
             $("#age").hide();
             $(".error").empty();
+            $("#PatientInformation").hide();
             //$("#lastname").attr("disabled", true);
         $("#option").hide();
     });
@@ -279,7 +289,7 @@
             $("#age").show();
             $("#option").show();
             $(".error").empty();
-
+            $("#PatientInformation").show();
     });
 </script>
 {%endblock%}
