@@ -26,7 +26,8 @@
                         <h1 class="fs-40 font-bold cl-dark-blue text-center py-lg-5 py-3 m-0  px-3">My Cart</h1>
                         <div class="row justify-content-center">
                             <div class="col-lg-12">
-                                <div class="table-responsive">
+                                <h1 class="text-center fs-30 font-bold cl-dark-blue mb-4" id="nodata">No Record Found...</h1>
+                                <div class="table-responsive" id="carttable">
                                     <div class="wrapper">
                                         <div class="table test_row">
                                             <div class="row header row_data_header">
@@ -261,9 +262,13 @@
         var count =parseInt("{{datacount}}");
         if(count!=0){
           $("#checkout1").attr("disabled",false);  
+          $("#carttable").show();
+          $("#nodata").hide();
         }
         else{
             $("#checkout1").attr("disabled",true); 
+            $("#carttable").hide();
+            $("#nodata").show();
         }
     })
     $('#cart_checkout_modal').on('shown.bs.modal', function (e) {

@@ -1,6 +1,5 @@
 {% extends "index.html" %}
 {% load static %}
-
 {%block content%}
 <body>
     {% include "header.html"%}
@@ -20,13 +19,13 @@
     </section>
     <section class="section_booking_history pb-5 mb-5" >
         <div class="container">
-            {% if messages %}
+            {% comment %} {% if messages %}
             
             {% for msg in  messages %}
             <center>{{msg}}</center>
             {% endfor %}
 
-            {% endif %}
+            {% endif %} {% endcomment %}
 
             <div class="row">
 
@@ -60,10 +59,11 @@
                         <div class="row">
                             <div class="col-lg-12 px-lg-5 px-3">
                                 <div class="tab-content" id="pills-tabContent">
-   
-                                    <div class="pb-lg-5 pb-3 tab-pane fade show active" id="pills-home" role="tabpanel"
+                                    
+                                    <div class="pb-lg-5 pb-3 tab-pane fade show active " id="pills-home" role="tabpanel"
                                         aria-labelledby="pills-home-tab" tabindex="0">
-                                        <table id ="bookinghistorytable">
+                                        <h1 class="text-center fs-30 font-bold cl-dark-blue mb-4" id="nodataa">No Record Found...</h1>
+                                        <table class="bookingh" id ="bookinghistorytable">
                                             <thead>
                                                 <tr>
                                                     <td class="t_head" scope="col">ID</td>
@@ -139,9 +139,11 @@
                                        
                                     </div>
                                     {% comment %} table end {% endcomment %}
-                                    <div class="tab-pane fade pb-5" id="pills-profile" role="tabpanel"
+                                    
+                                    <div class="tab-pane fade pb-5 " id="pills-profile" role="tabpanel"
                                         aria-labelledby="pills-profile-tab" tabindex="0">
-                                        <table>
+                                        <h1 class="text-center fs-30 font-bold cl-dark-blue mb-4" id="nodata">No Record Found...</h1>
+                                        <table class="paymentc">
                                             <thead>
                                                 <tr>
                                                     <td class="t_head" scope="col">Payment ID</td>
@@ -221,17 +223,41 @@
 {% if messages %}
 {% for message in messages %}
 <script>
-    
-    swal('{{message}}')
-    
+  $(document).ready(function(){
+    swal('{{message}}');
+  });
 </script>
-{%endif}
-{%endfor}
+{%endfor%}
+{% endif %}
+<script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
+    $(document).ready(function(){
+        
+        var historycount =parseInt("{{bookinghistorylength}}");
+        var paymentcount =parseInt("{{paymentcount}}");
+        if(historycount!=0){
+          $(".bookingh").show();  
+          $("#nodataa").hide();
+        }
+        else{
+            $(".bookingh").hide();
+            $("#nodataa").show();
+           // $(".bookingh").append(`<h4>No Records Found</h4>`);
+        }
+        if(paymentcount!=0){
+            $(".paymentc").show();  
+            $("#nodata").hide();
+          }
+          else{
+              $(".paymentc").hide();
+              $("#nodata").show();
+             // $(".paymentc").append(`<h4>No Records Found</h4>`);
+          }
+    })
     function paymentFunction(ids, status){
         if (status=="false"){
-            swal('You booking under review progress by our experts. Please try after sometime.If you have any queries related to booking please contact our support team +91 9769 351 301')
+            alert('You booking under review progress by our experts. Please try after sometime.If you have any queries related to booking please contact our support team +91 9769 351 301')
             //alert("Please wait till your prescription is viewed by our doctors.");
             
         }else{
@@ -292,10 +318,7 @@
         
 
     };
-//if("{{bookhistories}}"){
 
-//}
-   // $("#otherspop1").click(function(){
         function othersfunc(e){
         
         $.ajax({
@@ -335,7 +358,7 @@
  
 $("#testdetails").click(function(){
     a=$(this).attr("name");
-  
+    alert(a);
     $.ajax({
         url: "{% url 'testdetails' %}",
         type: "POST",
@@ -345,6 +368,7 @@ $("#testdetails").click(function(){
             'csrfmiddlewaretoken':'{{ csrf_token }}',
         },
         success: function(resp){
+            console.log(resp['message'])
         var msg = resp['message'];
         var splitted_str = msg.split(",");
          $("#testdetaills").empty();
@@ -356,6 +380,9 @@ $("#testdetails").click(function(){
     });
   });
 
-
+ // $('#testdetaill').on('hidden.bs.modal', function () {
+    //alert();
+    //$("#testdetaills").empty();
+ // })
 </script>
 {%endblock%}

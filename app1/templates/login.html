@@ -1,7 +1,10 @@
 {% extends "index.html" %}
 {% load static %}
+{% load sweetify %}
+{% sweetify %}
 {%block content%}
 <body>
+   
     {%include "header.html"%}
     <section class="sub_header py-xl-4 py-3">
         <div class="container">
@@ -86,7 +89,15 @@
         </div>
     </section>
 </body>
-
+{% if messages %}
+{% for message in messages %}
+<script>
+  $(document).ready(function(){
+    swal('{{message}}');
+  });
+</script>
+{%endfor%}
+{% endif %}
 <script>
     $(document).on('click', '.toggle-password', function() {
 
