@@ -68,5 +68,13 @@
         </div>
     </section>
 </body>
-
+{% if messages %}
+{% for message in messages %}
+<script>
+  $(document).ready(function(){
+    alert('{{message}}');
+  });
+</script>
+{%endfor%}
+{% endif %}
 {%endblock%}

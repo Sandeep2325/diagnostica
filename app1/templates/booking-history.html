@@ -4,7 +4,20 @@
 {%block content%}
 <body>
     {% include "header.html"%}
-{%include "subheader.html"%}
+    <section class="sub_header py-xl-4 py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="d-flex ">
+                        <p class="m-0 fs-18 font-regular cl-dark-blue opc-5 pe-1 sub_nav_bar"><a
+                                href="{%url "home"%}">Home</a></p>
+                        /
+                        <p class="m-0 fs-18 font-regular cl-dark-blue ps-1 sub_nav_bar">Booking History</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     <section class="section_booking_history pb-5 mb-5" >
         <div class="container">
             {% if messages %}
@@ -132,6 +145,7 @@
                                             <thead>
                                                 <tr>
                                                     <td class="t_head" scope="col">Payment ID</td>
+                                                    <td class="t_head" scope="col">Booking ID</td>
                                                     <td class="t_head" scope="col">Date</td>
                                                     {% comment %} <td class="t_head" scope="col">Payment</td> {% endcomment %}
                                                     <td class="t_head" scope="col">Amount</td>
@@ -143,6 +157,7 @@
                                                 {%for payment in payments%}
                                                 <tr>
                                                     <td data-label="Payment ID">{{payment.paymentid}}</td>
+                                                    <td data-label="Booking ID">{{payment.booking_id}}</td>
                                                     <td data-label="Date">{{payment.date}}</td>
                                                     {% comment %} <td data-label="Payment">My Self</td> {% endcomment %}
                                                     <td data-label="Amount">₹ {{payment.amount}}</td>
@@ -203,12 +218,21 @@
     
 </body>
 {%include "footer.html"%}
-
+{% if messages %}
+{% for message in messages %}
+<script>
+    
+    swal('{{message}}')
+    
+</script>
+{%endif}
+{%endfor}
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
     function paymentFunction(ids, status){
         if (status=="false"){
-            alert("Please wait till your prescription is viewed by our doctors.");
+            swal('You booking under review progress by our experts. Please try after sometime.If you have any queries related to booking please contact our support team +91 9769 351 301')
+            //alert("Please wait till your prescription is viewed by our doctors.");
             
         }else{
             $.ajax({

@@ -22,4 +22,5 @@ urlpatterns = [
     path('',include("app1.urls")),
     path('summernote/', include('django_summernote.urls')),
 ]
+handler404 = 'app1.views.error_404_view'
 

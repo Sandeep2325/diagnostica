@@ -4,7 +4,20 @@
 {%block content%}
 <body>
     {%include 'header.html'%}
-    {%include 'subheader.html' %}
+    <section class="sub_header py-xl-4 py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="d-flex ">
+                        <p class="m-0 fs-18 font-regular cl-dark-blue opc-5 pe-1 sub_nav_bar"><a
+                                href="{%url "home"%}">Home</a></p>
+                        /
+                        <p class="m-0 fs-18 font-regular cl-dark-blue ps-1 sub_nav_bar">Cart</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     <section class="cart_table">
         <div class="container">
             <div class="row ">

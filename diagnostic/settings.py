@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-q6^hx14a=lgi46rai+=20-31f7&-sfp@5tb7i+yf*f%f8xoz-='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["162.240.55.20","127.0.0.1"]
 
@@ -137,7 +137,7 @@ import os
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 MEDIA_URL = '/photos/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'photos')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'photos/')
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'photos/')
 STATIC_ROOT = os.path.join(BASE_DIR, 'app1/static')
 STATIC_URL = '/static/'
