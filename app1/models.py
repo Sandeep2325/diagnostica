@@ -149,6 +149,7 @@ STATUS_CHOICES = (
 )   
 class prescription_book(models.Model):
     unique=models.UUIDField(null=True,blank=True)
+  
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
     prescription_file=models.FileField(upload_to="prescription",null=True,blank=True)
     test_name=models.ManyToManyField(test,blank=True)
@@ -359,6 +360,7 @@ STATUS=[
 ]    
 class book_history(models.Model):
     testbooking_id=models.IntegerField(null=True,blank=True)
+    bookingid = models.CharField(max_length=20,null=True, blank=True,verbose_name="Booking Id")
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
     patient_info=models.CharField(max_length=200,null=True,blank=True)
     booking_type=models.CharField(max_length=200,null=True,blank=True)

@@ -148,10 +148,11 @@
             success: function (resp) {
                 $("#emaill").val('');
                 if (!resp["message"]){
-                    alert("Already Subscribed Thank you!!")
+                    swal("Thank you", "Already Subscribed Thank you!!", "warning");
+                    //alert("Already Subscribed Thank you!!")
                 }
                 else{
-                    alert("Thank you for Subscribing!")
+                    swal("Subscribed","Thank you for Subscribing!","success")
                 }
             }
         });

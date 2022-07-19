@@ -32,7 +32,7 @@
         <div class="col-lg-12 d-flex justify-content-between pt-3">
           <h1 class="fs-40 font-bold home_health_h1 w-100 m-0">Health Checks & Lab Tests
           </h1>
-          <a href="{% url 'testselect' %}"><button class="home_pack_viewpack py-2 px-0 fs-16 br-50 " style="min-width: 150px;">VIEW ALL</button></a>
+          <a href="{% url 'Health-checkups' %}"><button class="home_pack_viewpack py-2 px-0 fs-16 br-50 " style="min-width: 150px;">VIEW ALL</button></a>
           
         </div>
         {%for checkup in healthcheckup%}
@@ -413,7 +413,37 @@
   </section>
   {%include "footer.html"%}
 </body>
+{% if messages %}
+{% for message in messages %}
+{% if message.tags == "error"%}
+<script>
+  $(document).ready(function(){
+   // swal('{{message}}');
 
+    swal({
+	title:'{{message}}',
+	//text: "You clicked the button!",
+	icon:"warning",
+	button:"ok"
+});
+  });
+</script>
+{%else%}
+<script>
+  $(document).ready(function(){
+   // swal('{{message}}');
+
+    swal({
+	title:'{{message}}',
+	//text: "You clicked the button!",
+	icon:"success",
+	button:"ok"
+});
+  });
+</script>
+{% endif %}
+{%endfor%}
+{% endif %}
 <script src="https://checkout.razorpay.com/v1/checkout.js">
 </script>
   <script>
@@ -669,10 +699,11 @@ console.log(id);
       success: function(resp){
           
           if(!resp['message']){
-              alert("Test Already Added");
+              swal('',"Test Already Added",'info');
           }else{
-              alert("Test Added");
-              window.location.reload();
+              swal('',"Test Added","success");
+              window.setTimeout(function(){location.reload()},1500)
+              //window.location.reload();
           }
           
       },

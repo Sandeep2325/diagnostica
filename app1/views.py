@@ -1,5 +1,5 @@
 import re
-import sweetify
+# import sweetify
 from django.shortcuts import render,redirect
 from .forms import UserProfileForm,UserRegistrationForm, forgotpasswordform, prescriptionform, subscriptionform
 from django.contrib.auth.hashers import make_password
@@ -31,6 +31,8 @@ from django.contrib.auth import logout
 from django.db.models import Q
 from django.conf import settings
 import environ
+import shortuuid
+
 env = environ.Env()
 global OBJ_COUNT
 OBJ_COUNT = 0
@@ -62,7 +64,6 @@ def dashboard(request):
 
 def aboutus(request):
     return render (request,"aboutus.html")
-
 
 def cityy(request):
     city=request.POST.get("city")
@@ -243,7 +244,7 @@ def forgotpassword(request):
             )
             return redirect('/forgotpassword/otp/')
         else:
-            sweetify.error(request,"Email is not registered")
+            messages.error(request,"Email is not registered")
             return render(request,"forgotpassword.html")
     return render(request,"forgotpassword.html")
   
@@ -281,7 +282,7 @@ def changepasswordotp(request):
                 request.session.delete("conpassword")
                 print("changed successfully")
                 messages.success(request,'Password changed successfully!! Please Login Again.')
-                return redirect('login')
+                return redirect('user-login')
             else:
                 print("not exists")
         else:
@@ -324,6 +325,7 @@ def otpforgotpassword(request):
             request.session.delete('otp')
             request.session.delete('email')
             request.session.delete('password')
+            messages.success(request,"Password Changed")
             return redirect('user-login')
         else:
             messages.error(request,'Wrong OTP')
@@ -612,6 +614,7 @@ def home(request):
                 "tests":tests,
                 "envcity":envcity,
         }
+        messages.success(request,"Submitted Successfully")
         return HttpResponseRedirect(reverse("home"))
 
 def healthcheckupview(request,slug):
@@ -770,10 +773,14 @@ def prescriptionbookview(request):
         gender=request.POST.get('gender')
         address=request.POST.get("address")
         unique = uuid.uuid4()
+        s = shortuuid.ShortUUID(alphabet="0123456789")
+        bid = s.random(length=5)
+        bookingid="DP"+str(bid)
         prescription_book(
             user=request.user,
             unique=unique,
             prescription_file=prescription_file,
+            
                         myself=True if myself == "on" else False,
                         others=True if others == "on" else False,
                         others_choice=others_choice,
@@ -790,6 +797,7 @@ def prescriptionbookview(request):
         book_history(
             user=request.user,
             testbooking_id=data.id,
+            bookingid=bookingid,
             patient_info="myself" if others==None else "others",
                     booking_type="Prescription",
                     bookingdetails="upload prescription",
@@ -840,9 +848,13 @@ def testselect(request):
         age=request.POST.get('age')
         gender=request.POST['gender']
         unique = uuid.uuid4()
+        s = shortuuid.ShortUUID(alphabet="0123456789")
+        bid = s.random(length=5)
+        bookingid="DP"+str(bid)
         a=prescription_book.objects.create(
             unique=unique,
             user=request.user,
+            
                           myself=True if myself == "on" else False,
                           others=True if others == "on" else False,
                           others_choice=others_choice,
@@ -898,9 +910,13 @@ def cartt(request):
         global uniquee
         uniquee = uuid.uuid4()
         data=cart.objects.filter(user=request.user)
+        s = shortuuid.ShortUUID(alphabet="0123456789")
+        bid = s.random(length=5)
+        bookingid = "DP"+str(bid)
         a=prescription_book.objects.create(
                 unique=uniquee,
                 user=request.user,
+           
                                 myself=True if others == "m" else False,
                                 others=True if others == "o" else False,
                                 others_choice=others_choice,
@@ -986,10 +1002,11 @@ def cartt(request):
         bookhistory=book_history(
             user=request.user,
             testbooking_id=data2.id,
+            bookingid=bookingid,
             patient_info="Myself" if others == "m" else "others",
                      booking_type="Selected test",
                      bookingdetails=listToStr,
-                     amount=sum(a),
+                     amount=float(amount),
                      payment_id=razorpay_order_id,
                      payment_status=False).save()
         return JsonResponse({"message":True,"razorpay_key":settings.RAZOR_KEY_ID,"currency":currency,"razorpayorder":razorpay_order_id,"callback":callback_url})
@@ -1162,7 +1179,7 @@ def cartt1(request):
             patient_info="Myself" if others == "m" else "others",
                      booking_type="Selected test",
                      bookingdetails=listToStr,
-                     amount=sum(a),
+            amount=int(amount),
                      payment_id=razorpay_order_id,
                      payment_status=False).save()
         return JsonResponse({"message":True,"razorpay_key":settings.RAZOR_KEY_ID,"currency":currency,"razorpayorder":razorpay_order_id,"callback":callback_url})
@@ -1246,7 +1263,7 @@ def paymenthandler(request,str,amount):
                     history=book_history.objects.get(payment_id=transid)
                     history.payment_status=True
                     history.save()
-                    payment.objects.create(user=usr,paymentid=paymentid,transid=transid,amount=amount,booking_id=history.id).save()
+                    payment.objects.create(user=usr,paymentid=paymentid,transid=transid,amount=amount,booking_id=history.bookingid).save()
                     request.session.delete("amount")
                     messages.info(request, "Thankyou for making payment our team will come and collect the sample soon.")
                     return HttpResponseRedirect(reverse("booking-history"))
@@ -1464,19 +1481,19 @@ def search(request):
                 a["testt"]=tesst.testt
                 a["description"]=tesst.description
                 if city == Bangalore:
-                    a["Banglore_price"]=str(tesst.Banglore_price)
+                    a["pricel1"]=str(tesst.Banglore_price)
                 elif city== Mumbai:
-                    a["Mumbai_price"]=str(tesst.Mumbai_price)
+                    a["pricel1"]=str(tesst.Mumbai_price)
                 elif city== Bhophal:
-                    a["bhopal_price"]=str(tesst.bhopal_price)
+                    a["pricel1"]=str(tesst.bhopal_price)
                 elif city== Nanded:
-                    a["nanded_price"]=str(tesst.nanded_price)
+                    a["pricel1"] = str(tesst.nanded_price)
                 elif city== Pune:
                     a["pune_price"]=str(tesst.pune_price)
                 elif city== Barshi:
-                    a["barshi_price"]=str(tesst.barshi_price)
+                    a["pricel1"]=str(tesst.barshi_price)
                 elif city== Aurangabad:
-                    a["aurangabad_price"]=str(tesst.aurangabad_price)
+                    a["pricel1"]=str(tesst.aurangabad_price)
                 b.append(a)
             return JsonResponse(b,safe=False)
     else:
@@ -1504,7 +1521,7 @@ def coupon(request):
             # print(t)
             totall=float(total)-int(discount)
             request.session["couponamount"]=totall
-            return JsonResponse({"message":True,"total":totall,"percent":c.discount,"discount":"{:.2f}".format(discount)})
+            return JsonResponse({"message":True,"total":float(totall),"percent":c.discount,"discount":"{:.2f}".format(discount)})
         except:
             return JsonResponse({"message":False})
 def razorpayclose(request):
@@ -1521,11 +1538,9 @@ def contactuss(request):
         subject=request.POST["subject"]
         message=request.POST["message"]
         contactus.objects.create(fullname=name,email=email,phone=phone,subject=subject,message=message).save()
-        # messages.success(request,"Your response submitted successfully")
+        messages.success(request,"Your response submitted successfully")
         return render(request,"contactus.html")
     return render(request,"contactus.html") 
-
-
 def healthcheckupadd(request):
     cityy=request.session.get("city")
     deviceCookie = request.COOKIES['device']
@@ -1865,7 +1880,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
     login_url = '/login/'
     def get(self, request,*args, **kwargs):
         his = []
-        bookhistories=book_history.objects.filter(user=request.user).order_by('created')
+        bookhistories=book_history.objects.filter(user=request.user).order_by('-created')
         testbooking=prescription_book.objects.filter(user=request.user)
         payments=payment.objects.filter(user=request.user).order_by('-date')
         for i in bookhistories:
@@ -1878,6 +1893,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
             hi["created"] = i.created
             hi["patient_info"] = i.patient_info
             hi["testbooking_id"] = i.testbooking_id
+            hi["bookingid"] = i.bookingid
             hi["patient_info"] = i.patient_info
             hi["booking_type"] = i.booking_type
             hi["bookingdetails"] = i.bookingdetails
