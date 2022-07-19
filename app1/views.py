@@ -974,13 +974,20 @@ def cartt(request):
             da['price']=str(i.price)  
             da["categoryy"]=i.items.categoryy
             data.append(da)
-        
-    a=[float(i["price"]) for i in data]
-
-    context={
+    try:    
+        a=[float(i["price"]) for i in data]
+        context={
             "data":data,
+            "datacount":len(data),
             "subtotal":sum(a)
         }
+    except:
+         context={
+            "data":data,
+            "datacount":len(data),
+            
+        }
+    
     if request.user.is_anonymous:
         request.session['cart_count']= cart.objects.filter(device = deviceCookie).count()
     else:
