@@ -1,0 +1,264 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<title>Diagnostica Diagno</title>
+
+		<!-- Favicon -->
+		<link rel="icon" href="" type="image/x-icon" />
+
+		<!-- Invoice styling -->
+		<style>
+			body {
+				font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+				text-align: center;
+				color: #777;
+			}
+			body a {
+				color: #06f;
+			}
+			.invoice-box {
+				max-width: 800px;
+				margin: auto;
+				padding: 30px;
+				border: 1px solid #eee;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+				font-size: 16px;
+				line-height: 24px;
+				font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+				color: #555;
+			}
+            .invoice_font{
+                font-family: 'Times New Roman', Times, serif;
+                font-size: 16px;
+                margin: 0px;
+                color: black;
+            }
+            .invoive_logo{
+                text-align: end;
+                margin-bottom: 20px;
+            }
+            .invoice_address_p p{
+                font-family: 'Times New Roman', Times, serif;
+                text-align: start;
+                font-size: 16px;
+                font-weight: bold;
+                color: black;
+                margin: 0px;
+            }
+            .invoice_address_sub_p p{
+                width: 345px;
+                text-align: start;
+                font-size: 14px;
+                margin: 0px;
+                color: black;
+               
+            }
+            .invoice_header{
+                font-family: 'Times New Roman', Times, serif;
+                font-size: 18px;
+                font-weight: bold;
+                color: black;
+                text-align: center;
+
+            }
+            .first_t_row{
+                width: 100%;
+                border-top: 2px solid;
+            }
+            .first_t_row_Final{
+                width: 100%!important;
+            }
+            .first_t_row_th_1 {
+                text-align: start;
+                display: flex;
+            }
+            .first_t_row_th_1 p, .first_t_row_th_3 p{
+                margin: 0px;
+                text-align: start;
+                font-size: 14px;
+                color: black;
+                font-weight:100;
+                padding-left: 5px;
+            }
+            .first_t_row_th_total p{
+                margin: 0px;
+                font-family: 'Times New Roman', Times, serif;
+                text-align: end!important;
+                font-size: 16px;
+                color: black;
+                font-weight:100;
+                padding-left: 255px;
+            }
+            .first_t_row_th_total_p p{
+                margin: 0px;
+                font-family: 'Times New Roman', Times, serif;
+                text-align: end!important;
+                font-size: 16px;
+                color: black;
+                font-weight:100;
+                padding-left: 40px;
+            }
+            .first_t_row_th_2{
+                text-align: start;
+            }
+            .first_t_row_th_3{
+                text-align: start;
+                    display: flex;
+            }
+            .first_t_row_th_4{
+                text-align: start;
+            }
+            .test{
+                margin-top: 10px!important;
+            }
+			.first_t_row_3{
+                display: flex!important;
+            }
+            .signatute-invoice{
+                margin-top: 50px!important;
+            }
+            #header-content {
+                position: absolute;
+                bottom: 0;
+                }
+                .header-content p {
+                margin: 0px;
+                }
+                .fs{
+                    font-size: 14px!important;
+                }
+
+			@media only screen and (max-width: 600px) {
+				.invoice-box table tr.top table td {
+					width: 100%;
+					display: block;
+					text-align: center;
+				}
+
+				.invoice-box table tr.information table td {
+					width: 100%;
+					display: block;
+					text-align: center;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="invoice-box">
+                        <div class="invoive_logo">
+                            <img src="{%static "images/image_logo.png"%}" alt="" class="img-fluid logo-img" />
+                        </div>
+                        <div class="invoice_address_p">
+                            <p>Diagnostica Span Pvt. Ltd,</p>
+                        </div>
+                        <div class="invoice_address_sub_p">
+                            <p>Ground Floor, No. 79, Deccan Central, 40th Main,
+                                M.E.I Road, 2nd Stage, Industrial Suburb, Yeshwanthpur,
+                                Bengaluru 560022</p>
+                        </div>
+                        <h5 class="invoice_header">BILL/RECEIPT</h6>
+						<table class="first_t_row">
+							<tr>
+                                <th class="first_t_row_th_1 invoice_font">Receipt No. :<p>test</p> </th>
+                                <th class="first_t_row_th_2 invoice_font">Name : Mr. Suresha A M (ID: 382)</th> 
+                                <th class="first_t_row_th_3 invoice_font">Sex / Age: <p>Male / 29 years</p></th>
+                            </tr>
+                            <tr class="test">
+                                <th class="first_t_row_th_1 invoice_font test">Status :<p>Completed</p>  </th>
+                                <th class="first_t_row_th_2 invoice_font test">Referral : SELF</th> 
+                                <th class="first_t_row_th_3 invoice_font test">Date & Time:<p>21/06/22, 06:45 PM</p></th>
+                            </tr>
+						</table>  
+                        <table class="first_t_row">
+                            <thead>
+                                <tr>
+                                    <th class="first_t_row_th_1 invoice_font">SL no. </th>
+                                    <th class="first_t_row_th_2 invoice_font">Test Code</th> 
+                                    <th class="first_t_row_th_3 invoice_font">Test Name</th>
+                                    <th class="invoice_font" style="text-align:end ;">Test Price</th>
+                                </tr>
+                            </thead>
+                            <tbody style="text-align:start">
+                                <tr>
+                                    <td class="fs" data-label="SL no.">1</td>
+                                    <td class="fs" data-label="Test Code">SHCPL</td>
+                                    <td class="fs" data-label="Test Name">SPAN COMBO SHCPL.</td>
+                                    <td class="fs" data-label="Test Price" style="text-align:end ;">600.00</td>
+                                </tr>
+                                <tr>
+                                    <td class="fs" data-label="SL no.">2</td>
+                                    <td class="fs" data-label="Test Code">SHCPL</td>
+                                    <td class="fs" data-label="Test Name">SPAN COMBO SHCPL.</td>
+                                    <td class="fs" data-label="Test Price" style="text-align:end ;">600.00</td>
+                                </tr>
+                                <tr>
+                                    <td class="fs" data-label="SL no.">3</td>
+                                    <td class="fs" data-label="Test Code">SHCPL</td>
+                                    <td class="fs" data-label="Test Name">SPAN COMBO SHCPL.</td>
+                                    <td class="fs" data-label="Test Price" style="text-align:end ;">600.00</td>
+                                </tr>
+                            </tbody>
+                        </table> 
+                        <table class="first_t_row">
+							<tr class="first_t_row_3">
+                                <th class="first_t_row_th_1 invoice_font" style="padding: 5px 0px ;">Payable Amount (in words) :Four Hundred Eighty Three only</th>
+                                <th class="first_t_row_th_total invoice_font"><p>Total :</p></th> 
+                                <th class="first_t_row_th_total_p invoice_font "><p>1099</p></th> 
+                            </tr>
+						</table>  
+                        <table class="first_t_row" style="padding:5px 0px ;">
+                            <tbody>
+                                <tr>
+                                    <th class="" style="text-align:end; color: black;">Discount :600.00</th>
+                                </tr>
+                                <tr>
+                                    <th class="" style="text-align:end; color: black;">Payable Amount :600.00</th>
+                                </tr>
+                            </tbody>
+                        </table> 
+                        <table  class="first_t_row_Final">
+                            <tbody>
+                                <tr>
+                                    <td class="fs">Payment Mode : CASH</td>
+                                    <td class="fs">Payment Date : 21/06/22, 06:45 p.m.</td>
+                                    <td class="fs" style="text-align:end;">Paid Amount : 0.00</td>
+                                </tr>
+                                <tr>
+                                    <td class="fs">Payment Mode : CASH</td>
+                                    <td class="fs">Payment Date : 21/06/22, 06:45 p.m.</td>
+                                    <td class="fs" style="text-align:end;">Paid Amount : 0.00</td>
+                                </tr>
+                                <tr>
+                                    <td class="fs">Payment Mode : CASH</td>
+                                    <td class="fs">Payment Date : 21/06/22, 06:45 p.m.</td>
+                                    <td class="fs" style="text-align:end;">Total Amount : 0.00</td>
+                                </tr>
+                            </tbody>
+                        </table>  
+                        <table class="first_t_row">
+                            <tbody>
+                                <tr>
+                                    <th class="first_t_row_th_1 invoice_font">Comments : Span Voucher Discount @ 30%</th>
+                                    <th class="signatute-invoice" style="text-align:center;  padding-top: 70px;">Cashier's Signature</th>
+                                </tr>
+                                <tr>
+                                    
+                                </tr>
+                            </tbody>
+                        </table>   
+                        <div>
+                        <table class="text-center header-content"  id="header-content" >
+                            <h4 style="color: #402f64; padding-top: 30px; margin-bottom: 0px;">Diagnostica <span style="color:#7a2020 ;"> SPAN </span> Private Limited</h4>
+                            <p class="fs">H.O.: NO. 79, Deccan Central, 40th Main, M.E.I Road, 2nd Stage, Industrial Suburb, Yeshwanthpur, Bengaluru 560022 | Website: www.spandiagno.com
+                                Customer Care No: +91 9769351301 / +91 9888799994 | CIN No: U85300KA2021PTC151331 | Email: enquiry@spanhealth.com</p>
+                        </div> 
+		</div>
+	</div>
+	</body>
+</html>

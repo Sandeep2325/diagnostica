@@ -1555,8 +1555,7 @@ textarea {
         font-size: 16px;
     }
     .cart_table h1 {
-        font-size: 25px;
-        text-align: start !important;
+        font-size: 25px;                            
     }
     .cart_table .cell {
         text-align: start !important;
