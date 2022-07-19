@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-q6^hx14a=lgi46rai+=20-31f7&-sfp@5tb7i+yf*f%f8xoz-='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["162.240.55.20","127.0.0.1"]
 
@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'sweetify',
     "app1",
 ]
 INSTALLED_APPS += ('django_summernote', ) 
@@ -78,28 +79,28 @@ AUTH_USER_MODEL = 'app1.User'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-# DATABASES = {  
-#     'default': {  
-#         'ENGINE': 'django.db.backends.mysql',  
-#         'NAME': 'diagnospan',  
-#         'USER': 'root',  
-#         'PASSWORD': 'Sandeep@8105',  
-#         'HOST': 'localhost',  
-#         'PORT': '3306',  
-        
-#     }  
-# } 
-
 DATABASES = {  
     'default': {  
         'ENGINE': 'django.db.backends.mysql',  
         'NAME': 'diagnospan',  
         'USER': 'root',  
-        'PASSWORD': 'mySqlServer@#$432',  
+        'PASSWORD': 'Sandeep@8105',  
         'HOST': 'localhost',  
-        'PORT': '3306',   
+        'PORT': '3306',  
+        
     }  
-}
+} 
+
+# DATABASES = {  
+#     'default': {  
+#         'ENGINE': 'django.db.backends.mysql',  
+#         'NAME': 'diagnospan',  
+#         'USER': 'root',  
+#         'PASSWORD': 'mySqlServer@#$432',  
+#         'HOST': 'localhost',  
+#         'PORT': '3306',   
+#     }  
+# }
 
 
 # Password validation
@@ -155,6 +156,7 @@ EMAIL_HOST_USER = "gowdasandeep8105@gmail.com"
 EMAIL_HOST_PASSWORD = 'atkzlpfgzcvpdhai'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SESSION_SAVE_EVERY_REQUEST =True
+SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
     "site_title": "Diagnostica Span",
