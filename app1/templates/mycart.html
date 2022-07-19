@@ -154,19 +154,16 @@
                         <form method="post" id="patientInformationForm">
                            {% comment %} {%csrf_token%} {% endcomment %}
                             <h3 class="fs-30 font-bold cl-dark-blue text-center">Patient Information</h3>
-
-                            
-                            <div class=" ">
+                            <div>
                                 <select class="w-100 mt-3 form-select " type="select" name="option1" id="option1">
                                     <option selected="selected" class="opc-5" disabled>Select Test For</option>
                                     <option value="m">My-Self</option>
                                     <option value="o">Others</option>
                                 </select>
                             </div>
-                            <div class=" ">
+                            <div>
                                 <select class="w-100 mt-3 form-select " type="select" name="option" id="option">
-                                    <option selected="selected" class="opc-5" disabled>Option</option>
-                                
+                                    <option selected="selected" class="opc-5" disabled>To Whom</option>
                                     <option value="m">Mother</option>
                                     <option value="f">Father</option>
                                     <option value="w">Wife</option>
@@ -184,7 +181,7 @@
                                     type="text" maxlength="250" >
                             </div>
                             <div>
-                                <input class="w-100  form_input mt-3" placeholder="Contact Number" name="phone" id="phone"
+                                <input class="w-100  form_input mt-3" placeholder="Mobile Number" name="phone" id="phone"
                                     type="text" maxlength="250">
                             </div>
                             <div>
@@ -484,9 +481,15 @@ $(document).ready(function(){
             'gender': {
                 required: true,
             },
-            'address': {
+            'address1': {
                 required: true,
                 minlength: 1,
+            },
+            'option1': {
+                required: true,
+            },
+            'option': {
+                required: true,
             },
         },
     

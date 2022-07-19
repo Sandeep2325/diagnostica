@@ -35,20 +35,20 @@
                                     Lorem Ipsum is simply dummy text of the printing and
                                     typesetting industry.
                                 </p>
-                                <div class="">
+                                <div class="pt-3">
                                     <label class="fs-20 font-bold cl-dark-blue" for="firstname">First Name</label>
                                     <br />
                                     <div class="pt-2">
 
-                                        <input class="w-100 px-4 py-2 register_input br-5 m-0"
+                                        <input class="w-100 form_input m-0"
                                             placeholder="Enter Your Name" id="firstname" name="firstname" type="text" maxlength="250"/>
                                     </div>
                                 </div>
-                                <div class="">
+                                <div class="pt-3">
                                     <label class="fs-20 font-bold cl-dark-blue" for="lastname">Last Name</label>
                                     <br />
                                     <div class="pt-2">
-                                        <input class="w-100 px-4 py-2 register_input br-5 m-0"
+                                        <input class="w-100 form_input m-0"
                                             placeholder="Enter Your Name" id="lastname" name="lastname" type="text" maxlength="250"/>
 
                                     </div>
@@ -152,7 +152,12 @@
     $("#registerForm").validate({
         rules: {
 
-            'name': {
+            'firstname': {
+                required: true,
+                minlength: 1,
+                name_regex: true,
+            },
+            'lastname': {
                 required: true,
                 minlength: 1,
                 name_regex: true,
@@ -179,7 +184,10 @@
 
         messages: {
 
-            'name': {
+            'firstname': {
+                required: "This field is required."
+            },
+            'lastname': {
                 required: "This field is required."
             },
             'email': {

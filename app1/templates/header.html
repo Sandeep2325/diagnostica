@@ -8,7 +8,7 @@
                 <ul class="mb-0 ps-0 ms-auto d-flex d-lg-none align-items-center">
                     <li class="nav-item dropdown">
                         <a class="pe-2 dropdown-toggle " href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="{%static 'images/bg-user.png' %}" alt="" class="" />
+                            <img src="{%static 'images/bg-user.png' %}" alt="" class="w-20" />
                         </a>
                         <ul class="dropdown-menu " aria-labelledby="navbarScrollingDropdown">
                              {% if user.is_authenticated %}  
@@ -23,11 +23,12 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                    <a class="px-1" href="{%url "cart"%}"><img src="{%static "images/bg-cart.png"%}" alt="" class="" /></a>
+                    <a class="px-1" href="{%url "cart"%}"><img src="{%static "images/bg-cart.png"%}" alt="" class="w-22" /></a>
                     </li>
                 </ul>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"><i class="fa fa-compress header_tgl_btn" aria-hidden="true"></i></span>
+                <span class="navbar-toggler-icon"><i class="fa fa-bars header_tgl_btn" aria-hidden="true"></i>
+                </span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarScroll">
                     <ul class="navbar-nav ms-auto my-2 my-lg-0 navbar-nav-scroll align-items-lg-center">

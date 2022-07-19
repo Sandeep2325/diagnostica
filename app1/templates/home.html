@@ -310,11 +310,13 @@
                 <h1 class="fs-40 font-bold cl-dark-blue pt-2 pb-lg-4">Request a Call Back</h1>
                 <div class="row">
                   <div class="col-12 col-md-12 col-lg-6 pt-4">
-                    <label class="fs-20 font-regular cl-dark-blue">First name</label>
+                    <label class="fs-20 font-regular cl-dark-blue">First name<span
+                      class="cl-red ps-1">*</span></label>
                     <input class="w-100  form_input mt-2" type="text" name="firstname" id="name" maxlength="250" />
                   </div>
                   <div class="col-12 col-md-12 col-lg-6 pt-4">
-                    <label class="fs-20 font-regular cl-dark-blue">Last name</label>
+                    <label class="fs-20 font-regular cl-dark-blue">Last name<span
+                      class="cl-red ps-1">*</span></label>
                     <input class="w-100 form_input mt-2" type="text" name="lastname" id="surname" maxlength="250" />
                   </div>
                   <div class="col-12 col-md-12 col-lg-6 pt-4">
@@ -328,11 +330,13 @@
                     <input class="w-100 form_input mt-2" type="email" name="email" id="email" maxlength="250" />
                   </div>
                   <div class="col-12 pt-4">
-                    <label class="fs-20 font-regular cl-dark-blue">Select Test Name</label>
+                    <label class="fs-20 font-regular cl-dark-blue">Select Test Name<span
+                      class="cl-red ps-1">*</span></label>
                     <select class="w-100 mt-2  form-select" type="select"
                       name="selectbookhelp">
                       <option selected="selected" class="opc-5" disabled>Select
-                        Test</option>
+                        Test<span
+                        class="cl-red ps-1">*</span></option>
                       {%for test in tests%}
                       <option value={{test.id}}>{{test.testt}}</option>
                       {%endfor%}
