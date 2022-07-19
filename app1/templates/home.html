@@ -32,7 +32,7 @@
         <div class="col-lg-12 d-flex justify-content-between pt-3">
           <h1 class="fs-40 font-bold home_health_h1 w-100 m-0">Health Checks & Lab Tests
           </h1>
-          <a href="{% url 'testselect' %}" style=""><button class="home_pack_viewpack py-2 px-0 fs-16 br-50 " style="min-width: 150px;">VIEW ALL</button></a>
+          <a href="{% url 'testselect' %}"><button class="home_pack_viewpack py-2 px-0 fs-16 br-50 " style="min-width: 150px;">VIEW ALL</button></a>
           
         </div>
         {%for checkup in healthcheckup%}
@@ -77,7 +77,7 @@
                  {%endif%}
                     <!-- <div class="  p-0 "> -->
                   <button
-                    class="ps-xl-3 ps-2 test_now_button fs-16 cl-dark-blue font-bold py-2 px-4 br-20 position-absolute br" onclick='testnow("{{checkup.id}}")' name={{checkup.slug}} id="testnow">Test
+                    class="px-xl-3 px-2 test_now_button fs-16 cl-dark-blue font-bold py-2 px-4 br-20 position-absolute br" onclick='testnow("{{checkup.id}}")' name={{checkup.slug}} id="testnow">Test
                     Now</button>
                   <!-- </div> -->
                 </div>
@@ -162,7 +162,7 @@
               <div class="row">
                 <div class="col-lg-6 h-100">
                   <div class="pe-lg-4">
-                    <img src="{{blog.image.url}}" alt="" class="img-fluid">
+                    <img src="{{blog.image.url}}" alt="" class="img-fluid br-10">
                   </div>
                 </div>
                 <div class="col-lg-6">
@@ -311,25 +311,25 @@
                 <div class="row">
                   <div class="col-12 col-md-12 col-lg-6 pt-4">
                     <label class="fs-20 font-regular cl-dark-blue">First name</label>
-                    <input class="w-100  br-5 mt-2" type="text" name="firstname" id="name" maxlength="250" />
+                    <input class="w-100  form_input mt-2" type="text" name="firstname" id="name" maxlength="250" />
                   </div>
                   <div class="col-12 col-md-12 col-lg-6 pt-4">
                     <label class="fs-20 font-regular cl-dark-blue">Last name</label>
-                    <input class="w-100 br-5 mt-2" type="text" name="lastname" id="surname" maxlength="250" />
+                    <input class="w-100 form_input mt-2" type="text" name="lastname" id="surname" maxlength="250" />
                   </div>
                   <div class="col-12 col-md-12 col-lg-6 pt-4">
                     <label class="fs-20 font-regular cl-dark-blue">Phone Number<span
                         class="cl-red ps-1">*</span></label>
-                    <input class="w-100 br-5 mt-2" type="text" name="phone" id="phone" maxlength="250" />
+                    <input class="w-100 form_input mt-2" type="text" name="phone" id="phone" maxlength="250" />
                   </div>
                   <div class="col-12 col-md-12 col-lg-6 pt-4">
                     <label class="fs-20 font-regular cl-dark-blue">Email Address<span
                         class="cl-red ps-1">*</span></label>
-                    <input class="w-100 br-5 mt-2" type="email" name="email" id="email" maxlength="250" />
+                    <input class="w-100 form_input mt-2" type="email" name="email" id="email" maxlength="250" />
                   </div>
                   <div class="col-12 pt-4">
-                    <label class="fs-20 font-regular cl-dark-blue">Select your Test Name</label>
-                    <select class="w-100 mt-2 br-5 cl-dark-blue fs-20 br form-select bookhelper_select" type="select"
+                    <label class="fs-20 font-regular cl-dark-blue">Select Test Name</label>
+                    <select class="w-100 mt-2  form-select" type="select"
                       name="selectbookhelp">
                       <option selected="selected" class="opc-5" disabled>Select
                         Test</option>
@@ -339,7 +339,7 @@
                     </select>
                   </div>
                   <div class="col-12 py-3 mt-4"><button
-                      class="br px-5 py-lg-3 py-2  fs-18 font-bold cl-dark-white bg-sky-blue br-5" type="submit">Submit</button>
+                      class="globalsubmitbutton" type="submit">Submit</button>
                   </div>
                 </div>
               </div>
@@ -495,12 +495,12 @@ $(document).ready(function(){
   $("#homeForm").validate({
     rules: {
 
-      'name': {
+      'firstname': {
         required: true,
         minlength: 1,
         name_regex: true,
       },
-      'surname': {
+      'lastname': {
         required: true,
         minlength: 1,
         name_regex: true,
@@ -514,23 +514,29 @@ $(document).ready(function(){
         phone_regex: true,
         minlength: 10
       },
+      'selectbookhelp': {
+        required: true,
+      },
 
     },
 
     messages: {
 
-      'name': {
-        required: "Enter first name",
+      'firstname': {
+        required: "This field is required."
       },
-      'surname': {
-        required: "Enter  name",
+      'lastname': {
+        required: "This field is required."
       },
       'email': {
-        required: "Enter email ID",
+        required: "This field is required.",
         email: "Enter valid email"
       },
       'phone': {
-        required: "Enter phone number",
+        required: "This field is required."
+      },
+      'selectbookhelp': {
+        required: "This field is required."
       },
     },
     submitHandler: function (form) {

@@ -19,17 +19,18 @@
         </div>
     </section>
 
-    <section class="section_register">
+    <section class="section_register mb-5">
         <div class="container">
             <div class="row">
                 {%for message in messages%}
                 {{message}}
                 {%endfor%}
-                <form method="post">
+                <form method="post" id="otpForm">
                     {%csrf_token%}
                 <div class="col-lg-12">
+                    <div class="bg-light-grey br-15">
                     <div class="row px-3">
-                        <div class="col-lg-7 bg-light-grey p-0 py-xl-5 px-xl-5 br-5">
+                        <div class="col-lg-7  p-0 py-xl-5 px-xl-5 br-5">
                             <div class="px-xl-5 mx-3">
                                 <h1 class="fs-40 font-bold cl-dark-blue py-4 m-0">
                                     Enter OTP
@@ -40,28 +41,29 @@
                                 </p>
                                 <div class="row pt-xl-5 pt-4" id="otp">
                                     <div class="d-flex ">
-                                        <input class=" col-1 h-100 otp_digit_input digit text-center" type="text"
-                                            name="digit-1" id="verificationCodeDigit1" minlength="1" maxlength="1" required>
-                                        <input class=" col-1 h-100 otp_digit_input digit text-center mx-3" type="text"
-                                        name="digit-2" id="verificationCodeDigit2" minlength="1" maxlength="1" required>
-                                        <input class=" col-1 h-100 otp_digit_input digit text-center" type="text"
-                                        name="digit-3"id="verificationCodeDigit3" minlength="1" maxlength="1" required>
-                                        <input class=" col-1 h-100 otp_digit_input digit text-center mx-3" type="text"
-                                        name="digit-4" id="verificationCodeDigit4" minlength="1" maxlength="1" required>
+                                        <input class=" col-1 h-100 otp_digit_input digit text-center" type="number"
+                                            name="digit-1" id="verificationCodeDigit1" minlength="1" maxlength="1" required name="otp_">
+                                        <input class=" col-1 h-100 otp_digit_input digit text-center mx-3" type="number"
+                                        name="digit-2" id="verificationCodeDigit2" minlength="1" maxlength="1" required name="otp_">
+                                        <input class=" col-1 h-100 otp_digit_input digit text-center" type="number"
+                                        name="digit-3"id="verificationCodeDigit3" minlength="1" maxlength="1" required name="otp_">
+                                        <input class=" col-1 h-100 otp_digit_input digit text-center mx-3" type="number"
+                                        name="digit-4" id="verificationCodeDigit4" minlength="1" maxlength="1" required name="otp_">
                                     </div>
-                                    <a href="{%url "resend"%}" class="py-3 cursor">Resend OTP</a>
+                                    <a href="{%url "resend"%}" class="col-lg-3 col-5 py-3 cursor">Resend OTP</a>
                                 </div>
                                 <div class="mt-xl-5 my-4">
                                     <button
-                                        class="px-5 py-2  bg-sky-blue br-5  fs-18 font-bold cl-dark-white cursor br" type="submit">Submit</button>
+                                        class="globalsubmitbutton" type="submit">Submit</button>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-5 bg-light-grey p-0">
+                        <div class="col-lg-5  p-0">
                             <img src="asset/images/login.png" alt="" class="img-fluid h-100" />
 
                         </div>
                     </div>
+                </div>
                 </div>
             </form>
             </div>

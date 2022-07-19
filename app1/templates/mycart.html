@@ -143,14 +143,14 @@
 
                             
                             <div class=" ">
-                                <select class="w-100 mt-3 form-select myself_other" type="select" name="option1" id="option1">
+                                <select class="w-100 mt-3 form-select " type="select" name="option1" id="option1">
                                     <option selected="selected" class="opc-5" disabled>Select Test For</option>
                                     <option value="m">My-Self</option>
                                     <option value="o">Others</option>
                                 </select>
                             </div>
                             <div class=" ">
-                                <select class="w-100 mt-3 form-select myself_other" type="select" name="option" id="option">
+                                <select class="w-100 mt-3 form-select " type="select" name="option" id="option">
                                     <option selected="selected" class="opc-5" disabled>Option</option>
                                 
                                     <option value="m">Mother</option>
@@ -162,19 +162,19 @@
                                 </select>
                             </div>
                             <div>
-                                <input class="w-100  br-5 modal_input" placeholder="First Name" name="firstname" id="firstname"
+                                <input class="w-100  form_input mt-3 " placeholder="First Name" name="firstname" id="firstname"
                                     type="text" maxlength="250" >
                             </div>
                             <div>
-                                <input class="w-100  br-5" placeholder="Last Name" name="lastname" id="lastname"
+                                <input class="w-100  form_input mt-3" placeholder="Last Name" name="lastname" id="lastname"
                                     type="text" maxlength="250" >
                             </div>
                             <div>
-                                <input class="w-100  br-5" placeholder="Contact Number" name="phone" id="phone"
+                                <input class="w-100  form_input mt-3" placeholder="Contact Number" name="phone" id="phone"
                                     type="text" maxlength="250">
                             </div>
                             <div>
-                                <input class="w-100  br-5" placeholder="Age" name="age" id="age" type="text" maxlength="250"/>
+                                <input class="w-100  form_input mt-3" placeholder="Age" name="age" id="age" type="text" maxlength="250"/>
                             </div>
                             <div>
                                 <select class="w-100 mt-3 form-select myself_other" type="select" name="gender" id="gender">
@@ -186,9 +186,9 @@
                                 </select>
                             </div>
                             <div>
-                                <textarea rows="2" class="w-100 myself_other br-5" placeholder="Address" name="address1" id="address" type="text" ></textarea>
+                                <textarea rows="2" class="w-100 myself_other form_input mt-3" placeholder="Address" name="address1" id="address" type="text" ></textarea>
                             </div>
-                            <button class="mx-lg-0 mx-3 mt-4 prescription br bg-sky-blue br-5 cl-dark-white"
+                            <button class="mx-lg-0 mx-3 mt-4 globalsubmitbutton"
                                 type="submit" name="submit" id="checkout">SUBMIT</button>
                         {% comment %} </form> {% endcomment %}
                     </div>
@@ -215,7 +215,7 @@
         },
         messages: {
             'coupon': {
-                required: "The Coupon is required!",
+                required: "This field is required."
             },
         },
         submitHandler: function (form) {
@@ -234,8 +234,8 @@
         },
         messages: {
             'email': {
-                required: "The Email is required!",
-                email: "Please enter a valid email address!"
+                required: "This field is required.",
+                email: "Enter valid email ID"
             },
         },
         submitHandler: function (form) {
@@ -478,26 +478,26 @@ $(document).ready(function(){
             },
     
             'file': {
-                required: "Enter file",
+                required: "This field is required."
             },
             
             'phone': {
-                required: "Enter mobile number",
+                required: "This field is required."
             },
             'gender': {
-                required: "Select gender",
+                required: "This field is required."
             },
             'firstname': {
-                required: "Enter first name"
+                required: "This field is required."
             },
             'lastname': {
-                required: "Enter last name"
+                required: "This field is required."
             },
             'age': {
-                required: "Enter Age"
+                required: "This field is required."
             },
             'address': {
-                required: "Enter Address"
+                required: "This field is required."
             }
     
         },

@@ -9,8 +9,9 @@
             <form method="POST" id="registerForm">
                 {%csrf_token%}
                 <div class="col-lg-12">
+                    <div class="bg-light-grey br-15">
                     <div class="row px-3">
-                        <div class="col-lg-7 bg-light-grey px-3 px-sm-4 px-lg-3 pb-xl-5 px-xl-5 br-5">
+                        <div class="col-lg-7  px-3 px-sm-4 px-lg-3 pb-xl-5 px-xl-5">
                             <div class="pe-xl-5">
                                 <h1 class="fs-40 font-bold cl-dark-blue pt-5 mb-4">
                                     Register Now
@@ -26,16 +27,16 @@
                                     <label class="fs-20 font-bold cl-dark-blue" for="name">Name</label>
                                     <br />
                                     <div class="pt-2">
-                                        <input class="w-100 px-4 py-2 register_input br-5 m-0"
+                                        <input class="w-100 form_input"
                                             placeholder="Enter Your Name" id="name" name="name" type="text" maxlength="250"/>
                                     </div>
                                 </div>
                                 <div class="pt-3">
-                                    <label class="fs-20 font-bold cl-dark-blue" for="email">Enter Your Email
+                                    <label class="fs-20 font-bold cl-dark-blue" for="email"> Email
                                         ID</label>
                                     <br />
                                     <div class="pt-2">
-                                        <input class="w-100 px-4 py-2 register_input br-5 m-0"
+                                        <input class="w-100 form_input"
                                             placeholder="Enter Your Email ID" name="email" id="email" type="email" maxlength="250"/>
                                     </div>
                                 </div>
@@ -43,7 +44,7 @@
                                     <label class="fs-20 font-bold cl-dark-blue" for="phone">Mobile Number</label>
                                     <br />
                                     <div class="pt-2 ">
-                                        <input class="w-100 px-4 py-2 register_input br-5 m-0"
+                                        <input class="w-100 form_input"
                                             placeholder="Enter Your Mobile Number" type="text" name="phone"
                                             id="phone" maxlength="250"/>
 
@@ -54,7 +55,7 @@
                                         <label class="fs-20 font-bold cl-dark-blue" for="password">Password</label>
                                         <br />
                                         <div class="pt-2">
-                                            <input class="w-100 px-4 py-2 register_input br-5 m-0"
+                                            <input class="w-100 form_input"
                                                 placeholder="Enter Password" type="password" name="password"
                                                 id="password" maxlength="250"/>
                                         </div>
@@ -65,7 +66,7 @@
                                             Password</label>
                                         <br />
                                         <div class="pt-2 position-relative">
-                                            <input class="w-100 px-4 py-2 register_input br-5 m-0"
+                                            <input class="w-100 form_input"
                                                 placeholder="Enter Confirm Password" type="password"
                                                 name="confirmpassword" id="rePassword" maxlength="250"/>
                                             <i
@@ -74,22 +75,23 @@
                                     </div>
                                 </div>
                                 <div class="mt-4">
-                                    <button class="px-5 py-2  bg-sky-blue br-5  fs-18 font-bold cl-dark-white br"
+                                    <button class="globalsubmitbutton"
                                         type="submit" value="submit">REGISTER
                                         NOW</button>
                                 </div>
                                 <div class="d-flex py-3">
                                     <p class="m-0 opc-5">Are you already Registered?</p>
-                                    <a href="{%url "user-login"%}" class="ps-3 fs-16 font-bold">Login</a>
+                                    <a href="{%url "user-login"%}" class="ps-2 fs-16 font-bold">Login</a>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-5 bg-light-grey p-0">
+                        <div class="col-lg-5 p-0">
                             <img src="{%static "images/login.png" %}" alt="" class="img-fluid h-100" />
 
                         </div>
                     </div>
                 </div>
+            </div>
             </form>
         </div>
     </div>
@@ -107,6 +109,9 @@
     jQuery.validator.addMethod("name_regex", function (value, element) {
         return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);
     }, "Enter valid name");
+    jQuery.validator.addMethod("password_regex", function (value, element) {
+        return this.optional(element) || /^[a-z0-9!@#$%^&*()_\.\-_]{8,30}$/i.test(value);
+    }, "Password should be minimum 8 characters.");
     jQuery.validator.addMethod("phone_regex", function (value, element) {
         return this.optional(element) || /^[0-9\.\-_]{10,30}$/i.test(value);
     }, "Enter valid phone number");
@@ -132,7 +137,8 @@
             },
             'password': {
                 required: true,
-
+                password_regex: true,
+                minlength: 8
             },
             'confirmpassword': {
                 equalTo: '#password'
@@ -143,17 +149,17 @@
         messages: {
 
             'name': {
-                required: "Enter first name",
+                required: "This field is required."
             },
             'email': {
-                required: "Enter email ID",
-                email: "Enter valid email"
+                required: "This field is required.",
+                email: "Enter valid email ID"
             },
             'phone': {
-                required: "Enter phone number",
+                required: "This field is required."
             },
             'password': {
-                required: "Enter password"
+                required: "This field is required."
             },
             'confirmpassword': {
                 equalTo: "Enter matching password"

@@ -253,11 +253,9 @@ select,
 textarea {
     box-shadow: none !important;
 }
-
 .cursor {
     cursor: pointer;
 }
-
 .select_option {
     outline: none;
 }
@@ -314,97 +312,6 @@ textarea {
     margin-top: 39px;
 }
 
-
-/* .section_nav_bar {
-    position: sticky;
-    top: 0;
-    z-index: 999;
-}
-
-.section_nav_bar .menu-center {
-    text-align: right;
-}
-
-.test_nav {
-    text-align: left !important;
-}
-
-.section_nav_bar ul li {
-    display: inline-block;
-    padding: 35px 10px;
-    cursor: pointer;
-}
-
-.dropdown-menu ul li {
-    display: block;
-    padding: 0px !important;
-    cursor: pointer;
-}
-
-.section_nav_bar .dropdown-menu {
-    top: 100px !important;
-    right: 0 !important;
-    transform: unset !important;
-    min-width: 12rem;
-}
-
-.dropdown-menu li {
-    width: 100% !important;
-}
-
-.section_nav_bar a {
-    font-family: Chivo-Regular;
-    font-size: 18px;
-    color: #17235A;
-}
-
-.section_nav_bar .nav_hov:hover {
-    border-bottom: 3px solid #FDB42B;
-}
-
-.section_nav_bar span {
-    margin: 0 20px;
-    font-size: 28px;
-    cursor: pointer;
-    display: none;
-}
-
-.section_nav_bar .nav_bar .logo-img {
-    width: 200px;
-    float: left;
-    margin-top: 35px;
-    cursor: pointer;
-}
-
-.section_nav_bar .nav_button {
-    padding: 10px 20px;
-    font-family: Chivo-Regular;
-    font-size: 16px;
-    border: 3px solid #17235A;
-    color: #17235a;
-    border-radius: 50px;
-}
-
-.section_nav_bar .nav_button:hover {
-    background-color: #17235A;
-    color: white;
-}
-
-.section_nav_bar a .active {
-    border-bottom: 2px solid orange;
-}
-
-.cart-logo1 .show {
-    display: block;
-    position: absolute;
-    top: 100px;
-}
-
-.dropdown-menu .show {
-    display: block;
-    position: static;
-    top: 100px;
-} */
 
 
 /*--------------- footer ----------------*/
@@ -711,26 +618,31 @@ textarea {
 .helper_header_col {
     padding-top: 30px;
 }
-
-.helping_book_test input,
-.bookhelper_select {
-    padding: 12px 20px !important;
-    outline: none;
-    border: 2px solid #DBDEEF !important;
-    color: #17235A;
-}
-
-
-/* .home_modal_city_icon {
-    width: 100px;
-    height: 100px;
-  } */
-
-
 /* -------------------Login------------------- */
 
 .section_login p {
     opacity: 0.5;
+}
+.globalsubmitbutton{
+    font-size: 16px;
+    font-family: Chivo-bold;
+    color: white;
+    width: 175px;
+    height: 45px;
+    background: #5c62ce;
+    border-radius: 5px;
+    border: none;
+}
+.globalsubmitbutton:hover{
+    font-size: 15px;
+    font-family: Chivo-bold;
+    color: white;
+    width: 175px;
+    height: 45px;
+    background: #17235A;;
+    border-radius: 5px;
+    border: none;
+    transition: 0.5s ease-in-out;
 }
 
 .section_login .login_input {
@@ -739,10 +651,14 @@ textarea {
     background-position: left;
     background-size: 18px;
     border: 2px solid #DBDEEF;
-    padding: 10px;
+    padding: 8px;
     width: 100%;
     background-position-x: 15px;
     outline: none;
+    opacity: 0.8;
+}
+.section_login .login_input:focus {
+   opacity: 999;
 }
 
 .section_login .login_input_2 {
@@ -751,17 +667,20 @@ textarea {
     background-position: left;
     background-size: 18px;
     border: 2px solid #DBDEEF;
-    padding: 10px;
+    padding: 8px;
     width: 100%;
     background-position-x: 15px;
     outline: none;
     position: relative;
+    opacity: 0.8;
+}
+.section_login .login_input_2:focus {
+   opacity: 999;
 }
 
 input::-webkit-input-placeholder,
 select::placeholder {
-    opacity: 0.8;
-    color: #17235A;
+    opacity: 1;
 }
 
 .opc-5 {
@@ -770,7 +689,7 @@ select::placeholder {
 
 .error {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     color: red;
 }
 
@@ -782,19 +701,36 @@ select::placeholder {
     position: absolute;
     z-index: 2;
     right: 34px;
-    top: 51px;
+    top: 46px;
     font-size: 20px !important;
 }
 
+.form_input{
+    font-size: 15px!important;
+    padding: 10px 20px!important;
+    outline: none!important;
+    border: 2px solid #DBDEEF!important;
+    background: #FFFFFF 0% 0% no-repeat padding-box!important;
+    border-radius: 5px!important;
+    opacity: 0.8!important;
+    
+}
+.form_input:focus{
+   opacity: 999;
+}
+select{
+    font-size: 15px!important;
+    padding: 10px 20px!important;
+    outline: none!important;
+    border: 2px solid #DBDEEF!important;
+    border-radius: 5px!important;
+    opacity: 0.8!important;  
+}
+.select:focus{
+    opacity: 999;
+ }
 
 /* ------------------Register Now -----------------*/
-
-.section_register .register_input {
-    outline: none;
-    border: 2px solid #DBDEEF;
-    background: #FFFFFF 0% 0% no-repeat padding-box;
-}
-
 .toggle-password-register {
     position: absolute;
     z-index: 2;
@@ -822,8 +758,11 @@ select::placeholder {
     min-width: 60px;
     min-height: 60px;
 }
-
-
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 /* -----------Change password -----------------*/
 
 .change_password_eye {
@@ -836,14 +775,14 @@ select::placeholder {
 
 /* ----------------profile------------- */
 
-.section_profile input,
-.select_option {
-    border: none;
-    outline: none;
-    padding: 10px 20px !important;
-    border: 2px solid #DBDEEF !important;
-    font-size: 16px !important;
+
+.profile-br{
+    border-radius: 15px 15px 0px 0px;
 }
+.profile-br-2{
+    border-radius: 0px 0px 15px 15px;
+}
+
 
 .change_password_modal input {
     border: none;
@@ -990,7 +929,7 @@ select::placeholder {
     right: 0px;
 }
 
-.cart_checkout_modal .close {
+ .close {
     position: absolute;
     right: 0px;
     top: -1px;
@@ -1001,19 +940,13 @@ select::placeholder {
     margin: 10vh auto 0px auto
 }
 
-.cart_checkout_modal input, textarea,
-.myself_other {
-    padding: 10px 20px !important;
-    outline: none;
-    border: 2px solid #DBDEEF !important;
-    margin-top: 20px;
-}
+
 
 
 /* -----------------Booking History -------------- */
 
 #othersspop {
-    text-align: start!important;
+    align-items: flex-start;
 }
 
 .section_booking_history .tad_button {
@@ -1135,16 +1068,6 @@ table td {
 
 
 /* ------------------ Upload Pescription -----------*/
-
-.section_book-test-online input,
-select,
-.myself_other {
-    padding: 10px 20px !important;
-    outline: none;
-    border: 2px solid #DBDEEF !important;
-    color: #04336A;
-}
-
 .section_book-test-online .folder_icon {
     position: absolute;
     top: 18px;
@@ -1152,9 +1075,7 @@ select,
     color: #2B3147;
 }
 
-.prescription {
-    padding: 10px 70px;
-}
+
 
 .section_book-test-online ul li {
     list-style: none;
@@ -1250,11 +1171,6 @@ select,
     color: #2B3147;
 }
 
-.contact input,
-textarea {
-    border: 2px solid #DBDEEF;
-    outline: none;
-}
 
 
 /* ------------faq---------- */
