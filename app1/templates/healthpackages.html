@@ -32,19 +32,29 @@
                                     <p
                                         class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">
                                         Price</p>
+                                    
                                     {% comment %} {%if %} {% endcomment %}
-                                    {%if city == "Bangalore"%}
+                                    {%if city == envcity.Bangalore%}
                                     <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">
-                                        ₹{{package.pricel1}}</h1>
-                                    {%elif city == "Chennai"%}
+                                        ₹{{package.Banglore_price}}</h1>
+                                    {%elif city == envcity.Mumbai%}
                                     <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">
-                                        ₹{{package.pricel2}}</h1>
-                                    {%elif city == "Mumbai"%}
+                                        ₹{{package.Mumbai_price}}</h1>
+                                    {%elif city == envcity.Bhophal%}
                                     <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">
-                                        ₹{{package.pricel3}}</h1>
-                                    {%elif city == "Delhi"%}
+                                        ₹{{package.bhopal_price}}</h1>
+                                    {%elif city == envcity.Nanded%}
                                     <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">
-                                        ₹{{package.pricel4}}</h1>
+                                        ₹{{package.nanded_price}}</h1>
+                                    {%elif city == envcity.Pune%}
+                                    <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">
+                                        ₹{{package.pune_price}}</h1>
+                                    {%elif city == envcity.Barshi%}
+                                    <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">
+                                        ₹{{package.barshi_price}}</h1>
+                                    {%elif city == envcity.Aurangabad%}
+                                        <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">
+                                        ₹{{package.aurangabad_price}}</h1>
                                     {%endif%}
                                     <p
                                         class="d-flex justify-content-center align-content-center align-items-center m-0 fs-18 cl-dark-blue font-bold">

@@ -29,13 +29,22 @@ from django.views import View
 import razorpay
 from django.contrib.auth import logout
 from django.db.models import Q
-
+from django.conf import settings
+import environ
+env = environ.Env()
 global OBJ_COUNT
 OBJ_COUNT = 0
 checkk=[]
 teest=[]
 packagee=[]
 
+Bangalore=env("Bangalore")
+Mumbai=env("Mumbai")
+Bhophal=env("Bhophal")
+Nanded=env("Nanded")
+Pune=env("Pune")
+Barshi=env("Barshi")
+Aurangabad=env("Aurangabad")
 
 def dashboard(request):
     test=prescription_book.objects.all().count()
@@ -272,7 +281,7 @@ def changepasswordotp(request):
                 request.session.delete("conpassword")
                 print("changed successfully")
                 messages.success(request,'Password changed successfully!! Please Login Again.')
-                return redirect('home')
+                return redirect('login')
             else:
                 print("not exists")
         else:
@@ -348,44 +357,47 @@ def userinfo(request):
 def profilee(request):
     cityy=city.objects.all()
     profile=User.objects.get(email=request.user.email)
-    context={
-        "profile":profile,
-        "cityy":cityy,
-    }
+    if request.method=="GET":
+        context={
+            "profile":profile,
+            "cityy":cityy,
+        }
+        return render (request,"profile.html",context)
     if request.method=="POST":
         # profile_pic=request.POST.Files
         profilepic=request.FILES.get("profile_pic")
         name=request.POST.get("name")
-        # firstname=request.POST.get("firstname")
-        # lastname=request.POST.get("lastname")
+        firstname=request.POST.get("firstname")
+        lastname=request.POST.get("lastname")
         email=request.POST.get("email")
         phone=request.POST.get("phone")
         gender=request.POST.get("gender")
         location=request.POST.get("location")
         age=request.POST.get("age")
         address=request.POST.get("address")
+        c=city.objects.get(id=int(location))
         print(request.FILES)
         print(profilepic, type(profilepic))
         a=User.objects.get(email=request.user.email)
-        # a.first_name=firstname
-        # a.last_name=lastname
+        a.first_name=firstname
+        a.last_name=lastname
         a.photo=profilepic
         a.username=name
         a.email=email
         a.phone_no=phone
         a.gender=gender
-        a.location=location
+        a.location=c
         a.age=age
         a.address=address
         a.save()
         messages.success(request,"Profile updated Successfully")
-        profile=User.objects.get(email=request.user.email)
+        # profile=User.objects.get(email=request.user.email)
         context1={
             "profile":profile,
             "cityy":cityy,
         }
-        return render (request,"profile.html",context)  
-    return render (request,"profile.html",context)          
+        return redirect("profile")  
+              
 def userLogin(request):
     # try :
     #     if request.session.get('failed') > 2:
@@ -431,17 +443,26 @@ def userLogin(request):
                 try:
                     for j in chckupp:
                         
-                        if city=="Bangalore":
-                            price=str(j.dpricel1)
+                        if city==Bangalore:
+                            price=str(j.dBanglore_price)
                         
-                        elif city == "Chennai":
-                            price=str(j.dpricel1)
+                        elif city == Mumbai:
+                            price=str(j.dMumbai_price)
                         
-                        elif city == "Mumbai":
-                            price=str(j.dpricel1)
+                        elif city == Bhophal:
+                            price=str(j.dbhopal_price)
                         
-                        elif city == "Delhi":
-                            price=str(j.dpricel1)
+                        elif city == Nanded:
+                            price=str(j.dnanded_price)
+                            
+                        elif city == Pune:
+                            price=str(j.dpune_price)
+                        
+                        elif city == Barshi:
+                            price=str(j.dbarshi_price)
+                        
+                        elif city == Aurangabad:
+                            price=str(j.daurangabad_price)
                             
                         cart.objects.create(user=request.user,labtest=j,price=price).save()
                 except:
@@ -449,36 +470,51 @@ def userLogin(request):
                 try:    
                     for j in package:
                         
-                        if city=="Bangalore":
+                        if city==Bangalore:
+                            price=str(j.Banglore_price)
                         
-                            price=str(j.pricel1)
-                        elif city == "Chennai":
+                        elif city == Mumbai:
+                            price=str(j.Mumbai_price)
+                        
+                        elif city == Bhophal:
+                            price=str(j.bhopal_price)
+                        
+                        elif city == Nanded:
+                            price=str(j.nanded_price)
                             
-                            price=str(j.pricel1)
-                        elif city == "Mumbai":
-                            
-                            price=str(j.pricel1)
-                        elif city == "Delhi":
-                            
-                            price=str(j.pricel1)
+                        elif city == Pune:
+                            price=str(j.pune_price)
+                        
+                        elif city == Barshi:
+                            price=str(j.barshi_price)
+                        
+                        elif city == Aurangabad:
+                            price=str(j.daurangabad_price)
                         cart.objects.create(user=request.user,packages=j,price=price).save()
                 except:
                     pass   
                 try:    
                     for j in tessst:
-                        print("--------",j)
-                        if city=="Bangalore":
-                            price=str(j.pricel1)
+                        if city==Bangalore:
+                            price=str(j.Banglore_price)
+                        
+                        elif city == Mumbai:
+                            price=str(j.Mumbai_price)
+                        
+                        elif city == Bhophal:
+                            price=str(j.bhopal_price)
+                        
+                        elif city == Nanded:
+                            price=str(j.nanded_price)
                             
-                        elif city == "Chennai":
-                            price=str(j.pricel1)
+                        elif city == Pune:
+                            price=str(j.pune_price)
                         
-                        elif city == "Mumbai":
-                            price=str(j.pricel1)
+                        elif city == Barshi:
+                            price=str(j.barshi_price)
                         
-                        elif city == "Delhi":
-                            price=str(j.pricel1)
-                            print("--------",j)
+                        elif city == Aurangabad:
+                            price=str(j.daurangabad_price)
                         cart.objects.create(user=request.user,items=j,price=price,categoryy=j.categoryy).save()
                 except:
                     pass
@@ -511,6 +547,7 @@ def newsletter(request):
 def home(request):
     deviceCookie = request.COOKIES.get('device')
     c=request.session.get("city")
+    envcity={"Bangalore":Bangalore,"Mumbai":Mumbai,"Bhophal":Bhophal,"Nanded":Nanded,"Pune":Pune,"Barshi":Barshi,"Aurangabad":Aurangabad}
     if request.method =="GET":
         cit=city.objects.all()
         tests=test.objects.all()
@@ -533,27 +570,11 @@ def home(request):
             "city":cit,
             "currentcity":c,
             "tests":tests,
+            "envcity":envcity
         }
         res = render(request,'home.html',context)
         return res
-    # if request.POST.get("action") == "retreive_data":
-    #     currentcity=request.session.get("city")
-    #     slug=request.POST['id']
-    #     print(slug)
-    #     context={}
-    #     healthcheckup=healthcheckuppackages.objects.get(slug=slug)
-    #     if currentcity=="Bangalore":
-    #         amount=healthcheckup.dpricel1
-    #     elif currentcity=="Chennai":
-    #         amount=healthcheckup.dpricel2
-    #     elif currentcity=="Mumbai":
-    #         amount=healthcheckup.dpricel3
-    #     elif currentcity=="Delhi":
-    #         amount=healthcheckup.dpricel4
-        
-        
-    #     return JsonResponse(context)
-    # else:
+
     if request.method=="POST":
         testt=request.POST["selectbookhelp"]
         tes=test.objects.get(id=testt)
@@ -589,9 +610,9 @@ def home(request):
                 "city":cit,
                 "currentcity":c,
                 "tests":tests,
+                "envcity":envcity,
         }
         return HttpResponseRedirect(reverse("home"))
-
 
 def healthcheckupview(request,slug):
     c=request.session.get("city")
@@ -613,10 +634,12 @@ def healthcheckupallview(request):
     return render(request,'latestviewall.html',context)
 def hpackagess(request):
     packages=healthpackages.objects.all()
-    city=request.session.get("city")
+    cit=request.session.get("city")
+    envcity={"Bangalore":Bangalore,"Mumbai":Mumbai,"Bhophal":Bhophal,"Nanded":Nanded,"Pune":Pune,"Barshi":Barshi,"Aurangabad":Aurangabad}
     context={
         "packages":packages,
-        "city":city,
+        "city":cit,
+        "envcity":envcity,
     }
     return render(request,'healthpackages.html',context)
 
@@ -624,20 +647,28 @@ def healthpackageview(request,slug):
         c=request.session.get("city")
         package=healthpackages.objects.get(slug=slug)
         packages=healthpackages.objects.exclude(slug=slug)
+        envcity={"Bangalore":Bangalore,"Mumbai":Mumbai,"Bhophal":Bhophal,"Nanded":Nanded,"Pune":Pune,"Barshi":Barshi,"Aurangabad":Aurangabad}
         context={
             "package":package,
             "packages":packages,
-            "city":c
+            "city":c,
+            'envcity':envcity,
         }
         currency = 'INR'
-        if c == "Bangalore":
-            amount=int(package.pricel1)
-        elif c == "Chennai":
-            amount=int(package.pricel2)
-        elif c == "Mumbai":
-            amount=int(package.pricel3)
-        elif c == "Delhi":
-            amount=int(package.pricel4)
+        if c == Bangalore:
+            amount=int(package.Banglore_price)
+        elif c == Mumbai:
+            amount=int(package.Mumbai_price)
+        elif c == Bhophal:
+            amount=int(package.bhopal_price)
+        elif c == Nanded:
+            amount=int(package.nanded_price)
+        elif c == Pune:
+            amount=int(package.pune_price)
+        elif c == Barshi:
+            amount=int(package.barshi_price)
+        elif c == Aurangabad:
+            amount=int(package.aurangabad_price)
         client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
         try:
             razorpay_order = client.order.create(
@@ -664,7 +695,7 @@ def healthpackageview(request,slug):
         #              amount=amount,
         #              payment_id=razorpay_order['id'],
         #              payment_status=False).save()
-        print("booked")
+        # print("booked")
         return render(request,'packagedetail.html',context)
 
 
@@ -737,6 +768,7 @@ def prescriptionbookview(request):
         contact=request.POST.get('phone')
         age=request.POST.get('age')
         gender=request.POST.get('gender')
+        address=request.POST.get("address")
         unique = uuid.uuid4()
         prescription_book(
             user=request.user,
@@ -750,7 +782,10 @@ def prescriptionbookview(request):
                         contact=contact,
                         age=age,
                         gender=gender,
-                        location=c).save()
+                        location=c,
+                        address=address).save()
+        if myself=="on":
+            User.objects.filter(email=request.user.email).update(first_name=firstname,last_name=lastname,phone_no=contact,age=age,address=address)
         data=prescription_book.objects.get(unique=unique)
         book_history(
             user=request.user,
@@ -784,11 +819,15 @@ def testselect(request):
     c=request.session.get("city")
     tcategories=category.objects.all()
     tests=test.objects.all()
+    envcity={"Bangalore":Bangalore,"Mumbai":Mumbai,"Bhophal":Bhophal,"Nanded":Nanded,"Pune":Pune,"Barshi":Barshi,"Aurangabad":Aurangabad}
+    
     context={
         "tests":tests,
         "categories":tcategories,
         "city":c,
+        'envcity':envcity
     }
+    print(envcity)
     if request.method=="POST":
         # others=request.POST.get("myself")
         test_name=request.POST.getlist("test_name")
@@ -813,19 +852,26 @@ def testselect(request):
                           age=age,
                           gender=gender,
                           location=c)
+        
         for j in test_name:
             item=test.objects.get(id=j)
             a.test_name.add(item)
         for i in test_name:
             item=test.objects.get(id=i)
-            if c=="Banglore":
-                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel1).save()
-            elif c == "Chennai":
-                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel2).save()
-            elif c == "Mumbai":
-                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel3).save()   
-            elif c == "Delhi":
-                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel4).save()
+            if c==Bangalore:
+                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.Banglore_price).save()
+            elif c == Mumbai:
+                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.Mumbai_price).save()
+            elif c == Bhophal:
+                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.bhopal_price).save()   
+            elif c == Nanded:
+                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.nanded_price).save()
+            elif c == Pune:
+                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pune_price).save()
+            elif c == Barshi:
+                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.barshi_price).save()   
+            elif c == Aurangabad:
+                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.aurangabad_price).save()
         messages.success(request,"Your booking added to cart successfully")
         return render(request,"choose-test-list.html",context)
     return render(request,"choose-test-list.html",context)
@@ -863,7 +909,8 @@ def cartt(request):
                                 contact=contact,
                                 age=age,
                                 gender=gender,
-                                location=c)
+                                location=c,
+                                address=address)
         data2=prescription_book.objects.get(unique=uniquee)
         if others=="m":
             User.objects.filter(email=request.user.email).update(first_name=firstname,last_name=lastname,phone_no=contact,age=age,address=address)
@@ -1244,40 +1291,76 @@ def addtocart(request):
         pk=request.POST["pk"]
         item=test.objects.get(id=pk)
 
-        if cityy=="Bangalore":
+        if cityy==Bangalore:
             obj, created = cart.objects.get_or_create(
                 device = deviceCookie,
                 items = item,
                 user = request.user if not request.user.is_anonymous else None,
-                price=item.pricel1,
+                price=item.Banglore_price,
                 )
             res = {"message":created}
             RES = res
-        elif cityy=="Chennai":
+            
+        elif cityy==Mumbai:
             obj, created = cart.objects.get_or_create(
                 device = deviceCookie,
                 items = item,
                 user = request.user if not request.user.is_anonymous else None,
-                price=item.pricel2,
+                price=item.Mumbai_price,
                 )
             res = {"message":created}
             RES = res
-        elif cityy=="Mumbai":
+            
+        elif cityy==Bhophal:
             obj, created = cart.objects.get_or_create(
                 device = deviceCookie,
                 items = item,
                 user = request.user if not request.user.is_anonymous else None,
-                price=item.pricel3,
+                price=item.bhopal_price,
                 )
             res = {"message":created}
             RES = res
-        elif cityy=="Delhi":
-            cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel4).save()
+            
+        elif cityy==Nanded:
+            
             obj, created = cart.objects.get_or_create(
                 device = deviceCookie,
                 items = item,
                 user = request.user if not request.user.is_anonymous else None,
-                price=item.pricel4,
+                price=item.nanded_price,
+                )
+            res = {"message":created}
+            RES = res
+            
+        elif cityy==Pune:
+            # cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel4).save()
+            obj, created = cart.objects.get_or_create(
+                device = deviceCookie,
+                items = item,
+                user = request.user if not request.user.is_anonymous else None,
+                price=item.pune_price,
+                )
+            res = {"message":created}
+            RES = res
+        
+        elif cityy==Barshi:
+            # cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel4).save()
+            obj, created = cart.objects.get_or_create(
+                device = deviceCookie,
+                items = item,
+                user = request.user if not request.user.is_anonymous else None,
+                price=item.barshi_price,
+                )
+            res = {"message":created}
+            RES = res
+            
+        elif cityy==Aurangabad:
+            # cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pricel4).save()
+            obj, created = cart.objects.get_or_create(
+                device = deviceCookie,
+                items = item,
+                user = request.user if not request.user.is_anonymous else None,
+                price=item.aurangabad_price,
                 )
             res = {"message":created}
             RES = res
@@ -1336,14 +1419,20 @@ def categoryy(request):
             a['id']=tesst.id
             a['testt']=tesst.testt
             a['description']=tesst.description
-            if city == "Bangalore":
-                a["pricel1"]=str(tesst.pricel1)
-            elif city== "Chennai":
-                a["pricel1"]=str(tesst.pricel2)
-            elif city== "Mumbai":
-                a["pricel1"]=str(tesst.pricel3)
-            elif city== "Delhi":
-                a["pricel1"]=str(tesst.pricel3)
+            if city == Bangalore:
+                a["pricel1"]=str(tesst.Banglore_price)
+            elif city== Mumbai:
+                a["pricel1"]=str(tesst.Mumbai_price)
+            elif city== Bhophal:
+                a["pricel1"]=str(tesst.bhopal_price)
+            elif city== Nanded:
+                a["pricel1"]=str(tesst.nanded_price)
+            elif city== Pune:
+                a["pricel1"]=str(tesst.pune_price)
+            elif city== Barshi:
+                a["pricel1"]=str(tesst.barshi_price)
+            elif city== Aurangabad:
+                a["pricel1"]=str(tesst.aurangabad_price)
             b.append(a)
         return JsonResponse(b,safe=False)
     
@@ -1374,14 +1463,20 @@ def search(request):
                 a["id"]=tesst.id
                 a["testt"]=tesst.testt
                 a["description"]=tesst.description
-                if city == "Bangalore":
-                    a["pricel1"]=str(tesst.pricel1)
-                if city== "Chennai":
-                    a["pricel1"]=str(tesst.pricel2)
-                if city== "Mumbai":
-                    a["pricel1"]=str(tesst.pricel3)
-                if city== "Delhi":
-                    a["pricel1"]=str(tesst.pricel3)
+                if city == Bangalore:
+                    a["Banglore_price"]=str(tesst.Banglore_price)
+                elif city== Mumbai:
+                    a["Mumbai_price"]=str(tesst.Mumbai_price)
+                elif city== Bhophal:
+                    a["bhopal_price"]=str(tesst.bhopal_price)
+                elif city== Nanded:
+                    a["nanded_price"]=str(tesst.nanded_price)
+                elif city== Pune:
+                    a["pune_price"]=str(tesst.pune_price)
+                elif city== Barshi:
+                    a["barshi_price"]=str(tesst.barshi_price)
+                elif city== Aurangabad:
+                    a["aurangabad_price"]=str(tesst.aurangabad_price)
                 b.append(a)
             return JsonResponse(b,safe=False)
     else:
@@ -1439,42 +1534,70 @@ def healthcheckupadd(request):
         if request.POST.get("action") == "healthcheckup":
             slug=request.POST["ids"]
             labtest=healthcheckuppackages.objects.get(id=slug)
-            if cityy=="Bangalore":
+            if cityy==Bangalore:
                 obj, created = cart.objects.get_or_create(
                     device = deviceCookie,
                     labtest = labtest,
                     user = request.user if not request.user.is_anonymous else None,
-                    price=labtest.dpricel1
+                    price=labtest.dBanglore_price
                 )
                 res = {"message":created}
                 RES = res
             
-            elif cityy == "Chennai":
+            elif cityy == Mumbai:
                 obj, created = cart.objects.get_or_create(
                     device = deviceCookie,
                     labtest = labtest,
                     user = request.user if not request.user.is_anonymous else None,
-                    price=labtest.dpricel2
+                    price=labtest.dMumbai_price
                 )
                 res = {"message":created}
                 RES = res
 
-            elif cityy == "Mumbai":
+            elif cityy == Bhophal:
                 obj, created = cart.objects.get_or_create(
                     device = deviceCookie,
                     labtest = labtest,
                     user = request.user if not request.user.is_anonymous else None,
-                    price=labtest.dpricel3,
+                    price=labtest.dbhopal_price,
                 )
                 res = {"message":created}
                 RES = res
 
-            elif cityy == "Delhi":
+            elif cityy == Nanded:
                 obj, created = cart.objects.get_or_create(
                     device = deviceCookie,
                     labtest = labtest,
                     user = request.user if not request.user.is_anonymous else None,
-                    price=labtest.dpricel4,
+                    price=labtest.dnanded_price,
+                )
+                res = {"message":created}
+                
+                RES = res
+            elif cityy == Pune:
+                obj, created = cart.objects.get_or_create(
+                    device = deviceCookie,
+                    labtest = labtest,
+                    user = request.user if not request.user.is_anonymous else None,
+                    price=labtest.dpune_price,
+                )
+                res = {"message":created}
+                RES = res
+            elif cityy == Barshi:
+                obj, created = cart.objects.get_or_create(
+                    device = deviceCookie,
+                    labtest = labtest,
+                    user = request.user if not request.user.is_anonymous else None,
+                    price=labtest.dbarshi_price,
+                )
+                res = {"message":created}
+                RES = res
+            elif cityy == Aurangabad:
+                obj, created = cart.objects.get_or_create(
+                    device = deviceCookie,
+                    labtest = labtest,
+                    user = request.user if not request.user.is_anonymous else None,
+                    price=labtest.daurangabad_price,
                 )
                 res = {"message":created}
                 RES = res
@@ -1483,42 +1606,72 @@ def healthcheckupadd(request):
             slug=request.POST["ids"]
             package=healthpackages.objects.get(id=slug)
             
-            if cityy=="Bangalore":
+            if cityy==Bangalore:
                 obj, created = cart.objects.get_or_create(
                 device = deviceCookie,
                 packages = package,
                 user = request.user if not request.user.is_anonymous else None,
-                price=package.pricel1,
+                price=package.Banglore_price,
                 )
                 res = {"message":created}
                 RES = res
 
-            elif cityy == "Chennai":
+            elif cityy == Mumbai:
                 obj, created = cart.objects.get_or_create(
                 device = deviceCookie,
                 packages = package,
                 user = request.user if not request.user.is_anonymous else None,
-                price=package.pricel2,
+                price=package.Mumbai_price,
                 )
                 res = {"message":created}
                 RES = res
 
-            elif cityy == "Mumbai":
+            elif cityy == Bhophal:
                 obj, created = cart.objects.get_or_create(
                 device = deviceCookie,
                 packages = package,
                 user = request.user if not request.user.is_anonymous else None,
-                price=package.pricel3,
+                price=package.bhopal_price,
                 )
                 res = {"message":created}
                 RES = res
 
-            elif cityy == "Delhi":
+            elif cityy == Nanded:
                 obj, created = cart.objects.get_or_create(
                 device = deviceCookie,
                 packages = package,
                 user = request.user if not request.user.is_anonymous else None,
-                price=package.pricel4,
+                price=package.nanded_price,
+                )
+                res = {"message":created}
+                RES = res
+                
+            elif cityy == Pune:
+                obj, created = cart.objects.get_or_create(
+                device = deviceCookie,
+                packages = package,
+                user = request.user if not request.user.is_anonymous else None,
+                price=package.pune_price,
+                )
+                res = {"message":created}
+                RES = res
+
+            elif cityy == Barshi:
+                obj, created = cart.objects.get_or_create(
+                device = deviceCookie,
+                packages = package,
+                user = request.user if not request.user.is_anonymous else None,
+                price=package.barshi_price,
+                )
+                res = {"message":created}
+                RES = res
+
+            elif cityy == Aurangabad:
+                obj, created = cart.objects.get_or_create(
+                device = deviceCookie,
+                packages = package,
+                user = request.user if not request.user.is_anonymous else None,
+                price=package.aurangabad_price,
                 )
                 res = {"message":created}
                 RES = res
@@ -1772,13 +1925,16 @@ class BookingHistoryPay(LoginRequiredMixin,View):
 
 class HealthSymptoms(View):
     def get(self, request, *args,**kwargs):
+        c=request.session.get("city")
         currentSymptom = kwargs['slug']
         currentObj = healthsymptoms.objects.get(slug = currentSymptom)
         obj = healthsymptoms.objects.exclude(slug = currentSymptom)
-
+        envcity={"Bangalore":Bangalore,"Mumbai":Mumbai,"Bhophal":Bhophal,"Nanded":Nanded,"Pune":Pune,"Barshi":Barshi,"Aurangabad":Aurangabad}
         res = {
             "currentObj":currentObj,
             "others":obj,
+            "city":c,
+            "envcity":envcity,
         }
         return render(request, "health_symptoms_details.html", res)
     
@@ -1789,7 +1945,7 @@ class HealthSymptoms(View):
                 device = deviceCookie,
                 healthsymptoms = healthSympObj,
                 user = request.user if not request.user.is_anonymous else None,
-                price=healthSympObj.bengaluru_price,
+                price=healthSympObj.Banglore_price,
                 )
         res = {"message":created}
         if request.user.is_anonymous:
