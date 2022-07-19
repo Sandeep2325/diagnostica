@@ -57,7 +57,7 @@ class User(AbstractUser,PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     phone_no = models.CharField(max_length=10, null=True, unique=True,verbose_name="Mobile number")
-    location=models.CharField(max_length=200,null=True,blank=True)
+    location=models.ForeignKey(city, verbose_name=_("Locations"), null=True,blank=True,on_delete=models.SET_NULL)
     age=models.CharField(max_length=50,blank=True,null=True)
     address=models.TextField(null=True,blank=True)
     gender = models.CharField(

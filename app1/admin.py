@@ -270,11 +270,11 @@ class socialmediaadmin(admin.ModelAdmin):
     #     return super().has_add_permission(request)
 from django.utils.translation import gettext_lazy as _
 class UserAdmin(OriginalUserAdmin): 
-    list_display = ['id','first_name','last_name','email',"phone_no",'location','age','gender','address','date_joined']
+    list_display = ['id','first_name','last_name','email',"phone_no",'age','gender','location','address','date_joined']
     # list_editable=['is_confirmed']
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        (_('Personal info'), {'fields': ('photo','first_name','last_name', "phone_no",'location','age','gender','address')}),
+        (_('Personal info'), {'fields': ('photo','first_name','last_name', "phone_no",'age','gender','location','address')}),
     )
     def action_btn(self, obj):
         html = "<div class='field-action_btn d-flex m-8'> <a class='fa fa-edit ml-2' href='/admin/app1/user/" + \

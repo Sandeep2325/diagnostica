@@ -91,10 +91,17 @@
                                     <label class="fs-18 cl-dark-blue font-regular" for="gender">Gender</label>
                                     <select class="w-100 mt-2   form-select"
                                         type="select" name="gender" id="gender">
-                                        <option selected="selected" class="opc-5" disabled>{{profile.gender}}</option>
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                        <option value="Others">Others</option>
+                                        <option selected="selected" class="opc-5" disabled>Select Gender</option>
+                                        {% if  profile.gender == "m" %}
+                                        <option selected="selected" class="opc-5" value="m">Male</option>
+                                        {% elif profile.gender == "f" %}
+                                        <option selected="selected" class="opc-5"value="f">Female</option>
+                                        {% elif profile.gender == "o" %}
+                                        <option selected="selected" class="opc-5" value="o">Others</option>
+                                        {% endif %}
+                                        <option value="m">Male</option>
+                                        <option value="f">Female</option>
+                                        <option value="o">Others</option>
                                     </select>
                                     <!-- <input class=" w-100 mt-2 form_input  "> -->
                                 </div>
@@ -104,13 +111,11 @@
                                     <select class="w-100 mt-2    form-select "
                                         type="select" name="gender" id="gender">
                                         <option selected="selected" class="opc-5" disabled>Location</option>
-                                        <option value="Test">Bangalore</option>
-                                        <option value="Test">Mumbai</option>
-                                        <option value="Test">Bhopal</option>
-                                        <option value="Test">Nanded</option>
-                                        <option value="Test">Pune</option>
-                                        <option value="Test">Barshi</option>
-                                        <option value="Test">TesAurangabadt</option>
+                                        {%for city in cityy%}
+                                        <option value="{{city.id}}">{{city.cityname}}</option>
+                                        {%endfor%}
+                                        {% comment %} <option value="Test">Test</option> {% endcomment %}
+                                        {% comment %} <option value="Test">Test</option> {% endcomment %}
                                     </select>
                                 </div>
                                 {% comment %} <div class="col-lg-4 pt-3 pb-xl-5">

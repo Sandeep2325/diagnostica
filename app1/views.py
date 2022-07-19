@@ -1,4 +1,5 @@
 import re
+import sweetify
 from django.shortcuts import render,redirect
 from .forms import UserProfileForm,UserRegistrationForm, forgotpasswordform, prescriptionform, subscriptionform
 from django.contrib.auth.hashers import make_password
@@ -233,7 +234,7 @@ def forgotpassword(request):
             )
             return redirect('/forgotpassword/otp/')
         else:
-            messages.error(request,"Email is not registered")
+            sweetify.error(request,"Email is not registered")
             return render(request,"forgotpassword.html")
     return render(request,"forgotpassword.html")
   
@@ -345,15 +346,18 @@ def userinfo(request):
    return JsonResponse({"message":True,"firstname":a.first_name,"lastname":a.last_name,"contact":a.phone_no,"gender":a.gender,"address":a.address,"age":a.age}) 
 @login_required(login_url="/login/")
 def profilee(request):
+    cityy=city.objects.all()
     profile=User.objects.get(email=request.user.email)
     context={
         "profile":profile,
+        "cityy":cityy,
     }
     if request.method=="POST":
-        
         # profile_pic=request.POST.Files
         profilepic=request.FILES.get("profile_pic")
         name=request.POST.get("name")
+        # firstname=request.POST.get("firstname")
+        # lastname=request.POST.get("lastname")
         email=request.POST.get("email")
         phone=request.POST.get("phone")
         gender=request.POST.get("gender")
@@ -363,6 +367,8 @@ def profilee(request):
         print(request.FILES)
         print(profilepic, type(profilepic))
         a=User.objects.get(email=request.user.email)
+        # a.first_name=firstname
+        # a.last_name=lastname
         a.photo=profilepic
         a.username=name
         a.email=email
@@ -372,14 +378,13 @@ def profilee(request):
         a.age=age
         a.address=address
         a.save()
-        
         messages.success(request,"Profile updated Successfully")
         profile=User.objects.get(email=request.user.email)
         context1={
             "profile":profile,
+            "cityy":cityy,
         }
-        return render (request,"profile.html",context1)  
-        
+        return render (request,"profile.html",context)  
     return render (request,"profile.html",context)          
 def userLogin(request):
     # try :
@@ -398,7 +403,6 @@ def userLogin(request):
             user = authenticate(request,username=username,password=password)
             a=request.session.get("cartt")
         
-            
             if user is not None:
                 login(request,user)
                 a=request.session.get("cartt")
@@ -668,6 +672,7 @@ def testdetails(request):
     if request.method=="POST":
             id=request.POST["id"]
             a=book_history.objects.get(id=id)
+            print(a.bookingdetails)
             return JsonResponse({"message":a.bookingdetails})
 def healthsymptomview(request,slug):
     c=request.session.get("city")
@@ -756,6 +761,19 @@ def prescriptionbookview(request):
                     payment_status=False).save()
         messages.success(
             request, "Thankyou for your booking!, Our admin team will get back to you shortly.")
+        message=f'Hello {request.user.first_name},\n Thank you for Booking!, Our admin team will get back to you shortly. '
+            # message = f'Welcome your otp is {otp} '
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [request.user.email]
+        message = message
+        subject = "DIGNOSTICA SPAN" 
+        send_mail(
+                subject,
+                message,
+                email_from,
+                recipient_list,
+                fail_silently=False,
+        )
         return HttpResponseRedirect(reverse("booking-history"))
         # return render(request,"uploadprescriptions.html",{"fm":fm})
     else:
@@ -1718,6 +1736,8 @@ class BookingHistoryPay(LoginRequiredMixin,View):
 
         context={
             "bookhistories":his,
+            "bookinghistorylength":len(his),
+            "paymentcount":payments.count(),
             "payments":payments,
             "testbooking":testbooking,
         }
