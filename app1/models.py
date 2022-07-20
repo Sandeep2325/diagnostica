@@ -69,7 +69,7 @@ class User(AbstractUser,PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name','phone_no']
     def __str__(self):
-        return "{}".format(str(self.username))
+        return "{}".format(str(self.first_name))
     
 # class profile(models.Model):
 #     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)

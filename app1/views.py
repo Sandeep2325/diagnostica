@@ -367,16 +367,17 @@ def profilee(request):
         return render (request,"profile.html",context)
     if request.method=="POST":
         # profile_pic=request.POST.Files
-        profilepic=request.FILES.get("profile_pic")
-        name=request.POST.get("name")
-        firstname=request.POST.get("firstname")
-        lastname=request.POST.get("lastname")
-        email=request.POST.get("email")
-        phone=request.POST.get("phone")
-        gender=request.POST.get("gender")
-        location=request.POST.get("location")
-        age=request.POST.get("age")
-        address=request.POST.get("address")
+        profilepic=request.FILES.get("profile_pic", request.user.photo)
+        # name=request.POST.get("name")
+        firstname=request.POST.get("firstname",request.user.first_name)
+        lastname=request.POST.get("lastname",request.user.last_name)
+        email=request.POST.get("email",request.user.email)
+        phone=request.POST.get("phone",request.user.phone_no)
+        gender=request.POST.get("gender",request.user.gender)
+        location=request.POST.get("location",request.user.location.id)
+        age=request.POST.get("age",request.user.age)
+        address=request.POST.get("address",request.user.address)
+        # print(profilepic)
         try:
             c=city.objects.get(id=int(location))
         except:
@@ -389,7 +390,7 @@ def profilee(request):
             a.first_name=firstname
             a.last_name=lastname
             a.photo=profilepic
-            a.username=name
+            # a.username=name
             a.email=email
             a.phone_no=phone
             a.gender=gender
@@ -583,7 +584,8 @@ def home(request):
             "city":cit,
             "currentcity":c,
             "tests":tests,
-            "envcity":envcity
+            "envcity":envcity,
+            "blogcount":healthcareblog.count()
         }
         res = render(request,'home.html',context)
         return res
