@@ -64,12 +64,12 @@ class testadmin(admin.ModelAdmin):
                         obj, created = test.objects.get_or_create(
                                 testt=row["Tests"],
                                 categoryy=categoryy,
-                                Banglore_price=row.get("price l1") if row.get("price l1") else None,
-                                Mumbai_price=row.get("price l2") if row.get("price l2") else None,
-                                bhopal_price=row.get("price l3") if row.get("price l3") else None,
-                                nanded_price=row.get("price l4") if row.get("price l4") else None,
-                                pune_price=row.get("price l5") if row.get("price l5") else None,
-                                barshi_price=row.get("price l6") if row.get("price l6") else None,
+                                Banglore_price=row.get("Banglore_price") if row.get("price l1") else None,
+                                Mumbai_price=row.get("Mumbai_price") if row.get("price l2") else None,
+                                bhopal_price=row.get("bhopal_price") if row.get("price l3") else None,
+                                nanded_price=row.get("nanded_price") if row.get("price l4") else None,
+                                pune_price=row.get("pune_price") if row.get("price l5") else None,
+                                barshi_price=row.get("barshi_price") if row.get("price l6") else None,
                                 description=des)
                     except IndexError:
                         pass
