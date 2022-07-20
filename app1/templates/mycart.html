@@ -84,7 +84,7 @@
                                                 </div>
                                                 
                                                 <div class="cell" data-title="Price">
-                                                   Rs. {{cart.price|floatformat:1}}
+                                                   Rs. {{cart.price}}
                                                 </div>
                                             </div>
 {%endfor%}                           
@@ -381,7 +381,7 @@ function deletefunc(e){
                         <h4 class="fs-20 font-bold cl-dark-blue mb-3">Rs. ${resp['discount']}</h4>
                     </div>
                 `
-                var h4 =`<h4 class="fs-30 font-bold cl-dark-blue" id="total">Rs. ${resp['total']}.0</h4>`;
+                var h4 =`<h4 class="fs-30 font-bold cl-dark-blue" id="total">Rs. ${resp['total']}.00</h4>`;
                    /* $('#output').html(data.msg) response message */
                    //details
                    $("#details").append(detail);

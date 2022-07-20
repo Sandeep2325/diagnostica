@@ -1069,12 +1069,13 @@ def cartt(request):
             da['price']=str(i.price)  
             da["categoryy"]=i.items.categoryy
             data.append(da)
-    try:    
+    try:  
+       
         a=[float(i["price"]) for i in data]
         context={
             "data":data,
             "datacount":len(data),
-            "subtotal":sum(a)
+            "subtotal": '{0:1.2f}'.format(sum(a)) 
         }
     except:
          context={
