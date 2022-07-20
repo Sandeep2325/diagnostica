@@ -50,26 +50,26 @@ class testadmin(admin.ModelAdmin):
                     messages.warning(
                         request, 'The wrong file type was uploaded')
                     return HttpResponseRedirect(request.path_info)
-
-            
                 def decode_utf8(input_iterator):
                     for l in input_iterator:
                         yield l.decode('cp1252')
-
                 reader = csv.DictReader(decode_utf8(request.FILES['csv_upload']))
                 for row in reader:
                     des = re.sub(r"</?\[\d+>", "", row.get("Description"))
                     try:
+                        # print(row)
+                        # print(row.get("Banglore_price"))
                         categoryy=category.objects.get(pk=row.get("category_id"))
                         obj, created = test.objects.get_or_create(
-                                testt=row["Tests"],
+                                testt=row["ï»¿Tests"],
                                 categoryy=categoryy,
-                                Banglore_price=row.get("Banglore_price") if row.get("price l1") else None,
-                                Mumbai_price=row.get("Mumbai_price") if row.get("price l2") else None,
-                                bhopal_price=row.get("bhopal_price") if row.get("price l3") else None,
-                                nanded_price=row.get("nanded_price") if row.get("price l4") else None,
-                                pune_price=row.get("pune_price") if row.get("price l5") else None,
-                                barshi_price=row.get("barshi_price") if row.get("price l6") else None,
+                                Banglore_price=row.get("Banglore_price") if row.get("Banglore_price") else None,
+                                Mumbai_price=row.get("Mumbai_price") if row.get("Mumbai_price") else None,
+                                bhopal_price=row.get("bhopal_price") if row.get("bhopal_price") else None,
+                                nanded_price=row.get("nanded_price") if row.get("nanded_price") else None,
+                                pune_price=row.get("pune_price") if row.get("pune_price") else None,
+                                barshi_price=row.get("barshi_price") if row.get("barshi_price") else None,
+                                aurangabad_price=row.get("aurangabad_price") if row.get("aurangabad_price") else None,
                                 description=des)
                     except IndexError:
                         pass
