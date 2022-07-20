@@ -83,7 +83,7 @@
                  {%endif%}                   
                  <div class="  p-0 ">
                                         <a
-                                            class=" test_now_button fs-16 cl-dark-blue font-bold py-2 px-4 br-20 position-absolute">Test
+                                            class=" test_now_button fs-16 cl-dark-blue font-bold py-2 px-4 br-20 position-absolute" onclick='testnow("{{checkup.id}}")'>Test
                                             Now</a>
                                     </div>
 
@@ -100,4 +100,30 @@
     </section>
 {%include "footer.html"%}
 </body>
+<script>
+ function testnow(e){
+    //localStorage.setItem("healthcheckup",[e]);
+    $.ajax({
+      url: "{% url 'healthcheckupadd' %}",
+      type: "POST",
+      dataType: "json",
+      data: {
+        'action':"healthcheckup",
+          'ids':e,
+          'csrfmiddlewaretoken':'{{ csrf_token }}',
+      },
+      success: function(resp){
+          
+          if(!resp['message']){
+              swal('',"Test Already Added",'info');
+          }else{
+              swal('',"Test Added","success");
+              window.setTimeout(function(){location.reload()},1500)
+              //window.location.reload();
+          }
+          
+      },
+  });
+   }
+   </script>
 {%endblock%}

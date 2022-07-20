@@ -81,8 +81,17 @@
                                             </thead>
                                             <tbody>
                                                 {% for bookhistory in bookhistories %}
+                                           
                                                 <tr>
-                                                    <td data-label="ID">{{bookhistory.id}}</td>
+                                                    {% if bookhistory.bookingid == None %}
+                                                    <td data-label="ID">-
+
+                                                       
+                                                    </td>
+                                                     {%else%}
+                                                     <td data-label="ID">{{bookhistory.bookingid}}
+                                                    </td>
+                                                    {%endif%}
                                                     <td data-label="Date">{{bookhistory.created}}</td>
                                                    
                                                     {%if bookhistory.patient_info == "others" %}
@@ -93,9 +102,9 @@
                                                     <td data-label="Booking Type">{{bookhistory.booking_type}}</td>
                                                     
                                                     {% if bookhistory.prescription %}
-                                                    <td data-label="Booking Details"><a  target="blank" href="{{ bookhistory.prescription.url}}">{{bookhistory.bookingdetails}}</a></td>
+                                                    <td data-label="Booking Details"><a  target="blank" href="{{ bookhistory.prescription.url}}">{{bookhistory.bookingdetails|truncatechars:10}}</a></td>
                                                     {% else %}
-                                                    <td data-label="Booking Details"><a id="testdetails" name="{{bookhistory.id}}" data-bs-toggle="modal" data-bs-target="#testdetaill" class="br bg-dark-white cursor" onclick='testfunc({{bookhistory.id}})';>{{bookhistory.bookingdetails}}</a></td>
+                                                    <td data-label="Booking Details"><a id="testdetails" name="{{bookhistory.id}}" data-bs-toggle="modal" data-bs-target="#testdetaill" class="br bg-dark-white cursor" onclick='testfunc({{bookhistory.id}})';>{{bookhistory.bookingdetails|truncatechars:10}}</a></td>
                                                     {% endif %}
                                                     
 
@@ -173,7 +182,7 @@
                                     </div>
                                     <div class="tab-pane fade" id="pills-contact" role="tabpanel"
                                         aria-labelledby="pills-contact-tab" tabindex="0">
-                                        <h1 class="text-center fs-30 font-bold cl-dark-blue mb-4">No Data</h1>
+                                        <h1 class="text-center fs-30 font-bold cl-dark-blue mb-4">No Record Found...</h1>
                                     </div>
                                 </div>
                             </div>
@@ -219,14 +228,35 @@
     </section>
     
 </body>
-{%include "footer.html"%}
 {% if messages %}
 {% for message in messages %}
+{% if message.tags == "error"%}
 <script>
   $(document).ready(function(){
-    swal('{{message}}');
+   // swal('{{message}}');
+
+    swal({
+	title:'{{message}}',
+	//text: "You clicked the button!",
+	icon:"warning",
+	button:"ok"
+});
   });
 </script>
+{%else%}
+<script>
+  $(document).ready(function(){
+   // swal('{{message}}');
+
+    swal({
+	title:'{{message}}',
+	//text: "You clicked the button!",
+	icon:"success",
+	button:"ok"
+});
+  });
+</script>
+{% endif %}
 {%endfor%}
 {% endif %}
 
@@ -257,7 +287,7 @@
     })
     function paymentFunction(ids, status){
         if (status=="false"){
-            alert('You booking under review progress by our experts. Please try after sometime.If you have any queries related to booking please contact our support team +91 9769 351 301')
+            swal('Hello','You booking under review progress by our experts. Please try after sometime.If you have any queries related to booking please contact our support team +91 9769 351 301','info')
             //alert("Please wait till your prescription is viewed by our doctors.");
             
         }else{

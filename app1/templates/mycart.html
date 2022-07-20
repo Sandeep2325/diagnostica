@@ -258,12 +258,12 @@
         
         var count =parseInt("{{datacount}}");
         if(count!=0){
-          $("#checkout1").attr("disabled",false);  
+          $("#checkout1").show();  
           $("#carttable").show();
           $("#nodata").hide();
         }
         else{
-            $("#checkout1").attr("disabled",true); 
+            $("#checkout1").hide();
             $("#carttable").hide();
             $("#nodata").show();
         }
@@ -363,7 +363,8 @@ function deletefunc(e){
                 if (!resp['message']){
                    // alert("Invalid Coupon")
                    var h4 =`<h4 class="fs-30 font-bold cl-dark-blue" id="total"> ${a}</h4>`;
-                   alert("Invalid Coupon");
+                 swal("Invalid Coupon", "Please check your coupon", "error")
+                  // alert("Invalid Coupon");
                    /* $('#output').html(data.msg) response message */
                    $(".discount").append(h4);
                 }
@@ -380,7 +381,7 @@ function deletefunc(e){
                         <h4 class="fs-20 font-bold cl-dark-blue mb-3">Rs. ${resp['discount']}</h4>
                     </div>
                 `
-                var h4 =`<h4 class="fs-30 font-bold cl-dark-blue" id="total">Rs ${resp['total']}</h4>`;
+                var h4 =`<h4 class="fs-30 font-bold cl-dark-blue" id="total">Rs. ${resp['total']}.0</h4>`;
                    /* $('#output').html(data.msg) response message */
                    //details
                    $("#details").append(detail);

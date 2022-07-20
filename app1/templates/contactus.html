@@ -159,5 +159,13 @@
         }
     });
 </script>
-
+{% if messages %}
+{% for message in messages %}
+<script>
+  $(document).ready(function(){
+    swal('Thank you','{{message}}','success');
+  });
+</script>
+{%endfor%}
+{% endif %}
 {%endblock%}

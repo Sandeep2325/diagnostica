@@ -184,12 +184,18 @@ def testbookings(sender, instance, **kwargs):
     for i in instance.test_name.all():
         if instance.location=="Bangalore":
             a.append(i.Banglore_price)
-        elif instance.location=="Chennai":
-            a.append(i.pricel2)
         elif instance.location=="Mumbai":
-            a.append(i.Banglore_price)
-        elif instance.location=="Delhi":
-            a.append(i.Banglore_price)
+            a.append(i.Mumbai_price)
+        elif instance.location=="Bhophal":
+            a.append(i.bhopal_price)
+        elif instance.location=="Nanded":
+            a.append(i.nanded_price)
+        elif instance.location=="Pune":
+            a.append(i.pune_price)
+        elif instance.location=="Barshi":
+            a.append(i.barshi_price)
+        elif instance.location=="Aurangabad":
+            a.append(i.daurangabad_price)
     book_history.objects.filter(testbooking_id=instance.id).update(amount=sum(a))
     # print(bool(instance.prescription_file))
     if (instance.test_name.first()!=None) and (bool(instance.prescription_file)==True): 
@@ -359,6 +365,7 @@ STATUS=[
 ]    
 class book_history(models.Model):
     testbooking_id=models.IntegerField(null=True,blank=True)
+    bookingid = models.CharField(max_length=20,null=True, blank=True,verbose_name="Booking Id")
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
     patient_info=models.CharField(max_length=200,null=True,blank=True)
     booking_type=models.CharField(max_length=200,null=True,blank=True)

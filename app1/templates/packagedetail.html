@@ -242,10 +242,11 @@
         //  alert("please login to add")
        // }
         if(!resp['message']){
-            alert("Test Already Added");
+            swal('',"Test Already Added",'info');
         }else{
-            alert("Test Added");
-            window.location.reload();
+            swal('',"Test Added",'success');
+            window.setTimeout(function(){location.reload()},1500)
+           // window.location.reload();
         }
         
     },

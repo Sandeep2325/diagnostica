@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'sweetify',
+    
     "app1",
 ]
 INSTALLED_APPS += ('django_summernote', ) 

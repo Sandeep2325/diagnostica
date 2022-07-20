@@ -129,7 +129,7 @@
                                         </div>
                                         <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
                                             <div class="px-lg-0 px-3">
-                                                <input class="w-100  form_input" placeholder="Contact Number" name="phone" id="phone" type="text" maxlength="250"/>
+                                                <input class="w-100  form_input" placeholder="Mobile Number" name="phone" id="phone" type="text" maxlength="250"/>
                                             </div>
                                         </div>
                                         <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
@@ -263,7 +263,7 @@
         }
     });
 
-  $("#myself").change(function(e){
+  /*$("#myself").change(function(e){
         console.log("{{data}}" )
         var opt = $(this).val();
        // $('#myCheckbox').prop('checked', true);
@@ -289,6 +289,51 @@
             $("#age").show();
             $("#option").show();
             $(".error").empty();
+            $("#PatientInformation").show();
+    });
+*/
+
+
+    $("#myself").change(function(e){
+        $("#others").prop("checked",false);
+    var opt = $(this).val();
+    console.log("{{data}}" )
+    
+        $("#option").hide();
+    $.ajax({
+        url:"{% url 'userinfo' %}",
+        method:"get",
+        data:{
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+        },
+        dataType: "json",
+        success: function(resp){
+            
+        $("#firstname").val(resp['firstname']);
+        $("#lastname").val(resp['lastname']);
+        $("#age").val(resp['age']);
+        $("#gender").val(resp['gender']);
+        $("#phone").val(resp['contact']);
+        $("#address").val(resp['address']);
+        }
+    })
+
+
+
+});
+
+      $("#others").change(function(e){
+        $("#myself").prop("checked",false)
+        console.log("{{data}}" )
+        var opt = $(this).val();
+        $("#myself").prop("checked",false);
+            $("#firstname").val('');
+            $("#lastname").val('');
+            $("#phone").val('');
+            $("#gender").val('');
+            $("#age").val('');
+            $("#option").val('');
+            $(".error").val('');
             $("#PatientInformation").show();
     });
 </script>
