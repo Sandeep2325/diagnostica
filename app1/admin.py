@@ -61,7 +61,7 @@ class testadmin(admin.ModelAdmin):
                         # print(row.get("Banglore_price"))
                         categoryy=category.objects.get(pk=row.get("category_id"))
                         obj, created = test.objects.get_or_create(
-                                testt=row["ï»¿Tests"],
+                                testt=row["Tests"],
                                 categoryy=categoryy,
                                 Banglore_price=row.get("Banglore_price") if row.get("Banglore_price") else None,
                                 Mumbai_price=row.get("Mumbai_price") if row.get("Mumbai_price") else None,
