@@ -1464,19 +1464,19 @@ def search(request):
                 a["testt"]=tesst.testt
                 a["description"]=tesst.description
                 if city == Bangalore:
-                    a["Banglore_price"]=str(tesst.Banglore_price)
+                    a["pricel1"]=str(tesst.Banglore_price)
                 elif city== Mumbai:
-                    a["Mumbai_price"]=str(tesst.Mumbai_price)
+                    a["pricel1"]=str(tesst.Mumbai_price)
                 elif city== Bhophal:
-                    a["bhopal_price"]=str(tesst.bhopal_price)
+                    a["pricel1"]=str(tesst.bhopal_price)
                 elif city== Nanded:
-                    a["nanded_price"]=str(tesst.nanded_price)
+                    a["pricel1"]=str(tesst.nanded_price)
                 elif city== Pune:
-                    a["pune_price"]=str(tesst.pune_price)
+                    a["pricel1"]=str(tesst.pune_price)
                 elif city== Barshi:
-                    a["barshi_price"]=str(tesst.barshi_price)
+                    a["pricel1"]=str(tesst.barshi_price)
                 elif city== Aurangabad:
-                    a["aurangabad_price"]=str(tesst.aurangabad_price)
+                    a["pricel1"]=str(tesst.aurangabad_price)
                 b.append(a)
             return JsonResponse(b,safe=False)
     else:
