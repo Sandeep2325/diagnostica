@@ -925,11 +925,10 @@ def cartt(request):
         data=cart.objects.filter(user=request.user)
         s = shortuuid.ShortUUID(alphabet="0123456789")
         bid = s.random(length=5)
-        bookingid = "DP"+str(bid)
+        bookingid ="DP"+str(bid)
         a=prescription_book.objects.create(
                 unique=uniquee,
                 user=request.user,
-           
                                 myself=True if others == "m" else False,
                                 others=True if others == "o" else False,
                                 others_choice=others_choice,
@@ -1022,6 +1021,7 @@ def cartt(request):
                      amount=float(amount),
                      payment_id=razorpay_order_id,
                      payment_status=False).save()
+        
         return JsonResponse({"message":True,"razorpay_key":settings.RAZOR_KEY_ID,"currency":currency,"razorpayorder":razorpay_order_id,"callback":callback_url})
     # data1=cart.objects.filter(user=request.user)
     # a=[]
@@ -1034,7 +1034,6 @@ def cartt(request):
     #         }
     # print(request.session.get("cartt"))
     a=request.session.get("cartt")
-    
     if not request.user.is_anonymous:
         c = cart.objects.filter(user=request.user)
     else:
@@ -1070,7 +1069,7 @@ def cartt(request):
             da["categoryy"]=i.items.categoryy
             data.append(da)
     try:  
-       
+     
         a=[float(i["price"]) for i in data]
         context={
             "data":data,
@@ -1427,7 +1426,6 @@ def addtocart(request):
         else:
             request.session['cart_count']= cart.objects.filter(user = request.user).count()
         return JsonResponse(RES)
-
 def categoryy(request):
     if request.method=="POST":
         city=request.session.get("city")

@@ -152,6 +152,10 @@ class prescription_book(models.Model):
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
     prescription_file=models.FileField(upload_to="prescription",null=True,blank=True)
     test_name=models.ManyToManyField(test,blank=True)
+    # labtest=models.ForeignKey("healthcheckuppackages",null=True,blank=True,on_delete=models.CASCADE)
+    # packages=models.ForeignKey("healthpackages",null=True,blank=True,on_delete=models.CASCADE)
+    # healthsymptoms = models.ForeignKey("healthsymptoms", verbose_name=_("Health Symptoms"), on_delete=models.SET_NULL, null=True, blank=True)
+    price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
     myself=models.BooleanField(default=False)
     others=models.BooleanField(default=False)
     others_choice = models.CharField(
@@ -362,10 +366,18 @@ STATUS=[
     ('p','On Process'),
     ('u',"updated"),
     ('t',"tested")
-]    
+]  
+from shortuuid.django_fields import ShortUUIDField  
 class book_history(models.Model):
     testbooking_id=models.IntegerField(null=True,blank=True)
-    bookingid = models.CharField(max_length=20,null=True, blank=True,verbose_name="Booking Id")
+    bookingid = ShortUUIDField(
+        length=16,
+        max_length=40,
+        prefix="DP",
+        verbose_name="Booking Id",
+        null=True, blank=True
+    )
+    # bookingid = models.CharField(max_length=20,null=True, blank=True,verbose_name="Booking Id")
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
     patient_info=models.CharField(max_length=200,null=True,blank=True)
     booking_type=models.CharField(max_length=200,null=True,blank=True)
