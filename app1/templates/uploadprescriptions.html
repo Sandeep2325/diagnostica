@@ -54,7 +54,7 @@
                                         {%endfor%}
                                 <form method="post" id="prescription" enctype="multipart/form-data">
                                     {%csrf_token%}
-                                    <div class="row py-lg-5 py-3">
+                                    <div class="row py-lg-0 py-3">
 
                                         <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto">
                                             <h3 class="px-lg-0 px-3 fs-30 font-bold cl-dark-blue"> Upload Prescription
@@ -71,7 +71,7 @@
                                             </div>
                                         </div>
                                         <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-4">
-                                            <!-- <div class="px-lg-0 px-3">
+                                            <div class="px-lg-3 py-lg-3 br-10 px-3 d-lg-block d-none">
                                                 <h3 class="fs-30 font-bold cl-dark-blue">How it Works</h3>
                                                 <p class="m-0 mb-1">1. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                                                 </p>
@@ -80,20 +80,20 @@
                                                 <p class="m-0 mb-1"> 3. Donec vitae elit efficitur, sollicitudin tortor ut, aliquet nunc. </p>
                                                 <p class="m-0 mb-1"> 4. Praesent vestibulum tortor vitae dolor blandit ultrices.
                                                 </p>
-                                            </div> -->
+                                            </div>
                                         </div>
-                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3 h-100" style="margin-top:-50px ;">
                                             <div class="row ">
                                                 <div class="col-6">
                                                     <div class="bg-white myself_other ms-3 ms-lg-0 mt-lg-0 mt-3 form_input">
-                                                        <input class="form_input" type="radio" name="radio_self" id="myself" onClick="ckChange(this)"/>
-                                                        <label for="myself">My Self</label>
+                                                        <input class="form_input cursor" type="radio" name="radio_self" id="myself" onClick="ckChange(this)"/>
+                                                        <label for="myself" class="cursor">My Self</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-6">
                                                     <div class="bg-white myself_other me-3 me-lg-0 mt-lg-0 mt-3  form_input">
-                                                        <input class="form_input" checked type="radio" name="radio_others" id="others" onClick="ckChange1(this)"/>
-                                                        <label for="others">Others</label>
+                                                        <input class="form_input cursor" checked type="radio" name="radio_others" id="others" onClick="ckChange1(this)"/>
+                                                        <label for="others" class="cursor">Others</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -116,7 +116,7 @@
                                             </select>
                                             </div>
                                         </div>
-                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3"></div>
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-lg-3"></div>
                                         <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
                                             <div class="px-lg-0 px-3">
                                                 <input class="w-100  form_input" placeholder="First Name" name="firstname" id="firstname" type="text" maxlength="250"/>
@@ -147,17 +147,17 @@
                                             </select>
                                             </div>
                                         </div>
-                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3"> </div>
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-lg-3"> </div>
                                         <div class="px-xl-4 col-12 mx-auto pt-3">
                                             <div class="px-lg-0 px-3">
                                                 <textarea class="w-100  form_input" rows="2" placeholder="Address" name="address" id="address" type="text" maxlength="250"></textarea>
                                             </div>
                                         </div>
-                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto py-lg-5 py-3 ">
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-lg-4 py-3 ">
                                             <button class="mx-lg-0 mx-3 globalsubmitbutton " type="submit" name="submit" id="submit">SUBMIT</button>
                                         </div>
-                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-lg-5">
-                                            <div class="px-lg-0 px-3">
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-lg-5 ">
+                                            <div class="px-lg-0 px-3 d-lg-none">
                                                 <h3 class="fs-30 font-bold cl-dark-blue">How it Works</h3>
                                                 <p class="m-0 mb-1">1. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                                                 </p>
