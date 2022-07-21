@@ -95,16 +95,20 @@ def Registration(request):
         f = request.POST['firstname']
         l = request.POST['lastname']
         p = request.POST['confirmpassword']
+        p_number = request.POST['phone']
         user=User.objects.filter(email=e)
         if user.exists():
             messages.error(request,"Email is already registered")
+            return render(request,'register.html')
+        if User.objects.filter(phone_no=p_number).exists():
+            messages.error(request,"Mobile Number Already Exists")
             return render(request,'register.html')
         else:
             request.session['email'] = e
             request.session['firstname'] = f
             request.session['lastname'] = l
             request.session['password'] = p
-            p_number = request.POST['phone']
+            
             request.session['number'] = p_number
             otp = random.randint(1000,9999)
             request.session['otp'] = otp
@@ -374,7 +378,7 @@ def profilee(request):
         email=request.POST.get("email",request.user.email)
         phone=request.POST.get("phone",request.user.phone_no)
         gender=request.POST.get("gender",request.user.gender)
-        location=request.POST.get("location",request.user.location.id)
+        location=request.POST.get("location")
         age=request.POST.get("age",request.user.age)
         address=request.POST.get("address",request.user.address)
         # print(profilepic)
@@ -821,7 +825,6 @@ def prescriptionbookview(request):
             # message = f'Welcome your otp is {otp} '
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [request.user.email]
-        message = message
         subject = "DIGNOSTICA SPAN" 
         send_mail(
                 subject,

@@ -376,29 +376,7 @@
                     $(holder).removeClass("uploadInProgress");
                     $(holder).find(".upload-loader").remove();
                     // If upload successful
-                    if (Math.random() < 0.9) {
-                        $(wrapper).append(
-                            '<div class="snackbar show" role="alert"><i class="fa fa-check-circle text-success"></i> Profile image updated successfully</div>'
-                        );
-
-                        // Clear input after upload
-                      //  $(triggerInput).val("");
-
-                        setTimeout(() => {
-                            $(wrapper).find('[role="alert"]').remove();
-                        }, 3000);
-                    } else {
-                        $(holder).find(".pic").attr("src", currentImg);
-                        $(wrapper).append(
-                            '<div class="snackbar show" role="alert"><i class="fa fa-times-circle text-danger"></i> There is an error while uploading! Please try again later.</div>'
-                        );
-
-                        // Clear input after upload
-                        /*$(triggerInput).val("");
-                        setTimeout(() => {
-                            $(wrapper).find('[role="alert"]').remove();
-                        }, 3000);*/
-                    }
+                
                 }, 1500);
             };
         } else {

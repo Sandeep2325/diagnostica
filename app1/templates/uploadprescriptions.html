@@ -298,7 +298,8 @@
         $("#others").prop("checked",false);
     var opt = $(this).val();
     console.log("{{data}}" )
-    
+    //$("#option").prop('disabled', true);
+   // $("#option").attr(disabled,true)
         $("#option").hide();
     $.ajax({
         url:"{% url 'userinfo' %}",
@@ -325,15 +326,16 @@
       $("#others").change(function(e){
         $("#myself").prop("checked",false)
         console.log("{{data}}" )
+        //$("#option").prop('disabled', false);
         $("#option").show();
         var opt = $(this).val();
         $("#myself").prop("checked",false);
             $("#firstname").val('');
             $("#lastname").val('');
             $("#phone").val('');
-            $("#gender").val('');
+            //$("#gender").val('');
             $("#age").val('');
-            $("#option").val('');
+           // $("#option").val('');
             $(".error").val('');
             $("#PatientInformation").show();
     });

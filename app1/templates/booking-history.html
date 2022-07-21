@@ -370,8 +370,8 @@
              $("#othersspop").empty();
              
                var detail=` <h3 class="fs-20 font-bold cl-dark-blue text-center" id="choice">Others : ${resp['otherschoice']}</h3>
-               <h3 class="fs-20 font-bold cl-dark-blue text-center" id="fistname">Firstname : ${resp['firstname']}</h3>
-               <h3 class="fs-20 font-bold cl-dark-blue text-center" id="lastname">Lastname : ${resp['lastname']}</h3>
+               <h3 class="fs-20 font-bold cl-dark-blue text-center" id="fistname">First Name : ${resp['firstname']}</h3>
+               <h3 class="fs-20 font-bold cl-dark-blue text-center" id="lastname">Last Name : ${resp['lastname']}</h3>
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="gender">Gender : ${resp['gender']}</h3>
 
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="age">Age : ${resp['age']}</h3>
@@ -383,10 +383,6 @@
     
 
 }
-
-
- 
-
     function testfunc(e){
     $.ajax({
         url: "{% url 'testdetails' %}",
