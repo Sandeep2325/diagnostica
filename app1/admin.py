@@ -347,6 +347,8 @@ class faqadmin(admin.ModelAdmin):
     list_display=["question","answer"]
 class invoiceadmin(admin.ModelAdmin):
     list_display=['order_id',"items","labtest","packages","healthsymptoms","price"]
+class couponredeemadmin(admin.ModelAdmin):
+    list_display=['order_id',"coupon","discountpercen","discountamount","created",]
 admin.site.register(faq,faqadmin)
 admin.site.register(contactus,contactusadmin)
 admin.site.register(payment,paymentadmin)
@@ -368,12 +370,13 @@ admin.site.register(aboutspan,aboutspanadmin)
 admin.site.register(subscription,subscriptionadmin)
 admin.site.register(socialmedialinks,socialmediaadmin)
 admin.site.register(coupons,couponadmin)
-admin.site.register(invoicee,invoiceadmin)
+admin.site.register(couponredeem,couponredeemadmin)
+# admin.site.register(invoicee,invoiceadmin)
 # admin.site.register(pricee,priceadmin)
 from django.contrib.auth.models import Group
 admin.site.unregister(Group)
 # admin.site.register(dummycart)
-admin.site.register(cart,cartadmin)
+# admin.site.register(cart,cartadmin)
 
 
 

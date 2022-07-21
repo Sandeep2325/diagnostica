@@ -69,22 +69,7 @@ def cityy(request):
     city=request.POST.get("city")
     request.session["city"]=city
     return JsonResponse({"message":True,"city":city})
-    # if request.method =="GET":
-    #     cit=city.objects.all()
-    #     healthcheckup=healthcheckuppackages.objects.all()
-    #     healthpackage=healthpackages.objects.all()
-    #     healthsymptom=healthsymptoms.objects.all()
-    #     healthcareblog=healthcareblogs.objects.all()
-    #     testimonial=testimonials.objects.all()
-    #     context={
-    #         "healthcheckup":healthcheckup,
-    #         "healthpackage":healthpackage,
-    #         "healthsymptom":healthsymptom,
-    #         "testimonial":testimonial,
-    #         "healthcareblog":healthcareblog,
-    #         "city":cit,
-    #     }
-    #     return render(request,'home.html',context)
+
     
 def Registration(request):
     if request.method == "POST":
@@ -334,7 +319,6 @@ def otpforgotpassword(request):
         else:
             messages.error(request,'Wrong OTP')
     return render(request,'otpforgot.html') 
-    
 def forgotresendotp(request):
     # if request.method=="POST":
     email_address = request.session.get('email')
@@ -357,7 +341,6 @@ def forgotresendotp(request):
 
 def userinfo(request):
    a= request.user
-   
    return JsonResponse({"message":True,"firstname":a.first_name,"lastname":a.last_name,"contact":a.phone_no,"gender":a.gender,"address":a.address,"age":a.age}) 
 @login_required(login_url="/login/")
 def profilee(request):
@@ -371,6 +354,7 @@ def profilee(request):
         return render (request,"profile.html",context)
     if request.method=="POST":
         # profile_pic=request.POST.Files
+        
         profilepic=request.FILES.get("profile_pic", request.user.photo)
         # name=request.POST.get("name")
         firstname=request.POST.get("firstname",request.user.first_name)
@@ -386,25 +370,28 @@ def profilee(request):
             c=city.objects.get(id=int(location))
         except:
             messages.error(request,"Please Update every field")
-        print(request.FILES)
-        print(profilepic, type(profilepic))
-        a=User.objects.get(email=request.user.email)
-        
-        try:
-            a.first_name=firstname
-            a.last_name=lastname
-            a.photo=profilepic
-            # a.username=name
-            a.email=email
-            a.phone_no=phone
-            a.gender=gender
-            a.location=c
-            a.age=age
-            a.address=address
-            a.save()
-            messages.success(request,"Profile updated Successfully")
-        except:
-            messages.error(request,"Please Update every field")
+        if bool(firstname)==False or bool(lastname)==False or bool(phone)==False:
+            messages.error(request,"Please Update every field") 
+        else:
+            print(bool(firstname))
+            print(profilepic, type(profilepic))
+
+            a=User.objects.get(email=request.user.email)
+            try:
+                a.first_name=firstname
+                a.last_name=lastname
+                a.photo=profilepic
+                # a.username=name
+                a.email=email
+                a.phone_no=phone
+                a.gender=gender
+                a.location=c
+                a.age=age
+                a.address=address
+                a.save()
+                messages.success(request,"Profile updated Successfully")
+            except:
+                messages.error(request,"Please Update every field")
         # a.age=age
         # a.address=address
         # a.save()
@@ -1044,8 +1031,14 @@ def cartt(request):
                      amount="{0:1.2f}".format(float(amount)),
                      payment_id=razorpay_order_id,
                      payment_status=False).save()
+        couponredeem.objects.create(order_id=razorpay_order_id,coupon=request.session.get("coupon"),discountpercen=request.session.get("couponpercent"),discountamount=request.session.get("discountamount"),actualamount=request.session.get('actualamount')).save()
+        
+        request.session.delete("coupon")
+        request.session.delete("discountamount")
+        request.session.delete("couponpercent")
+        request.session.delete("actualamount")
         return JsonResponse({"message":True,"razorpay_key":settings.RAZOR_KEY_ID,"currency":currency,"razorpayorder":razorpay_order_id,"callback":callback_url})
-    a=request.session.get("cartt")
+    
     if not request.user.is_anonymous:
         c = cart.objects.filter(user=request.user)
     else:
@@ -1539,7 +1532,11 @@ def coupon(request):
             discount=(float(total)*(int(c.discount)/100))
             # print(t)
             totall=float(total)-int(discount)
-            request.session["couponamount"]=totall
+            request.session['discountamount']=discount
+            request.session['coupon']=coupon
+            request.session['couponpercent']=c.discount
+            request.session['actualamount']=total
+            # request.session["couponamount"]=totall
             return JsonResponse({"message":True,"total":float(totall),"percent":c.discount,"discount":"{:.2f}".format(discount)})
         except:
             return JsonResponse({"message":False})
@@ -1548,8 +1545,10 @@ def razorpayclose(request):
         paymentid=request.POST["paymentid"]
         a=book_history.objects.filter(payment_id=paymentid)
         b=invoicee.objects.filter(order_id=paymentid)
+        c=couponredeem.objects.filter(order_id=paymentid)
         b.delete()
         a.delete()
+        c.delete()
         return JsonResponse({"message":True})
 def contactuss(request):
     if request.method=="POST":
@@ -1791,34 +1790,40 @@ def html_to_pdf(template_src, context_dict={}):
     if not pdf.err:
         return HttpResponse(result.getvalue(), content_type='application/pdf')
     return None
+# import pdfkit
+# def dummy(request):
 
+ 
+#     input_filename = 'app1/templates/invoice2.html'
+#     output_filename = 'README.pdf'
+    
+#     with open(input_filename, 'r') as f:
+#         html_text = f.read()
+#     pdfkit.from_string(html_text, output_filename)
 def invoice(request,orderid):
     order=book_history.objects.get(payment_id=orderid)
     payments=payment.objects.get(transid=orderid)
     testbooking=prescription_book.objects.get(id=order.testbooking_id)
     invoic=invoicee.objects.filter(order_id=orderid)
-    # print(data)
-    context_dict={
+    try:
+        coupoonn=couponredeem.objects.get(order_id=orderid)
+        context_dict={
         "order":order,
         "payments":payments,
         "testbooking":testbooking,
         "tests":invoic,
-            # "order_id":order.order_payment_id,
-            # "payment_id":paymentid.payment_id,
-            # "date":order.date,
-            # "total_price":amount,
-            # "data":data,
-            # "gst":gst,
-            # "grand_total":grand_total,
-            # "deliver_charge":deliver_charge,
-            # "name":address.fullname,
-            # "phone":address.phone,
-            # "locality":address.locality,
-            # "address":address.address,
-            # "city":address.city,
-            # "state":address.state,
-            # "pincode":address.pincode
+        "coupon":coupoonn,
             }
+    except:
+        # coupoonn=couponredeem.objects.get(order_id=orderid)
+        context_dict={
+        "order":order,
+        "payments":payments,
+        "testbooking":testbooking,
+        "tests":invoic,
+        
+            }
+    
     template_name='invoice2.html'
     pdf = html_to_pdf(template_name,context_dict)
     return FileResponse(pdf,as_attachment=True,filename="invoice2.pdf",content_type='application/pdf') 
@@ -2082,5 +2087,4 @@ class HealthSymptoms(View):
         print(RES)
         return JsonResponse(RES)
 def error_404_view(request, exception):
-    
     return HttpResponse("404 Not Found")

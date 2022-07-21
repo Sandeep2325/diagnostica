@@ -7,10 +7,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 		<title>Diagnostica Diagno</title>
-
 		<!-- Favicon -->
 		<link rel="icon" href="" type="image/x-icon" />
-
 		<!-- Invoice styling -->
 		<style>
 			body {
@@ -78,6 +76,7 @@
                 display: flex;
             }
             .first_t_row_th_1 p, .first_t_row_th_3 p{
+                height:2px;
                 margin: 0px;
                 text-align: start;
                 font-size: 14px;
@@ -148,24 +147,23 @@
 			}
 		</style>
 	</head>
-
 	<body>
 		<div class="invoice-box">
                         <div class="invoive_logo">
                             <img src="{%static "images/image_logo.png"%}" alt="" class="img-fluid logo-img" />
                         </div>
-                        <div class="invoice_address_p">
-                            <p>Diagnostica Span Pvt. Ltd,</p>
+                        <div class="" style="border:None; font-size:16px">
+                           Diagnostica Span Pvt. Ltd,
                         </div>
-                        <div class="invoice_address_sub_p">
-                            <p>Ground Floor, No. 79, Deccan Central, 40th Main,
-                                M.E.I Road, 2nd Stage, Industrial Suburb, Yeshwanthpur,
-                                Bengaluru 560022</p>
+                        <div class="" style="text-align:start; font-size:10px; border:None;">
+                          <p style="width:20px">  Ground Floor, No. 79, Deccan Central, 40th Main,
+                            M.E.I Road, 2nd Stage, Industrial Suburb, Yeshwanthpur,
+                            Bengaluru 560022</p>
                         </div>
                         <h5 class="invoice_header">BILL/RECEIPT</h6>
 						<table class="first_t_row">
 							<tr>
-                                <th class="first_t_row_th_1 invoice_font">Receipt No. :<p>{{order.bookingid}}</p> </th>
+                                <th class="first_t_row_th_1 invoice_font" style="">Receipt No. :<p>{{order.bookingid}}</p> </th>
                                 <th class="first_t_row_th_2 invoice_font">Name : {{testbooking.firstname}} {{testbooking.lastname}}</th> 
                                 {% if testbooking.gender == 'm'%}
                                 <th class="first_t_row_th_3 invoice_font">Sex / Age: <p>Male / {{testbooking.age}} years</p></th>
@@ -177,11 +175,20 @@
                             </tr>
                             <tr class="test">
                                 <th class="first_t_row_th_1 invoice_font test">Status :<p>Completed</p>  </th>
-                                
                                 {%if testbooking.myself == True%}
                                 <th class="first_t_row_th_2 invoice_font test">Referral : Myself</th> 
-                                {%else%}
-                                <th class="first_t_row_th_2 invoice_font test">Referral : {{testbooking.others_choice}}</th> 
+                                {%elif testbooking.others_choice == 'm' %}
+                                <th class="first_t_row_th_2 invoice_font test">Referral : Mother</th> 
+                                {%elif testbooking.others_choice == 'f' %}
+                                <th class="first_t_row_th_2 invoice_font test">Referral : Father</th> 
+                                {%elif testbooking.others_choice == 'w'%}
+                                <th class="first_t_row_th_2 invoice_font test">Referral : Wife</th> 
+                                {%elif testbooking.others_choice == 's'%}
+                                <th class="first_t_row_th_2 invoice_font test">Referral : Son</th> 
+                                {%elif testbooking.others_choice == 'd'%}
+                                <th class="first_t_row_th_2 invoice_font test">Referral : Daughter</th> 
+                                {%elif testbooking.others_choice == 'o'%}
+                                <th class="first_t_row_th_2 invoice_font test">Referral : Other</th>
                                 {%endif%}
                                 <th class="first_t_row_th_3 invoice_font test">Date & Time:<p>{{testbooking.created}}</p></th>
                             </tr>
@@ -222,7 +229,7 @@
                                 {%elif test.healthsymptoms != None%}
                                 <tr>
                                     <td class="fs" data-label="SL no.">{{ forloop.counter }}</td>
-                                    <td class="fs" data-label="Test Code">SHCPL</td>
+                                    <td class="fs" data-label="Test Code">-</td>
                                     <td class="fs" data-label="Test Name">{{test.healthsymptoms}}</td>
                                     <td class="fs" data-label="Test Price" style="text-align:end ;">{{test.price}}</td>
                                 </tr>
@@ -231,19 +238,28 @@
                             </tbody>
                         </table> 
                         <table class="first_t_row">
-							<tr class="first_t_row_3">
+                            {%if coupon.order_id %}
+                            <tr class="first_t_row_3">
+                                <th class="first_t_row_th_1 invoice_font" style="padding: 5px 0px ;">Payable Amount (in words) :Four Hundred Eighty Three only</th>
+                                <th class="first_t_row_th_total invoice_font"><p>Total :</p></th> 
+                                <th class="first_t_row_th_total_p invoice_font "><p>{{coupon.actualamount}}</p></th> 
+                            </tr>
+                            {%else%}
+                            <tr class="first_t_row_3">
                                 <th class="first_t_row_th_1 invoice_font" style="padding: 5px 0px ;">Payable Amount (in words) :Four Hundred Eighty Three only</th>
                                 <th class="first_t_row_th_total invoice_font"><p>Total :</p></th> 
                                 <th class="first_t_row_th_total_p invoice_font "><p>{{payments.amount}}</p></th> 
                             </tr>
+                            {%endif%}
+							
 						</table>  
                         <table class="first_t_row" style="padding:5px 0px ;">
                             <tbody>
                                 <tr>
-                                    <th class="" style="text-align:end; color: black;">Discount :600.00</th>
+                                    <th class="" style="text-align:end; color: black;">Discount :{{coupon.discountamount}}</th>
                                 </tr>
                                 <tr>
-                                    <th class="" style="text-align:end; color: black;">Payable Amount :600.00</th>
+                                    <th class="" style="text-align:end; color: black;">Payable Amount :{{payments.amount}}</th>
                                 </tr>
                             </tbody>
                         </table> 
@@ -269,7 +285,8 @@
                         <table class="first_t_row">
                             <tbody>
                                 <tr>
-                                    <th class="first_t_row_th_1 invoice_font">Comments : Span Voucher Discount @ 30%</th>
+    
+                                    <th class="first_t_row_th_1 invoice_font">Comments : {{coupon.coupon}} Discount @ {{coupon.discountpercen}}%</th>
                                     <th class="signatute-invoice" style="text-align:center;  padding-top: 70px;">Cashier's Signature</th>
                                 </tr>
 

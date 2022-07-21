@@ -503,6 +503,17 @@ class paymentids(models.Model):
         return self.paymentid
     class Meta:
         verbose_name_plural="Payment Ids"
+class couponredeem(models.Model):
+    order_id=models.CharField(max_length=200,null=True,blank=True)
+    coupon=models.CharField(max_length=200,null=True,blank=True)
+    discountpercen=models.CharField(max_length=200,null=True,blank=True,verbose_name="Discount(%)")
+    discountamount=models.CharField(max_length=20,null=True,blank=True,verbose_name="Discounted Price(₹)")
+    created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
+    actualamount=models.CharField(max_length=20,null=True,blank=True)
+    def __str__(self):
+        return self.order_id
+    class Meta:
+        verbose_name_plural="Redeemed Coupons"
 # class dummycart(models.Model):
 #     name=models.CharField(max_length=500,null=True,blank=True)
 #     category=models.CharField(max_length=500,null=True,blank=True)

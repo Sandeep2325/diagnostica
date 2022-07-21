@@ -1,5 +1,5 @@
 from django.urls import path,re_path
-from .import views,payments
+from .import views
 from django.contrib.auth import views as auth_view
 from django.views.generic import TemplateView
 from django.conf.urls.static import static
@@ -57,11 +57,11 @@ urlpatterns = [
     # path('forget-password/',views.forget_password,name="forger-password"),
     # path('forget-password/done/',TemplateView.as_view(template_name='forget-password-done.html')),
     # path('change-password/<slug:uid>/',views.change_password,name="change-password"),
-    path('payment/', payments.payment, name='payment'),
     path('paymenthandler/<str:str>/<str:amount>/', views.paymenthandler, name='paymenthandler'),
     path("cartsessiondelete",views.cartsessiondelete,name="cartsessiondelete"),
 
     path("health-symptoms/<slug:slug>/",views.HealthSymptoms.as_view(),name="health_symptoms"),
+    # path("dummy",views.dummy),
 
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
