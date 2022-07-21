@@ -936,6 +936,16 @@ input::-webkit-inner-spin-button {
     color: #2B3147;
 }
 
+/* .close {
+    position: absolute;
+    right: 0px;
+    top: -50px;
+    color: #2B3147;
+    z-index: 999;
+    opacity: 111111;
+} */
+
+
 .cart_checkout_modal .modal-dialog {
     margin: 10vh auto 0px auto
 }
