@@ -25,8 +25,8 @@
                     <div class="bg-light-grey br-15">
                         <h1 class="fs-40 font-bold cl-dark-blue text-center py-lg-5 py-3 m-0  px-3">My Cart</h1>
                         <div class="row justify-content-center">
-                            <div class="col-lg-12">
-                                <h1 class="text-center fs-30 font-bold cl-dark-blue mb-4 px-2" id="nodata">No Record Found...</h1>
+                            <div class="col-lg-12 nodata">
+                                {% comment %} <h1 class="text-center fs-30 font-bold cl-dark-blue mb-4 px-2" id="nodata">No Record Found...</h1>  {% endcomment %}
                                 <div class="table-responsive" id="carttable">
                                     <div class="wrapper">
                                         <div class="table test_row">
@@ -260,12 +260,14 @@
         if(count!=0){
           $("#checkout1").show();  
           $("#carttable").show();
-          $("#nodata").hide();
+         // $("#nodata").hide();
         }
         else{
             $("#checkout1").hide();
             $("#carttable").hide();
-            $("#nodata").show();
+            //$("#nodata").show();
+            dataa=`<h1 class="text-center fs-30 font-bold cl-dark-blue mb-4 px-2" id="nodata">No Record Found...</h1>`
+            $(".nodata").append(dataa);
         }
     })
     $('#cart_checkout_modal').on('shown.bs.modal', function (e) {

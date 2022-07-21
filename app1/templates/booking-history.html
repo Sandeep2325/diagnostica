@@ -26,9 +26,7 @@
             {% endfor %}
 
             {% endif %} {% endcomment %}
-
             <div class="row">
-
                 <div class="col-lg-12">
                     <div class=" bg-light-grey py-4 py-lg-0 br-15">
                         <div class="row ">
@@ -110,8 +108,10 @@
 
                                                     {%if bookhistory.amount == None%}
                                                         <td data-label="Amount">-</td>
+                                                    {%elif bookhistory.prescription%}
+                                                        <td data-label="Amount">₹ {{bookhistory.amount}}<i  id ="prescriptiontest" data-bs-toggle="modal" data-bs-target="#prescriptionbreaks" class="fa fa-info br-5 cursor" aria-hidden="true" style="text-align:center;background:#d5e6f7; padding:5px 9px;margin-left:5px " onclick='prescrbreak({{bookhistory.testbooking_id}})'></i></td>
                                                     {%else%}
-                                                        <td data-label="Amount">₹ {{bookhistory.amount}}</td>
+                                                    <td data-label="Amount">₹ {{bookhistory.amount}}</td>
                                                     {%endif%}
 
                                                     {%if not bookhistory.payment_status%}
@@ -172,7 +172,7 @@
                                                     <td data-label="Date">{{payment.date}}</td>
                                                     {% comment %} <td data-label="Payment">My Self</td> {% endcomment %}
                                                     <td data-label="Amount">₹ {{payment.amount}}</td>
-                                                    <td data-label="Invoice"><a href="{% url "invoice" payment.transid %}"
+                                                    <td data-label="Invoice"><a href="{% url "invoice" payment.transid %} " target="_blank"
                                                             class=""><button class="br br-5 fs-16 font-bold bg-dark-green cl-dark-white download text-center">Invoice</button></a>
                                                     </td>
                                                 </tr>
@@ -219,6 +219,24 @@
                             aria-label="Close"></button>
                             
                             <div id="testdetaills" >
+                                
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="prescriptionbreak" id ="prescriptionbreak">
+        <div class="modal fade" id="prescriptionbreaks" tabindex="-1" aria-labelledby="otherspopLabel"
+            aria-hidden="true">
+            <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content p-sm-4">
+                    <div class="modal-body">
+                        <button type="button" class="btn-close  close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                            
+                            <div id="prescr" >
                                 
                         </div>
                     </div>
@@ -395,7 +413,7 @@
         success: function(resp){
             console.log(resp['message'])
         var msg = resp['message'];
-        var splitted_str = msg.split(",");
+        var splitted_str = msg.split("/");
          $("#testdetaills").empty();
         for (let i = 0; i < splitted_str.length; i++) {
            var a= `<p>${splitted_str[i]}</p>`
@@ -405,7 +423,31 @@
     });
 }
 
-
+function prescrbreak(e){
+   
+    $.ajax({
+        url: "{% url 'prescriptionbreak' %}",
+        type: "POST",
+        dataType: "json",
+        data: {
+            'id':e,
+            'csrfmiddlewaretoken':'{{ csrf_token }}',
+        },
+        success: function(resp){
+            console.log(resp['message'])
+            
+        var msg = resp['message'];
+        
+        console.log(msg.length)
+         $("#prescr").empty();
+        for (let i = 0; i < msg.length; i++) {
+           var a= `<p>${msg[i].test}-₹ ${msg[i].pricel1}</p>  `
+           console.log(a)
+           $("#prescr").append(a)
+          }
+        }
+    });
+}
 
 </script>
 {%endblock%}

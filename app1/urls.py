@@ -24,6 +24,7 @@ urlpatterns = [
     path("userinfo",views.userinfo,name="userinfo"),
     path("prescription-upload/",views.prescriptionbookview,name="prescription-upload"),
     path("othersdetail",views.othersdetail,name="othersdetail"),
+    path("prescriptionbreak",views.prescriptionbreak,name="prescriptionbreak"),
     path("testselect",views.testselect,name="testselect"),
     path('delete/', views.destroy,name="destroy"),
     path('razorclose/',views.razorpayclose,name="razorpayclose"),

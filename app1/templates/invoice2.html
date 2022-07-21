@@ -165,14 +165,25 @@
                         <h5 class="invoice_header">BILL/RECEIPT</h6>
 						<table class="first_t_row">
 							<tr>
-                                <th class="first_t_row_th_1 invoice_font">Receipt No. :<p>12345</p> </th>
-                                <th class="first_t_row_th_2 invoice_font">Name : Sandeep</th> 
-                                <th class="first_t_row_th_3 invoice_font">Sex / Age: <p>Male / 29 years</p></th>
+                                <th class="first_t_row_th_1 invoice_font">Receipt No. :<p>{{order.bookingid}}</p> </th>
+                                <th class="first_t_row_th_2 invoice_font">Name : {{testbooking.firstname}} {{testbooking.lastname}}</th> 
+                                {% if testbooking.gender == 'm'%}
+                                <th class="first_t_row_th_3 invoice_font">Sex / Age: <p>Male / {{testbooking.age}} years</p></th>
+                                {%elif testbooking.gender == 'f' %}
+                                <th class="first_t_row_th_3 invoice_font">Sex / Age: <p>Female / {{testbooking.age}} years</p></th>
+                                {%elif testbooking.gender == 'o' %}
+                                <th class="first_t_row_th_3 invoice_font">Sex / Age: <p>Other / {{testbooking.age}} years</p></th>
+                                {%endif%}
                             </tr>
                             <tr class="test">
                                 <th class="first_t_row_th_1 invoice_font test">Status :<p>Completed</p>  </th>
-                                <th class="first_t_row_th_2 invoice_font test">Referral : SELF</th> 
-                                <th class="first_t_row_th_3 invoice_font test">Date & Time:<p>21/06/22, 06:45 PM</p></th>
+                                
+                                {%if testbooking.myself == True%}
+                                <th class="first_t_row_th_2 invoice_font test">Referral : Myself</th> 
+                                {%else%}
+                                <th class="first_t_row_th_2 invoice_font test">Referral : {{testbooking.others_choice}}</th> 
+                                {%endif%}
+                                <th class="first_t_row_th_3 invoice_font test">Date & Time:<p>{{testbooking.created}}</p></th>
                             </tr>
 						</table>  
                         <table class="first_t_row">
@@ -185,31 +196,45 @@
                                 </tr>
                             </thead>
                             <tbody style="text-align:start">
+                                {%for test in tests%}
+                                {% comment %} {{test}} {% endcomment %}
+                                {%if test.items != None%}
                                 <tr>
-                                    <td class="fs" data-label="SL no.">1</td>
-                                    <td class="fs" data-label="Test Code">SHCPL</td>
-                                    <td class="fs" data-label="Test Name">SPAN COMBO SHCPL.</td>
-                                    <td class="fs" data-label="Test Price" style="text-align:end ;">600.00</td>
+                                    <td class="fs" data-label="SL no.">{{ forloop.counter }}</td>
+                                    <td class="fs" data-label="Test Code">-</td>
+                                    <td class="fs" data-label="Test Name">{{test.items}}</td>
+                                    <td class="fs" data-label="Test Price" style="text-align:end ;">{{test.price}}</td>
                                 </tr>
+                                {%elif test.labtest != None%}
                                 <tr>
-                                    <td class="fs" data-label="SL no.">2</td>
-                                    <td class="fs" data-label="Test Code">SHCPL</td>
-                                    <td class="fs" data-label="Test Name">SPAN COMBO SHCPL.</td>
-                                    <td class="fs" data-label="Test Price" style="text-align:end ;">600.00</td>
+                                    <td class="fs" data-label="SL no.">{{ forloop.counter }}</td>
+                                    <td class="fs" data-label="Test Code">-</td>
+                                    <td class="fs" data-label="Test Name">{{test.labtest}}</td>
+                                    <td class="fs" data-label="Test Price" style="text-align:end ;">{{test.price}}</td>
                                 </tr>
+                                {%elif test.packages != None%}
                                 <tr>
-                                    <td class="fs" data-label="SL no.">3</td>
-                                    <td class="fs" data-label="Test Code">SHCPL</td>
-                                    <td class="fs" data-label="Test Name">SPAN COMBO SHCPL.</td>
-                                    <td class="fs" data-label="Test Price" style="text-align:end ;">600.00</td>
+                                    <td class="fs" data-label="SL no.">{{ forloop.counter }}</td>
+                                    <td class="fs" data-label="Test Code">-</td>
+                                    <td class="fs" data-label="Test Name">{{test.packages}}</td>
+                                    <td class="fs" data-label="Test Price" style="text-align:end ;">{{test.price}}</td>
                                 </tr>
+                                {%elif test.healthsymptoms != None%}
+                                <tr>
+                                    <td class="fs" data-label="SL no.">{{ forloop.counter }}</td>
+                                    <td class="fs" data-label="Test Code">SHCPL</td>
+                                    <td class="fs" data-label="Test Name">{{test.healthsymptoms}}</td>
+                                    <td class="fs" data-label="Test Price" style="text-align:end ;">{{test.price}}</td>
+                                </tr>
+                                {%endif%}
+                                {%endfor%}
                             </tbody>
                         </table> 
                         <table class="first_t_row">
 							<tr class="first_t_row_3">
                                 <th class="first_t_row_th_1 invoice_font" style="padding: 5px 0px ;">Payable Amount (in words) :Four Hundred Eighty Three only</th>
                                 <th class="first_t_row_th_total invoice_font"><p>Total :</p></th> 
-                                <th class="first_t_row_th_total_p invoice_font "><p>1099</p></th> 
+                                <th class="first_t_row_th_total_p invoice_font "><p>{{payments.amount}}</p></th> 
                             </tr>
 						</table>  
                         <table class="first_t_row" style="padding:5px 0px ;">
@@ -225,11 +250,11 @@
                         <table  class="first_t_row_Final">
                             <tbody>
                                 <tr>
-                                    <td class="fs">Payment Mode : CASH</td>
-                                    <td class="fs">Payment Date : 21/06/22, 06:45 p.m.</td>
-                                    <td class="fs" style="text-align:end;">Paid Amount : 0.00</td>
+                                    <td class="fs">Payment Mode : Online</td>
+                                    <td class="fs">Payment Date : {{testbooking.created}}</td>
+                                    <td class="fs" style="text-align:end;">Paid Amount : {{payments.amount}}</td>
                                 </tr>
-                                <tr>
+                                {% comment %} <tr>
                                     <td class="fs">Payment Mode : CASH</td>
                                     <td class="fs">Payment Date : 21/06/22, 06:45 p.m.</td>
                                     <td class="fs" style="text-align:end;">Paid Amount : 0.00</td>
@@ -238,7 +263,7 @@
                                     <td class="fs">Payment Mode : CASH</td>
                                     <td class="fs">Payment Date : 21/06/22, 06:45 p.m.</td>
                                     <td class="fs" style="text-align:end;">Total Amount : 0.00</td>
-                                </tr>
+                                </tr> {% endcomment %}
                             </tbody>
                         </table>  
                         <table class="first_t_row">

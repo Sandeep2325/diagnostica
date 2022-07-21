@@ -725,6 +725,35 @@ def testdetails(request):
             a=book_history.objects.get(id=id)
             print(a.bookingdetails)
             return JsonResponse({"message":a.bookingdetails})
+def prescriptionbreak(request):
+    if request.method=="POST":
+        city=request.session.get("city")
+        id=request.POST["id"]
+        a=prescription_book.objects.get(id=id)
+        strr=[]
+        for i in a.test_name.all():
+            di={}
+            di["test"]=(i.testt)
+            
+            print(str(i.Banglore_price))
+            if city == Bangalore:
+                di["pricel1"]=str(i.Banglore_price)
+            elif city== Mumbai:
+                di["pricel1"]=str(i.Mumbai_price)
+            elif city== Bhophal:
+                di["pricel1"]=str(i.bhopal_price)
+            elif city== Nanded:
+                di["pricel1"]=str(i.nanded_price)
+            elif city== Pune:
+                di["pricel1"]=str(i.pune_price)
+            elif city== Barshi:
+                di["pricel1"]=str(i.barshi_price)
+            elif city== Aurangabad:
+                di["pricel1"]=str(i.aurangabad_price)
+            strr.append(di)
+        # listToStr = '/'.join(map(str, strr))
+        print(strr)
+        return JsonResponse({"message":strr})
 def healthsymptomview(request,slug):
     c=request.session.get("city")
     data=healthsymptoms.objects.filter(slug=slug)
@@ -905,9 +934,7 @@ def testselect(request):
     return render(request,"choose-test-list.html",context)
 from django.core.paginator import Paginator,EmptyPage, PageNotAnInteger
 razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
-# @login_required(login_url="login/")    
-
-
+ 
 def cartt(request):
     deviceCookie = request.COOKIES.get('device')
     if not request.user.is_anonymous:
@@ -929,6 +956,9 @@ def cartt(request):
         s = shortuuid.ShortUUID(alphabet="0123456789")
         bid = s.random(length=5)
         bookingid ="DP"+str(bid)
+        # id=get_next_value(bid)
+        # print(bookingid)
+        # print("",id)
         a=prescription_book.objects.create(
                 unique=uniquee,
                 user=request.user,
@@ -949,48 +979,23 @@ def cartt(request):
         a=[]
         for i in data:
             a.append(i.price)
-        def testname():
-            return ", ".join([
-                test.testt for test in data2.test_name.all()
-            ])
-            
-        def testname():
-            return ",".join([
-                test.testt for test in data1
-            ])
-
-        strr=[]
-        for tesst in data1:
-            if tesst.packages:
-                strr.append(tesst.packages.package_name)
-
-            elif tesst.labtest:
-                strr.append(tesst.labtest.package_title)
-
-            elif tesst.healthsymptoms:
-                strr.append(tesst.healthsymptoms.name)
-
-            elif tesst.items: 
-                strr.append(tesst.items.testt)
-                print(tesst)
+        
+        
             # if tesst.items == None and tesst.packages == None:
             #     strr.append(tesst.labtest.package_title)
             # elif tesst.items == None and tesst.labtest == None:
             #     strr.append(tesst.packages.package_name)
             # else:
             #     strr.append(tesst.items.testt)
-        listToStr = ','.join(map(str, strr))
-        # str1 = " " 
-        # for i in str:
-        #     str1 += i
+        
+        
         request.session.delete("order_id")
-        data=cart.objects.filter(user=request.user)
-        a=[]
-        for i in data:
-            a.append(i.price)
+        # data=cart.objects.filter(user=request.user)
+        # a=[]
+        # for i in data:
+        #     a.append(i.price)
         context={}
         amount=request.POST["amount"]
-       
         currency = 'INR'
         # amount=int(sum(a))
         client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
@@ -1002,7 +1007,6 @@ def cartt(request):
             razorpay_order = client.order.create(
                     {"amount": 1* 100, "currency": "INR", "payment_capture": "1"}
             )
-        
         request.session["order_id"]=razorpay_order['id']
         # request.session['amount']=amount
         razorpay_order_id = razorpay_order['id']
@@ -1014,28 +1018,33 @@ def cartt(request):
         context['razorpay_amount'] = amount
         context['currency'] = currency
         context['callback_url'] = callback_url
+        strr=[]
+        for tesst in data1:
+            if tesst.packages:
+                strr.append(tesst.packages.package_name)
+                invoicee.objects.create(user=request.user,order_id=razorpay_order_id,packages=tesst.packages,price=tesst.price).save()
+            elif tesst.labtest:
+                strr.append(tesst.labtest.package_title)
+                invoicee.objects.create(user=request.user,order_id=razorpay_order_id,labtest=tesst.labtest,price=tesst.price).save()
+            elif tesst.healthsymptoms:
+                strr.append(tesst.healthsymptoms.name)
+                invoicee.objects.create(user=request.user,order_id=razorpay_order_id,healthsymptoms=tesst.healthsymptoms,price=tesst.price).save()
+            elif tesst.items: 
+                strr.append(tesst.items.testt)
+                invoicee.objects.create(user=request.user,order_id=razorpay_order_id,items=tesst.items,price=tesst.price).save()
+                print(tesst)
+        listToStr = '/'.join(map(str, strr))
         bookhistory=book_history(
             user=request.user,
             testbooking_id=data2.id,
             bookingid=bookingid,
             patient_info="Myself" if others == "m" else "others",
-                     booking_type="Selected test",
+                     booking_type="Selected test/Package",
                      bookingdetails=listToStr,
-                     amount=float(amount),
+                     amount="{0:1.2f}".format(float(amount)),
                      payment_id=razorpay_order_id,
                      payment_status=False).save()
-        
         return JsonResponse({"message":True,"razorpay_key":settings.RAZOR_KEY_ID,"currency":currency,"razorpayorder":razorpay_order_id,"callback":callback_url})
-    # data1=cart.objects.filter(user=request.user)
-    # a=[]
-    # for i in data1:
-    #     a.append(i.price)
-    # context={
-    #         "data":data1,
-    #        "subtotal":sum(a),
-    #         "datacount":data1.count(),
-    #         }
-    # print(request.session.get("cartt"))
     a=request.session.get("cartt")
     if not request.user.is_anonymous:
         c = cart.objects.filter(user=request.user)
@@ -1154,10 +1163,8 @@ def cartt1(request):
                 strr.append(tesst.packages.package_name)
             else:
                 strr.append(tesst.items.testt)
-        listToStr = ','.join(map(str, strr))
-        # str1 = " " 
-        # for i in str:
-        #     str1 += i
+        listToStr = '/'.join(map(str, strr))
+        
         request.session.delete("order_id")
         data=cart.objects.filter(user=request.user)
         a=[]
@@ -1443,11 +1450,8 @@ def categoryy(request):
                 tests=test.objects.filter(categoryy__id=pk)
         else:
             tests=test.objects.all()
-
-
         for tesst in tests:
             a={}
-            
             a['id']=tesst.id
             a['testt']=tesst.testt
             a['description']=tesst.description
@@ -1543,6 +1547,8 @@ def razorpayclose(request):
     if request.method=="POST":
         paymentid=request.POST["paymentid"]
         a=book_history.objects.filter(payment_id=paymentid)
+        b=invoicee.objects.filter(order_id=paymentid)
+        b.delete()
         a.delete()
         return JsonResponse({"message":True})
 def contactuss(request):
@@ -1790,12 +1796,13 @@ def invoice(request,orderid):
     order=book_history.objects.get(payment_id=orderid)
     payments=payment.objects.get(transid=orderid)
     testbooking=prescription_book.objects.get(id=order.testbooking_id)
-    
+    invoic=invoicee.objects.filter(order_id=orderid)
     # print(data)
     context_dict={
         "order":order,
         "payments":payments,
         "testbooking":testbooking,
+        "tests":invoic,
             # "order_id":order.order_payment_id,
             # "payment_id":paymentid.payment_id,
             # "date":order.date,
@@ -1930,10 +1937,11 @@ class BookingHistoryPay(LoginRequiredMixin,View):
         return render(request,"booking-history.html",context)
     def post(self, request, *args, **kwargs):
         if request.POST.get("action") == "retreive_data":
-            mod = book_history.objects.get(testbooking_id=request.POST.get('id'))
+            id=request.POST.get('id')
+            mod = book_history.objects.get(testbooking_id=id)
             client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
 
-            tot_amt = int(mod.amount) * 100
+            tot_amt = float(mod.amount) * 100
             razorpay_order = client.order.create(
                 {"amount": tot_amt, "currency": "INR", "payment_capture": "1"}
             )
@@ -1947,6 +1955,25 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 "order_id":razorpay_order['id'],
                 "callbackUrl":callback_url,
             }
+            items=prescription_book.objects.get(id=id)
+            for item in items.test_name.all():
+                cityy=request.session.get("city")
+                if cityy==Bangalore:
+                    invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.Banglore_price)
+                elif cityy==Mumbai:
+                    invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.Mumbai_price)  
+    
+                elif cityy==Bhophal:
+                    invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.bhopal_price)
+                elif cityy==Nanded:
+                    invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.nanded_price)
+                elif cityy==Pune:
+                    invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.pune_price)
+                elif cityy==Barshi:
+                    invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.barshi_price)  
+                elif cityy==Aurangabad:
+                    invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.aurangabad_price)   
+        
         if request.POST.get("action") == "payment_canceled":
             mod = book_history.objects.get(testbooking_id=request.POST.get('id'))
             mod.payment_id = None
@@ -1972,23 +1999,88 @@ class HealthSymptoms(View):
         return render(request, "health_symptoms_details.html", res)
     
     def post(self, request, *args,**kwargs):
+        RES = {}
+        cityy=request.session.get("city")
         deviceCookie = request.COOKIES['device']
         healthSympObj = healthsymptoms.objects.get(id=request.POST.get('ids'))
-        obj, created = cart.objects.get_or_create(
-                device = deviceCookie,
-                healthsymptoms = healthSympObj,
-                user = request.user if not request.user.is_anonymous else None,
-                price=healthSympObj.Banglore_price,
-                )
-        res = {"message":created}
+        # obj, created = cart.objects.get_or_create(
+        #         device = deviceCookie,
+        #         healthsymptoms = healthSympObj,
+        #         user = request.user if not request.user.is_anonymous else None,
+        #         price=healthSympObj.Banglore_price,
+        #         )
+        # res = {"message":created}
+        
+        if cityy==Bangalore:
+            obj, created = cart.objects.get_or_create(
+            device = deviceCookie,
+            healthsymptoms = healthSympObj,
+            user = request.user if not request.user.is_anonymous else None,
+            price=healthSympObj.Banglore_price,)
+            res = {"message":created}
+            RES = res
+
+        elif cityy == Mumbai:
+            obj, created = cart.objects.get_or_create(
+            device = deviceCookie,
+            packages = healthSympObj,
+            user = request.user if not request.user.is_anonymous else None,
+            price=healthSympObj.Mumbai_price,
+            )
+            res = {"message":created}
+            RES = res
+        elif cityy == Bhophal:
+            obj, created = cart.objects.get_or_create(
+            device = deviceCookie,
+            packages = healthSympObj,
+            user = request.user if not request.user.is_anonymous else None,
+            price=healthSympObj.bhopal_price,
+            )
+            res = {"message":created}
+            RES = res
+        elif cityy == Nanded:
+            obj, created = cart.objects.get_or_create(
+            device = deviceCookie,
+            packages = healthSympObj,
+            user = request.user if not request.user.is_anonymous else None,
+            price=healthSympObj.nanded_price,
+            )
+            res = {"message":created}
+            RES = res
+            
+        elif cityy == Pune:
+            obj, created = cart.objects.get_or_create(
+            device = deviceCookie,
+            packages = healthSympObj,
+            user = request.user if not request.user.is_anonymous else None,
+            price=healthSympObj.pune_price,
+            )
+            res = {"message":created}
+            RES = res
+        elif cityy == Barshi:
+            obj, created = cart.objects.get_or_create(
+            device = deviceCookie,
+            packages = healthSympObj,
+            user = request.user if not request.user.is_anonymous else None,
+            price=healthSympObj.barshi_price,
+            )
+            res = {"message":created}
+            RES = res
+        elif cityy == Aurangabad:
+            obj, created = cart.objects.get_or_create(
+            device = deviceCookie,
+            packages = healthSympObj,
+            user = request.user if not request.user.is_anonymous else None,
+            price=healthSympObj.aurangabad_price,
+            )
+            res = {"message":created}
+            RES = res
         if request.user.is_anonymous:
             request.session['cart_count']= cart.objects.filter(device = deviceCookie).count()
         else:
             request.session['cart_count']= cart.objects.filter(user = request.user).count()
-        return HttpResponse(json.dumps(res), content_type="application/json")
+        print(RES)
+        return JsonResponse(RES)
 def error_404_view(request, exception):
-   
-    # we add the path to the the 404.html file
-    # here. The name of our HTML file is 404.html
-    # return render(request, '404.html')
+    
     return HttpResponse("404 Not Found")

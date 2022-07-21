@@ -13,6 +13,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.db.models.signals import post_save,m2m_changed
 from django.dispatch import receiver
+from shortuuid.django_fields import ShortUUIDField  
 # phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', 
 #                                 message = "Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
 
@@ -199,7 +200,7 @@ def testbookings(sender, instance, **kwargs):
         elif instance.location=="Barshi":
             a.append(i.barshi_price)
         elif instance.location=="Aurangabad":
-            a.append(i.daurangabad_price)
+            a.append(i.aurangabad_price)
     book_history.objects.filter(testbooking_id=instance.id).update(amount=sum(a))
     # print(bool(instance.prescription_file))
     if (instance.test_name.first()!=None) and (bool(instance.prescription_file)==True): 
@@ -252,8 +253,7 @@ class healthcheckuppackages(models.Model):
     @property
     def testcount(self):
         return self.test_name.all().count()
-
-    
+   
 class healthpackages(models.Model):
     package_name=models.CharField(max_length=300,null=True,blank=True)
     # location=models.ForeignKey(city,null=True,on_delete=models.CASCADE,verbose_name="Location")
@@ -354,12 +354,24 @@ class cart(models.Model):
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
     
-class cart2(models.Model):
+# class cart2(models.Model):
+#     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
+#     items=models.ManyToManyField(test)
+#     categoryy=models.CharField(max_length=200,null=True,blank=True)
+#     price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
+#     slug = models.SlugField(null=True, unique=True)
+#     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
+#     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
+class invoicee(models.Model):
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
-    items=models.ManyToManyField(test)
-    categoryy=models.CharField(max_length=200,null=True,blank=True)
+    order_id=models.CharField(max_length=200,null=True,blank=True)
+    items=models.ForeignKey(test,null=True,blank=True,on_delete=models.CASCADE)
+    labtest=models.ForeignKey(healthcheckuppackages,null=True,blank=True,on_delete=models.CASCADE)
+    packages=models.ForeignKey(healthpackages,null=True,blank=True,on_delete=models.CASCADE)
+    # categoryy=models.ForeignKey(category,null=True,blank=True,on_delete=models.SET_NULL)
+    healthsymptoms = models.ForeignKey(healthsymptoms, verbose_name=_("Health Symptoms"), on_delete=models.SET_NULL, null=True, blank=True)
     price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
-    slug = models.SlugField(null=True, unique=True)
+    # device = models.CharField(_("Device"), max_length=200,null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
 STATUS=[
@@ -367,7 +379,6 @@ STATUS=[
     ('u',"updated"),
     ('t',"tested")
 ]  
-from shortuuid.django_fields import ShortUUIDField  
 class book_history(models.Model):
     testbooking_id=models.IntegerField(null=True,blank=True)
     bookingid = ShortUUIDField(
@@ -382,7 +393,7 @@ class book_history(models.Model):
     patient_info=models.CharField(max_length=200,null=True,blank=True)
     booking_type=models.CharField(max_length=200,null=True,blank=True)
     bookingdetails=models.TextField(null=True,blank=True)
-    amount=models.IntegerField(null=True,blank=True)
+    amount=models.CharField(max_length=20,null=True,blank=True)
     payment_id=models.CharField(max_length=500,null=True,blank=True)
     status = models.CharField(
         choices=STATUS,
@@ -410,8 +421,6 @@ def reportresponse(sender, instance, **kwargs):
                   settings.EMAIL_HOST_USER,
                   [instance.user.email],
                   fail_silently=False)
-
-
 # m2m_changed.connect(testbookings, sender=prescription_book.test_name.through)
 class payment(models.Model):
     booking_id=models.CharField(max_length=50,null=True,blank=True)
@@ -420,7 +429,7 @@ class payment(models.Model):
     transid=models.CharField(max_length=400,null=True,blank=True)
     date=models.DateTimeField(auto_now_add=True,max_length=30,null=True,blank=True)
     amount=models.CharField(max_length=50,null=True,blank=True)
-
+    
     def __str__(self):
         return self.paymentid
 

@@ -86,7 +86,7 @@ class testadmin(admin.ModelAdmin):
             return render(request, "admin/app1/csv_upload.html", data)
 
 class prescriptionbookadmin(admin.ModelAdmin):
-    list_display=["users","testname","myself","others","others_choice","firstname","lastname","contact","age","gender","prescription_file","created","updated","action_btn"]        
+    list_display=["users","testname","myself","others","others_choice","firstname","lastname","contact","age","gender","address","prescription_file","created","updated","action_btn"]        
     readonly_fields=["user","myself","others","others_choice","firstname","lastname","contact","age","gender","unique","created","updated","location"]
     exclude = ('unique',)
     list_filter = ("user","test_name",'prescription_file',"myself","others","gender")
@@ -345,6 +345,8 @@ class contactusadmin(admin.ModelAdmin):
     list_display=["fullname","email","phone","subject","message"]
 class faqadmin(admin.ModelAdmin):
     list_display=["question","answer"]
+class invoiceadmin(admin.ModelAdmin):
+    list_display=['order_id',"items","labtest","packages","healthsymptoms","price"]
 admin.site.register(faq,faqadmin)
 admin.site.register(contactus,contactusadmin)
 admin.site.register(payment,paymentadmin)
@@ -366,7 +368,7 @@ admin.site.register(aboutspan,aboutspanadmin)
 admin.site.register(subscription,subscriptionadmin)
 admin.site.register(socialmedialinks,socialmediaadmin)
 admin.site.register(coupons,couponadmin)
-
+admin.site.register(invoicee,invoiceadmin)
 # admin.site.register(pricee,priceadmin)
 from django.contrib.auth.models import Group
 admin.site.unregister(Group)
