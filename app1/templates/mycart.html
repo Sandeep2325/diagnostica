@@ -437,6 +437,15 @@ $("#option1").change(function(e){
 
 function coupRemove(){
     //$("#cleardetail").remove()
+    $.ajax({
+        url: "{% url 'couponsessiondelete' %}",
+        type: "GET",
+        dataType: "json",
+        success: function(resp){
+            console.log(resp)
+           window.location.reload();
+        }
+    });
     window.location.reload()
    }
 

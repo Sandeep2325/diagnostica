@@ -4,7 +4,7 @@ from django.contrib.auth import views as auth_view
 from django.views.generic import TemplateView
 from django.conf.urls.static import static
 from django.conf import settings 
-
+from wkhtmltopdf.views import PDFTemplateView
 """<a href="{% url 'update' slug=instance.slug %}"> Edit </a>
 <a href="{% url 'delete' slug=instance.slug %}"> Delete</a> """
 urlpatterns = [
@@ -61,7 +61,7 @@ urlpatterns = [
     path("cartsessiondelete",views.cartsessiondelete,name="cartsessiondelete"),
 
     path("health-symptoms/<slug:slug>/",views.HealthSymptoms.as_view(),name="health_symptoms"),
-    # path("dummy",views.dummy),
+    path("couponsessiondelete",views.couponsessiondelete,name='couponsessiondelete'),
 
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

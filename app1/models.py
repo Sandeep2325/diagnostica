@@ -45,6 +45,7 @@ class aboutspan(models.Model):
         verbose_name_plural = "About Span"
         
 GENDER_CHOICES = (
+    ('g',"Gender"),
     ("m","Male"),
     ("f","female"),
     ("o","others")
@@ -64,7 +65,7 @@ class User(AbstractUser,PermissionsMixin):
     gender = models.CharField(
         choices=GENDER_CHOICES,
         max_length=8,
-        default="choose", null=True,blank=True
+        default="Gender", null=True,blank=True
     )
     is_used = models.BooleanField(default=False)
     USERNAME_FIELD = 'email'
@@ -205,8 +206,8 @@ def testbookings(sender, instance, **kwargs):
     # print(bool(instance.prescription_file))
     if (instance.test_name.first()!=None) and (bool(instance.prescription_file)==True): 
             print("sent")
-            send_mail(str("Hello"),
-                        ("Tests are added as per your Prescription please check"),
+            send_mail(str("Dear Customer" ),
+                        ("After reviewing your Prescription ,\nTests are added as per your Prescription \nPlease check and make payment to further steps"),
                         settings.EMAIL_HOST_USER,
                         [instance.user.email],
                         fail_silently=False)
@@ -417,7 +418,7 @@ def reportresponse(sender, instance, **kwargs):
     if (instance.payment_status== True) and (bool(instance.report) == True):
         print("sent")
         send_mail(str("DIAGNOSTICA SPAN TEST REPORT"),
-                  ("Hello,\n Your Report is Added to your dashboard,Please Checkit out"),
+                  ("Dear Customer,\n Your Report is Added to your dashboard,Please Checkit out"),
                   settings.EMAIL_HOST_USER,
                   [instance.user.email],
                   fail_silently=False)

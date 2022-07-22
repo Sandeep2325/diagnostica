@@ -32,7 +32,7 @@
         <div class="col-lg-12 d-flex justify-content-between pt-3">
           <h1 class="fs-40 font-bold home_health_h1 w-100 m-0">Health Checks & Lab Tests
           </h1>
-          <a href="{% url 'Health-checkups' %}"><button class="home_pack_viewpack py-2 px-0 fs-16 br-50 " style="min-width: 150px;">VIEW ALL</button></a>
+          <a href="{% url 'testselect' %}"><button class="home_pack_viewpack py-2 px-0 fs-16 br-50 " style="min-width: 150px;">VIEW ALL</button></a>
           
         </div>
         {%for checkup in healthcheckup%}
@@ -216,7 +216,7 @@
       <div class="row py-lg-5 py-3">
         <div class="col-lg-6 pe-lg-5 py-3">
           <h1 class="fs-40 font-bold cl-dark-blue pb-lg-3">About Span</h1>
-          <p class="fs-30 lh-30 font-regular cl-dark-brown m-0">On December 1 2018, SPAN (www.spanhealth.com) took
+          <p class="fs-24 lh-30 font-regular cl-dark-brown m-0">On December 1 2018, SPAN (www.spanhealth.com) took
             the
             first
             step towards
@@ -228,21 +228,21 @@
             franchisee models designed to provide a robust and reliable one-stop solution.</p>
           <div class="row py-4">
             <div class="col w-100  ">
-              <h1 class="fs-40 cl-light-2-blue font-bold ">123456</h1>
+              <h1 class="fs-40 cl-light-2-blue font-bold " id="testepeeps">123456</h1>
               <p class="fs-25 font-bold cl-dark-blue">TESTED PEOPLE</p>
             </div>
             <div class="col w-100 ">
-              <h1 class="fs-40 cl-light-2-blue font-bold ">3456</h1>
+              <h1 class="fs-40 cl-light-2-blue font-bold " id="verified">3456</h1>
               <p class="fs-25 font-bold cl-dark-blue">VERIFIED CENTER</p>
             </div>
           </div>
           <div class="row">
             <div class="col w-100 ">
-              <h1 class="fs-40 cl-light-2-blue font-bold ">45</h1>
+              <h1 class="fs-40 cl-light-2-blue font-bold " id="cities">45</h1>
               <p class="fs-25 font-bold cl-dark-blue">CITIES</p>
             </div>
             <div class="col w-100 ">
-              <h1 class="fs-40 cl-light-2-blue font-bold ">543</h1>
+              <h1 class="fs-40 cl-light-2-blue font-bold " id="visits">543</h1>
               <p class="fs-25 font-bold cl-dark-blue">DAILY VISITS</p>
             </div>
           </div>
@@ -391,7 +391,7 @@
                 <div class="row justify-content-center gx-2 gx-sm-3">
                   {%for i in city%}
                   <div class="col-4 col-sm-3 py-2 py-sm-3">
-                    <button class="cursor h-100 w-100" id="city" name="{{i.cityname}}"
+                    <button class="cursor h-100 w-100 br" id="city" name="{{i.cityname}}"
                       onclick='myfunction("{{i.cityname}}")'>
                       {% if i.city_icon %}
                       <img src="{{i.city_icon.url}}" alt="" class="img-fluid">
@@ -752,6 +752,31 @@ console.log(id);
     document.cookie ='device=' + device + ";domain=;path=/";
 
 
+
+
+
+    document.addEventListener("DOMContentLoaded", () => {
+      function counter(id, start, end, duration) {
+       let obj = document.getElementById(id),
+        current = start,
+        range = end - start,
+        increment = end > start ? 1 : -1,
+        step = Math.abs(Math.floor(duration / range)),
+        timer = setInterval(() => {
+         current += increment;
+         obj.textContent = current;
+         if (current == end) {
+          clearInterval(timer);
+         }
+        }, step);
+      }
+
+      counter("testepeeps", 100000, 123456, 100);
+      counter("verified", 100, 3456, 2500);
+      counter("cities", 0, 45, 3000);
+      counter("visits", 0, 543, 3000);
+     });
+    
 
 
   /* $.ajax({

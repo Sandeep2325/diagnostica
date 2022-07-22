@@ -287,7 +287,7 @@ class UserAdmin(OriginalUserAdmin):
 class subscriptionadmin(admin.ModelAdmin):
     list_display=["email","created"]
 class bookhistoryadmin(admin.ModelAdmin):
-    list_display=["id","users","patient_infoo","booking_type","bookingdetails","amount","status","payment_status","created","updated","report","action_btn"]    
+    list_display=["bookingid","users","patient_infoo","booking_type","bookingdetails","amount","status","payment_status","created","updated","report","action_btn"]    
     readonly_fields=["created","updated"]
     list_filter = ("user","booking_type")
     def action_btn(self, obj):

@@ -139,7 +139,7 @@
                                         <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
                                             <div class="px-lg-0 px-3">
                                                 <select class="w-100 form-select myself_other m-0" type="select" name="gender" id="gender" placeholder="Gender ">
-                                                <option selected="selected" disabled>Gender</option>
+                                                <option selected="selected" value="g" disabled>Gender</option>
                                                     <option  value="m">Male</option>
                                                     <option value="f">Female</option>
                                                     <option>Others</option>
@@ -308,7 +308,7 @@
         },
         dataType: "json",
         success: function(resp){
-            
+        console.log(resp)    
         $("#firstname").val(resp['firstname']);
         $("#lastname").val(resp['lastname']);
         $("#age").val(resp['age']);
