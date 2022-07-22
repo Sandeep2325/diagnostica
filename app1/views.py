@@ -2025,19 +2025,25 @@ def html_to_pdf(template_src, context_dict={}):
 #     with open(input_filename, 'r') as f:
 #         html_text = f.read()
 #     pdfkit.from_string(html_text, output_filename)
+from num2words import num2words
 def invoice(request,orderid):
     order=book_history.objects.get(payment_id=orderid)
     payments=payment.objects.get(transid=orderid)
     testbooking=prescription_book.objects.get(id=order.testbooking_id)
     invoic=invoicee.objects.filter(order_id=orderid)
+    
+    amount=payments.amount
     try:
         coupoonn=couponredeem.objects.get(order_id=orderid)
+        couponamount=coupoonn.actualamount
         context_dict={
         "order":order,
         "payments":payments,
         "testbooking":testbooking,
         "tests":invoic,
         "coupon":coupoonn,
+        "couponamount":num2words(int(float(couponamount)), to = 'ordinal'),
+        "amount":num2words(int(float(amount)), to = 'ordinal')
             }
     except:
         # coupoonn=couponredeem.objects.get(order_id=orderid)
@@ -2046,6 +2052,8 @@ def invoice(request,orderid):
         "payments":payments,
         "testbooking":testbooking,
         "tests":invoic,
+        # "couponamount":num2words(int(couponamount), to = 'ordinal'),
+        "amount":num2words(int(float(amount)), to = 'ordinal')
             }
     template_name='invoice2.html'
     pdf = html_to_pdf(template_name,context_dict)

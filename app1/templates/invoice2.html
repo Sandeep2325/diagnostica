@@ -22,7 +22,7 @@
 	<body>
       <div style="text-align:right; margin-left:565px; padding-bottom:50px">
         
-       <div style="margin:0px"><img src="static/images/image_logo.png"/></div>
+       <div style="margin:0px"><img src="static/images/image_logo.png"></div>
       </div>
       <div style="padding-right:395px">
         <p style="font-size:14px; margin:0px; font-weight:bold;" class="f-family"><span>Diagnostica Span Pvt. Ltd,</span></p>
@@ -108,15 +108,15 @@
             <table  >
                 {%if coupon.order_id %}
                 <tr style="padding-top:5px;">
-                    <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black; width:520px" class="f-family">Payable Amount (in words) :Four Hundred Eighty Three only</td>
+                    <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black; width:520px" class="f-family">Payable Amount (in words) :{{couponamount|intword}} Rupees Only</td>
                     <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black" class="f-family">Total:</td>
-                    <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black" class="f-family">{{coupon.actualamount}}.00</td>
+                    <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black" class="f-family">{couponamount}.00</td>
                 </tr>
                 {%else%}
                 <tr style="padding-top:5px;">
-                    <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black; width:520px" class="f-family">Payable Amount (in words) :Four Hundred Eighty Three only</td>
+                    <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black; width:520px" class="f-family">Payable Amount (in words) :{{amount|intword}} Rupees Only</td>
                     <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black" class="f-family">Total:</td>
-                    <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black" class="f-family">{{payments.amount}}.00</td>
+                    <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black" class="f-family">{{payments.amount}}</td>
                 </tr>
                 {%endif%}
             </table>
@@ -130,13 +130,13 @@
                 <tr style="padding-top:5px;">
                     <td style="font-size:12px;  width:520px" class="f-family"></td>
                     <td style="font-size:12px; font-weight:bold" class="f-family">Payable Amount:</td>
-                    <td style="font-size:12px;" class="f-family">{{payments.amount}}.00</td>
+                    <td style="font-size:12px;" class="f-family">{{payments.amount}}</td>
                 </tr>
                 {%else%}
                 <tr style="padding-top:5px;">
                     <td style="font-size:12px;  width:520px" class="f-family"></td>
                     <td style="font-size:12px; font-weight:bold" class="f-family">Payable Amount:</td>
-                    <td style="font-size:12px;" class="f-family">{{payments.amount}}.00</td>
+                    <td style="font-size:12px;" class="f-family">{{payments.amount}}</td>
                 </tr>
                 {%endif%}
             </table>
@@ -152,14 +152,14 @@
                     <td style="font-size:12px;  width:260px" class="f-family">Payment Mode : ONLINE</td>
                     <td style="font-size:12px;  width:260px" class="f-family">Payment Date : {{testbooking.created}}</td>
                     <td style="font-size:12px; " class="f-family">Paid Amount:</td>
-                    <td style="font-size:12px;" class="f-family">{{payments.amount}}.00</td>
+                    <td style="font-size:12px;" class="f-family">{{payments.amount}}</td>
                 </tr>
             </table>
             <table  >
                 <tr style="padding-top:5px;">
                     <td style="font-size:12px; border-bottom:1px solid black;  width:520px" class="f-family"></td>
                     <td style="font-size:12px; border-bottom:1px solid black;" class="f-family">Total Paid:</td>
-                    <td style="font-size:12px; border-bottom:1px solid black;" class="f-family">{{payments.amount}}.00</td>
+                    <td style="font-size:12px; border-bottom:1px solid black;" class="f-family">{{payments.amount}}</td>
                 </tr>
             </table>
             {%if coupon.order_id %}
