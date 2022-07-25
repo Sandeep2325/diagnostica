@@ -418,8 +418,7 @@
 {% if message.tags == "error"%}
 <script>
   $(document).ready(function(){
-   // swal('{{message}}');
-
+  
     swal({
 	title:'{{message}}',
 	//text: "You clicked the button!",
@@ -448,6 +447,10 @@
 </script>
   <script>
 $(document).ready(function(){
+   $("#myModal").modal({
+    backdrop: 'static',
+   keyboard: false
+});
   
   if("{{currentcity}}" != "None"){
     
@@ -467,6 +470,7 @@ $(document).ready(function(){
        
    }
 });
+
 
 
   $("#health-care-slider").owlCarousel({
@@ -614,13 +618,8 @@ $(document).ready(function(){
       form.submit();
     }
   });
-  setTimeout(function () {
-    $('#myModal').modal({
-      backdrop: 'static'
-   });
-   //$('#myModal').modal('show');
 
-   }, 100);
+ 
 
         function myfunction(city){
           
@@ -828,6 +827,8 @@ console.log(id);
             rzp1.open();
      }  
 });*/
+
+
 </script>
 
 {% endblock %}
