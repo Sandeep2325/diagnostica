@@ -45,7 +45,7 @@ class aboutspan(models.Model):
         verbose_name_plural = "About Span"
         
 GENDER_CHOICES = (
-    ('g',"Gender"),
+  
     ("m","Male"),
     ("f","female"),
     ("o","others")
@@ -65,7 +65,7 @@ class User(AbstractUser,PermissionsMixin):
     gender = models.CharField(
         choices=GENDER_CHOICES,
         max_length=8,
-        default="Gender", null=True,blank=True
+        default="", null=True,blank=True
     )
     is_used = models.BooleanField(default=False)
     USERNAME_FIELD = 'email'

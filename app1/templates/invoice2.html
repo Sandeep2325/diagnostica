@@ -110,7 +110,7 @@
                 <tr style="padding-top:5px;">
                     <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black; width:520px" class="f-family">Payable Amount (in words) :{{couponamount|intword}} Rupees Only</td>
                     <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black" class="f-family">Total:</td>
-                    <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black" class="f-family">{{couponamount}}.00</td>
+                    <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black" class="f-family">{{coupon.actualamount}}</td>
                 </tr>
                 {%else%}
                 <tr style="padding-top:5px;">
@@ -125,7 +125,7 @@
                 <tr style="padding-top:5px;">
                     <td style="font-size:12px;  width:520px" class="f-family"></td>
                     <td style="font-size:12px;" class="f-family">Discount:</td>
-                    <td style="font-size:12px;" class="f-family">{{coupon.discountamount}}</td>
+                    <td style="font-size:12px;" class="f-family">{{coupon.discountamount|floatformat:2}}</td>
                 </tr>
                 <tr style="padding-top:5px;">
                     <td style="font-size:12px;  width:520px" class="f-family"></td>
