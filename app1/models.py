@@ -72,43 +72,13 @@ class User(AbstractUser,PermissionsMixin):
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name','phone_no']
     def __str__(self):
         return "{}".format(str(self.first_name))
-    
-# class profile(models.Model):
-#     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
-#     photo=models.ImageField(upload_to='Profile',max_length=500, verbose_name="Profile photo", null=True, blank=True)
-#     name=models.CharField(max_length=200,null=True,blank=True)
-#     email = models.EmailField(max_length=255,null=True,blank=True)
-#     phone_no = models.CharField(max_length=10, null=True, unique=True,blank=True)
-#     gender = models.CharField(
-#         choices=GENDER_CHOICES,
-#         max_length=8,
-#         default="choose", null=True,blank=True
-#     )
-#     location=models.CharField(max_length=200,null=True,blank=True)
-#     dob=models.CharField(max_length=50,blank=True,null=True)
-#     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
-#     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
-#     slug = models.SlugField(null=True, unique=True)
-#     def __str__(self):
-#         return str(self.user.username)
-#     def save(self, *args, **kwargs):  # new
-#         if not self.slug:
-#             self.slug = slugify(self.name)
-#         return super().save(*args, **kwargs)
-#     class Meta:
-#         verbose_name_plural = "User Profiles"
 class category(models.Model):
     categoryy=models.CharField(max_length=200,null=True,blank=True,verbose_name="Category")
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    # slug = models.SlugField(null=True, unique=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
     def __str__(self):
         return self.categoryy
-    # def save(self, *args, **kwargs):  # new
-    #     if not self.slug:
-    #         self.slug = slugify(self.categoryy)
-    #     return super().save(*args, **kwargs)
     class Meta:
         verbose_name_plural = "Test Category"
 class test(models.Model):
@@ -154,9 +124,7 @@ class prescription_book(models.Model):
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
     prescription_file=models.FileField(upload_to="prescription",null=True,blank=True)
     test_name=models.ManyToManyField(test,blank=True)
-    # labtest=models.ForeignKey("healthcheckuppackages",null=True,blank=True,on_delete=models.CASCADE)
-    # packages=models.ForeignKey("healthpackages",null=True,blank=True,on_delete=models.CASCADE)
-    # healthsymptoms = models.ForeignKey("healthsymptoms", verbose_name=_("Health Symptoms"), on_delete=models.SET_NULL, null=True, blank=True)
+    
     price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
     myself=models.BooleanField(default=False)
     others=models.BooleanField(default=False)
@@ -215,8 +183,7 @@ m2m_changed.connect(testbookings, sender=prescription_book.test_name.through)
 class healthcheckuppackages(models.Model):
     package_title=models.CharField(max_length=200,null=True,blank=True,verbose_name="Package Title")
     test_name=models.ManyToManyField(test)
-    # location=models.ForeignKey(city,null=True,on_delete=models.CASCADE,verbose_name="Location")
-    # test_nos=models.CharField(max_length=100,null=True,blank=True,verbose_name="No of test")
+
     Banglore_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Banglore Price")
     Mumbai_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Mumbai Price")
     bhopal_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Bhopal Price")
@@ -224,8 +191,7 @@ class healthcheckuppackages(models.Model):
     pune_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Pune Price")
     barshi_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Barshi Price")
     aurangabad_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Aurangabad Price")
-    # pricel5=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Delhi Price")
-    # pricel6=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Kolkata Price")
+
     dBanglore_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Banglore Discount Price")
     dMumbai_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Mumbai DiscountPrice")
     dbhopal_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Bhopal Discount Price")
@@ -233,13 +199,10 @@ class healthcheckuppackages(models.Model):
     dpune_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Pune Discount Price")
     dbarshi_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Barshi DiscountPrice")
     daurangabad_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Aurangabad DiscountPrice")
-    # dpricel5=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Delhi DiscountedPrice")
-    # dpricel6=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Kolkata Discounted Price")
+    
     description=models.TextField(null=True,blank=True,verbose_name="Description")
-    # actual_price=models.IntegerField(null=True,blank=True,verbose_name="Actual Price(₹)")
     discount=models.DecimalField(max_digits=5, decimal_places=2, null=True, verbose_name='Discount(%)', validators=[
         MinValueValidator(1), MaxValueValidator(99)])
-    # discounted_price=models.IntegerField(null=True,blank=True,verbose_name="Discounted Price(₹)")
     slug = models.SlugField(null=True, unique=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
@@ -354,25 +317,15 @@ class cart(models.Model):
     device = models.CharField(_("Device"), max_length=200,null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
-    
-# class cart2(models.Model):
-#     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
-#     items=models.ManyToManyField(test)
-#     categoryy=models.CharField(max_length=200,null=True,blank=True)
-#     price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
-#     slug = models.SlugField(null=True, unique=True)
-#     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
-#     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
+
 class invoicee(models.Model):
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
     order_id=models.CharField(max_length=200,null=True,blank=True)
     items=models.ForeignKey(test,null=True,blank=True,on_delete=models.CASCADE)
     labtest=models.ForeignKey(healthcheckuppackages,null=True,blank=True,on_delete=models.CASCADE)
     packages=models.ForeignKey(healthpackages,null=True,blank=True,on_delete=models.CASCADE)
-    # categoryy=models.ForeignKey(category,null=True,blank=True,on_delete=models.SET_NULL)
     healthsymptoms = models.ForeignKey(healthsymptoms, verbose_name=_("Health Symptoms"), on_delete=models.SET_NULL, null=True, blank=True)
     price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
-    # device = models.CharField(_("Device"), max_length=200,null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
 STATUS=[
@@ -409,12 +362,9 @@ class book_history(models.Model):
         return "Book History"
     class Meta:
         verbose_name_plural="Booking Histories"
-
-
 @receiver(post_save, sender=book_history)
 def reportresponse(sender, instance, **kwargs):
   
-    # print(bool(instance.prescription_file))
     if (instance.payment_status== True) and (bool(instance.report) == True):
         print("sent")
         send_mail(str("DIAGNOSTICA SPAN TEST REPORT"),
@@ -422,7 +372,6 @@ def reportresponse(sender, instance, **kwargs):
                   settings.EMAIL_HOST_USER,
                   [instance.user.email],
                   fail_silently=False)
-# m2m_changed.connect(testbookings, sender=prescription_book.test_name.through)
 class payment(models.Model):
     booking_id=models.CharField(max_length=50,null=True,blank=True)
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)

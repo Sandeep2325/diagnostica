@@ -39,7 +39,6 @@ OBJ_COUNT = 0
 checkk=[]
 teest=[]
 packagee=[]
-
 Bangalore=env("Bangalore")
 Mumbai=env("Mumbai")
 Bhophal=env("Bhophal")
@@ -50,17 +49,30 @@ Aurangabad=env("Aurangabad")
 
 def dashboard(request):
     test=prescription_book.objects.all().count()
-    test_bookings=prescription_book.objects.exclude(test_name__isnull=True,prescription_file__isnull=False).count()
-    prescription_bookings=prescription_book.objects.exclude(test_name__isnull=False,prescription_file__isnull=True).count()
+    test_bookings=prescription_book.objects.filter(test_name__isnull=True, prescription_file='').count()
+    prescription_bookings=prescription_book.objects.filter(test_name__isnull=True).count()
     packages=healthpackages.objects.all().count()
+    bookamount=book_history.objects.all()
+    outstand=book_history.objects.filter(payment_status=False)
+    totalamount=[]
+    outstandingamount=[]
+    for i in bookamount:
+        if i.amount is not None:
+            totalamount.append(int(float(i.amount)))
+    for i in  outstand:
+         if i.amount is not None:
+            outstandingamount.append(int(float(i.amount)))  
+ 
+    prescription_bookings1=test-test_bookings
     context={
         "test":test,
         "test_bookings":test_bookings,
-        "prescription_bookings":prescription_bookings,
+        "prescription_bookings":prescription_bookings1,
         "packages":packages,
+        "totalamount":'₹'+str(sum(totalamount)),
+        "outstandingamount":'₹'+str(sum(outstandingamount))
     }
     return HttpResponse(json.dumps(context),content_type="application/json")
-
 
 def aboutus(request):
     return render (request,"aboutus.html")
@@ -70,7 +82,6 @@ def cityy(request):
     request.session["city"]=city
     return JsonResponse({"message":True,"city":city})
 
-    
 def Registration(request):
     if request.method == "POST":
         fm = UserRegistrationForm(request.POST)
@@ -112,7 +123,6 @@ def Registration(request):
                     fail_silently=False,
             )
             return redirect('/registration/otp/')
-    
     return render(request,'register.html')
 
 def otpRegistration(request):
@@ -1250,8 +1260,7 @@ def cartt(request):
         discountamount=request.session.get("discountamount")
         couponpercent=request.session.get("couponpercent")
         actualamount= request.session.get("actualamount")
-        print(request.session.get("coupon"))
-        # del request.session.get('coupon')
+        
         if coupon!= None and discountamount!=None and couponpercent!=None and actualamount!=None:
              couponredeem.objects.create(order_id=razorpay_order_id,coupon=request.session.get("coupon"),discountpercen=request.session.get("couponpercent"),discountamount=request.session.get("discountamount"),actualamount=request.session.get('actualamount')).save()
         if coupon!=None:
@@ -1262,8 +1271,7 @@ def cartt(request):
             del request.session['couponpercent']
         if actualamount!=None:
             del request.session['actualamount']
-        print("-----------",request.session.get("discountamount"))
-        print("-----------",request.session.get("couponpercent"))
+        print(razorpay_order)
         return JsonResponse({"message":True,"razorpay_key":settings.RAZOR_KEY_ID,"currency":currency,"razorpayorder":razorpay_order_id,"callback":callback_url})
     
     if not request.user.is_anonymous:
@@ -1476,6 +1484,7 @@ def othersdetail(request):
         return JsonResponse({"message":True,"firstname":detail.firstname,"lastname":detail.lastname,"gender":gender,"otherschoice":choice,"age":detail.age,"phone":detail.contact})
 @csrf_exempt
 def paymenthandler(request,str,amount):
+    # print(request.user)
     # if request.method =="POST":
     #     print(str)
     #     usr=User.objects.get(email=str)
@@ -1494,6 +1503,8 @@ def paymenthandler(request,str,amount):
     def verify_signature(response_data):
         client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
         b = client.utility.verify_payment_signature(response_data)
+        # a=paymentids.objects.create(orderid=response_data['razorpay_order_id'],paymentid=response_data['razorpay_payment_id'],signatureid=response_data['razorpay_signature'])
+        # a.save()
         return b
     try:
         if request.method =="POST":

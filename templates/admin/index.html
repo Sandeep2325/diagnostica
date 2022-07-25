@@ -57,20 +57,21 @@ Dashboard
       <a style="margin:auto;display:block" href={{model.url}} class="btn btn-primary btn-xs button">View</a>
     </div>
 </div>
+{%elif model.name == "Booking Histories"%}
 <div class="card w-100 m-2 " style="background:#00cccc">
     <h5 class="card-header" style="font-size:17px;text-align:center;height: 57px;">Total Amount</h5>
     <div class="card-body" style="height:150px">
       {% comment %} <h5 class="card-title" style="font-size:14px"> Amount</h5> {% endcomment %}
-      <p id="acount" style="text-align:center;" class="card-text">₹50000</p>
-      <a style="margin:auto;display:block" href="#" class="btn btn-primary btn-xs button">View</a>
+      <p id="acount" style="text-align:center;" class="card-text"></p>
+      <a style="margin:auto;display:block" href={{model.url}} class="btn btn-primary btn-xs button">View</a>
     </div>
 </div>
 <div class="card w-100 m-2 " style="background:#00cccc">
     <h5 class="card-header" style="font-size:17px;text-align:center;height: 57px;">Outstanding Amount</h5>
     <div class="card-body" style="height:150px">
       {% comment %} <h5 class="card-title" style="font-size:14px">Amount</h5> {% endcomment %}
-      <p id="ocount" style="text-align:center;" class="card-text">₹8000</p>
-      <a style="margin:auto;display:block" href="#" class="btn btn-primary btn-xs button">View</a>
+      <p id="ocount" style="text-align:center;" class="card-text"></p>
+      <a style="margin:auto;display:block" href={{model.url}} class="btn btn-primary btn-xs button">View</a>
     </div>
 </div>
 {% comment %}{%elif model.name == "Users"%}
@@ -170,15 +171,20 @@ Dashboard
 <script type="text/javascript">
 $(document).ready(function(){
 $.getJSON("/dashboard",function (j) {
-   console.log(j.products)
+   console.log(j)
    tcount=j.test
    tbcount=j.test_bookings
    pbcount=j.prescription_bookings
    hpcount=j.packages
+   acount=j.totalamount
+   ocount=j.outstandingamount
    $("#tcount").text(tcount);
    $("#tbcount").text(tbcount);
    $("#pbcount").text(pbcount);
    $("#hpcount").text(hpcount);
+   $("#acount").text(acount);
+   $("#ocount").text(ocount);
+
 })});
 </script>
 {% comment %} $('#id1').val(j.products); {% endcomment %}

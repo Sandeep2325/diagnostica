@@ -417,17 +417,21 @@ $("#option1").change(function(e){
         $("#firstname").val(resp['firstname']);
         $("#lastname").val(resp['lastname']);
         $("#age").val(resp['age']);
-        $("#gender").val(resp['gender']);
+        //$("#gender").val(resp['gender']);
         $("#phone").val(resp['contact']);
         $("#address").val(resp['address']);
+        if (resp['gender']!=null){
+            $("#gender").val(resp['gender']);
+        };
         }
     })
 }
+
     else if(opt === "o"){
         $("#firstname").val('');
         $("#lastname").val('');
         $("#age").val('');
-        $("#gender").val('');
+        //$("#gender").val('');
         $("#phone").val('');
         $("address").val('');
         $("#option").show();

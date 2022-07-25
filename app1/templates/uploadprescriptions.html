@@ -308,17 +308,19 @@
         },
         dataType: "json",
         success: function(resp){
-        console.log(resp)    
+        //console.log(resp)  
+        //a=resp['gender'];
+        //console.log(a)
         $("#firstname").val(resp['firstname']);
         $("#lastname").val(resp['lastname']);
         $("#age").val(resp['age']);
-        $("#gender").val(resp['gender']);
         $("#phone").val(resp['contact']);
         $("#address").val(resp['address']);
+        if (resp['gender']!=null){
+            $("#gender").val(resp['gender']);
+        };
         }
     })
-
-
 
 });
 

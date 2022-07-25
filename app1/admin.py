@@ -87,7 +87,7 @@ class testadmin(admin.ModelAdmin):
 
 class prescriptionbookadmin(admin.ModelAdmin):
     list_display=["users","testname","myself","others","others_choice","firstname","lastname","contact","age","gender","address","prescription_file","created","updated","action_btn"]        
-    readonly_fields=["user","myself","others","others_choice","firstname","lastname","contact","age","gender","unique","created","updated","location"]
+    readonly_fields=["user","myself","others","others_choice","firstname","lastname","contact","age","gender","unique","created","updated","location","price"]
     exclude = ('unique',)
     list_filter = ("user","test_name",'prescription_file',"myself","others","gender")
     # search_fields = ('testt', 'categoryy__categoryy')
