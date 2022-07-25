@@ -372,10 +372,8 @@ admin.site.register(socialmedialinks,socialmediaadmin)
 admin.site.register(coupons,couponadmin)
 admin.site.register(couponredeem,couponredeemadmin)
 # admin.site.register(invoicee,invoiceadmin)
-# admin.site.register(pricee,priceadmin)
 from django.contrib.auth.models import Group
 admin.site.unregister(Group)
-# admin.site.register(dummycart)
 # admin.site.register(cart,cartadmin)
 
 

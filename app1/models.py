@@ -406,7 +406,6 @@ SELECT_CHOICES=[
     ("a","Active"),
     ("i","Inactive")
 ]
-
 class coupons(models.Model):
     couponcode=models.CharField(max_length=100,null=True,blank=True,verbose_name="Coupon Code")
     discount=models.CharField(max_length=2,null=True,blank=True,verbose_name="Discount(%)")

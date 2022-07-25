@@ -79,28 +79,28 @@
                     <td style="font-size:13px; width:100px  " class="f-family"> {{ forloop.counter }}</td>
                     <td style="font-size:13px;  width:170px" class="f-family">{{test.items}}{{test.id}}</td>
                     <td style="font-size:13px;  width:350px" class="f-family">{{test.items}}.</td>
-                    <td style="font-size:13px; " class="f-family">{{test.price}}</td>
+                    <td style="font-size:13px; " class="f-family">Rs.{{test.price|floatformat:2}}</td>
                 </tr>
                 {%elif test.labtest != None%}
                 <tr style="padding-top:5px;">
                     <td style="font-size:12px; width:100px  " class="f-family"> {{ forloop.counter }}</td>
                     <td style="font-size:12px;  width:170px" class="f-family">{{test.labtest}}{{test.id}}</td>
                     <td style="font-size:12px;  width:350px" class="f-family">{{test.labtest}}</td>
-                    <td style="font-size:12px; " class="f-family">{{test.price}}</td>
+                    <td style="font-size:12px; " class="f-family">Rs.{{test.price|floatformat:2}}</td>
                 </tr>
                 {%elif test.packages != None%}
                 <tr style="padding-top:5px;">
                     <td style="font-size:12px; width:100px  " class="f-family"> {{ forloop.counter }}</td>
                     <td style="font-size:12px;  width:170px" class="f-family">{{test.packages}}{{test.id}}</td>
                     <td style="font-size:12px;  width:350px" class="f-family">{{test.packages}}</td>
-                    <td style="font-size:12px; " class="f-family">{{test.price}}</td>
+                    <td style="font-size:12px; " class="f-family">Rs.{{test.price|floatformat:2}}</td>
                 </tr>
                 {%elif test.healthsymptoms != None%}
                 <tr style="padding-top:5px;">
                     <td style="font-size:12px; width:100px  " class="f-family"> {{ forloop.counter }}</td>
                     <td style="font-size:12px;  width:170px" class="f-family">{{test.healthsymptoms}}{{test.id}}</td>
                     <td style="font-size:12px;  width:350px" class="f-family">{{test.healthsymptoms}}</td>
-                    <td style="font-size:12px; " class="f-family">{{test.price}}</td>
+                    <td style="font-size:12px; " class="f-family">Rs.{{test.price|floatformat:2}}</td>
                 </tr>
                 {%endif%}
                 {%endfor%}
@@ -110,13 +110,13 @@
                 <tr style="padding-top:5px;">
                     <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black; width:520px" class="f-family">Payable Amount (in words) :{{couponamount|intword}} Rupees Only</td>
                     <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black" class="f-family">Total:</td>
-                    <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black" class="f-family">{{coupon.actualamount}}</td>
+                    <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black" class="f-family">Rs.{{coupon.actualamount|floatformat:2}}</td>
                 </tr>
                 {%else%}
                 <tr style="padding-top:5px;">
                     <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black; width:520px" class="f-family">Payable Amount (in words) :{{amount|intword}} Rupees Only</td>
                     <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black" class="f-family">Total:</td>
-                    <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black" class="f-family">{{payments.amount}}</td>
+                    <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black" class="f-family">Rs.{{payments.amount|floatformat:2}}</td>
                 </tr>
                 {%endif%}
             </table>
@@ -125,18 +125,18 @@
                 <tr style="padding-top:5px;">
                     <td style="font-size:12px;  width:520px" class="f-family"></td>
                     <td style="font-size:12px;" class="f-family">Discount:</td>
-                    <td style="font-size:12px;" class="f-family">{{coupon.discountamount|floatformat:2}}</td>
+                    <td style="font-size:12px;" class="f-family">Rs.{{coupon.discountamount|floatformat:2}}</td>
                 </tr>
                 <tr style="padding-top:5px;">
                     <td style="font-size:12px;  width:520px" class="f-family"></td>
                     <td style="font-size:12px; font-weight:bold" class="f-family">Payable Amount:</td>
-                    <td style="font-size:12px;" class="f-family">{{payments.amount}}</td>
+                    <td style="font-size:12px;" class="f-family">Rs.{{payments.amount|floatformat:2}}</td>
                 </tr>
                 {%else%}
                 <tr style="padding-top:5px;">
                     <td style="font-size:12px;  width:520px" class="f-family"></td>
                     <td style="font-size:12px; font-weight:bold" class="f-family">Payable Amount:</td>
-                    <td style="font-size:12px;" class="f-family">{{payments.amount}}</td>
+                    <td style="font-size:12px;" class="f-family">Rs.{{payments.amount|floatformat:2}}</td>
                 </tr>
                 {%endif%}
             </table>
@@ -150,16 +150,16 @@
                 </tr> {% endcomment %}
                 <tr style="padding-top:5px;">
                     <td style="font-size:12px;  width:260px" class="f-family">Payment Mode : ONLINE</td>
-                    <td style="font-size:12px;  width:260px" class="f-family">Payment Date : {{testbooking.created}}</td>
+                    <td style="font-size:12px;  width:260px" class="f-family">Payment Date : {{payments.date}}</td>
                     <td style="font-size:12px; " class="f-family">Paid Amount:</td>
-                    <td style="font-size:12px;" class="f-family">{{payments.amount}}</td>
+                    <td style="font-size:12px;" class="f-family">Rs.{{payments.amount|floatformat:2}}</td>
                 </tr>
             </table>
             <table  >
                 <tr style="padding-top:5px;">
                     <td style="font-size:12px; border-bottom:1px solid black;  width:520px" class="f-family"></td>
                     <td style="font-size:12px; border-bottom:1px solid black;" class="f-family">Total Paid:</td>
-                    <td style="font-size:12px; border-bottom:1px solid black;" class="f-family">{{payments.amount}}</td>
+                    <td style="font-size:12px; border-bottom:1px solid black;" class="f-family">Rs.{{payments.amount|floatformat:2}}</td>
                 </tr>
             </table>
             {%if coupon.order_id %}
