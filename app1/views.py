@@ -383,7 +383,6 @@ def profilee(request):
         if bool(firstname)==False or bool(lastname)==False or bool(phone)==False:
             messages.error(request,"Please Update every field") 
         else:
-
             a=User.objects.get(email=request.user.email)
             try:
                 a.first_name=firstname
@@ -811,17 +810,16 @@ def prescriptionbookview(request):
             user=request.user,
             unique=unique,
             prescription_file=prescription_file,
-            
-                        myself=True if myself == "on" else False,
-                        others=True if others == "on" else False,
-                        others_choice=others_choice,
-                        firstname=firstname,
-                        lastname=lastname,
-                        contact=contact,
-                        age=age,
-                        gender=gender,
-                        location=c,
-                        address=address).save()
+            myself=True if myself == "on" else False,
+            others=True if others == "on" else False,
+            others_choice=others_choice,
+            firstname=firstname,
+            lastname=lastname,
+            contact=contact,
+            age=age,
+            gender=gender,
+            location=c,
+            address=address).save()
         if myself=="on":
             User.objects.filter(email=request.user.email).update(first_name=firstname,last_name=lastname,phone_no=contact,age=age,address=address)
         data=prescription_book.objects.get(unique=unique)
