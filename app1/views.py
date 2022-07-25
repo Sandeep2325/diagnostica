@@ -32,7 +32,8 @@ from django.db.models import Q
 from django.conf import settings
 import environ
 import shortuuid
-
+from num2words import num2words
+import re
 env = environ.Env()
 global OBJ_COUNT
 OBJ_COUNT = 0
@@ -61,8 +62,7 @@ def dashboard(request):
             totalamount.append(int(float(i.amount)))
     for i in  outstand:
          if i.amount is not None:
-            outstandingamount.append(int(float(i.amount)))  
- 
+            outstandingamount.append(int(float(i.amount)))
     prescription_bookings1=test-test_bookings
     context={
         "test":test,
@@ -245,9 +245,10 @@ def forgotpassword(request):
             messages.error(request,"Email is not registered")
             return render(request,"forgotpassword.html")
     return render(request,"forgotpassword.html")
-  
+
 def changepasswordotp(request):
-    if request.session.get("email") == None:
+    print(request.user)
+    if request.user.is_anonymous:
         return HttpResponseRedirect(reverse("user-login"))
     if request.method == "POST":
         u_otp1 = request.POST['digit-1']
@@ -749,7 +750,7 @@ def healthcareblogsview(request,slug):
     }
     return render(request,'blogdetail.html',context)
 def categoryblog(request,slug):
-    detail=healthcareblogs.objects.first()
+    detail=healthcareblogs.objects.get(category__slug=slug)
     blogs=healthcareblogs.objects.filter(category__slug=slug).order_by("-created")
     category=blogcategory.objects.all()
     context={
@@ -930,7 +931,7 @@ def couponsessiondelete(request):
             del request.session['actualamount']
     return JsonResponse({"message":True})
 razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
-import re
+
 def cartt(request):
     deviceCookie = request.COOKIES.get('device')
     if not request.user.is_anonymous:
@@ -1882,21 +1883,11 @@ def html_to_pdf(template_src, context_dict={}):
         return HttpResponse(result.getvalue(), content_type='application/pdf')
     return None
 
-# import pdfkit
-# def dummy(request):
-#     input_filename = 'app1/templates/invoice2.html'
-#     output_filename = 'README.pdf'
-    
-#     with open(input_filename, 'r') as f:
-#         html_text = f.read()
-#     pdfkit.from_string(html_text, output_filename)
-from num2words import num2words
 def invoice(request,orderid):
     order=book_history.objects.get(payment_id=orderid)
     payments=payment.objects.get(transid=orderid)
     testbooking=prescription_book.objects.get(id=order.testbooking_id)
     invoic=invoicee.objects.filter(order_id=orderid)
-    
     amount=payments.amount
     try:
         coupoonn=couponredeem.objects.get(order_id=orderid)
@@ -1999,8 +1990,6 @@ def invoice(request,orderid):
 #         return HttpResponse('Wrong URL')
 #     return render(request,'change-password.html')
 
-
-
 from django.contrib.auth.mixins import LoginRequiredMixin
 class BookingHistoryPay(LoginRequiredMixin,View):
     login_url = '/login/'
@@ -2063,8 +2052,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 if cityy==Bangalore:
                     invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.Banglore_price)
                 elif cityy==Mumbai:
-                    invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.Mumbai_price)  
-    
+                    invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.Mumbai_price)
                 elif cityy==Bhophal:
                     invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.bhopal_price)
                 elif cityy==Nanded:

@@ -80,7 +80,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <h1 class="fs-35 font-bold cl-dark-blue m-0">{{blog.title}}</h1>
-                                    <p class="m-0 fs-18 cl-dark-blue health_care_p pt-4 pb-5 ">{{blog.description|safe}}
+                                    <p class="m-0 fs-18 cl-dark-blue health_care_p pt-4 pb-5 ">{{blog.description|striptags|truncatechars:140|safe}}
                                         </p>
                                     <a  href="{% url "blogsdetail" blog.slug%}"class="py-3 px-4 bg-dark-orange cl-dark-blue font-bold fs-16 br-30 mb-5">READ
                                         MORE</a>
