@@ -14,6 +14,7 @@ from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
 import csv
 import re
+from django.contrib.auth.models import Group
 # Register your models here.
 class cityadmin(admin.ModelAdmin):
     list_display=["cityname","created","updated"]
@@ -290,6 +291,7 @@ class bookhistoryadmin(admin.ModelAdmin):
     list_display=["bookingid","users","patient_infoo","booking_type","bookingdetails","amount","status","payment_status","created","updated","report","action_btn"]    
     readonly_fields=["created","updated"]
     list_filter = ("user","booking_type")
+    search_fields = ('bookingid',)
     def action_btn(self, obj):
         html = "<div class='field-action_btn d-flex m-8'> <a class='fa fa-edit ml-2' href='/admin/app1/book_history/" + \
             str(obj.id)+"/change/'></a><br></br>"
@@ -368,11 +370,11 @@ admin.site.register(book_history,bookhistoryadmin)
 # admin.site.register(profile,profileadmin)
 admin.site.register(aboutspan,aboutspanadmin)
 admin.site.register(subscription,subscriptionadmin)
-admin.site.register(socialmedialinks,socialmediaadmin)
+# admin.site.register(socialmedialinks,socialmediaadmin)
 admin.site.register(coupons,couponadmin)
 admin.site.register(couponredeem,couponredeemadmin)
 # admin.site.register(invoicee,invoiceadmin)
-from django.contrib.auth.models import Group
+
 admin.site.unregister(Group)
 # admin.site.register(cart,cartadmin)
 

@@ -10,7 +10,7 @@
 ;
 .sidebar,
 a {
-    color: black;
+    color: rgb(115, 108, 108);
     font-style: italic;
 }
 
@@ -25,11 +25,15 @@ a {
     width: auto;
 }
 
+.select2-selection {
+    width: min-content;
+}
+
 
 /* .sidebar ,
     a {
       color: $sidebar-dark-color;
-
+     
       &:hover,
       &:focus {
         text-decoration: none;
