@@ -474,7 +474,7 @@ $(document).ready(function(){
 
 
   $("#health-care-slider").owlCarousel({
-    loop: true,
+    //loop: true,
     margin: 30,
     items: 2,
     responsiveClass: true,
@@ -506,7 +506,7 @@ $(document).ready(function(){
     },
   });
   $("#testimonial_slider").owlCarousel({
-    loop: true,
+    //loop: true,
     margin: 30,
     items: 2.7,
     responsiveClass: true,
@@ -709,9 +709,9 @@ console.log(id);
       success: function(resp){
           
           if(!resp['message']){
-              swal('',"Test Already Added",'info');
+              swal('',"Already Added",'info');
           }else{
-              swal('',"Test Added","success");
+              swal('',"Added","success");
               window.setTimeout(function(){location.reload()},1500)
               //window.location.reload();
           }

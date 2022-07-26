@@ -10,6 +10,7 @@ from django.urls import reverse
 from django.contrib.auth.admin import UserAdmin as OriginalUserAdmin
 from django.utils.html import format_html
 from django_summernote.admin import SummernoteModelAdmin
+from django_summernote.utils import get_attachment_model 
 from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
 import csv
@@ -17,7 +18,18 @@ import re
 from django.contrib.auth.models import Group
 # Register your models here.
 class cityadmin(admin.ModelAdmin):
-    list_display=["cityname","created","updated"]
+    list_display=["cityname","imagee","active","created","updated"]
+    list_editable=["active"]
+    def imagee(self, obj):
+        
+        # a=obj.image.first()
+        # print(obj.image.first().image.url)
+        try:
+            # print(obj.image.url)
+            return format_html('<img src="{}" width="{}" height="{}"/>'.format(obj.city_icon.url, "50", "50"))
+        except:
+            return format_html('<img src="https://thumbs.dreamstime.com/b/no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482953.jpg" width="100" height="100"/>')
+    imagee.short_description = 'City Icon'
     # readonly_fields = ["cityname"]
 class testadmin(admin.ModelAdmin):
     list_display=["testt","categoryy","Banglore_price","Mumbai_price","bhopal_price","nanded_price","pune_price","barshi_price","aurangabad_price","is_active","created","updated","action_btn"]
@@ -88,11 +100,16 @@ class testadmin(admin.ModelAdmin):
 
 class prescriptionbookadmin(admin.ModelAdmin):
     list_display=["users","testname","myself","others","others_choice","firstname","lastname","contact","age","gender","address","prescription_file","created","updated","action_btn"]        
-    readonly_fields=["user","myself","others","others_choice","firstname","lastname","contact","age","gender","unique","created","updated","location","price"]
+    readonly_fields=["user","myself","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location","bookingid"]
     exclude = ('unique',)
-    list_filter = ("user","test_name",'prescription_file',"myself","others","gender")
+    list_filter = ("user","myself","others","gender")
     # search_fields = ('testt', 'categoryy__categoryy')
     # list_editable=[""]
+    def get_form(self, request, obj=None, **kwargs):
+        # if obj.type == "1":
+        self.exclude = ("unique",'price')
+        form = super(prescriptionbookadmin, self).get_form(request, obj, **kwargs)
+        return form
     def testname(self, obj):
         return ", ".join([
             test.testt for test in obj.test_name.all()
@@ -105,9 +122,9 @@ class prescriptionbookadmin(admin.ModelAdmin):
         except:
             pass
     def action_btn(self, obj):
-        html = "<div class='field-action_btn d-flex m-8'> <a class='fa fa-edit ml-2' href='/admin/app1/prescription_book/" + \
+        html = "<div class='field-action_btn d-flex m-8'> <a class='fa fa-edit ml-2' href='/admin/app1/prescriptionbook1/" + \
             str(obj.id)+"/change/'></a><br></br>"
-        html += "<a class='text-danger fa fa-trash ml-2' href='/admin/app1/prescription_book/"+str(obj.id)+"/delete/'></a></div>"
+        html += "<a class='text-danger fa fa-trash ml-2' href='/admin/app1/prescriptionbook1/"+str(obj.id)+"/delete/'></a></div>"
         return format_html(html)
     action_btn.short_description = "Action"
     def has_add_permission(self, request):
@@ -120,6 +137,32 @@ class prescriptionbookadmin(admin.ModelAdmin):
 #             test.testt for test in obj.test_name.all()
 #         ])
 #     testname.short_description = "Tests"
+class testbookadmin(admin.ModelAdmin):
+    list_display=["users","myself","others","others_choice","firstname","lastname","contact","age","gender","address","created","updated","action_btn"]        
+    readonly_fields=["user","myself","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location",'bookingid']
+    exclude = ('unique',)
+    list_filter = ("user","myself","others","gender")
+    # search_fields = ('testt', 'categoryy__categoryy')
+    # list_editable=[""]
+    def get_form(self, request, obj=None, **kwargs):
+        # if obj.type == "1":
+        self.exclude = ("unique",'price')
+        form = super(testbookadmin, self).get_form(request, obj, **kwargs)
+        return form
+    def users(self,obj):
+        try:
+            html="<div><a  href='/admin/app1/user/"+ str(obj.user.id)+"/change/'>{}</a></div>".format(str(obj.user))
+            return format_html(html)
+        except:
+            pass
+    def action_btn(self, obj):
+        html = "<div class='field-action_btn d-flex m-8'> <a class='fa fa-edit ml-2' href='/admin/app1/testbook/" + \
+            str(obj.id)+"/change/'></a><br></br>"
+        html += "<a class='text-danger fa fa-trash ml-2' href='/admin/app1/testbook/"+str(obj.id)+"/delete/'></a></div>"
+        return format_html(html)
+    action_btn.short_description = "Action"
+    def has_add_permission(self, request):
+        return False
 class categoryadmin(admin.ModelAdmin):
     list_display=["id","categoryy","created","updated","action_btn"]
     readonly_fields=["created","updated"]
@@ -289,9 +332,14 @@ class subscriptionadmin(admin.ModelAdmin):
     list_display=["email","created"]
 class bookhistoryadmin(admin.ModelAdmin):
     list_display=["bookingid","users","patient_infoo","booking_type","bookingdetails","amount","status","payment_status","created","updated","report","action_btn"]    
-    readonly_fields=["created","updated"]
+    readonly_fields=["created","updated",'bookingid']
     list_filter = ("user","booking_type")
     search_fields = ('bookingid',)
+    def get_form(self, request, obj=None, **kwargs):
+        # if obj.type == "1":
+        self.exclude = ("uni",'testbooking_id' )
+        form = super(bookhistoryadmin, self).get_form(request, obj, **kwargs)
+        return form
     def action_btn(self, obj):
         html = "<div class='field-action_btn d-flex m-8'> <a class='fa fa-edit ml-2' href='/admin/app1/book_history/" + \
             str(obj.id)+"/change/'></a><br></br>"
@@ -306,11 +354,18 @@ class bookhistoryadmin(admin.ModelAdmin):
             pass
     def patient_infoo(self,obj):
         # admin/app1/prescription_book/56/change/
-        try:
-            html="<div><a  href='/admin/app1/prescription_book/"+ str(obj.testbooking_id)+"/change/'>{}</a></div>".format(str(obj.patient_info))
-            return format_html(html)
-        except:
-            pass
+        if obj.booking_type=="Prescription":
+            try:
+                html="<div><a  href='/admin/app1/prescriptionbook1/"+ str(obj.uni)+"/change/'>{}</a></div>".format(str(obj.patient_info))
+                return format_html(html)
+            except:
+                pass
+        else:
+            try:
+                html="<div><a  href='/admin/app1/testbook/"+ str(obj.uni)+"/change/'>{}</a></div>".format(str(obj.patient_info))
+                return format_html(html)
+            except:
+                pass
     patient_infoo.short_description = "Patient Info"
     def has_add_permission(self, request):
         return False
@@ -357,8 +412,9 @@ admin.site.register(payment,paymentadmin)
 admin.site.register(city,cityadmin)
 admin.site.register(blogcategory,blogcategoryadmin)
 admin.site.register(test,testadmin)
-admin.site.register(prescription_book,prescriptionbookadmin)
-# admin.site.register(selectedtest_book,selectedtestbookadmin)
+# admin.site.register(prescription_book,prescriptionbookadmin)
+admin.site.register(testbook,testbookadmin)
+admin.site.register(Prescriptionbook1,prescriptionbookadmin)
 admin.site.register(User,UserAdmin)
 admin.site.register(category,categoryadmin)
 admin.site.register(healthcheckuppackages,healthcheckup_admin)
@@ -374,9 +430,9 @@ admin.site.register(subscription,subscriptionadmin)
 admin.site.register(coupons,couponadmin)
 admin.site.register(couponredeem,couponredeemadmin)
 # admin.site.register(invoicee,invoiceadmin)
-
 admin.site.unregister(Group)
-# admin.site.register(cart,cartadmin)
+
+admin.site.unregister(get_attachment_model())
 
 
 

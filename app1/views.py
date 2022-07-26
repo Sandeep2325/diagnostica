@@ -50,8 +50,9 @@ Aurangabad=env("Aurangabad")
 
 def dashboard(request):
     test=prescription_book.objects.all().count()
-    test_bookings=prescription_book.objects.filter(test_name__isnull=True, prescription_file='').count()
-    prescription_bookings=prescription_book.objects.filter(test_name__isnull=True).count()
+    # test_bookings=prescription_book.objects.filter(test_name__isnull=True, prescription_file='').count()
+    prescription_bookings=Prescriptionbook1.objects.all().count()
+    testbooking=testbook.objects.all().count()
     packages=healthpackages.objects.all().count()
     bookamount=book_history.objects.all()
     outstand=book_history.objects.filter(payment_status=False)
@@ -63,11 +64,12 @@ def dashboard(request):
     for i in  outstand:
          if i.amount is not None:
             outstandingamount.append(int(float(i.amount)))
-    prescription_bookings1=test-test_bookings
+    # prescription_bookings1=test-test_bookings
+    bookings=int(testbooking)+int(prescription_bookings)
     context={
-        "test":test,
-        "test_bookings":test_bookings,
-        "prescription_bookings":prescription_bookings1,
+        "test":bookings,
+        "test_bookings":testbooking,
+        "prescription_bookings":prescription_bookings,
         "packages":packages,
         "totalamount":'₹'+str(sum(totalamount)),
         "outstandingamount":'₹'+str(sum(outstandingamount))
@@ -355,7 +357,7 @@ def userinfo(request):
    return JsonResponse({"message":True,"firstname":a.first_name,"lastname":a.last_name,"contact":a.phone_no,"gender":a.gender,"address":a.address,"age":a.age}) 
 @login_required(login_url="/login/")
 def profilee(request):
-    cityy=city.objects.all()
+    cityy=city.objects.filter(active=True)
     profile=User.objects.get(email=request.user.email)
     if request.method=="GET":
         context={
@@ -364,10 +366,7 @@ def profilee(request):
         }
         return render (request,"profile.html",context)
     if request.method=="POST":
-        # profile_pic=request.POST.Files
-        
         profilepic=request.FILES.get("profile_pic", request.user.photo)
-        # name=request.POST.get("name")
         firstname=request.POST.get("firstname",request.user.first_name)
         lastname=request.POST.get("lastname",request.user.last_name)
         email=request.POST.get("email",request.user.email)
@@ -555,7 +554,7 @@ def home(request):
     c=request.session.get("city")
     envcity={"Bangalore":Bangalore,"Mumbai":Mumbai,"Bhophal":Bhophal,"Nanded":Nanded,"Pune":Pune,"Barshi":Barshi,"Aurangabad":Aurangabad}
     if request.method =="GET":
-        cit=city.objects.all()
+        cit=city.objects.filter(active=True)
         tests=test.objects.all()
         healthcheckup=healthcheckuppackages.objects.all()[0:4]
         healthpackage=healthpackages.objects.all()
@@ -706,12 +705,13 @@ def prescriptionbreak(request):
     if request.method=="POST":
         city=request.session.get("city")
         id=request.POST["id"]
-        a=prescription_book.objects.get(id=id)
+        print(id)
+        a=Prescriptionbook1.objects.get(id=id)
+        print(a)
         strr=[]
         for i in a.test_name.all():
             di={}
             di["test"]=(i.testt)
-            
             if city == Bangalore:
                 di["pricel1"]=str(i.Banglore_price)
             elif city== Mumbai:
@@ -801,11 +801,15 @@ def prescriptionbookview(request):
         for i in book:
             temp = re.compile("([a-zA-Z]+)([0-9]+)")
             res = temp.match(i.bookingid).groups()
-        booking=int(res[1])+1
-        if str(booking)==str(bid):
+        try: 
+            booking=int(res[1])+1
+        
+            if str(booking)==str(bid):
+                bookingid="DP"+str(bid)
+            else:    
+                bookingid="DP"+str(booking)
+        except:
             bookingid="DP"+str(bid)
-        else:    
-            bookingid="DP"+str(booking)
         prescription_book(
             user=request.user,
             unique=unique,
@@ -820,17 +824,35 @@ def prescriptionbookview(request):
             gender=gender,
             location=c,
             address=address).save()
+        Prescriptionbook1(
+            user=request.user,
+            unique=unique,
+            prescription_file=prescription_file,
+            myself=True if myself == "on" else False,
+            others=True if others == "on" else False,
+            others_choice=others_choice,
+            firstname=firstname,
+            lastname=lastname,
+            contact=contact,
+            age=age,
+            gender=gender,
+            location=c,
+            address=address,
+            bookingid=bookingid).save()
+        data2=Prescriptionbook1.objects.get(unique=unique)
         if myself=="on":
             User.objects.filter(email=request.user.email).update(first_name=firstname,last_name=lastname,phone_no=contact,age=age,address=address)
         data=prescription_book.objects.get(unique=unique)
         book_history(
             user=request.user,
             testbooking_id=data.id,
+            uni=data2.id,
             bookingid=bookingid,
             patient_info="myself" if others==None else "others",
                     booking_type="Prescription",
                     bookingdetails="upload prescription",
                     payment_status=False).save()
+        
         messages.success(
             request, "Thankyou for your booking!, Our admin team will get back to you shortly.")
         message=f'Hello {request.user.first_name},\n Thank you for Booking!, Our admin team will get back to you shortly. '
@@ -864,7 +886,6 @@ def testselect(request):
         'envcity':envcity
     }
     if request.method=="POST":
-        # others=request.POST.get("myself")
         test_name=request.POST.getlist("test_name")
         myself=request.POST.get("myself")
         others=request.POST.get('others')
@@ -894,7 +915,7 @@ def testselect(request):
         
         for j in test_name:
             item=test.objects.get(id=j)
-            a.test_name.add(item)
+            a.test_name.add(item)   
         for i in test_name:
             item=test.objects.get(id=i)
             if c==Bangalore:
@@ -957,25 +978,42 @@ def cartt(request):
             temp = re.compile("([a-zA-Z]+)([0-9]+)")
             res = temp.match(i.bookingid).groups()
             print(res[1])
-        booking=int(res[1])+1
-        if str(booking)==str(bid):
+        try: 
+            booking=int(res[1])+1
+            if str(booking)==str(bid):
+                bookingid="DP"+str(bid)
+            else:    
+                bookingid="DP"+str(booking)
+        except:
             bookingid="DP"+str(bid)
-        else:    
-            bookingid="DP"+str(booking)
         
-        a=prescription_book.objects.create(
+        a=testbook.objects.create(
                 unique=uniquee,
                 user=request.user,
-                                myself=True if others == "m" else False,
-                                others=True if others == "o" else False,
-                                others_choice=others_choice,
-                                firstname=firstname,
-                                lastname=lastname,
-                                contact=contact,
-                                age=age,
-                                gender=gender,
-                                location=c,
-                                address=address)
+                myself=True if others == "m" else False,
+                others=True if others == "o" else False,
+                others_choice=others_choice,
+                firstname=firstname,
+                lastname=lastname,
+                contact=contact,
+                age=age,
+                gender=gender,
+                location=c,
+                address=address,
+                bookingid=bookingid)
+        b=prescription_book.objects.create(
+                unique=uniquee,
+                user=request.user,
+                myself=True if others == "m" else False,
+                others=True if others == "o" else False,
+                others_choice=others_choice,
+                firstname=firstname,
+                lastname=lastname,
+                contact=contact,
+                age=age,
+                gender=gender,
+                location=c,
+                address=address)
         data2=prescription_book.objects.get(unique=uniquee)
         if others=="m":
             User.objects.filter(email=request.user.email).update(first_name=firstname,last_name=lastname,phone_no=contact,age=age,address=address)
@@ -1036,189 +1074,221 @@ def cartt(request):
             elif tesst.items: 
                 strr.append(tesst.items.testt)
                 invoicee.objects.create(user=request.user,order_id=razorpay_order_id,items=tesst.items,price=tesst.price).save()
-                
+        data=testbook.objects.get(unique=uniquee)        
         listToStr = '/'.join(map(str, strr))
-        for i in data1:
-            if i.items==None and i.labtest==None and i.packages==None and i.healthsymptoms!=None:
-                bookhistory=book_history(
-                    user=request.user,
-                    testbooking_id=data2.id,
-                    bookingid=bookingid,
-                    patient_info="Myself" if others == "m" else "others",
-                            booking_type="Health Symptoms",
-                            bookingdetails=listToStr,
-                            amount="{0:1.2f}".format(float(amount)),
-                            payment_id=razorpay_order_id,
-                            payment_status=False).save()
-            elif i.items!=None and i.labtest==None and i.packages==None and i.healthsymptoms==None:
-                bookhistory=book_history(
-                    user=request.user,
-                    testbooking_id=data2.id,
-                    bookingid=bookingid,
-                    patient_info="Myself" if others == "m" else "others",
-                            booking_type="Selected Test",
-                            bookingdetails=listToStr,
-                            amount="{0:1.2f}".format(float(amount)),
-                            payment_id=razorpay_order_id,
-                            payment_status=False).save()
-            elif i.items==None and i.labtest!=None and i.packages==None and i.healthsymptoms==None:
-                bookhistory=book_history(
-                    user=request.user,
-                    testbooking_id=data2.id,
-                    bookingid=bookingid,
-                    patient_info="Myself" if others == "m" else "others",
-                            booking_type="Health checkups",
-                            bookingdetails=listToStr,
-                            amount="{0:1.2f}".format(float(amount)),
-                            payment_id=razorpay_order_id,
-                            payment_status=False).save()
-            elif i.items==None and i.labtest==None and i.packages!=None and i.healthsymptoms==None:
-                bookhistory=book_history(
-                    user=request.user,
-                    testbooking_id=data2.id,
-                    bookingid=bookingid,
-                    patient_info="Myself" if others == "m" else "others",
-                            booking_type="Health Packages",
-                            bookingdetails=listToStr,
-                            amount="{0:1.2f}".format(float(amount)),
-                            payment_id=razorpay_order_id,
-                            payment_status=False).save()
-            elif i.items==None and i.labtest==None and i.packages!=None and i.healthsymptoms!=None:
-                bookhistory=book_history(
-                    user=request.user,
-                    testbooking_id=data2.id,
-                    bookingid=bookingid,
-                    patient_info="Myself" if others == "m" else "others",
-                            booking_type="Health Packages/Symptoms",
-                            bookingdetails=listToStr,
-                            amount="{0:1.2f}".format(float(amount)),
-                            payment_id=razorpay_order_id,
-                            payment_status=False).save()
-            elif i.items==None and i.labtest!=None and i.packages==None and i.healthsymptoms!=None:
-                bookhistory=book_history(
-                    user=request.user,
-                    testbooking_id=data2.id,
-                    bookingid=bookingid,
-                    patient_info="Myself" if others == "m" else "others",
-                            booking_type="Health Checkups/Symptoms",
-                            bookingdetails=listToStr,
-                            amount="{0:1.2f}".format(float(amount)),
-                            payment_id=razorpay_order_id,
-                            payment_status=False).save()
-            elif i.items!=None and i.labtest==None and i.packages==None and i.healthsymptoms!=None:
-                bookhistory=book_history(
-                    user=request.user,
-                    testbooking_id=data2.id,
-                    bookingid=bookingid,
-                    patient_info="Myself" if others == "m" else "others",
-                            booking_type="Selected Test/Symptoms",
-                            bookingdetails=listToStr,
-                            amount="{0:1.2f}".format(float(amount)),
-                            payment_id=razorpay_order_id,
-                            payment_status=False).save()
-            elif i.items!=None and i.labtest==None and i.packages!=None and i.healthsymptoms==None:
-                bookhistory=book_history(
-                    user=request.user,
-                    testbooking_id=data2.id,
-                    bookingid=bookingid,
-                    patient_info="Myself" if others == "m" else "others",
-                            booking_type="Selected Test/Packages",
-                            bookingdetails=listToStr,
-                            amount="{0:1.2f}".format(float(amount)),
-                            payment_id=razorpay_order_id,
-                            payment_status=False).save()
+        bookhistory=book_history(
+                 user=request.user,
+                 testbooking_id=data2.id,
+                 uni=data.id,
+                 bookingid=bookingid,
+                 patient_info="Myself" if others == "m" else "others",
+                         booking_type="Selected Test/Packages",
+                         bookingdetails=listToStr,
+                         amount="{0:1.2f}".format(float(amount)),
+                         payment_id=razorpay_order_id,
+                         payment_status=False).save()
+        
+        # for i in data1:
+        #     print(i.items)
+        #     print(i.labtest)
+        #     print(i.packages)
+        #     print(i.healthsymptoms)
+        #     if i.items==None and i.labtest==None and i.packages==None and i.healthsymptoms!=None:
+        #         print(1)
+        #         bookhistory=book_history(
+        #             user=request.user,
+        #             testbooking_id=data2.id,
+        #             bookingid=bookingid,
+        #             patient_info="Myself" if others == "m" else "others",
+        #                     booking_type="Health Symptoms",
+        #                     bookingdetails=listToStr,
+        #                     amount="{0:1.2f}".format(float(amount)),
+        #                     payment_id=razorpay_order_id,
+        #                     payment_status=False).save()
+        #     elif i.items!=None and i.labtest==None and i.packages==None and i.healthsymptoms==None:
+        #         print(2)
+        #         bookhistory=book_history(
+        #             user=request.user,
+        #             testbooking_id=data2.id,
+        #             bookingid=bookingid,
+        #             patient_info="Myself" if others == "m" else "others",
+        #                     booking_type="Selected Test",
+        #                     bookingdetails=listToStr,
+        #                     amount="{0:1.2f}".format(float(amount)),
+        #                     payment_id=razorpay_order_id,
+        #                     payment_status=False).save()
+        #     elif i.items==None and i.labtest!=None and i.packages==None and i.healthsymptoms==None:
+        #         print(3)
+        #         bookhistory=book_history(
+        #             user=request.user,
+        #             testbooking_id=data2.id,
+        #             bookingid=bookingid,
+        #             patient_info="Myself" if others == "m" else "others",
+        #                     booking_type="Health checkups",
+        #                     bookingdetails=listToStr,
+        #                     amount="{0:1.2f}".format(float(amount)),
+        #                     payment_id=razorpay_order_id,
+        #                     payment_status=False).save()
+        #     elif i.items==None and i.labtest==None and i.packages!=None and i.healthsymptoms==None:
+        #         print(4)
+        #         bookhistory=book_history(
+        #             user=request.user,
+        #             testbooking_id=data2.id,
+        #             bookingid=bookingid,
+        #             patient_info="Myself" if others == "m" else "others",
+        #                     booking_type="Health Packages",
+        #                     bookingdetails=listToStr,
+        #                     amount="{0:1.2f}".format(float(amount)),
+        #                     payment_id=razorpay_order_id,
+        #                     payment_status=False).save()
+        #     elif i.items==None and i.labtest==None and i.packages!=None and i.healthsymptoms!=None:
+        #         print(5)
+        #         bookhistory=book_history(
+        #             user=request.user,
+        #             testbooking_id=data2.id,
+        #             bookingid=bookingid,
+        #             patient_info="Myself" if others == "m" else "others",
+        #                     booking_type="Health Packages/Symptoms",
+        #                     bookingdetails=listToStr,
+        #                     amount="{0:1.2f}".format(float(amount)),
+        #                     payment_id=razorpay_order_id,
+        #                     payment_status=False).save()
+        #     elif i.items==None and i.labtest!=None and i.packages==None and i.healthsymptoms!=None:
+        #         print(6)
+        #         bookhistory=book_history(
+        #             user=request.user,
+        #             testbooking_id=data2.id,
+        #             bookingid=bookingid,
+        #             patient_info="Myself" if others == "m" else "others",
+        #                     booking_type="Health Checkups/Symptoms",
+        #                     bookingdetails=listToStr,
+        #                     amount="{0:1.2f}".format(float(amount)),
+        #                     payment_id=razorpay_order_id,
+        #                     payment_status=False).save()
+        #     elif i.items!=None and i.labtest==None and i.packages==None and i.healthsymptoms!=None:
+        #         print(7)
+        #         bookhistory=book_history(
+        #             user=request.user,
+        #             testbooking_id=data2.id,
+        #             bookingid=bookingid,
+        #             patient_info="Myself" if others == "m" else "others",
+        #                     booking_type="Selected Test/Symptoms",
+        #                     bookingdetails=listToStr,
+        #                     amount="{0:1.2f}".format(float(amount)),
+        #                     payment_id=razorpay_order_id,
+        #                     payment_status=False).save()
+        #     elif i.items!=None and i.labtest==None and i.packages!=None and i.healthsymptoms==None:
+        #         print(8)
+        #         bookhistory=book_history(
+        #             user=request.user,
+        #             testbooking_id=data2.id,
+        #             bookingid=bookingid,
+        #             patient_info="Myself" if others == "m" else "others",
+        #                     booking_type="Selected Test/Packages",
+        #                     bookingdetails=listToStr,
+        #                     amount="{0:1.2f}".format(float(amount)),
+        #                     payment_id=razorpay_order_id,
+        #                     payment_status=False).save()
 
-            elif i.items!=None and i.labtest!=None and i.packages==None and i.healthsymptoms==None:
-                bookhistory=book_history(
-                    user=request.user,
-                    testbooking_id=data2.id,
-                    bookingid=bookingid,
-                    patient_info="Myself" if others == "m" else "others",
-                            booking_type="Selected Test/Checkups",
-                            bookingdetails=listToStr,
-                            amount="{0:1.2f}".format(float(amount)),
-                            payment_id=razorpay_order_id,
-                            payment_status=False).save()
+        #     elif i.items!=None and i.labtest!=None and i.packages==None and i.healthsymptoms==None:
+        #         print(9)
+        #         bookhistory=book_history(
+        #             user=request.user,
+        #             testbooking_id=data2.id,
+        #             bookingid=bookingid,
+        #             patient_info="Myself" if others == "m" else "others",
+        #                     booking_type="Selected Test/Checkups",
+        #                     bookingdetails=listToStr,
+        #                     amount="{0:1.2f}".format(float(amount)),
+        #                     payment_id=razorpay_order_id,
+        #                     payment_status=False).save()
 
-            elif i.items==None and i.labtest!=None and i.packages!=None and i.healthsymptoms==None:
-                bookhistory=book_history(
-                    user=request.user,
-                    testbooking_id=data2.id,
-                    bookingid=bookingid,
-                    patient_info="Myself" if others == "m" else "others",
-                            booking_type="Health Chekups/Packages",
-                            bookingdetails=listToStr,
-                            amount="{0:1.2f}".format(float(amount)),
-                            payment_id=razorpay_order_id,
-                            payment_status=False).save()
-            elif i.items!=None and i.labtest!=None and i.packages!=None and i.healthsymptoms!=None:
-                bookhistory=book_history(
-                    user=request.user,
-                    testbooking_id=data2.id,
-                    bookingid=bookingid,
-                    patient_info="Myself" if others == "m" else "others",
-                            booking_type="Health Chekups/Packages",
-                            bookingdetails=listToStr,
-                            amount="{0:1.2f}".format(float(amount)),
-                            payment_id=razorpay_order_id,
-                            payment_status=False).save()
-            elif i.items==None and i.labtest!=None and i.packages!=None and i.healthsymptoms!=None:
-                bookhistory=book_history(
-                    user=request.user,
-                    testbooking_id=data2.id,
-                    bookingid=bookingid,
-                    patient_info="Myself" if others == "m" else "others",
-                            booking_type="Health Chekups/Packages/Symptoms",
-                            bookingdetails=listToStr,
-                            amount="{0:1.2f}".format(float(amount)),
-                            payment_id=razorpay_order_id,
-                            payment_status=False).save()
-            elif i.items!=None and i.labtest==None and i.packages!=None and i.healthsymptoms!=None:
-                bookhistory=book_history(
-                    user=request.user,
-                    testbooking_id=data2.id,
-                    bookingid=bookingid,
-                    patient_info="Myself" if others == "m" else "others",
-                            booking_type="Selected Test/Packages/Symptoms",
-                            bookingdetails=listToStr,
-                            amount="{0:1.2f}".format(float(amount)),
-                            payment_id=razorpay_order_id,
-                            payment_status=False).save()
+        #     elif i.items==None and i.labtest!=None and i.packages!=None and i.healthsymptoms==None:
+        #         print(10)
+        #         bookhistory=book_history(
+        #             user=request.user,
+        #             testbooking_id=data2.id,
+        #             bookingid=bookingid,
+        #             patient_info="Myself" if others == "m" else "others",
+        #                     booking_type="Health Chekups/Packages",
+        #                     bookingdetails=listToStr,
+        #                     amount="{0:1.2f}".format(float(amount)),
+        #                     payment_id=razorpay_order_id,
+        #                     payment_status=False).save()
+        #     elif i.items!=None and i.labtest!=None and i.packages!=None and i.healthsymptoms!=None:
+        #         print(11)
+        #         bookhistory=book_history(
+        #             user=request.user,
+        #             testbooking_id=data2.id,
+        #             bookingid=bookingid,
+        #             patient_info="Myself" if others == "m" else "others",
+        #                     booking_type="Health Chekups/Packages",
+        #                     bookingdetails=listToStr,
+        #                     amount="{0:1.2f}".format(float(amount)),
+        #                     payment_id=razorpay_order_id,
+        #                     payment_status=False).save()
+        #     elif i.items==None and i.labtest!=None and i.packages!=None and i.healthsymptoms!=None:
+        #         print(12)
+        #         bookhistory=book_history(
+        #             user=request.user,
+        #             testbooking_id=data2.id,
+        #             bookingid=bookingid,
+        #             patient_info="Myself" if others == "m" else "others",
+        #                     booking_type="Health Chekups/Packages/Symptoms",
+        #                     bookingdetails=listToStr,
+        #                     amount="{0:1.2f}".format(float(amount)),
+        #                     payment_id=razorpay_order_id,
+        #                     payment_status=False).save()
+        #     elif i.items!=None and i.labtest==None and i.packages!=None and i.healthsymptoms!=None:
+        #         print(13)
+        #         bookhistory=book_history(
+        #             user=request.user,
+        #             testbooking_id=data2.id,
+        #             bookingid=bookingid,
+        #             patient_info="Myself" if others == "m" else "others",
+        #                     booking_type="Selected Test/Packages/Symptoms",
+        #                     bookingdetails=listToStr,
+        #                     amount="{0:1.2f}".format(float(amount)),
+        #                     payment_id=razorpay_order_id,
+        #                     payment_status=False).save()
 
-            elif i.items!=None and i.labtest!=None and i.packages==None and i.healthsymptoms!=None:
-                bookhistory=book_history(
-                    user=request.user,
-                    testbooking_id=data2.id,
-                    bookingid=bookingid,
-                    patient_info="Myself" if others == "m" else "others",
-                            booking_type="Selected Test/Symptoms/Health Checkups",
-                            bookingdetails=listToStr,
-                            amount="{0:1.2f}".format(float(amount)),
-                            payment_id=razorpay_order_id,
-                            payment_status=False).save()
+        #     elif i.items!=None and i.labtest!=None and i.packages==None and i.healthsymptoms!=None:
+        #         print(14)
+        #         bookhistory=book_history(
+        #             user=request.user,
+        #             testbooking_id=data2.id,
+        #             bookingid=bookingid,
+        #             patient_info="Myself" if others == "m" else "others",
+        #                     booking_type="Selected Test/Symptoms/Health Checkups",
+        #                     bookingdetails=listToStr,
+        #                     amount="{0:1.2f}".format(float(amount)),
+        #                     payment_id=razorpay_order_id,
+        #                     payment_status=False).save()
 
-            elif i.items!=None and i.labtest!=None and i.packages==None and i.healthsymptoms!=None:
-                bookhistory=book_history(
-                    user=request.user,
-                    testbooking_id=data2.id,
-                    bookingid=bookingid,
-                    patient_info="Myself" if others == "m" else "others",
-                            booking_type="Selected Test/Symptoms/Health Checkups",
-                            bookingdetails=listToStr,
-                            amount="{0:1.2f}".format(float(amount)),
-                            payment_id=razorpay_order_id,
-                            payment_status=False).save()
-            else:
-                   bookhistory=book_history(
-                    user=request.user,
-                    testbooking_id=data2.id,
-                    bookingid=bookingid,
-                    patient_info="Myself" if others == "m" else "others",
-                            booking_type="Items",
-                            bookingdetails=listToStr,
-                            amount="{0:1.2f}".format(float(amount)),
-                            payment_id=razorpay_order_id,
-                            payment_status=False).save()
+        #     elif i.items!=None and i.labtest!=None and i.packages==None and i.healthsymptoms!=None:
+        #         print(15)
+        #         bookhistory=book_history(
+        #             user=request.user,
+        #             testbooking_id=data2.id,
+        #             bookingid=bookingid,
+        #             patient_info="Myself" if others == "m" else "others",
+        #                     booking_type="Selected Test/Symptoms/Health Checkups",
+        #                     bookingdetails=listToStr,
+        #                     amount="{0:1.2f}".format(float(amount)),
+        #                     payment_id=razorpay_order_id,
+        #                     payment_status=False).save()
+        #     else:
+        #         print(16)
+        #         bookhistory=book_history(
+        #          user=request.user,
+        #          testbooking_id=data2.id,
+        #          bookingid=bookingid,
+        #          patient_info="Myself" if others == "m" else "others",
+        #                  booking_type="Items",
+        #                  bookingdetails=listToStr,
+        #                  amount="{0:1.2f}".format(float(amount)),
+        #                  payment_id=razorpay_order_id,
+        #                  payment_status=False).save()
 
         coupon=request.session.get("coupon")
         discountamount=request.session.get("discountamount")
@@ -1312,8 +1382,14 @@ def cartsessiondelete(request):
 
 def othersdetail(request):
     if request.method=="POST":
+       
         testid=request.POST["testid"]
-        detail=prescription_book.objects.get(id=int(testid))
+        try:
+            detail=Prescriptionbook1.objects.get(id=int(testid))
+            print("prec")
+        except:
+            detail=testbook.objects.get(id=int(testid))
+            print("test")
         choice = ""
         gender=""
         if detail.others_choice=="m":
@@ -1884,7 +1960,10 @@ def html_to_pdf(template_src, context_dict={}):
 def invoice(request,orderid):
     order=book_history.objects.get(payment_id=orderid)
     payments=payment.objects.get(transid=orderid)
-    testbooking=prescription_book.objects.get(id=order.testbooking_id)
+    try:
+        testbooking=Prescriptionbook1.objects.get(id=order.uni)
+    except:
+        testbooking=testbook.objects.get(id=order.uni)
     invoic=invoicee.objects.filter(order_id=orderid)
     amount=payments.amount
     try:
@@ -1994,27 +2073,44 @@ class BookingHistoryPay(LoginRequiredMixin,View):
     def get(self, request,*args, **kwargs):
         his = []
         bookhistories=book_history.objects.filter(user=request.user).order_by('-created')
-        testbooking=prescription_book.objects.filter(user=request.user)
+        # testbooking=prescription_book.objects.filter(user=request.user)
         payments=payment.objects.filter(user=request.user).order_by('-date')
         for i in bookhistories:
             try:
-                testbooking=prescription_book.objects.get(id=i.testbooking_id)
+                testbooking=Prescriptionbook1.objects.get(id=i.uni)
+                hi = {}
+                hi["id"] = i.id
+                hi["created"] = i.created
+                hi["patient_info"] = i.patient_info
+                hi["testbooking_id"] = i.testbooking_id
+                hi["uni"]=i.uni
+                hi["bookingid"] = i.bookingid
+                hi["patient_info"] = i.patient_info
+                hi["booking_type"] = i.booking_type
+                hi["bookingdetails"] = i.bookingdetails
+                hi['prescription'] = testbooking.prescription_file
+                hi['payment_status'] = i.payment_status
+                hi['report'] = i.report
+                hi['amount'] = i.amount
+                his.append(hi)
             except:
-                hi['prescription'] = None
-            hi = {}
-            hi["id"] = i.id
-            hi["created"] = i.created
-            hi["patient_info"] = i.patient_info
-            hi["testbooking_id"] = i.testbooking_id
-            hi["bookingid"] = i.bookingid
-            hi["patient_info"] = i.patient_info
-            hi["booking_type"] = i.booking_type
-            hi["bookingdetails"] = i.bookingdetails
-            hi['prescription'] = testbooking.prescription_file
-            hi['payment_status'] = i.payment_status
-            hi['report'] = i.report
-            hi['amount'] = i.amount
-            his.append(hi)
+                testbooking=testbook.objects.get(id=i.uni)
+                # hi['prescription'] = None
+                hi = {}
+                hi["id"] = i.id
+                hi["created"] = i.created
+                hi["patient_info"] = i.patient_info
+                hi["testbooking_id"] = i.testbooking_id
+                hi["uni"]=i.uni
+                hi["bookingid"] = i.bookingid
+                hi["patient_info"] = i.patient_info
+                hi["booking_type"] = i.booking_type
+                hi["bookingdetails"] = i.bookingdetails
+                # hi['prescription'] = testbooking.prescription_file
+                hi['payment_status'] = i.payment_status
+                hi['report'] = i.report
+                hi['amount'] = i.amount
+                his.append(hi)
 
         context={
             "bookhistories":his,
@@ -2044,7 +2140,11 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 "order_id":razorpay_order['id'],
                 "callbackUrl":callback_url,
             }
-            items=prescription_book.objects.get(id=id)
+            try:
+                items=Prescriptionbook1.objects.get(id=id)
+            except:
+                items=testbook.objects.get(id=id)
+                
             for item in items.test_name.all():
                 cityy=request.session.get("city")
                 if cityy==Bangalore:
@@ -2169,6 +2269,12 @@ class HealthSymptoms(View):
             request.session['cart_count']= cart.objects.filter(user = request.user).count()
         print(RES)
         return JsonResponse(RES)
+def privacypolicy(request):
+    return render(request,"privacypolicy.html")
+def paymentsrefund(request):
+    return render(request,"paymentsrefunds.html")
+def termsofuse(request):
+    return render(request,"termsofuse.html")
 def error_404_view(request, exception):
     return HttpResponse("404 Not Found")
 

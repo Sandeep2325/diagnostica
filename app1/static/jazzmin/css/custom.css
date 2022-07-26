@@ -25,9 +25,10 @@ a {
     width: auto;
 }
 
-.select2-selection {
-    width: min-content;
-}
+
+/* .select2-selection {
+    width: 600px;
+} */
 
 
 /* .sidebar ,

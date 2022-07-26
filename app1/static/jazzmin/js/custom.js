@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    $("#recent-actions-module").hide();
     /*  Selects all elements matched by <input> that have a name value exactly equal to 
     username.*/
     // alert(window.location.pathname)

@@ -25,6 +25,7 @@ from shortuuid.django_fields import ShortUUIDField
 class city(models.Model):
     cityname=models.CharField(max_length=200,null=True,blank=True)
     city_icon= models.ImageField(upload_to = "photos/icons/", null=True, blank=True)
+    active=models.BooleanField(default=True,verbose_name="Is Active")
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
     def __str__(self):
@@ -72,6 +73,8 @@ class User(AbstractUser,PermissionsMixin):
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name','phone_no']
     def __str__(self):
         return "{}".format(str(self.first_name))
+    class Meta:
+        verbose_name_plural = "Registered Users"
 class category(models.Model):
     categoryy=models.CharField(max_length=200,null=True,blank=True,verbose_name="Category")
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
@@ -148,29 +151,132 @@ class prescription_book(models.Model):
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
 
     def __str__(self):
-        return "Prescription booking"
+        return "Prescription booking1"
+    class Meta:
+        verbose_name_plural="Prescription Bookings1" 
+        
+# @receiver(post_save, sender=prescription_book)
+# def testbookings(sender, instance, **kwargs):
+#     a=[]
+#     for i in instance.test_name.all():
+#         if instance.location=="Bangalore":
+#             a.append(i.Banglore_price)
+#         elif instance.location=="Mumbai":
+#             a.append(i.Mumbai_price)
+#         elif instance.location=="Bhophal":
+#             a.append(i.bhopal_price)
+#         elif instance.location=="Nanded":
+#             a.append(i.nanded_price)
+#         elif instance.location=="Pune":
+#             a.append(i.pune_price)
+#         elif instance.location=="Barshi":
+#             a.append(i.barshi_price)
+#         elif instance.location=="Aurangabad":
+#             a.append(i.aurangabad_price)
+#     book_history.objects.filter(testbooking_id=instance.id).update(amount=sum(a))
+#     # print(bool(instance.prescription_file))
+#     if (instance.test_name.first()!=None) and (bool(instance.prescription_file)==True): 
+#             print("sent")
+#             send_mail(str("Dear Customer" ),
+#                         ("After reviewing your Prescription ,\nTests are added as per your Prescription \nPlease check and make payment to further steps"),
+#                         settings.EMAIL_HOST_USER,
+#                         [instance.user.email],
+#                         fail_silently=False)
+# m2m_changed.connect(testbookings, sender=prescription_book.test_name.through)
+class testbook(models.Model):
+    bookingid=models.CharField(max_length=20,null=True,blank=True)
+    unique=models.UUIDField(null=True,blank=True)
+    user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
+    # prescription_file=models.FileField(upload_to="prescription",null=True,blank=True)
+    # test_name=models.ManyToManyField(test,blank=True)
+    price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
+    myself=models.BooleanField(default=False)
+    others=models.BooleanField(default=False)
+    others_choice = models.CharField(
+        choices=STATUS_CHOICES1,
+        max_length=8,
+        default="", null=True,blank=True
+    )
+    firstname=models.CharField(max_length=200,null=True,blank=True)
+    lastname=models.CharField(max_length=200,null=True,blank=True)
+    contact=models.CharField(max_length=200,null=True,blank=True)
+    age=models.CharField(max_length=3,null=True,blank=True)
+    gender = models.CharField(
+        choices=STATUS_CHOICES,
+        max_length=8,
+        default="", null=True,blank=True
+    )
+    location=models.CharField(max_length=100,null=True,blank=True)
+    address=models.TextField(null=True,blank=True)
+    created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
+    updated = models.DateTimeField(auto_now=True,null=True, blank=True)
+
+    def __str__(self):
+        return "Test booking"
     class Meta:
         verbose_name_plural="Test Bookings" 
+                
+class Prescriptionbook1(models.Model):
+    bookingid=models.CharField(max_length=20,null=True,blank=True)
+    unique=models.UUIDField(null=True,blank=True)
+    user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
+    prescription_file=models.FileField(upload_to="prescription",null=True,blank=True)
+    test_name=models.ManyToManyField(test,blank=True)
+    
+    price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
+    myself=models.BooleanField(default=False)
+    others=models.BooleanField(default=False)
+    others_choice = models.CharField(
+        choices=STATUS_CHOICES1,
+        max_length=8,
+        default="", null=True,blank=True
+    )
+    firstname=models.CharField(max_length=200,null=True,blank=True)
+    lastname=models.CharField(max_length=200,null=True,blank=True)
+    contact=models.CharField(max_length=200,null=True,blank=True)
+    age=models.CharField(max_length=3,null=True,blank=True)
+    gender = models.CharField(
+        choices=STATUS_CHOICES,
+        max_length=8,
+        default="", null=True,blank=True
+    )
+    location=models.CharField(max_length=100,null=True,blank=True)
+    address=models.TextField(null=True,blank=True)
+    created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
+    updated = models.DateTimeField(auto_now=True,null=True, blank=True)
+    
+    def __str__(self):
+        return "Prescription booking"
+    class Meta:
+        verbose_name_plural="Prescription Bookings"
         
-@receiver(post_save, sender=prescription_book)
+@receiver(post_save, sender=Prescriptionbook1)
 def testbookings(sender, instance, **kwargs):
+    print("qwertyu")
     a=[]
     for i in instance.test_name.all():
         if instance.location=="Bangalore":
             a.append(i.Banglore_price)
+            
         elif instance.location=="Mumbai":
             a.append(i.Mumbai_price)
+            
         elif instance.location=="Bhophal":
             a.append(i.bhopal_price)
+            
         elif instance.location=="Nanded":
             a.append(i.nanded_price)
+            
         elif instance.location=="Pune":
             a.append(i.pune_price)
+            
         elif instance.location=="Barshi":
             a.append(i.barshi_price)
+            
         elif instance.location=="Aurangabad":
             a.append(i.aurangabad_price)
-    book_history.objects.filter(testbooking_id=instance.id).update(amount=sum(a))
+    print(a)       
+    book_history.objects.filter(uni=instance.id).update(amount=sum(a))
     # print(bool(instance.prescription_file))
     if (instance.test_name.first()!=None) and (bool(instance.prescription_file)==True): 
             print("sent")
@@ -179,7 +285,7 @@ def testbookings(sender, instance, **kwargs):
                         settings.EMAIL_HOST_USER,
                         [instance.user.email],
                         fail_silently=False)
-m2m_changed.connect(testbookings, sender=prescription_book.test_name.through)
+m2m_changed.connect(testbookings, sender=Prescriptionbook1.test_name.through)
 class healthcheckuppackages(models.Model):
     package_title=models.CharField(max_length=200,null=True,blank=True,verbose_name="Package Title")
     test_name=models.ManyToManyField(test)
@@ -342,6 +448,8 @@ class book_history(models.Model):
         verbose_name="Booking Id",
         null=True, blank=True
     )
+    
+    uni=models.IntegerField(null=True,blank=True)
     # bookingid = models.CharField(max_length=20,null=True, blank=True,verbose_name="Booking Id")
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
     patient_info=models.CharField(max_length=200,null=True,blank=True)
