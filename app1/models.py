@@ -127,7 +127,6 @@ class prescription_book(models.Model):
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
     prescription_file=models.FileField(upload_to="prescription",null=True,blank=True)
     test_name=models.ManyToManyField(test,blank=True)
-    
     price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
     myself=models.BooleanField(default=False)
     others=models.BooleanField(default=False)
@@ -187,6 +186,7 @@ class testbook(models.Model):
     bookingid=models.CharField(max_length=20,null=True,blank=True)
     unique=models.UUIDField(null=True,blank=True)
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
+    tests=models.TextField(null=True,blank=True)
     # prescription_file=models.FileField(upload_to="prescription",null=True,blank=True)
     # test_name=models.ManyToManyField(test,blank=True)
     price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
@@ -197,6 +197,7 @@ class testbook(models.Model):
         max_length=8,
         default="", null=True,blank=True
     )
+    payment_status=models.BooleanField(default=False)
     firstname=models.CharField(max_length=200,null=True,blank=True)
     lastname=models.CharField(max_length=200,null=True,blank=True)
     contact=models.CharField(max_length=200,null=True,blank=True)
@@ -208,6 +209,7 @@ class testbook(models.Model):
     )
     location=models.CharField(max_length=100,null=True,blank=True)
     address=models.TextField(null=True,blank=True)
+    report=models.FileField(upload_to="report",null=True,blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
 
@@ -215,7 +217,16 @@ class testbook(models.Model):
         return "Test booking"
     class Meta:
         verbose_name_plural="Test Bookings" 
-                
+@receiver(post_save, sender=testbook)
+def reportresponse(sender, instance, **kwargs):
+  
+    if (instance.payment_status== True) and (bool(instance.report) == True):
+        # print("sent")
+        send_mail(str("DIAGNOSTICA SPAN TEST REPORT"),
+                  ("Dear Customer,\n Your Report is Added to your dashboard,Please Checkit out"),
+                  settings.EMAIL_HOST_USER,
+                  [instance.user.email],
+                  fail_silently=False)                
 class Prescriptionbook1(models.Model):
     bookingid=models.CharField(max_length=20,null=True,blank=True)
     unique=models.UUIDField(null=True,blank=True)
@@ -223,7 +234,7 @@ class Prescriptionbook1(models.Model):
     prescription_file=models.FileField(upload_to="prescription",null=True,blank=True)
     test_name=models.ManyToManyField(test,blank=True)
     
-    price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
+    # price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
     myself=models.BooleanField(default=False)
     others=models.BooleanField(default=False)
     others_choice = models.CharField(
@@ -231,6 +242,7 @@ class Prescriptionbook1(models.Model):
         max_length=8,
         default="", null=True,blank=True
     )
+    payment_status=models.BooleanField(default=False)
     firstname=models.CharField(max_length=200,null=True,blank=True)
     lastname=models.CharField(max_length=200,null=True,blank=True)
     contact=models.CharField(max_length=200,null=True,blank=True)
@@ -240,8 +252,10 @@ class Prescriptionbook1(models.Model):
         max_length=8,
         default="", null=True,blank=True
     )
+    price=models.CharField(max_length=20,null=True,blank=True)
     location=models.CharField(max_length=100,null=True,blank=True)
     address=models.TextField(null=True,blank=True)
+    report=models.FileField(upload_to="report",null=True,blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
     
@@ -249,7 +263,11 @@ class Prescriptionbook1(models.Model):
         return "Prescription booking"
     class Meta:
         verbose_name_plural="Prescription Bookings"
-        
+    # def save(self, *args, **kwargs):  # new
+    #     if not self.slug:
+    #         self.slug = slugify(self.package_title)
+    #     return super().save(*args, **kwargs)  
+      
 @receiver(post_save, sender=Prescriptionbook1)
 def testbookings(sender, instance, **kwargs):
     print("qwertyu")
@@ -275,11 +293,20 @@ def testbookings(sender, instance, **kwargs):
             
         elif instance.location=="Aurangabad":
             a.append(i.aurangabad_price)
-    print(a)       
-    book_history.objects.filter(uni=instance.id).update(amount=sum(a))
-    # print(bool(instance.prescription_file))
-    if (instance.test_name.first()!=None) and (bool(instance.prescription_file)==True): 
-            print("sent")
+    # print(sender)
+    # print(sum(a))
+         
+    book_history.objects.filter(uni=instance.bookingid).update(amount=sum(a))
+    # instance.price=sum(a)
+   
+    if (instance.payment_status== True) and (bool(instance.report) == True):
+        send_mail(str("DIAGNOSTICA SPAN TEST REPORT"),
+                  ("Dear Customer,\n Your Report is Added to your dashboard,Please Checkit out"),
+                  settings.EMAIL_HOST_USER,
+                  [instance.user.email],
+                  fail_silently=False)
+    if (instance.test_name.first()!=None) and (bool(instance.prescription_file)==True and bool(instance.report) == False): 
+            # print("sent")
             send_mail(str("Dear Customer" ),
                         ("After reviewing your Prescription ,\nTests are added as per your Prescription \nPlease check and make payment to further steps"),
                         settings.EMAIL_HOST_USER,
@@ -315,7 +342,7 @@ class healthcheckuppackages(models.Model):
     def __str__(self):
         return self.package_title
     class Meta:
-        verbose_name_plural = "Lab Tests"
+        verbose_name_plural = "Health Checkups and Lab Tests"
     def save(self, *args, **kwargs):  # new
         if not self.slug:
             self.slug = slugify(self.package_title)
@@ -448,15 +475,13 @@ class book_history(models.Model):
         verbose_name="Booking Id",
         null=True, blank=True
     )
-    
-    uni=models.IntegerField(null=True,blank=True)
-    # bookingid = models.CharField(max_length=20,null=True, blank=True,verbose_name="Booking Id")
+    uni=models.CharField( max_length=50,null=True,blank=True)
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
     patient_info=models.CharField(max_length=200,null=True,blank=True)
     booking_type=models.CharField(max_length=200,null=True,blank=True)
     bookingdetails=models.TextField(null=True,blank=True)
     amount=models.CharField(max_length=20,null=True,blank=True)
-    payment_id=models.CharField(max_length=500,null=True,blank=True)
+    payment_id=models.CharField(max_length=500,null=True,blank=True,verbose_name="Order Id")
     status = models.CharField(
         choices=STATUS,
         max_length=8,
@@ -470,9 +495,13 @@ class book_history(models.Model):
         return "Book History"
     class Meta:
         verbose_name_plural="Booking Histories"
+    # def save(self, *args, **kwargs):
+    #     a=Prescriptionbook1.objects.get(bookingid=self.bookingid)
+    #     a.price=self.amount
+    #     a.save()
+    #     super(book_history, self).save(*args, **kwargs)
 @receiver(post_save, sender=book_history)
 def reportresponse(sender, instance, **kwargs):
-  
     if (instance.payment_status== True) and (bool(instance.report) == True):
         print("sent")
         send_mail(str("DIAGNOSTICA SPAN TEST REPORT"),

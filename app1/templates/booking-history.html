@@ -109,7 +109,7 @@
                                                     {%if bookhistory.amount == None%}
                                                         <td data-label="Amount">-</td>
                                                     {%elif bookhistory.prescription%}
-                                                        <td data-label="Amount">₹ {{bookhistory.amount}}<i  id ="prescriptiontest" data-bs-toggle="modal" data-bs-target="#prescriptionbreaks" class="fa fa-info br-5 cursor" aria-hidden="true" style="text-align:center;background:#d5e6f7; padding:5px 9px;margin-left:5px " onclick='prescrbreak({{bookhistory.uni}})'></i></td>
+                                                        <td data-label="Amount">₹ {{bookhistory.amount}}<i  id ="prescriptiontest" data-bs-toggle="modal" data-bs-target="#prescriptionbreaks" class="fa fa-info br-5 cursor" aria-hidden="true" style="text-align:center;background:#d5e6f7; padding:5px 9px;margin-left:5px " onclick='prescrbreak("{{bookhistory.uni}}")'></i></td>
                                                     {%else%}
                                                     <td data-label="Amount">₹ {{bookhistory.amount}}</td>
                                                     {%endif%}
@@ -124,8 +124,8 @@
                                                     <td data-label="Report"><button
                                                             class="br br-5 fs-16 font-bold bg-dark-green cl-dark-white download text-center paynow-btn" 
                                                             {% if bookhistory.amount == None %}
-                                                            onclick='paymentFunction({{bookhistory.uni}}, "false")';
-                                                            {% else %}onclick='paymentFunction({{bookhistory.uni}}, "true")';{% endif %}id="testbooking{{bookhistory.testbooking_id}}">Pay Now</button>
+                                                            onclick='paymentFunction("{{bookhistory.uni}}", "false")';
+                                                            {% else %}onclick='paymentFunction("{{bookhistory.uni}}", "true")';{% endif %}id="testbooking{{bookhistory.testbooking_id}}">Pay Now</button>
                                                     </td>
                                                     {%else%}
                                                     {%if bookhistory.report %}

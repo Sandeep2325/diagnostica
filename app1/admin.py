@@ -16,12 +16,12 @@ from django.contrib.admin.views.main import ChangeList
 import csv
 import re
 from django.contrib.auth.models import Group
+from django.utils.translation import gettext_lazy as _
 # Register your models here.
 class cityadmin(admin.ModelAdmin):
     list_display=["cityname","imagee","active","created","updated"]
     list_editable=["active"]
     def imagee(self, obj):
-        
         # a=obj.image.first()
         # print(obj.image.first().image.url)
         try:
@@ -32,11 +32,15 @@ class cityadmin(admin.ModelAdmin):
     imagee.short_description = 'City Icon'
     # readonly_fields = ["cityname"]
 class testadmin(admin.ModelAdmin):
-    list_display=["testt","categoryy","Banglore_price","Mumbai_price","bhopal_price","nanded_price","pune_price","barshi_price","aurangabad_price","is_active","created","updated","action_btn"]
+    list_display=["testt","categoryy","Banglore_price","is_active","created","updated","action_btn"]
     list_editable=["is_active"]
     list_filter = ('categoryy', 'is_active')
     search_fields = ('testt', 'categoryy__categoryy')
-   
+    def get_form(self, request, obj=None, **kwargs):
+        # if obj.type == "1":
+        self.exclude = ("Mumbai_price","bhopal_price","nanded_price","pune_price","barshi_price","aurangabad_price")
+        form = super(testadmin, self).get_form(request, obj, **kwargs)
+        return form
     # form = testform
     # def get_fieldsets(self, request, obj=None):
     #     fieldsets = super(testadmin, self).get_fieldsets(request, obj)
@@ -99,15 +103,20 @@ class testadmin(admin.ModelAdmin):
             return render(request, "admin/app1/csv_upload.html", data)
 
 class prescriptionbookadmin(admin.ModelAdmin):
-    list_display=["users","testname","myself","others","others_choice","firstname","lastname","contact","age","gender","address","prescription_file","created","updated","action_btn"]        
-    readonly_fields=["user","myself","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location","bookingid"]
+    list_display=["users","testname","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address","prescription_file","report","created","updated","action_btn"]        
+    readonly_fields=["user","myself","payment_status","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location","bookingid"]
     exclude = ('unique',)
     list_filter = ("user","myself","others","gender")
+    fieldsets = (
+        (_('Prescription'), {'fields': ('user','prescription_file', 'test_name')}),
+        (_('Patient Details'), {'fields': ("bookingid","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address")}),
+        (_('Report'),{'fields':("report",)})
+    )
     # search_fields = ('testt', 'categoryy__categoryy')
     # list_editable=[""]
     def get_form(self, request, obj=None, **kwargs):
         # if obj.type == "1":
-        self.exclude = ("unique",'price')
+        self.exclude = ("unique",)
         form = super(prescriptionbookadmin, self).get_form(request, obj, **kwargs)
         return form
     def testname(self, obj):
@@ -129,21 +138,19 @@ class prescriptionbookadmin(admin.ModelAdmin):
     action_btn.short_description = "Action"
     def has_add_permission(self, request):
         return False
-    # prepopulated_fields = {"slug": ("name",)}
-# class selectedtestbookadmin(admin.ModelAdmin):
-#     list_display=["id","user","testname","myself","others","others_choice","firstname","lastname","contact","age","gender","created","updated"]
-#     def testname(self, obj):
-#         return ", ".join([
-#             test.testt for test in obj.test_name.all()
-#         ])
-#     testname.short_description = "Tests"
+
 class testbookadmin(admin.ModelAdmin):
-    list_display=["users","myself","others","others_choice","firstname","lastname","contact","age","gender","address","created","updated","action_btn"]        
-    readonly_fields=["user","myself","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location",'bookingid']
+    list_display=["users","tests","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address","report","created","updated","action_btn"]        
+    readonly_fields=["user","myself","payment_status","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location",'bookingid']
     exclude = ('unique',)
     list_filter = ("user","myself","others","gender")
     # search_fields = ('testt', 'categoryy__categoryy')
     # list_editable=[""]
+    fieldsets = (
+        (_('Tests'), {'fields': ('user','tests')}),
+        (_('Patient Details'), {'fields': ("bookingid",'payment_status',"myself","others","others_choice","firstname","lastname","contact","age","gender","address")}),
+        (_('Report'),{'fields':("report",)})
+    )
     def get_form(self, request, obj=None, **kwargs):
         # if obj.type == "1":
         self.exclude = ("unique",'price')
@@ -176,11 +183,16 @@ class categoryadmin(admin.ModelAdmin):
         return format_html(html)
     action_btn.short_description = "Action"
 class healthcheckup_admin(SummernoteModelAdmin):
-    list_display=["package_title","testname","testcount","Banglore_price","Mumbai_price","bhopal_price","nanded_price","pune_price","barshi_price","aurangabad_price","dBanglore_price","dMumbai_price","dbhopal_price","dnanded_price",'dpune_price','dbarshi_price','daurangabad_price',"discount","created","updated","action_btn"]    
+    list_display=["package_title","testname","testcount","Banglore_price","dBanglore_price","discount","created","updated","action_btn"]    
     readonly_fields=["created","updated"]
     # list_editable=["location"]
     prepopulated_fields = {"slug": ("package_title",)}
     summernote_fields = ('description')
+    def get_form(self, request, obj=None, **kwargs):
+        # if obj.type == "1":
+        self.exclude = ("Mumbai_price","bhopal_price","nanded_price","pune_price","barshi_price","aurangabad_price","dMumbai_price","dbhopal_price","dnanded_price",'dpune_price','dbarshi_price','daurangabad_price',)
+        form = super(healthcheckup_admin, self).get_form(request, obj, **kwargs)
+        return form
     def testname(self, obj):
         
         return ", ".join([
@@ -200,11 +212,16 @@ class healthcheckup_admin(SummernoteModelAdmin):
         return format_html(html)
     action_btn.short_description = "Action"
 class healthpackage_admin(SummernoteModelAdmin):
-    list_display=["package_name","testname","Banglore_price","Mumbai_price","bhopal_price","nanded_price","pune_price","barshi_price","aurangabad_price","created","updated","action_btn"]
+    list_display=["package_name","testname","Banglore_price","created","updated","action_btn"]
     readonly_fields=["created","updated"]
     # list_editable=["location"]
     prepopulated_fields = {"slug": ("package_name",)}
     # summernote_fields = ('content','package_name')
+    def get_form(self, request, obj=None, **kwargs):
+        # if obj.type == "1":
+        self.exclude = ("Mumbai_price","bhopal_price","nanded_price","pune_price","barshi_price","aurangabad_price",)
+        form = super(healthpackage_admin, self).get_form(request, obj, **kwargs)
+        return form
     def testname(self, obj):
         return ", ".join([
             test.testt for test in obj.test_name.all()
@@ -220,10 +237,15 @@ class healthpackage_admin(SummernoteModelAdmin):
     action_btn.short_description = "Action"
     
 class healthsymptoms_admin(SummernoteModelAdmin):
-    list_display=["name","imagee","testname","symptoms","created","updated","action_btn"]
+    list_display=["name","testname","symptoms","created","updated","action_btn"]
     readonly_fields=["created","updated"]
     prepopulated_fields = {"slug": ("name",)}
     summernote_fields = ('symptoms',)
+    def get_form(self, request, obj=None, **kwargs):
+        # if obj.type == "1":
+        self.exclude = ("Mumbai_price","bhopal_price","nanded_price","pune_price","barshi_price","aurangabad_price",)
+        form = super(healthsymptoms_admin, self).get_form(request, obj, **kwargs)
+        return form
     def testname(self, obj):
         return ", ".join([
             test.testt for test in obj.test_name.all()
@@ -312,7 +334,7 @@ class socialmediaadmin(admin.ModelAdmin):
     #     if self.model.objects.count() >= 1:
     #         return False
     #     return super().has_add_permission(request)
-from django.utils.translation import gettext_lazy as _
+
 class UserAdmin(OriginalUserAdmin): 
     list_display = ['id','first_name','last_name','email',"phone_no",'age','gender','location','address','date_joined']
     # list_editable=['is_confirmed']
@@ -331,13 +353,13 @@ class UserAdmin(OriginalUserAdmin):
 class subscriptionadmin(admin.ModelAdmin):
     list_display=["email","created"]
 class bookhistoryadmin(admin.ModelAdmin):
-    list_display=["bookingid","users","patient_infoo","booking_type","bookingdetails","amount","status","payment_status","created","updated","report","action_btn"]    
-    readonly_fields=["created","updated",'bookingid']
+    list_display=["bookingid","users","patient_infoo","booking_type","bookingdetails","amount","status","payment_status","created","updated","action_btn"]    
+    readonly_fields=["created","updated",'bookingid','payment_id']
     list_filter = ("user","booking_type")
     search_fields = ('bookingid',)
     def get_form(self, request, obj=None, **kwargs):
         # if obj.type == "1":
-        self.exclude = ("uni",'testbooking_id' )
+        self.exclude = ('testbooking_id','report','uni' )
         form = super(bookhistoryadmin, self).get_form(request, obj, **kwargs)
         return form
     def action_btn(self, obj):
@@ -356,13 +378,15 @@ class bookhistoryadmin(admin.ModelAdmin):
         # admin/app1/prescription_book/56/change/
         if obj.booking_type=="Prescription":
             try:
-                html="<div><a  href='/admin/app1/prescriptionbook1/"+ str(obj.uni)+"/change/'>{}</a></div>".format(str(obj.patient_info))
+                a=Prescriptionbook1.objects.get(bookingid=obj.bookingid)
+                html="<div><a  href='/admin/app1/prescriptionbook1/"+ str(a.id)+"/change/'>{}</a></div>".format(str(obj.patient_info))
                 return format_html(html)
             except:
                 pass
         else:
             try:
-                html="<div><a  href='/admin/app1/testbook/"+ str(obj.uni)+"/change/'>{}</a></div>".format(str(obj.patient_info))
+                a=testbook.objects.get(bookingid=obj.bookingid)
+                html="<div><a  href='/admin/app1/testbook/"+ str(a.id)+"/change/'>{}</a></div>".format(str(obj.patient_info))
                 return format_html(html)
             except:
                 pass

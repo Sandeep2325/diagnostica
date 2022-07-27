@@ -85,13 +85,13 @@
                                             <div class="row ">
                                                 <div class="col-6">
                                                     <div class="bg-white myself_other ms-3 ms-lg-0 mt-lg-0 mt-3 form_input">
-                                                        <input class="form_input cursor" type="radio" name="radio_self" id="myself" onClick="ckChange(this)"/>
+                                                        <input class="form_input cursor" type="radio" name="radio_self" id="myself" />
                                                         <label for="myself" class="cursor">My Self</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-6">
                                                     <div class="bg-white myself_other me-3 me-lg-0 mt-lg-0 mt-3  form_input">
-                                                        <input class="form_input cursor" checked type="radio" name="radio_others" id="others" onClick="ckChange1(this)"/>
+                                                        <input class="form_input cursor" checked type="radio" name="radio_others" id="others" />
                                                         <label for="others" class="cursor">Others</label>
                                                     </div>
                                                 </div>
@@ -309,14 +309,15 @@
         dataType: "json",
         success: function(resp){
         //console.log(resp)  
-        //a=resp['gender'];
+        a=resp['gender'];
         //console.log(a)
         $("#firstname").val(resp['firstname']);
         $("#lastname").val(resp['lastname']);
         $("#age").val(resp['age']);
         $("#phone").val(resp['contact']);
         $("#address").val(resp['address']);
-        if (resp['gender']!=null){
+        if (resp['gender']!=''){
+            console.log(resp['gender'])
             $("#gender").val(resp['gender']);
         };
         }

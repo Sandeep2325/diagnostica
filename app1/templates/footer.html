@@ -39,13 +39,15 @@
                 <div class="col-xl-3 col-lg-3  col-6 pt-xl-5 pt-3 ps-xl-5">
                     <h3 class="fs-30  footer_branches font-bold m-0 pb-3">Branches</h3>
                     <ul class="p-0">
+                        {% comment %} {%for city in cityy%}
+                        <li class="text_decoration font-bold pb-2">
+                            <a class="footer_branch_text fs-24 cursor" onclick='myfunction("{{city.cityname}}")'>{{city.cityname}}</a>
+                        </li>
+                        {%endfor%} {% endcomment %}
                         <li class="text_decoration font-bold pb-2">
                             <a class="footer_branch_text fs-24 ">Bangalore</a>
                         </li>
-                        <li class="text_decoration font-bold pb-2">
-                            <a class="footer_branch_text fs-24 ">Mumbai</a>
-                        </li>
-                        <li class="text_decoration font-bold pb-2">
+                         {% comment %} <li class="text_decoration font-bold pb-2">
                             <a class="footer_branch_text fs-24 ">Bhopal</a>
                         </li>
                         <li class="text_decoration font-bold pb-2">
@@ -59,7 +61,7 @@
                         </li>
                         <li class="text_decoration font-bold pb-2">
                             <a class="footer_branch_text fs-24 ">Aurangabad</a>
-                        </li>
+                        </li> {% endcomment %}
                     </ul>
                 </div>
                 <div class="col-xl-3 col-lg-3 col-6 pt-xl-5 pt-3 subscription_div">
@@ -194,5 +196,25 @@
         $('html, body').animate({ scrollTop: 0 }, '300');
     });
 
+
+    function myfunction(city){
+          
+        $.ajax({
+          url: "{% url 'city' %}",
+          type : "POST", 
+          data: {
+           "city":city,
+           csrfmiddlewaretoken: '{{ csrf_token }}',
+          },
+          dataType: "json",
+          success: function(resp){
+           console.log(resp);
+           if(resp["city"]){
+            $('#myModal').modal('hide');
+            window.location.reload();
+           }
+          }
+         });
+       };
 </script>
 
