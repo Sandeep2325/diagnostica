@@ -392,11 +392,55 @@ textarea {
     color: #2B3147;
 }
 
+.section_footer .footer_address ul li {
+    list-style: none;
+    font-size: 16px;
+    color: #2B3147;
+    position: relative;
+    padding-left: 35px;
+}
+
+.section_footer .footer_address ul li a {
+    color: #2B3147;
+}
+
+.section_footer .footer_address ul li a:hover {
+    font-size: 17px;
+    transition: 0.5s ease-in-out;
+}
+
+.section_footer .footer_address  ul li i {
+    list-style: none;
+    left: 0px;
+    position: absolute;
+    font-size: 20px;
+    color: #2B3147;
+}
+
+
 
 /* ---------------home page----------------- */
 
-.home-banner {
+.banner1 {
     background: url(../images/home_banner.png) no-repeat;
+    background-size: cover;
+    min-height: 450px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+}
+
+
+.banner2 {
+    background: url(../images/banner2.png) no-repeat;
+    background-size: cover;
+    min-height: 450px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+}
+.banner3 {
+    background: url(../images/banner3.png) no-repeat;
     background-size: cover;
     min-height: 450px;
     border-radius: 15px;
@@ -1361,7 +1405,7 @@ textarea {
 
 @media (max-width: 575.98px) {
     .home-banner {
-        min-height: 300px;
+        min-height: 380px;
     }
     .section_nav_bar .logo-img {
         width: 175px;
@@ -1428,6 +1472,15 @@ textarea {
     .select_option {
         font-size: 14px !important;
     }
+    .section_footer .footer_address  ul li i {
+        font-size: 15px;
+    }
+    .contact  ul li i {
+        font-size: 15px;
+    }
+    
+    
+    
 }
 
 @media (max-width: 767.98px) {
@@ -1541,7 +1594,7 @@ textarea {
     .section_nav_bar .nav_button {
         margin: 7px 0px !important;
     }
-    .home-banner h1 {
+    /* .home-banner h1 {
         font-size: 40px;
         font-family: Chivo-regular;
         color: white;
@@ -1559,7 +1612,7 @@ textarea {
     }
     .home_banner b {
         font-size: 18px;
-    }
+    } */
     .section_booking_history .tad_button {
         padding: 10px 20px;
         font-size: 16px;
@@ -1706,3 +1759,33 @@ textarea {
 .w-22{
     width: 22px;
 }
+
+
+
+
+
+
+
+.sec_otp_new .bgWhite{
+    background:white;
+    box-shadow:0px 3px 6px 0px #cacaca;
+  }
+  
+ .sec_otp_new .title{
+    font-weight:600;
+    margin-top:20px;
+    font-size:24px
+  }
+  
+.sec_otp_new .customBtn{
+    border-radius:0px;
+    padding:10px;
+  }
+  
+ .sec_otp_new form input{
+    display:inline-block;
+    width:50px;
+    height:50px;
+    text-align:center;
+    outline: none;
+  }
