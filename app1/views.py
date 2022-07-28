@@ -111,7 +111,7 @@ def Registration(request):
             request.session['otp'] = otp
             
                 # f"Hi {f},\nThere was a request to change your password!\nIf you did not make this request then please ignore this email.\nOtherwise, please click this link to change your password: [link]"
-            message=f"Hi {f},\nThank You for Choosing DIAGNOSTICA SPAN\nPlease enter this OTP {otp} to verify"
+            message=f"Hi {f},\n\nGreetings!\nYou are just a step away from accessing your Diagnostica Span account.\nWe are sharing a verification code to access your account. Once you have verified the code, you'll be prompted to access our portal immediately.\n\nYour OTP: {otp}\n\nThank You,\nDiagnostica Span"
             # message = f'Welcome your otp is {otp} '
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [e]
@@ -169,11 +169,11 @@ def resendotp(request):
     email_address = request.session.get('email')
     otp = random.randint(1000,9999)
     request.session['otp'] = otp
-    message=f"Hello,\nYour Resend OTP is {otp}\nPlease enter to verify"
+    message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDignostica Span"
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [email_address]
     message = message
-    subject = "DIGNOSTICA SPAN" 
+    subject = "OTP Verification | Dignostica Span" 
     send_mail(
             subject,
             message,
@@ -198,7 +198,7 @@ def changepassword(request):
         request.session["ppassword"]=password 
         request.session["conpassword"]=conpassword
         request.session['otp'] = otp
-        message=f"Hi {request.user.first_name},\nThere was a request to Password change\nIf you did not make this request then please ignore this email.\nOtherwise, Please enter the otp {otp}"
+        message=f"Hi {request.user.first_name},\nYou have requested to change your password credentials to login, please use below OTP to do the same\n\nOTP: {otp}\nIf the wish to keep your old password, kindly ignore the mail.\nThank you,\nDignostica Span"
         # message = f'Hello,\nWelcome your Change Password OTP is {otp} '
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [email_address]
@@ -843,7 +843,7 @@ def prescriptionbookview(request):
             bookingid=bookingid).save()
         data2=Prescriptionbook1.objects.get(unique=unique)
         if myself=="on":
-            User.objects.filter(email=request.user.email).update(first_name=firstname,last_name=lastname,phone_no=contact,age=age,address=address)
+            User.objects.filter(email=request.user.email).update(first_name=firstname,last_name=lastname,phone_no=contact,age=age,address=address,gender=gender)
         data=prescription_book.objects.get(unique=unique)
         print("---",data2.unique)
         book_history(
@@ -858,11 +858,12 @@ def prescriptionbookview(request):
         
         messages.success(
             request, "Thankyou for your booking!, Our admin team will get back to you shortly.")
-        message=f'Hello {request.user.first_name},\n Thank you for Booking!, Our admin team will get back to you shortly. '
+        link=request.build_absolute_uri('/bookinghistory/')
+        message=f'Hello {request.user.first_name},\n You have successfully uploaded your prescription on our website, our internal team will review it and get back to you shortly for further steps.\nYou can always track your bookings/uploads (link: {link})\n\nWe appreciate your patience\nThank You,\nDignostica Span'
             # message = f'Welcome your otp is {otp} '
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [request.user.email]
-        subject = "DIGNOSTICA SPAN" 
+        subject = "Prescription Upload Successfull | Dignostica Span" 
         send_mail(
                 subject,
                 message,
@@ -1005,7 +1006,7 @@ def cartt(request):
                 address=address).save()
         data2=prescription_book.objects.get(unique=uniquee)
         if others=="m":
-            User.objects.filter(email=request.user.email).update(first_name=firstname,last_name=lastname,phone_no=contact,age=age,address=address)
+            User.objects.filter(email=request.user.email).update(first_name=firstname,last_name=lastname,phone_no=contact,age=age,address=address,gender=gender)
         data1=cart.objects.filter(user=request.user)
         # a=[]
         # for i in data:
@@ -1049,7 +1050,7 @@ def cartt(request):
                 strr.append(tesst.items.testt)
                 invoicee.objects.create(user=request.user,order_id=razorpay_order_id,items=tesst.items,price=tesst.price).save()       
         listToStr = '/'.join(map(str, strr))
-        listToline = '\n'.join(map(str, strr))
+        listToline = '\n /'.join(map(str, strr))
         a=testbook.objects.create(
                 unique=uniquee,
                 user=request.user,
@@ -1064,7 +1065,7 @@ def cartt(request):
                 gender=gender,
                 location=c,
                 address=address,
-                bookingid=bookingid).save()
+                bookingid=bookingid)
         data=testbook.objects.get(unique=uniquee) 
         bookhistory=book_history(
                  user=request.user,
@@ -1354,8 +1355,7 @@ def cartt(request):
     return render(request,"mycart.html",context)
         # except:
         #     return render(request,"mycart.html")
-    
-
+ 
 def cartsessiondelete(request):
     deviceCookie = request.COOKIES['device']
     if request.method=="POST":
@@ -1372,13 +1372,13 @@ def cartsessiondelete(request):
 
 def othersdetail(request):
     if request.method=="POST":
-       
         testid=request.POST["testid"]
+        print("----",testid)
         try:
-            detail=Prescriptionbook1.objects.get(id=int(testid))
+            detail=Prescriptionbook1.objects.get(bookingid=testid)
             print("prec")
         except:
-            detail=testbook.objects.get(id=int(testid))
+            detail=testbook.objects.get(bookingid=testid)
             print("test")
         choice = ""
         gender=""
@@ -1407,8 +1407,8 @@ def paymenthandler(request,str,amount):
     def verify_signature(response_data):
         client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
         b = client.utility.verify_payment_signature(response_data)
-        # a=paymentids.objects.create(orderid=response_data['razorpay_order_id'],paymentid=response_data['razorpay_payment_id'],signatureid=response_data['razorpay_signature'])
-        # a.save()
+        request.session['signatureid']=response_data['razorpay_signature']
+        # paymentids.objects.create(orderid=response_data['razorpay_order_id'],paymentid=response_data['razorpay_payment_id'],signatureid=response_data['razorpay_signature'])
         return b
     try:
         if request.method =="POST":
@@ -1416,8 +1416,6 @@ def paymenthandler(request,str,amount):
             paymentid=request.POST.get("razorpay_payment_id")
             if paymentid:
                 if verify_signature(request.POST):
-                    print(paymentid)
-                    print(verify_signature)
                     transid=request.POST["razorpay_order_id"]
                     cart.objects.filter(user=usr).delete()
                     history=book_history.objects.get(payment_id=transid)
@@ -1425,10 +1423,26 @@ def paymenthandler(request,str,amount):
                     Prescriptionbook1.objects.filter(bookingid=history.bookingid).update(payment_status=True)
                     testbook.objects.filter(bookingid=history.bookingid).update(payment_status=True)
                     history.save()
+                    # signatureid=request.session.get("signatureid")
+                    # print("------",signatureid)
                     payment.objects.create(user=usr,paymentid=paymentid,transid=transid,amount=amount,booking_id=history.bookingid).save()
+                    # if signatureid!=None:
+                    #     del request.session['signatureid']
+                    # print("=====",signatureid)
                     request.session.delete("amount")
-                    message1 = f"Hi there,\nWe have successfully received your payment for booking id: {history.bookingid}.\nOur Medical team will get in touch with you for your mentioned tests.\nThank you\nDignostica Span"
+                    link=request.build_absolute_uri('/bookinghistory/')
+                    # message1 = f"Hi there,\nWe have successfully received your payment for booking id: {history.bookingid}.\nOur Medical team will get in touch with you for your mentioned tests.\nClick (link: {link}) to track your bookings.\nThank you\nDignostica Span"
                     email_from = settings.EMAIL_HOST_USER
+                    message1=f"""Hi there,
+
+                            We have successfully received your payment for booking id: {history.bookingid}..\n
+
+                            Our Medical team will get in touch with you for your mentioned tests.\n
+
+                            Click (link: {link}) to track your bookings.\n 
+                            
+                            Thank you\n
+                            Dignostica Span"""
                     recipient_list = [history.user.email]
                     subject = "DIAGNOSTICA SPAN" 
                     send_mail(
@@ -1441,6 +1455,26 @@ def paymenthandler(request,str,amount):
                     messages.info(request, "Thankyou for making payment our team will come and collect the sample soon.")
                     return HttpResponseRedirect(reverse("booking-history"))
             else:
+                transid=request.POST["razorpay_order_id"]
+                history=book_history.objects.get(payment_id=transid)
+                link=request.build_absolute_uri('/bookinghistory/')
+                email_from = settings.EMAIL_HOST_USER
+                recipient_list = [history.user.email]
+                # subject=f"Subject: Payment Failed| Dignostica Span | Booking Id:{history.bookingid}"
+                message=f"""Hi there,
+
+                            The payment initiated for booking id:{history.bookingid} has been failed.
+
+                            Payment success is required to proceed further steps:
+
+                            Click (link : {link}) to retry your payment."""
+                send_mail(
+                            f"Payment Failed| Dignostica Span | Booking Id:{history.bookingid}",
+                            message,
+                            email_from,
+                            recipient_list,
+                            fail_silently=False,
+                    )
                 b=request.POST.get('error[metadata]')
                 c=json.loads(b)
                 a=book_history.objects.filter(payment_id=c["order_id"])
@@ -1448,7 +1482,8 @@ def paymenthandler(request,str,amount):
                 messages.error(request, error)
                 return HttpResponseRedirect(reverse("booking-history"))
     except Exception as e:
-        messages.error(request, e)
+        print(e)
+        messages.error(request, "Payment failed Please Retry")
         return HttpResponseRedirect(reverse("booking-history"))
 
 def subscriptionview(request):
@@ -1994,24 +2029,40 @@ class BookingHistoryPay(LoginRequiredMixin,View):
             }
             try:
                 items=Prescriptionbook1.objects.get(bookingid=id)
+                for item in items.test_name.all():
+                    cityy=request.session.get("city")
+                    if cityy==Bangalore:
+                        invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.Banglore_price)
+                    elif cityy==Mumbai:
+                        invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.Mumbai_price)
+                    elif cityy==Bhophal:
+                        invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.bhopal_price)
+                    elif cityy==Nanded:
+                        invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.nanded_price)
+                    elif cityy==Pune:
+                        invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.pune_price)
+                    elif cityy==Barshi:
+                        invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.barshi_price)  
+                    elif cityy==Aurangabad:
+                        invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.aurangabad_price)
             except:
                 items=testbook.objects.get(bookingid=id)
-            for item in items.test_name.all():
-                cityy=request.session.get("city")
-                if cityy==Bangalore:
-                    invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.Banglore_price)
-                elif cityy==Mumbai:
-                    invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.Mumbai_price)
-                elif cityy==Bhophal:
-                    invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.bhopal_price)
-                elif cityy==Nanded:
-                    invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.nanded_price)
-                elif cityy==Pune:
-                    invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.pune_price)
-                elif cityy==Barshi:
-                    invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.barshi_price)  
-                elif cityy==Aurangabad:
-                    invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.aurangabad_price)   
+            # for item in items.test_name.all():
+            #     cityy=request.session.get("city")
+            #     if cityy==Bangalore:
+            #         invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.Banglore_price)
+            #     elif cityy==Mumbai:
+            #         invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.Mumbai_price)
+            #     elif cityy==Bhophal:
+            #         invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.bhopal_price)
+            #     elif cityy==Nanded:
+            #         invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.nanded_price)
+            #     elif cityy==Pune:
+            #         invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.pune_price)
+            #     elif cityy==Barshi:
+            #         invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.barshi_price)  
+            #     elif cityy==Aurangabad:
+            #         invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.aurangabad_price)   
         
         if request.POST.get("action") == "payment_canceled":
             mod = book_history.objects.get(testbooking_id=request.POST.get('id'))

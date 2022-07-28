@@ -412,7 +412,7 @@ $("#option1").change(function(e){
         },
         dataType: "json",
         success: function(resp){
-            
+            console.log(resp)
         $("#firstname").val(resp['firstname']);
         $("#lastname").val(resp['lastname']);
         $("#age").val(resp['age']);

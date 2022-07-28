@@ -77,7 +77,7 @@
                 {%if test.items != None%}
                 <tr style="padding-top:5px;">
                     <td style="font-size:13px; width:100px  " class="f-family"> {{ forloop.counter }}</td>
-                    <td style="font-size:13px;  width:170px" class="f-family">{{test.items}}{{test.id}}</td>
+                    <td style="font-size:13px;  width:170px" class="f-family">{{test.testcode}}</td>
                     <td style="font-size:13px;  width:350px" class="f-family">{{test.items}}.</td>
                     <td style="font-size:13px; " class="f-family">Rs.{{test.price|floatformat:2}}</td>
                 </tr>

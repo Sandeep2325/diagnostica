@@ -93,7 +93,7 @@
                                                     <td data-label="Date">{{bookhistory.created}}</td>
                                                    
                                                     {%if bookhistory.patient_info == "others" %}
-                                                    <td data-label="Patient Info"><a id="otherspop1" data-bs-toggle="modal" data-bs-target="#otherspop" class="br bg-dark-white cursor" onclick='othersfunc({{bookhistory.uni}})';>{{bookhistory.patient_info}}</a></td>
+                                                    <td data-label="Patient Info"><a id="otherspop1" data-bs-toggle="modal" data-bs-target="#otherspop" class="br bg-dark-white cursor" onclick='othersfunc("{{bookhistory.uni}}")';>{{bookhistory.patient_info}}</a></td>
                                                     {%else%}
                                                     <td data-label="Patient Info">{{bookhistory.patient_info}}</td>
                                                     {%endif%}
@@ -376,6 +376,7 @@
                 'csrfmiddlewaretoken':'{{ csrf_token }}',
             },
             success: function(resp){
+                
                
               //  $("#choice").text(resp['otherschoice']);
               // $("#firstname").text(resp['firstname']);
@@ -385,7 +386,7 @@
              //   $("#gender").text(resp['phone']);
              $("#othersspop").empty();
              
-               var detail=` <h3 class="fs-20 font-bold cl-dark-blue text-center" id="choice">Others : ${resp['otherschoice']}</h3>
+               var detail=` <h3 class="fs-20 font-bold cl-dark-blue text-center" id="choice">To Whom : ${resp['otherschoice']}</h3>
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="fistname">First Name : ${resp['firstname']}</h3>
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="lastname">Last Name : ${resp['lastname']}</h3>
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="gender">Gender : ${resp['gender']}</h3>

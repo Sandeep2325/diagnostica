@@ -32,7 +32,7 @@ class cityadmin(admin.ModelAdmin):
     imagee.short_description = 'City Icon'
     # readonly_fields = ["cityname"]
 class testadmin(admin.ModelAdmin):
-    list_display=["testt","categoryy","Banglore_price","is_active","created","updated","action_btn"]
+    list_display=["testcode","testt","categoryy","Banglore_price","is_active","created","updated","action_btn"]
     list_editable=["is_active"]
     list_filter = ('categoryy', 'is_active')
     search_fields = ('testt', 'categoryy__categoryy')
@@ -79,6 +79,7 @@ class testadmin(admin.ModelAdmin):
                         categoryy=category.objects.get(pk=row.get("category_id"))
                         obj, created = test.objects.get_or_create(
                                 testt=row["Tests"],
+                                testcode=row["test_code"],
                                 categoryy=categoryy,
                                 Banglore_price=row.get("Banglore_price") if row.get("Banglore_price") else None,
                                 Mumbai_price=row.get("Mumbai_price") if row.get("Mumbai_price") else None,
@@ -104,14 +105,15 @@ class testadmin(admin.ModelAdmin):
 
 class prescriptionbookadmin(admin.ModelAdmin):
     list_display=["users","testname","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address","prescription_file","report","created","updated","action_btn"]        
-    readonly_fields=["user","myself","payment_status","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location","bookingid"]
+    readonly_fields=["user","myself","payment_status","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location","bookingid",'price']
     exclude = ('unique',)
     list_filter = ("user","myself","others","gender")
     fieldsets = (
-        (_('Prescription'), {'fields': ('user','prescription_file', 'test_name')}),
+        (_('Prescription'), {'fields': ('user','prescription_file', 'test_name','price')}),
         (_('Patient Details'), {'fields': ("bookingid","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address")}),
         (_('Report'),{'fields':("report",)})
     )
+    
     # search_fields = ('testt', 'categoryy__categoryy')
     # list_editable=[""]
     def get_form(self, request, obj=None, **kwargs):

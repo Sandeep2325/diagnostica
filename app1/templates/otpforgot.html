@@ -83,11 +83,10 @@
                                         Enter OTP
                                     </h1>
                                     <p class="fs18 font-regular cl-dark-blue opc-5 m-0 pe-xl-5">
-                                        Lorem Ipsum is simply dummy text of the printing and
-                                        typesetting industry.
+                                        Please check your Mobile or Mail for the OTP.
                                     </p>
                                     <form method="post" class="mt-5">
-                                        {% comment %} {%csrf_token%} {% endcomment %}
+                                        {%csrf_token%}
                                         <input class="otp" type="text" oninput='digitValidate(this)'
                                             onkeyup='tabChange(1)' maxlength=1 name="digit-1" >
                                         <input class="otp" type="text" oninput='digitValidate(this)'

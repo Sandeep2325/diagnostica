@@ -87,28 +87,28 @@ AUTH_USER_MODEL = 'app1.User'
 #     }
 # }
 
-# DATABASES = {  
-#     'default': {  
-#         'ENGINE': 'django.db.backends.mysql',  
-#         'NAME': 'diagnospan',  
-#         'USER': 'root',  
-#         'PASSWORD': 'Sandeep@8105',  
-#         'HOST': 'localhost',  
-#         'PORT': '3306',  
-        
-#     }  
-# } 
-
 DATABASES = {  
     'default': {  
         'ENGINE': 'django.db.backends.mysql',  
         'NAME': 'diagnospan',  
         'USER': 'root',  
-        'PASSWORD': 'mySqlServer@#$432',  
+        'PASSWORD': 'Sandeep@8105',  
         'HOST': 'localhost',  
-        'PORT': '3306',   
+        'PORT': '3306',  
+        
     }  
-}
+} 
+
+# DATABASES = {  
+#     'default': {  
+#         'ENGINE': 'django.db.backends.mysql',  
+#         'NAME': 'diagnospan',  
+#         'USER': 'root',  
+#         'PASSWORD': 'mySqlServer@#$432',  
+#         'HOST': 'localhost',  
+#         'PORT': '3306',   
+#     }  
+# }
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 20000
 # Password validation
@@ -162,8 +162,14 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = "gowdasandeep8105@gmail.com"
 # EMAIL_HOST_PASSWORD = 'Sandeep@1234'
 EMAIL_HOST_PASSWORD = 'atkzlpfgzcvpdhai'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'mail.spandiagno.com'
+# EMAIL_USE_SSL = True
+# EMAIL_PORT = 465
+# EMAIL_HOST_USER = "donotreplay@spandiagno.com"
+# EMAIL_HOST_PASSWORD = 'Fullmoon22@'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-SESSION_SAVE_EVERY_REQUEST =True
+# SESSION_SAVE_EVERY_REQUEST =True
 SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)

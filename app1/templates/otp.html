@@ -83,21 +83,20 @@
                                         Enter OTP
                                     </h1>
                                     <p class="fs18 font-regular cl-dark-blue opc-5 m-0 pe-xl-5">
-                                        Lorem Ipsum is simply dummy text of the printing and
-                                        typesetting industry.
+                                        Please check your Mobile or Mail for the OTP.
                                     </p>
-                                    <form method="post" class="mt-5">
+                                    <form method="post" class="mt-5" id="form">
 
                                         {%csrf_token%}
                                     
                                         <input class="otp" type="text" oninput='digitValidate(this)'
-                                            onkeyup='tabChange(1)' maxlength=1 name="digit-1" >
+                                            onkeyup='tabChange(1)' maxlength=1 name="digit-1" id="digit-1">
                                         <input class="otp" type="text" oninput='digitValidate(this)'
-                                            onkeyup='tabChange(2)' maxlength=1 name="digit-2">
+                                            onkeyup='tabChange(2)' maxlength=1 name="digit-2" id="digit-1">
                                         <input class="otp" type="text" oninput='digitValidate(this)'
-                                            onkeyup='tabChange(3)' maxlength=1 name="digit-3">
+                                            onkeyup='tabChange(3)' maxlength=1 name="digit-3" id="digit-1">
                                         <input class="otp " type="text" oninput='digitValidate(this)'
-                                            onkeyup='tabChange(4)' maxlength=1  name="digit-4">
+                                            onkeyup='tabChange(4)' maxlength=1  name="digit-4" id="digit-1">
                                         <br>
                                         <div class="pt-3">
                                             <a href="{%url "resend" %}" class="col-lg-3 col-5  cursor">Resend OTP</a>
@@ -188,6 +187,28 @@
         }
     }
 
+   /* $("#form").submit(function (event) {
+        var formData = {
+            digit1: $("#digit-1").val(),
+            digit2: $("#digit-2").val()
+            digit3: $("#digit-3").val()
+            digit4: $("#digit-4").val()
+          
+        };
+    
+        $.ajax({
+          type: "POST",
+          url: "process.php",
+          data: formData,
+          dataType: "json",
+          encode: true,
+        }).done(function (data) {
+          console.log(data);
+          location.href="{% url 'user-login' %}"
+        });
+    
+        event.preventDefault();
+      });*/
 </script>
 
 {% if messages %}
