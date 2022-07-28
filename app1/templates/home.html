@@ -8,7 +8,7 @@
   {%include 'header.html'%}
   <section class="home_banner pt-3 pb-lg-5">
     <div class="owl-carousel owl-theme home-banner-slider">
-      <div class="home-banner pt-4 pb-5 py-sm-5">
+      <div class="home-banner banner1 pt-4 pb-5 py-sm-5">
         <div class="container">
           <div class="row">
             <div class="offset-xl-1 offset-xxl-1 col-xxl-5 col-xl-6 col-lg-10 ">
@@ -21,6 +21,29 @@
               <p class="fs-24">To become <b> “One Stop Solution” </b> for all your Diagnostic needs</p>
               <a href="{%url "bookonline"%}"><button>BOOK A TEST ONLINE</button></a>
             </div>
+          </div>
+        </div>
+      </div>
+      <div class="home-banner banner2 pt-4 pb-5 py-sm-5">
+        <div class="container">
+          <div class="row">
+            <div class="offset-xl-1 offset-xxl-1 col-xxl-5 col-xl-6 col-lg-10 ">
+              <h1 class="p-0" style="color:red">#</h1>
+              <h1 class="p-0 m-0" style="color:red; font-weight: bold;">STAY SAFE</h1>
+              <p class="fs-24" style="color:red"><b>HOME SAMPLE COLLECTION NOW AVAILABLE</b></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="home-banner banner3 pt-4 pb-5 py-sm-5">
+        <div class="container">
+          <div class="row">
+            <div class="offset-xl-1 offset-xxl-1 col-xxl-5 col-xl-6 col-lg-10 "> </div>
+            <div class="offset-xl-1 offset-xxl-1 col-xxl-5 col-xl-6 col-lg-10 ">
+              <h1 class="p-0 m-0" style="color:red; font-weight: bold;">Check out our Span's curated  </h1>
+             <a href="/"> <h2 style="color:orange">Health packages</h2></a>
+            </div>
+            
           </div>
         </div>
       </div>
@@ -364,7 +387,7 @@
                         Test<span
                         class="cl-red ps-1">*</span></option>
                       {%for test in tests%}
-                      <option value={{test.id}}>{{test.testt}}</option>
+                      <option  value={{test.id}}>{{test.testt}}</option>
                       {%endfor%}
                     </select>
                   </div>
@@ -479,11 +502,12 @@ $(document).ready(function(){
     items: 2,
     responsiveClass: true,
     autoHeight: false,
-    autoplayTimeout: 3000,
+    autoplayTimeout: 4000,
     smartSpeed: 800,
     dots: false,
     nav: false,
     autoplay: true,
+    stopOnHover:true,
     responsive: {
       0: {
         items: 1,
@@ -511,11 +535,12 @@ $(document).ready(function(){
     items: 2.7,
     responsiveClass: true,
     autoHeight: false,
-    autoplayTimeout: 7000,
+    autoplayTimeout: 4000,
     smartSpeed: 800,
     dots: false,
     nav: false,
     autoplay: true,
+    stopOnHover:true,
     responsive: {
       0: {
         items: 1,
@@ -541,12 +566,15 @@ $(document).ready(function(){
 
   $('.home-banner-slider').owlCarousel({
     loop: true,
+    // autoplay:true,
+    // autoplayTimeout: 7000,
     margin: 20,
     nav: false,
     items: 1.2,
     center: true,
     nav: false,
     dots: false,
+    stopOnHover:true,
     responsive: {
       0: {
         margin: 8,
