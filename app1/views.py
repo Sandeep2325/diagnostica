@@ -589,7 +589,7 @@ def home(request):
         lastname=request.POST["lastname"]
         phone=request.POST["phone"]
         email=request.POST["email"]
-        message = '{} from {} category from {}'.format(tes.testt,tes.categoryy,c)
+        message = 'Hi\nYou have Call back request for below test.\n{} from {} category from {}'.format(tes.testt,tes.categoryy,c)
         email_from = settings.EMAIL_HOST_USER
         recipient_list = ["sandeep.nexevo@gmail.com"]
         message = message

@@ -423,14 +423,13 @@ textarea {
 /* ---------------home page----------------- */
 
 .banner1 {
-    background: url(../images/home_banner.png) no-repeat;
+    background: url(../images/home_banner.jpeg) no-repeat;
     background-size: cover;
     min-height: 450px;
     border-radius: 15px;
     display: flex;
     align-items: center;
 }
-
 
 .banner2 {
     background: url(../images/banner2.png) no-repeat;
@@ -439,7 +438,9 @@ textarea {
     border-radius: 15px;
     display: flex;
     align-items: center;
+    background-position: 100%;
 }
+
 .banner3 {
     background: url(../images/banner3.png) no-repeat;
     background-size: cover;
@@ -447,6 +448,7 @@ textarea {
     border-radius: 15px;
     display: flex;
     align-items: center;
+    background-position: 100%;
 }
 
 .home-banner h1 {
@@ -1795,32 +1797,26 @@ textarea {
     width: 22px;
 }
 
+.sec_otp_new .bgWhite {
+    background: white;
+    box-shadow: 0px 3px 6px 0px #cacaca;
+}
 
+.sec_otp_new .title {
+    font-weight: 600;
+    margin-top: 20px;
+    font-size: 24px
+}
 
+.sec_otp_new .customBtn {
+    border-radius: 0px;
+    padding: 10px;
+}
 
-
-
-
-.sec_otp_new .bgWhite{
-    background:white;
-    box-shadow:0px 3px 6px 0px #cacaca;
-  }
-  
- .sec_otp_new .title{
-    font-weight:600;
-    margin-top:20px;
-    font-size:24px
-  }
-  
-.sec_otp_new .customBtn{
-    border-radius:0px;
-    padding:10px;
-  }
-  
- .sec_otp_new form input{
-    display:inline-block;
-    width:50px;
-    height:50px;
-    text-align:center;
+.sec_otp_new form input {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    text-align: center;
     outline: none;
-  }
+}

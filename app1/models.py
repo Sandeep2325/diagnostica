@@ -218,6 +218,7 @@ class testbook(models.Model):
         return "Test booking"
     class Meta:
         verbose_name_plural="Test Bookings" 
+    
 @receiver(post_save, sender=testbook)
 def reportresponse(sender, instance, **kwargs):
     if (instance.payment_status== True) and (bool(instance.report) == True):
@@ -268,63 +269,15 @@ class Prescriptionbook1(models.Model):
         return "Prescription booking"
     class Meta:
         verbose_name_plural="Prescription Bookings"
-    # def save_related(self,*args, **kwargs):
-    #     super(Prescriptionbook1, self).save_related(*args, **kwargs)
-    #     category = test.objects.get(pk=1)
-    #     form.instance.categories.add(category)
-        
-    # def save(self, *args, **kwargs):
-    #     m = super().save(*args, **kwargs) # new
-    #     o = Prescriptionbook1.objects.get(unique=self.unique)
-    #     # print(o.test_name.all())
-    #     a=[]
-    #     # print(self.test_name.all())
-    #     # self.test_name.clear()
-    #     # self.test_name.add()
-    #     # self.test_name.add(self.test_name.id)
-    #     for i in self.test_name.all():
-    #         print(i)
-    #         if self.location=="Bangalore":
-    #             a.append(i.Banglore_price)
-                
-    #         elif self.location=="Mumbai":
-    #             a.append(i.Mumbai_price)
-                
-    #         elif self.location=="Bhophal":
-    #             a.append(i.bhopal_price)
-                
-    #         elif self.location=="Nanded":
-    #             a.append(i.nanded_price)
-                
-    #         elif self.location=="Pune":
-    #             a.append(i.pune_price)
-                
-    #         elif self.location=="Barshi":
-    #             a.append(i.barshi_price)
-                
-    #         elif self.location=="Aurangabad":
-    #             a.append(i.aurangabad_price)
-    #     # print(sender)
-    #     # print(sum(a))
-            
-    #     book_history.objects.filter(uni=self.bookingid).update(amount=sum(a))
-    #     # instance.price=sum(a)
-    #     # print(sum(a),a)
-    #     # self.price=sum(a)
+    # def save(self,*args,**kwargs):
     #     if (self.payment_status== True) and (bool(self.report) == True):
-    #         send_mail(str("DIAGNOSTICA SPAN TEST REPORT"),
-    #                 ("Dear Customer,\n Your Report is Added to your dashboard,Please Checkit out"),
-    #                 settings.EMAIL_HOST_USER,
-    #                 [self.user.email],
-    #                 fail_silently=False)
-    #     if (self.test_name.first()!=None) and (bool(self.prescription_file)==True and bool(self.report) == False): 
-    #             # print("sent")
-    #             send_mail(str("Dear Customer" ),
-    #                         ("After reviewing your Prescription ,\nTests are added as per your Prescription \nPlease check and make payment to further steps"),
-    #                         settings.EMAIL_HOST_USER,
-    #                         [self.user.email],
-    #                         fail_silently=False)
-    #     return m
+    #         print("--------in")
+    #         send_mail(str("Tests Report | Dignostica Span"),
+    #                   (f"Hi {self.user.first_name},\n Thank for using our Services.\nThis mail is regarding the booking id: {instance.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please visit to review and download it..\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"),
+    #                   settings.EMAIL_HOST_USER,
+    #                   [self.user.email],
+    #                   fail_silently=False)
+    #     return super().save(self,*args,**kwargs)
 
 @receiver(post_save, sender=Prescriptionbook1)
 def testbookings(sender, instance, **kwargs):
