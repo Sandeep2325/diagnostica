@@ -253,9 +253,11 @@ select,
 textarea {
     box-shadow: none !important;
 }
+
 .cursor {
     cursor: pointer;
 }
+
 .select_option {
     outline: none;
 }
@@ -268,7 +270,8 @@ textarea {
     top: 0;
     z-index: 999;
 }
-.header_tgl_btn{
+
+.header_tgl_btn {
     font-size: 25px!important;
 }
 
@@ -311,7 +314,6 @@ textarea {
     left: unset;
     margin-top: 39px;
 }
-
 
 
 /*--------------- footer ----------------*/
@@ -409,14 +411,13 @@ textarea {
     transition: 0.5s ease-in-out;
 }
 
-.section_footer .footer_address  ul li i {
+.section_footer .footer_address ul li i {
     list-style: none;
     left: 0px;
     position: absolute;
     font-size: 20px;
     color: #2B3147;
 }
-
 
 
 /* ---------------home page----------------- */
@@ -504,7 +505,7 @@ textarea {
     overflow-y: hidden;
 }
 
-.section_home_health_check  .health_care_{
+.section_home_health_check .health_care_ {
     padding-bottom: 25px;
     margin: 0px;
     padding-left: 20px;
@@ -662,12 +663,15 @@ textarea {
 .helper_header_col {
     padding-top: 30px;
 }
+
+
 /* -------------------Login------------------- */
 
 .section_login p {
     opacity: 0.5;
 }
-.globalsubmitbutton{
+
+.globalsubmitbutton {
     font-size: 16px;
     font-family: Chivo-bold;
     color: white;
@@ -677,13 +681,15 @@ textarea {
     border-radius: 5px;
     border: none;
 }
-.globalsubmitbutton:hover{
+
+.globalsubmitbutton:hover {
     font-size: 15px;
     font-family: Chivo-bold;
     color: white;
     width: 175px;
     height: 45px;
-    background: #17235A;;
+    background: #17235A;
+    ;
     border-radius: 5px;
     border: none;
     transition: 0.5s ease-in-out;
@@ -701,8 +707,9 @@ textarea {
     outline: none;
     opacity: 0.8;
 }
+
 .section_login .login_input:focus {
-   opacity: 999;
+    opacity: 999;
 }
 
 .section_login .login_input_2 {
@@ -718,8 +725,9 @@ textarea {
     position: relative;
     opacity: 0.8;
 }
+
 .section_login .login_input_2:focus {
-   opacity: 999;
+    opacity: 999;
 }
 
 input::-webkit-input-placeholder,
@@ -749,7 +757,7 @@ select::placeholder {
     font-size: 20px !important;
 }
 
-.form_input{
+.form_input {
     font-size: 15px!important;
     padding: 10px 20px!important;
     outline: none!important;
@@ -757,24 +765,28 @@ select::placeholder {
     background: #FFFFFF 0% 0% no-repeat padding-box!important;
     border-radius: 5px!important;
     opacity: 0.8!important;
-    
 }
-.form_input:focus{
-   opacity: 999;
+
+.form_input:focus {
+    opacity: 999;
 }
-select{
+
+select {
     font-size: 15px!important;
     padding: 10px 20px!important;
     outline: none!important;
     border: 2px solid #DBDEEF!important;
     border-radius: 5px!important;
-    opacity: 0.8!important;  
+    opacity: 0.8!important;
 }
-.select:focus{
+
+.select:focus {
     opacity: 999;
- }
+}
+
 
 /* ------------------Register Now -----------------*/
+
 .toggle-password-register {
     position: absolute;
     z-index: 2;
@@ -802,11 +814,38 @@ select{
     min-width: 60px;
     min-height: 60px;
 }
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
+
+.sec_otp_new .bgWhite {
+    background: white;
+    box-shadow: 0px 3px 6px 0px #cacaca;
+}
+
+.sec_otp_new .title {
+    font-weight: 600;
+    margin-top: 20px;
+    font-size: 24px
+}
+
+.sec_otp_new .customBtn {
+    border-radius: 0px;
+    padding: 10px;
+}
+
+.sec_otp_new form input {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    outline: none;
+}
+
+
 /* -----------Change password -----------------*/
 
 .change_password_eye {
@@ -819,14 +858,13 @@ input::-webkit-inner-spin-button {
 
 /* ----------------profile------------- */
 
-
-.profile-br{
+.profile-br {
     border-radius: 15px 15px 0px 0px;
 }
-.profile-br-2{
+
+.profile-br-2 {
     border-radius: 0px 0px 15px 15px;
 }
-
 
 .change_password_modal input {
     border: none;
@@ -973,12 +1011,13 @@ input::-webkit-inner-spin-button {
     right: 0px;
 }
 
- .close {
+.close {
     position: absolute;
     right: 0px;
     top: -1px;
     color: #2B3147;
 }
+
 
 /* .close {
     position: absolute;
@@ -989,12 +1028,9 @@ input::-webkit-inner-spin-button {
     opacity: 111111;
 } */
 
-
 .cart_checkout_modal .modal-dialog {
     margin: 10vh auto 0px auto
 }
-
-
 
 
 /* -----------------Booking History -------------- */
@@ -1122,14 +1158,13 @@ table td {
 
 
 /* ------------------ Upload Pescription -----------*/
+
 .section_book-test-online .folder_icon {
     position: absolute;
     top: 18px;
     right: 30px;
     color: #2B3147;
 }
-
-
 
 .section_book-test-online ul li {
     list-style: none;
@@ -1224,7 +1259,6 @@ table td {
     font-size: 20px;
     color: #2B3147;
 }
-
 
 
 /* ------------faq---------- */
@@ -1333,6 +1367,8 @@ textarea {
     border-radius: 10px;
     -webkit-box-shadow: 0 0 20px #eceaea;
     box-shadow: 0 0 20px #eceaea;
+    height: 500px;
+    overflow: auto
 }
 
 
@@ -1472,15 +1508,12 @@ textarea {
     .select_option {
         font-size: 14px !important;
     }
-    .section_footer .footer_address  ul li i {
+    .section_footer .footer_address ul li i {
         font-size: 15px;
     }
-    .contact  ul li i {
+    .contact ul li i {
         font-size: 15px;
     }
-    
-    
-    
 }
 
 @media (max-width: 767.98px) {
@@ -1543,9 +1576,9 @@ textarea {
         font-size: 16px;
     }
     .section_profile input,
-.select_option {
-    font-size: 16px !important;
-}
+    .select_option {
+        font-size: 16px !important;
+    }
 }
 
 @media (max-width: 991.98px) {
@@ -1618,7 +1651,7 @@ textarea {
         font-size: 16px;
     }
     .cart_table h1 {
-        font-size: 25px;                            
+        font-size: 25px;
     }
     .cart_table .cell {
         text-align: start !important;
@@ -1740,7 +1773,7 @@ textarea {
     }
 }
 
-.cart_indication{
+.cart_indication {
     width: 20px;
     height: 20px;
     background: #17235A;
@@ -1753,10 +1786,12 @@ textarea {
     color: #fff;
     font-size: 12px;
 }
-.w-20{
+
+.w-20 {
     width: 20px;
 }
-.w-22{
+
+.w-22 {
     width: 22px;
 }
 

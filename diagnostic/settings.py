@@ -30,11 +30,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
     "app1",
+    "django.contrib.humanize",
+    
 ]
 INSTALLED_APPS += ('django_summernote', ) 
-INSTALLED_APPS += ['sequences.apps.SequencesConfig']
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -59,11 +60,14 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'app1.context_processor.context_processor'
+                
             ],
         },
     },
 ]
 TEMPLATE_CONTEXT_PROCESSORS = (
+    'app1.context_processor.context_processor'
     "django.core.context_processors.auth",
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
@@ -82,28 +86,30 @@ AUTH_USER_MODEL = 'app1.User'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-DATABASES = {  
-    'default': {  
-        'ENGINE': 'django.db.backends.mysql',  
-        'NAME': 'diagnospan',  
-        'USER': 'root',  
-        'PASSWORD': 'Sandeep@8105',  
-        'HOST': 'localhost',  
-        'PORT': '3306',  
-        
-    }  
-} 
 
 # DATABASES = {  
 #     'default': {  
 #         'ENGINE': 'django.db.backends.mysql',  
 #         'NAME': 'diagnospan',  
 #         'USER': 'root',  
-#         'PASSWORD': 'mySqlServer@#$432',  
+#         'PASSWORD': 'Sandeep@8105',  
 #         'HOST': 'localhost',  
-#         'PORT': '3306',   
+#         'PORT': '3306',  
+        
 #     }  
-# }
+# } 
+
+DATABASES = {  
+    'default': {  
+        'ENGINE': 'django.db.backends.mysql',  
+        'NAME': 'diagnospan',  
+        'USER': 'root',  
+        'PASSWORD': 'mySqlServer@#$432',  
+        'HOST': 'localhost',  
+        'PORT': '3306',   
+    }  
+}
+
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 20000
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -171,8 +177,11 @@ JAZZMIN_SETTINGS = {
     # "site_logo": "jazzmin/img/logo.png",
     "custom_css": "jazzmin/css/custom.css",
     "custom_js": "jazzmin/js/custom.js",
-    "order_with_respect_to": ["app1.city","app1.User","app1.aboutspan" "app1.User","app1.category", "app1.test","app1.prescription_book","app1.book_history","app1.healthcheckuppackages","app1.healthpackages","app1.healthcheckuppackages","app1.healthsymptoms","app1.coupons","app1.blogcategory","app1.healthcareblogs","app1.healthcareblogs","app1.subscription","app1.socialmedialinks"],
+    "order_with_respect_to": ["app1.city","app1.User","app1.aboutspan" "app1.User","app1.category", "app1.test","app1.Prescriptionbook1","app1.testbook","app1.book_history","app1.healthcheckuppackages","app1.healthpackages","app1.healthcheckuppackages","app1.healthsymptoms","app1.coupons","app1.blogcategory","app1.healthcareblogs","app1.healthcareblogs","app1.subscription","app1.socialmedialinks"],
     "default_icon_parents": "",
     "default_icon_children": "",
     }
+# from app1.views import TIME
+SESSION_COOKIE_AGE = 1209600
+
 

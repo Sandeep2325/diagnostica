@@ -1,5 +1,5 @@
 from django.urls import path,re_path
-from .import views,payments
+from .import views
 from django.contrib.auth import views as auth_view
 from django.views.generic import TemplateView
 from django.conf.urls.static import static
@@ -39,7 +39,7 @@ urlpatterns = [
     path('healthpackage/<slug:slug>',views.healthpackageview, name='Health-package'),
     path('healthsymptomview/<slug:slug>/',views.healthsymptomview, name='Health-symptoms'),
     path('blogdetail/<slug:slug>/',views.healthcareblogsview, name='blogsdetail'),
-    path('category/<slug:slug>/',views.categoryblog, name='categoryblog'),
+    path('blogcategory/<slug:slug>',views.categoryblog, name='categoryblog'),
     path('registration/',views.Registration, name="Registration"),
     path('registration/otp/',views.otpRegistration, name="otp-Registration"),
     path('resend/',views.resendotp,name="resend"),
@@ -51,17 +51,20 @@ urlpatterns = [
     path("changepasswordotp/",views.changepasswordotp,name="changepasswordotp"),
     path("passwordcheck",views.passwordcheck,name="passwordcheck"),
     path("testdetails",views.testdetails,name="testdetails"),
+    path("privacy-policy",views.privacypolicy,name="privacy-policy"),
+    path("payment-refund",views.paymentsrefund,name="payment-refund"),
+    path("termsofuse",views.termsofuse,name="termsofuse"),
     # path('login/otp/',views.otpLogin, name="otp-login"),
     # path('logout/',auth_view.LogoutView.as_view(template_name='logout.html')),
     # path('email-verify/', views.email_verification, name="email-verify"),
     # path('forget-password/',views.forget_password,name="forger-password"),
     # path('forget-password/done/',TemplateView.as_view(template_name='forget-password-done.html')),
     # path('change-password/<slug:uid>/',views.change_password,name="change-password"),
-    path('payment/', payments.payment, name='payment'),
     path('paymenthandler/<str:str>/<str:amount>/', views.paymenthandler, name='paymenthandler'),
     path("cartsessiondelete",views.cartsessiondelete,name="cartsessiondelete"),
 
     path("health-symptoms/<slug:slug>/",views.HealthSymptoms.as_view(),name="health_symptoms"),
+    path("couponsessiondelete",views.couponsessiondelete,name='couponsessiondelete'),
 
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

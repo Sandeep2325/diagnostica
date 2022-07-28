@@ -1,0 +1,55 @@
+{% extends "index.html" %}
+{% load static %}
+
+{%block content%}
+
+<body>
+    {%include "header.html"%}
+    <section class="sub_header py-xl-4 py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="d-flex ">
+                        <p class="m-0 fs-18 font-regular cl-dark-blue opc-5 pe-1 sub_nav_bar"><a
+                                href="{%url "home"%}">Home</a></p>
+                        /
+                        <p class="m-0 fs-18 font-regular cl-dark-blue ps-1 sub_nav_bar">Payments and Refunds</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section_health_pack py-lg-3 pb-lg-5 pb-4">
+        <div class="container">
+            <div class="row">
+                <b>1. PAYMENT</b>
+                The Company shall endeavour to provide the Customer with facilities/gateways to pay the Fee through credit cards (American Express, visa and mastercard), debit cards, cash cards and internet banking.
+                
+                It is understood and agreed by the User/Customer that the Services shall only commence after realization of money in the accounts of the Company incase online payment is being opted for by them.
+                
+                It is understood and agreed by the User/Customer that payment mechanisms may be governed by separate/additional terms of use prescribed by the Company.
+                
+                The Company reserves the right to refuse or cancel any order placed for a product/package that is listed at an incorrect price. This shall be regardless of whether the order has been confirmed and/or payment been levied via credit card. In the event the payment has been processed by the Company, the same shall be credited to your credit card account within 7-14 working days and duly notified to you by email. Once the order has been placed and in case You wish to cancel/modify the same You may do so subject to cancellation/modification charges as prescribed.
+                
+                It is understood and agreed by the User/Customer that payment mechanisms may be governed by separate agreements between the third parties who provide facilities for such payment mechanism and the Company.
+                
+                It is understood and agreed by the User/Customer that in no event whatsoever, the Company shall take any responsibility or liability for malfunctioning or defect in any payment procedure. Payment of the Price shall be the sole responsibility of the User/Customer.
+                
+                The Company reserves the right to charge listing fees for certain listings, as well as transaction fees based on certain completed transactions using the Services through the Website or any other fee. The Company further reserves the right to alter any and all fees from time to time, without notice.
+                
+                The User/Customer may be liable to pay all applicable charges, fees, duties, taxes, levies and assessments for availing the Services through the Website. Further, the Company reserves the right o change the Fees upon its sole discretion without any prior notice to the Customers/Users. <br> 
+                <br> 
+                <b>2. REFUND AND CANCELLATION POLICY</b>
+                The E-Health Package is valid for the [7] days from the time and date of invoice generation. After 7 days, the Customer shall not be entitled to claim for Services and the company shall have the right to forfeit the fees already paid in such a case.
+                
+                Cancellation shall be acceptable only if the Customer informs the Company within 72 hours from the time of booking. 3% cancellation charges will be applicable on the total amount of invoice. The Customer can contact us through e-mail id, enquiry@spandiagno.com in case of cancellation and refund.
+                
+                The refund amount will be sent to the respective debit card/credit card/account from where payment was made and amount will not be refundable by any other mode.
+            </div>
+        </div>
+    </section>
+
+    {%include "footer.html"%}
+
+</body>
+{%endblock%}

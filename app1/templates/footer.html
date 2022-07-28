@@ -16,17 +16,38 @@
                     <div class="footer_image_logo py-4 py-lg-5 mt-lg-3">
                        <a href="{%url "home"%}"> <img src="{%static "images/image_logo.png"%}" alt="" class="img-fluid"></a>
                     </div>
+                        <div class="footer_address">
+                            <ul class="p-0">
+                                <li> <i class="fa fa-map-marker  " aria-hidden="true"></i>
+                                    Ground floor, No. 79, 40th main<br>
+                                    M.E.I road, 2nd Stage<br>
+                                    Industrial Suburb<br>
+                                    Yeshwanthpur <br>
+                                    Bengaluru - 560022
+                                </li>
+                                <li>
+                                    <i class="fa fa-phone " aria-hidden="true"></i>
+                                    <a href="tel:+919769351301">+91 9769 351 301</a>
+                                </li>
+                                <li>
+                                    <i class="fa fa-envelope-o " aria-hidden="true"></i>
+                                    <a href="mailto:enquiry@spandiagno.com">enquiry@spandiagno.com</a>
+                                </li>
+                            </ul>
+                        </div>
                 </div>
                 <div class="col-xl-3 col-lg-3  col-6 pt-xl-5 pt-3 ps-xl-5">
                     <h3 class="fs-30  footer_branches font-bold m-0 pb-3">Branches</h3>
                     <ul class="p-0">
+                        {% comment %} {%for city in cityy%}
+                        <li class="text_decoration font-bold pb-2">
+                            <a class="footer_branch_text fs-24 cursor" onclick='myfunction("{{city.cityname}}")'>{{city.cityname}}</a>
+                        </li>
+                        {%endfor%} {% endcomment %}
                         <li class="text_decoration font-bold pb-2">
                             <a class="footer_branch_text fs-24 ">Bangalore</a>
                         </li>
-                        <li class="text_decoration font-bold pb-2">
-                            <a class="footer_branch_text fs-24 ">Mumbai</a>
-                        </li>
-                        <li class="text_decoration font-bold pb-2">
+                         {% comment %} <li class="text_decoration font-bold pb-2">
                             <a class="footer_branch_text fs-24 ">Bhopal</a>
                         </li>
                         <li class="text_decoration font-bold pb-2">
@@ -40,7 +61,7 @@
                         </li>
                         <li class="text_decoration font-bold pb-2">
                             <a class="footer_branch_text fs-24 ">Aurangabad</a>
-                        </li>
+                        </li> {% endcomment %}
                     </ul>
                 </div>
                 <div class="col-xl-3 col-lg-3 col-6 pt-xl-5 pt-3 subscription_div">
@@ -80,13 +101,13 @@
                         <div>
                             <h3 class="fs-30 footer_branches font-bold m-0 pt-4 mt-2">Social Media</h3>
                             <ul class="d-flex p-0 pt-3 ">
-                                <li class="text_dec_media pe-3"><a href="https://www.facebook.com/">
+                                <li class="text_dec_media pe-3"><a href=" https://www.facebook.com/DiagnosticaSpan">
                                         <img src="{%static "images/bg-facebook.png"%}" alt="" class="img-fluid">
                                     </a></li>
-                                <li class="text_dec_media pe-3"><a href="https://www.twitter.com/">
-                                        <img src="{%static "images/bg-twitter.png"%}" alt="" class="img-fluid">
-                                    </a></li>
-                                <li class="text_dec_media pe-3"><a href="https://www.instagram.com/">
+                                {% comment %} <li class="text_dec_media pe-3"><a href="https://www.linkedin.com/company/diagnosticaspan/">
+                                        <img src="{%static "images/linkdin.png"%}" alt="" class="img-fluid">
+                                    </a></li> {% endcomment %}
+                                <li class="text_dec_media pe-3"><a href="https://instagram.com/diagnostica.span?igshid=YmMyMTA2M2Y= ">
                                         <img src="{%static "images/bg-insta.png"%}" alt="" class="img-fluid">
                                     </a></li>
                             </ul>
@@ -96,9 +117,9 @@
                 </div>
             </div>
             <div class="row py-4 mx-sm-0">
-                <div class="col-6 col-sm-4 col-lg-2 px-lg-0 footer-policy">Privacy Policy</div>
-                <div class="col-6 col-sm-4 col-lg-2 px-lg-0 footer-policy">Terms of use</div>
-                <div class="col-sm-4 col-lg-3 col-xl-2 ps-lg-0 footer-policy pt-2 pt-sm-0">Payment & Refunds</div>
+                <a href="{% url "privacy-policy" %}" class="col-6 col-sm-4 col-lg-2 px-lg-0 footer-policy">Privacy Policy</a>
+                <a href="{% url "termsofuse" %}" class="col-6 col-sm-4 col-lg-2 px-lg-0 footer-policy">Terms of use</a>
+                <a href="{% url "payment-refund" %}" class="col-sm-4 col-lg-3 col-xl-2 ps-lg-0 footer-policy pt-2 pt-sm-0">Payment & Refunds</a>
                 <div
                     class="col-xl-6 col-lg-5 ps-lg-0 footer-policy d-flex justify-content-end align-content-end pt-4 pt-lg-0">
                     © 2022
@@ -175,5 +196,25 @@
         $('html, body').animate({ scrollTop: 0 }, '300');
     });
 
+
+    function myfunction(city){
+          
+        $.ajax({
+          url: "{% url 'city' %}",
+          type : "POST", 
+          data: {
+           "city":city,
+           csrfmiddlewaretoken: '{{ csrf_token }}',
+          },
+          dataType: "json",
+          success: function(resp){
+           console.log(resp);
+           if(resp["city"]){
+            $('#myModal').modal('hide');
+            window.location.reload();
+           }
+          }
+         });
+       };
 </script>
 

@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    $("#recent-actions-module").hide();
     /*  Selects all elements matched by <input> that have a name value exactly equal to 
     username.*/
     // alert(window.location.pathname)
@@ -80,16 +81,16 @@ $(document).ready(function() {
         $(this).parent('.remove').remove();
         e.preventDefault();
     });
-    $.getJSON("/city", function(j) {
-        console.log(j)
-        $.each(j, function(i, n) {
-            // console.log(i, n);
-            optionText = i;
-            optionValue = n;
-            $('#cityselect').append(new Option(optionValue.value, optionText));
-            // $('#cityselect').append(`<option value="${optionText}">
-            //                            ${optionValue}
-            //                       </option>`);
-        });
-    });
+    // $.getJSON("/city", function(j) {
+    //    console.log(j)
+    //    $.each(j, function(i, n) {
+    // console.log(i, n);
+    //      optionText = i;
+    //     optionValue = n;
+    // $('#cityselect').append(new Option(optionValue.value, optionText));
+    // $('#cityselect').append(`<option value="${optionText}">
+    //                            ${optionValue}
+    //                       </option>`);
+    // });
+    // });
 });

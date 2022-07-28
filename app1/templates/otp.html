@@ -20,8 +20,13 @@
             </div>
         </div>
     </section>
+<<<<<<< HEAD
     <!-- 
     <section class="section_register mb-5">
+=======
+
+    {% comment %} <section class="section_register mb-5">
+>>>>>>> 912c8e6940fd3d117a3ef693caf068fc33b784a3
         <div class="container">
             <div class="row">
 
@@ -148,6 +153,25 @@
 
 
 </body>
+
+<script>
+    let digitValidate = function (ele) {
+        console.log(ele.value);
+        ele.value = ele.value.replace(/[^0-9]/g, '');
+
+    }
+
+    let tabChange = function (val) {
+        let ele = document.querySelectorAll('input');
+        if (ele[val - 1].value != '') {
+            ele[val].focus()
+        } else if (ele[val - 1].value == '') {
+            ele[val - 2].focus()
+        }
+    }
+
+</script>
+
 {% if messages %}
 {% for message in messages %}
 {% if message.tags == "error"%}
@@ -181,23 +205,5 @@
 {%endfor%}
 {% endif %}
 
-<script>
-    let digitValidate = function (ele) {
-        console.log(ele.value);
-        ele.value = ele.value.replace(/[^0-9]/g, '');
-
-    }
-
-    let tabChange = function (val) {
-        let ele = document.querySelectorAll('input');
-        if (ele[val - 1].value != '') {
-            ele[val].focus()
-        } else if (ele[val - 1].value == '') {
-            ele[val - 2].focus()
-        }
-    }
-
-
-</script>
 
 {%endblock%}

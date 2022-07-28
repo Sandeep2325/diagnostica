@@ -286,11 +286,12 @@
             'csrfmiddlewaretoken':'{{ csrf_token }}',
         },
         success: function(resp){
-           
+           console.log(resp['message'])
             if(!resp['message']){
-                alert("Test Already Added");
-            }else{
-                alert("Test Added");
+                swal('',"Test Already Added","info");
+            }
+            else{
+                //alert("Test Added");
                 window.location.reload();
             }
             

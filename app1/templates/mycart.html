@@ -375,7 +375,6 @@ function deletefunc(e){
                     
                     var detail=`
                    
-                    
                     <div class="col-6" id="cleardetail">
                         <h4 class="fs-20 font-bold cl-dark-blue mb-3">Discount Price(${resp['percent']}%)</h4>
                     </div>
@@ -417,17 +416,21 @@ $("#option1").change(function(e){
         $("#firstname").val(resp['firstname']);
         $("#lastname").val(resp['lastname']);
         $("#age").val(resp['age']);
-        $("#gender").val(resp['gender']);
+        //$("#gender").val(resp['gender']);
         $("#phone").val(resp['contact']);
         $("#address").val(resp['address']);
+        if (resp['gender']!=''){
+            $("#gender").val(resp['gender']);
+        };
         }
     })
 }
+
     else if(opt === "o"){
         $("#firstname").val('');
         $("#lastname").val('');
         $("#age").val('');
-        $("#gender").val('');
+        //$("#gender").val('');
         $("#phone").val('');
         $("address").val('');
         $("#option").show();
@@ -437,6 +440,15 @@ $("#option1").change(function(e){
 
 function coupRemove(){
     //$("#cleardetail").remove()
+    $.ajax({
+        url: "{% url 'couponsessiondelete' %}",
+        type: "GET",
+        dataType: "json",
+        success: function(resp){
+            console.log(resp)
+           window.location.reload();
+        }
+    });
     window.location.reload()
    }
 
