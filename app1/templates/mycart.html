@@ -139,10 +139,14 @@
                             </div>
                         </div>
                     </div>
+                    {%if datacount%}
                     <div class="  check_out">
                         <button 
                             class="float-end fs-18 font-bold cl-dark-white br br-5 bg-sky-blue py-3 my-lg-5 my-3 px-5 br"  data-bs-toggle="modal" data-bs-target="#cart_checkout_modal" type="button" id="checkout1">CHECKOUT</button>
                     </div>
+                    {%else%}
+                    <div></div>
+                    {%endif%}
                 </div>
             </div>
         </div>
