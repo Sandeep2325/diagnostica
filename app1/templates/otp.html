@@ -88,7 +88,7 @@
                                         Please check your Mobile or Mail for the OTP.
                                     </p>
                                     <form method="post" class="mt-5" id="form">
-
+{%csrf_token%}
                                     <form action="" class="mt-5">
                                         <input class="otp" type="text" oninput='digitValidate(this)'
                                             onkeyup='tabChange(1)' maxlength=1 name="digit-1" id="digit-1">
