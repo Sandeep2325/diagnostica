@@ -1,0 +1,190 @@
+{% extends "admin/base_site.html" %}
+ {% load i18n static jazzmin %}
+{% get_jazzmin_ui_tweaks as jazzmin_ui %} 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+{% block bodyclass %}
+{{ block.super }}
+Dashboard
+ {% endblock %}
+{% comment %} <canvas id="myChart" width="1600" height="900"></canvas> {% endcomment %}
+{% block content_title %} {% trans 'Dashboard' %} {% endblock %}
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"><a href="{% url 'admin:index' %}"><i class="fa fa-tachometer-alt"></i> {% trans 'Home' %}</a></li>
+        <li class="breadcrumb-item">{% trans 'Dashboard' %}</li>
+    </ol>
+{% endblock %}
+{% block content %}
+{% get_side_menu using="app_list" as dashboard_list %}
+{% for app in dashboard_list %}
+{% for model in app.models %}
+{% comment %} {%if model.name == "Orders" or model.name == "Users" or model.name == "   Products"%} {% endcomment %}
+
+<div class='d-flex  h-100'>
+    
+    {%if model.name == "Test Bookings"%}
+<div class="card w-100 m-2" style="background:#00cccc">
+    <h5 class="card-header" style="font-size:17px ;text-align:center;height: 57px;">Booking</h5>
+    <div class="card-body" style="height:150px">
+      {% comment %} <h5 class="card-title" style="font-size:14px;text:center">Total Bookings</h5> {% endcomment %}
+      <p id="tcount" style="text-align:center;" class="card-text"></p>
+      <a style="margin:auto;display:block" href={{model.url}} class="btn btn-primary btn-xs button">View</a>
+    </div>
+</div>
+<div class="card w-100 m-2 " style="background:#00cccc">
+    <h5 class="card-header" style="font-size:17px ;text-align:center;height: 57px;">Test Bookings</h5>
+    <div class="card-body" style="text-align:center;">
+      {% comment %} <h5 class="card-title" style="font-size:14px;text-align:center;">Total Bookings</h5> {% endcomment %}
+      <p id="tbcount" style="text-align:center;" class="card-text"></p>
+      <a style="margin:auto;display:block" href={{model.url}} class="btn btn-primary btn-xs button">View</a>
+    </div>
+</div>
+<div class="card w-100 m-2 " style="background:#00cccc">
+    <h5 class="card-header" style="font-size:17px;text-align:center;height: 57px;">Prescription Bookings</h5>
+    <div class="card-body">
+      {% comment %} <h5 class="card-title" style="font-size:14px">Total Bookings</h5> {% endcomment %}
+      <p id="pbcount" style="text-align:center;" class="card-text"></p>
+      <a style="margin:auto;display:block" href={{model.url}} class="btn btn-primary btn-xs button">View</a>
+    </div>
+</div>
+{%elif model.name == "Health Packages" %}
+<div class="card w-100 m-2 " style="background:#00cccc">
+    <h5 class="card-header" style="font-size:17px;text-align:center;height: 57px;"> Total Packages</h5>
+    <div class="card-body" style="height:150px">
+      {% comment %} <h5 class="card-title" style="font-size:14px;text-align:center;">Total Packages</h5> {% endcomment %}
+      <p id="hpcount" style="text-align:center;" class="card-text"></p>
+      <a style="margin:auto;display:block" href={{model.url}} class="btn btn-primary btn-xs button">View</a>
+    </div>
+</div>
+{%elif model.name == "Booking Histories"%}
+<div class="card w-100 m-2 " style="background:#00cccc">
+    <h5 class="card-header" style="font-size:17px;text-align:center;height: 57px;">Total Amount</h5>
+    <div class="card-body" style="height:150px">
+      {% comment %} <h5 class="card-title" style="font-size:14px"> Amount</h5> {% endcomment %}
+      <p id="acount" style="text-align:center;" class="card-text"></p>
+      <a style="margin:auto;display:block" href={{model.url}} class="btn btn-primary btn-xs button">View</a>
+    </div>
+</div>
+<div class="card w-100 m-2 " style="background:#00cccc">
+    <h5 class="card-header" style="font-size:17px;text-align:center;height: 57px;">Outstanding Amount</h5>
+    <div class="card-body" style="height:150px">
+      {% comment %} <h5 class="card-title" style="font-size:14px">Amount</h5> {% endcomment %}
+      <p id="ocount" style="text-align:center;" class="card-text"></p>
+      <a style="margin:auto;display:block" href={{model.url}} class="btn btn-primary btn-xs button">View</a>
+    </div>
+</div>
+{% comment %}{%elif model.name == "Users"%}
+ <div class="card w-100 m-2 bg-secondary">
+    <h5 class="card-header" style="font-size:17px"><i class="fa fa-users" aria-hidden="true"></i>Users</h5>
+    <div class="card-body">
+      <h5 class="card-title" style="font-size:14px">Total Users</h5>
+      <p id="ucount" style="text-align:center;" class="card-text">5</p>
+      <a style="margin:auto;display:block" href={{model.url}}  class="btn btn-primary btn-sm">Users</a>
+    </div>
+</div> {% endcomment %}
+{%endif%}
+</div>
+  {% comment %} {%endif%}   {% endcomment %}
+{% comment %} {%endfor%} {% endcomment %}
+{%endfor%}
+{%endfor%}
+</div>
+  {% comment %} <div class="col-lg-3 col-12">
+    <div id="content-related">
+        <div class="module" id="recent-actions-module">
+            <h3>{% trans 'Recent actions' %}</h3>
+            {% load log %}
+            {% get_admin_log 6 as admin_log for_user user %}
+            {% if not admin_log %}
+                <p>{% trans 'None available' %}</p>
+            {% else %}
+                <div class="timeline">
+                    {% for entry in admin_log %}
+                        <div>
+                            {% if entry.is_change %}
+                                <i class="fas fa-edit bg-blue"></i>
+                            {% elif entry.is_deletion %}
+                                <i class="fas fa-trash bg-danger"></i>
+                            {% elif entry.is_addition %}
+                                <i class="fas fa-plus-circle bg-success"></i>
+                            {% endif %}
+
+                            <div class="timeline-item">
+                                <span class="time"><i class="fas fa-clock"></i> {% blocktrans with timesince=entry.action_time|timesince %}{{ timesince }} ago{% endblocktrans %}</span>
+                                <h3 class="timeline-header no-border">
+                                    {% if entry.is_deletion or not entry.get_admin_url %}
+                                        {{ entry.object_repr }}
+                                    {% else %}
+                                        <a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+                                    {% endif %}
+
+                                    {% if entry.model %}
+                                        <span class="mini quiet">
+                                            {% filter capfirst %}
+                                                {{ entry.model }}
+                                            {% endfilter %}
+                                        </span>
+                                    {% endif %}
+                                </h3>
+                                {% if not entry.is_deletion %}
+                                    <div class="timeline-body">
+                                        {% if entry.is_addition %}
+                                            {{ entry }}
+                                        {% else %}
+                                            <ul style="list-style: none; padding: 0;">
+                                                {% action_message_to_list entry as action_message_list %}
+                                                {% for action_message in action_message_list %}
+                                                    <li>{{ action_message.msg|style_bold_first_word }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div>
+                        <i class="fa fa-clock bg-gray"></i>
+                    </div>
+                </div>
+            {% endif %} 
+        </div>
+    </div>
+</div> {% endcomment %}
+<style>
+    .button {
+        top:50%;
+        background-color:#0a0a23;
+        color: #fff;
+        border:none;
+        border-radius:10px;
+        top: 145px;
+        left: 53px
+        padding: 10px 20px;
+        height: 30px;
+        font-size: 18px;
+      }
+</style>
+{{j.products}}
+{{block.super}} <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+$.getJSON("/dashboard",function (j) {
+   console.log(j)
+   tcount=j.test
+   tbcount=j.test_bookings
+   pbcount=j.prescription_bookings
+   hpcount=j.packages
+   acount=j.totalamount
+   ocount=j.outstandingamount
+   $("#tcount").text(tcount);
+   $("#tbcount").text(tbcount);
+   $("#pbcount").text(pbcount);
+   $("#hpcount").text(hpcount);
+   $("#acount").text(acount);
+   $("#ocount").text(ocount);
+})});
+</script>
+{% comment %} $('#id1').val(j.products); {% endcomment %}
+{%endblock%}

@@ -169,7 +169,7 @@
     </section> {% endcomment %}
 </body>
 
-<script>
+{% comment %} <script>
     let digitValidate = function (ele) {
         console.log(ele.value);
         ele.value = ele.value.replace(/[^0-9]/g, '');
@@ -185,8 +185,22 @@
         }
     }
 
-</script>
+</script> {% endcomment %}
+<script>
+    let digitValidate = function (ele) {
+        console.log(ele.value);
+        ele.value = ele.value.replace(/[^0-9]/g, '');
 
+    }
+    $("input").keyup(function () {
+        if (this.value.length == this.maxLength) {
+          $(this).next('input').focus();
+        }
+        else if(this.value.length < this.maxLength){
+            $(this).prev('input').focus();
+        }
+    });
+</script>
 {% if messages %}
 {% for message in messages %}
 {% if message.tags == "error"%}

@@ -269,6 +269,7 @@ class Prescriptionbook1(models.Model):
         return "Prescription booking"
     class Meta:
         verbose_name_plural="Prescription Bookings"
+
     # def save(self,*args,**kwargs):
     #     if (self.payment_status== True) and (bool(self.report) == True):
     #         print("--------in")
@@ -311,7 +312,6 @@ def testbookings(sender, instance, **kwargs):
     # instance.price=sum(a)
     
     Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=sum(a))
-    # print("--------out")
     if (instance.payment_status== True) and (bool(instance.report) == True):
         print("--------in")
         send_mail(str("Tests Report | Dignostica Span"),
@@ -320,16 +320,15 @@ def testbookings(sender, instance, **kwargs):
                   [instance.user.email],
                   fail_silently=False)
     if (instance.test_name.first()!=None) and (bool(instance.prescription_file)==True and bool(instance.report) == False): 
-            # print("sent")
+            print("sent")
             # link=request.build_absolute_uri('/bookinghistory/')
             send_mail(str("Booking Confirmation | Dignostica Span" ),
                         (f"Hi {instance.user.first_name} ,\nThis mail is regarding the booking id: {instance.bookingid}, recently booked by you, \nWe have reviewed your prescription and have added the tests for your testing Please check your dashboard,\nKindly visit your dashboard to review it and pay the mentioned amount to confirm the booking.\nHave a speedy and healthy recovery.\nThank you,\nDignostica Span"),
                         settings.EMAIL_HOST_USER,
                         [instance.user.email],
                         fail_silently=False)
-
 m2m_changed.connect(testbookings, sender=Prescriptionbook1.test_name.through)
-post_save.disconnect(testbookings, sender=Prescriptionbook1)           
+post_save.disconnect(testbookings, sender=Prescriptionbook1) 
 
 class healthcheckuppackages(models.Model):
     package_title=models.CharField(max_length=200,null=True,blank=True,verbose_name="Package Title")
@@ -626,7 +625,3 @@ class couponredeem(models.Model):
         return self.order_id
     class Meta:
         verbose_name_plural="Redeemed Coupons"
-# class dummycart(models.Model):
-#     name=models.CharField(max_length=500,null=True,blank=True)
-#     category=models.CharField(max_length=500,null=True,blank=True)
-#     price=models.CharField(max_length=10,null=True,blank=True)

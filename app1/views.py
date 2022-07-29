@@ -49,7 +49,6 @@ Barshi=env("Barshi")
 Aurangabad=env("Aurangabad")
 
 def dashboard(request):
-    test=prescription_book.objects.all().count()
     # test_bookings=prescription_book.objects.filter(test_name__isnull=True, prescription_file='').count()
     prescription_bookings=Prescriptionbook1.objects.all().count()
     testbooking=testbook.objects.all().count()
@@ -58,6 +57,7 @@ def dashboard(request):
     outstand=book_history.objects.filter(payment_status=False)
     totalamount=[]
     outstandingamount=[]
+    
     for i in bookamount:
         if i.amount is not None:
             totalamount.append(int(float(i.amount)))
@@ -230,11 +230,11 @@ def forgotpassword(request):
             request.session['otp'] = otp
                 # message = f'your otp is {otp}'
                 # send_otp(p_number,message)
-            message = f"Hi Dear Customer,\nThere was a request to Forgot password! Password change\nIf you did not make this request then please ignore this email.\nOtherwise, Please enter the otp {otp}"
+            message = f"Hi Dear Customer,\nThere was a request to Forgot password! Password change\nIf you did not make this request then please ignore this email.\nOtherwise, Please enter the OTP {otp}"
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [e]
             message = message
-            subject = "DIAGNOSTICA SPAN" 
+            subject = "DIAGNOSTICA SPAN | FORGOT PASSWORD" 
             send_mail(
                     subject,
                     message,
@@ -696,7 +696,6 @@ def healthpackageview(request,slug):
         context['currency'] = currency
         return render(request,'packagedetail.html',context)
 
-
 def testdetails(request):
     if request.method=="POST":
             id=request.POST["id"]
@@ -760,18 +759,6 @@ def categoryblog(request,slug):
     }
     return render(request,'blogdetail.html',context)
 
-# def blogdetail(request,slug):
-#     blogs=healthcareblogs.objects.filter(slug=slug)
-#     context={
-#         "blogs":blogs
-#     }
-#     return render(request,"blogdetail.html")
-# def testcategory(request):
-#     tcategories=category.objects.all()
-#     context={
-#         "categories":tcategories
-#     }
-#     return render(request,"choose-test-list.html",context)
 @login_required(login_url="/login/")   
 def prescriptionbookview(request):
     # if request.user.is_anonymous:
@@ -916,7 +903,6 @@ def testselect(request):
                           age=age,
                           gender=gender,
                           location=c)
-        
         for j in test_name:
             item=test.objects.get(id=j)
             a.test_name.add(item)   
@@ -2171,6 +2157,10 @@ def paymentsrefund(request):
 def termsofuse(request):
     return render(request,"termsofuse.html")
 def error_404_view(request, exception):
-    return HttpResponse("404 Not Found")
+    # return HttpResponse("404 Page not found")
+    return render(request,"404.html")
+def error_500_view(request):
+    # return HttpResponse("404 Page not found")
+    return render(request,"500.html")
 
 
