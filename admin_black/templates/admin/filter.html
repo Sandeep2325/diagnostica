@@ -1,7 +1,7 @@
 {% load i18n %}
 
 <div class="filter_panel">
-    <h5>{% blocktrans with filter_title=title %} By {{ filter_title }} {% endblocktrans %}</h5>
+    <h5 class ="filterh5">{% blocktrans with filter_title=title %} By {{ filter_title }} {% endblocktrans %}</h5>
     <ul>
         {% for choice in choices %}
             <li{% if choice.selected %} class="selected"{% endif %}>

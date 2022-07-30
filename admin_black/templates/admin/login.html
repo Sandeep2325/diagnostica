@@ -3,14 +3,20 @@
 {% load admin_black %}
 
 {% block content %}
+
     <div class="content">
-        <div class="row">
+        <img class="logo" src="{% static 'images/image_logo.png' %}">
+        {% comment %} <h2 style="color: #402f64; padding-top: 100px; margin-bottom: 0px; text-align:center; font-size:15px"><b>Diagnostica <span style="color:#7a2020 ;"> SPAN </span> Private Limited</b></h2> {% endcomment %}
+        <div>
+
+        </div>
+        <div class="row login" >
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header {{ direction.panel }}">
                         <h5 class="title">{% trans 'Log in' %}</h5>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body login2">
                         <form action="{{ app_path }}" method="post" id="login-form">
                             {% csrf_token %}
                             <div class="row">

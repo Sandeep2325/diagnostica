@@ -39,7 +39,11 @@
                             <ul class="dropdown-menu dropdown-navbar {{ direction.panel }}">
                                 {% block userlinks %}
                                     <li class="nav-link">
-                                        <b class="nav-item dropdown-item">{{ user.get_full_name }}</b>
+                                        <li class="nav-link">
+                                            <a href=""
+                                               class="nav-item dropdown-item">{{ user.get_full_name }}</a>
+                                        </li>
+                                        {% comment %} <b class="nav-item dropdown-item">{{ user.get_full_name }}</b> {% endcomment %}
                                     </li>
 
                                     {% if site_url %}

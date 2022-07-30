@@ -1,11 +1,15 @@
 {% extends "admin/base_site.html" %}
 {% load i18n static %}
-
 {% block breadcrumbs %}{% endblock %}
-
+{% comment %} {% admin_black_get_menu as app_list %}
+{% for app in app_list %}
+{%for models in app.models%}
+{{models}}
+{%endfor%}
+{%endfor%} {% endcomment %}
 {% block content %}
     <div class="content">
-        <div class="row">
+        {% comment %} <div class="row">
             <div class="col-12">
                 <div class="card card-chart">
                     <div class="card-header">
@@ -48,10 +52,10 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> {% endcomment %}
         <div class="row">
-            <div class="col-lg-4 {{ direction.panel }}">
-                <div class="card card-chart">
+            <div class="col-sm-4 {{ direction.panel }}">
+                <div class="card card-chart indexcard">
                     <div class="card-header">
                         <h5 class="card-category">{% trans "Total Shipments" %}</h5>
                         <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i> 763,215</h3>
@@ -63,8 +67,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 {{ direction.panel }}">
-                <div class="card card-chart">
+            <div class="col-sm-4 {{ direction.panel }}">
+                <div class="card card-chart indexcard">
                     <div class="card-header">
                         <h5 class="card-category">{% trans "Daily Sales" %}</h5>
                         <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info"></i> 3,500€</h3>
@@ -76,8 +80,34 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 {{ direction.panel }}">
-                <div class="card card-chart">
+            <div class="col-sm-4 {{ direction.panel }}">
+                <div class="card card-chart indexcard">
+                    <div class="card-header">
+                        <h5 class="card-category">{% trans "Completed Tasks" %}</h5>
+                        <h3 class="card-title"><i class="tim-icons icon-send text-success"></i> 12,100K</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="chartLineGreen"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 {{ direction.panel }}">
+                <div class="card card-chart indexcard">
+                    <div class="card-header">
+                        <h5 class="card-category">{% trans "Completed Tasks" %}</h5>
+                        <h3 class="card-title"><i class="tim-icons icon-send text-success"></i> 12,100K</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="chartLineGreen"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 {{ direction.panel }}">
+                <div class="card card-chart indexcard">
                     <div class="card-header">
                         <h5 class="card-category">{% trans "Completed Tasks" %}</h5>
                         <h3 class="card-title"><i class="tim-icons icon-send text-success"></i> 12,100K</h3>
@@ -278,3 +308,229 @@
 {% endblock %}
 
 {% block extrascript %}{% endblock %}
+{% comment %} {% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+
+
+   <div class="content">
+    <h2>Dashboard</h2>
+    <div class="container-sm dashboard">
+        <div class="row dashboardrow">
+            <div class="col-lg-6 mb-4">
+                <div class="card">
+                    <img class="card-img-top" src="" alt="">
+  
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">
+                            Some quick example text to build on 
+                            the card title and make up the bulk 
+                            of the card's content.
+                        </p>
+  
+                        <a href="#" class="btn btn-outline-primary btn-sm">
+                            Card link
+                        </a>
+                        <a href="#" class="btn btn-outline-secondary btn-sm">
+                            <i class="far fa-heart"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 mb-4">
+                <div class="card">
+                    <img class="card-img-top" src="" alt="">
+  
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">
+                            Some quick example text to build on the 
+                            card title and make up the bulk of the 
+                            card's content.
+                        </p>
+                          
+                        <a href="#" class="btn btn-outline-primary btn-sm">
+                            Card link
+                        </a>
+                        <a href="#" class="btn btn-outline-secondary btn-sm">
+                            <i class="far fa-heart"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 mb-4">
+                <div class="card">
+                    <img class="card-img-top" src="" alt="">
+  
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">
+                            Some quick example text to build on the 
+                            card title and make up the bulk of the 
+                            card's content.
+                        </p>
+                          
+                        <a href="#" class="btn btn-outline-primary btn-sm">
+                            Card link
+                        </a>
+                        <a href="#" class="btn btn-outline-secondary btn-sm">
+                            <i class="far fa-heart"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 mb-4">
+                <div class="card">
+                    <img class="card-img-top" src="" alt="">
+  
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">
+                            Some quick example text to build on the 
+                            card title and make up the bulk of the 
+                            card's content.
+                        </p>
+                          
+                        <a href="#" class="btn btn-outline-primary btn-sm">
+                            Card link
+                        </a>
+                        <a href="#" class="btn btn-outline-secondary btn-sm">
+                            <i class="far fa-heart"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-6">
+                <div class="card ">
+                    <div class="card-header {{ direction.panel }}">
+                        <h4 class="card-title">{% trans "Simple Table" %}</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table tablesorter " id="">
+                                <thead class="text-primary">
+                                <tr>
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th>
+                                        Country
+                                    </th>
+                                    <th>
+                                        City
+                                    </th>
+                                    <th class="text-center">
+                                        Salary
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        Dakota Rice
+                                    </td>
+                                    <td>
+                                        Niger
+                                    </td>
+                                    <td>
+                                        Oud-Turnhout
+                                    </td>
+                                    <td class="text-center">
+                                        $36,738
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Minerva Hooper
+                                    </td>
+                                    <td>
+                                        Curaçao
+                                    </td>
+                                    <td>
+                                        Sinaai-Waas
+                                    </td>
+                                    <td class="text-center">
+                                        $23,789
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Sage Rodriguez
+                                    </td>
+                                    <td>
+                                        Netherlands
+                                    </td>
+                                    <td>
+                                        Baileux
+                                    </td>
+                                    <td class="text-center">
+                                        $56,142
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Philip Chaney
+                                    </td>
+                                    <td>
+                                        Korea, South
+                                    </td>
+                                    <td>
+                                        Overland Park
+                                    </td>
+                                    <td class="text-center">
+                                        $38,735
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Doris Greene
+                                    </td>
+                                    <td>
+                                        Malawi
+                                    </td>
+                                    <td>
+                                        Feldkirchen in Kärnten
+                                    </td>
+                                    <td class="text-center">
+                                        $63,542
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Mason Porter
+                                    </td>
+                                    <td>
+                                        Chile
+                                    </td>
+                                    <td>
+                                        Gloucester
+                                    </td>
+                                    <td class="text-center">
+                                        $78,615
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Jon Porter
+                                    </td>
+                                    <td>
+                                        Portugal
+                                    </td>
+                                    <td>
+                                        Gloucester
+                                    </td>
+                                    <td class="text-center">
+                                        $98,615
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extrascript %}{% endblock %} {% endcomment %}

@@ -4,16 +4,21 @@
     <div class="sidebar">
         <div class="sidebar-wrapper">
             <div class="logo">
-                <a href="{% url 'admin:index' %}" class="simple-text logo-normal">{% trans 'Administrator' %}</a>
+                <a href="{% url 'admin:index' %}" class="simple-text logo-normal">{% trans 'Diagnostica Span' %}</a>
             </div>
+           
             <ul class="nav">
                 <li>
-                    <a href="{{ site_url }}">
-                        <i class="tim-icons icon-chart-pie-36"></i>
-                        <p>{% trans 'HOME' %}</p>
+                    {% comment %} <a href="{{ site_url }}">
+                        
+                        <p class="home">{% trans 'Site' %}</p>
+                    </a> {% endcomment %}
+                    <a href="{% url 'admin:index' %}">
+                       <i class="tim-icons icon-chart-pie-36"></i>
+                        <p class="home">{% trans 'Dashboard' %}</p>
                     </a>
                 </li>
-
+                
                 {% admin_black_get_menu as app_list %}
                 {% if app_list %}
                     {% for app in app_list %}
@@ -26,8 +31,8 @@
                                                                       data-order="{{ forloop.counter }}"
                                         {% if app.url_blank %} target="_blank"{% endif %}>
                                     <i class="{{ app.icon }}"></i>
-                                    <p>
-                                        {{ app.label }}
+                                    <p><i class="tim-icons icon-single-02"></i>
+                                        Admin 
                                         {% if app.models %}
                                             <span class="tim-icons icon-minimal-down m-2"></span>
                                         {% endif %}
@@ -37,6 +42,190 @@
                                 {% if app.models %}
                                     <ul class="navbar-dropdown">
                                         {% for model in app.models %}
+                                        {%if model.label == "City"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    <i class="tim-icons icon-square-pin"></i>
+                                                    <a href="{{ model.url }}">
+                                                        
+                                                        <span>{{ model.label }}</span>
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
+                                            {%elif model.label == "Prescription Bookings"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    <i class="tim-icons icon-paper"></i>
+                                                    <a href="{{ model.url }}">
+                                                        
+                                                        <span>{{ model.label }}</span>
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
+                                            {%elif model.label == "Test Bookings"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    <i class="tim-icons icon-tap-02"></i>
+                                                    <a href="{{ model.url }}">
+                                                        
+                                                        <span>{{ model.label }}</span>
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
+                                            {%elif model.label == "Booking Histories"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    <i class="tim-icons icon-refresh-02"></i>
+                                                    <a href="{{ model.url }}">
+                                                        <span>{{ model.label }}</span>
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
+
+                                            {%elif model.label == "Test Category"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    <i class="tim-icons icon-components"></i>
+                                                    <a href="{{ model.url }}">
+                                                        <span>{{ model.label }}</span>
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
+                                            {%elif model.label == "Tests"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    <i class="tim-icons icon-bullet-list-67"></i>
+                                                    <a href="{{ model.url }}">
+                                                        <span>{{ model.label }}</span>
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
+                                            {%endif%}
+                                            
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+
+
+
+
+                {% if app_list %}
+                    {% for app in app_list %}
+                        {% if app.has_perms and not app.pinned %}
+                            <li>
+                                <a{% if not app.models and app.url %} href="{{ app.url }}"{% endif %}
+                                                                      class="navbar-btn sidebar-link popup-section-link app-item"
+                                                                      data-app-label="{{ app.app_label }}"
+                                                                      data-popup-section-class="sidebar-popup-section-{{ app.app_label }}"
+                                                                      data-order="{{ forloop.counter }}"
+                                        {% if app.url_blank %} target="_blank"{% endif %}>
+                                    <i class="{{ app.icon }}"></i>
+                                    <p><i class="tim-icons icon-bag-16"></i> 
+                                        Packages 
+                                        {% if app.models %}
+                                            <span class="tim-icons icon-minimal-down m-2"></span>
+                                        {% endif %}
+                                    </p>
+                                </a>
+
+                                {% if app.models %}
+                                    <ul class="navbar-dropdown">
+                                        {% for model in app.models %}
+                                        {%if model.label == "Health Checkups and Lab Tests"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    <i class="tim-icons icon-bag-16"></i> 
+                                                    <a href="{{ model.url }}">
+                                                        <span>{{ model.label }}</span>
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
+                                            {%elif model.label == "Health Packages"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    <i class="tim-icons icon-bag-16"></i> 
+                                                    <a href="{{ model.url }}">
+                                                        <span>{{ model.label }}</span>
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
+                                            {%elif model.label == "Health Symptoms"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    <i class="tim-icons icon-bag-16"></i> 
+                                                    <a href="{{ model.url }}">
+                                                        <span>{{ model.label }}</span>
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
+                                            
+                                            {%endif%}
+                                            
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+
+
+                {% if app_list %}
+                    {% for app in app_list %}
+                        {% if app.has_perms and not app.pinned %}
+                            <li>
+                                <a{% if not app.models and app.url %} href="{{ app.url }}"{% endif %}
+                                                                      class="navbar-btn sidebar-link popup-section-link app-item"
+                                                                      data-app-label="{{ app.app_label }}"
+                                                                      data-popup-section-class="sidebar-popup-section-{{ app.app_label }}"
+                                                                      data-order="{{ forloop.counter }}"
+                                        {% if app.url_blank %} target="_blank"{% endif %}>
+                                    <i class="{{ app.icon }}"></i>
+                                    <p><i class="fa fa-users" aria-hidden="true"></i>
+                                        Users 
+                                        {% if app.models %}
+                                            <span class="tim-icons icon-minimal-down m-2"></span>
+                                        {% endif %}
+                                    </p>
+                                </a>
+
+                                {% if app.models %}
+                                    <ul class="navbar-dropdown">
+                                        {% for model in app.models %}
+                                        {%if model.label == "Registered Users"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
                                                     <a href="{{ model.url }}">
@@ -47,6 +236,269 @@
                                             {% else %}
                                                 <li>{{ model.label }}</li>
                                             {% endif %}
+                                            {%endif%}
+                                            
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+
+                {% if app_list %}
+                    {% for app in app_list %}
+                        {% if app.has_perms and not app.pinned %}
+                            <li>
+                                <a{% if not app.models and app.url %} href="{{ app.url }}"{% endif %}
+                                                                      class="navbar-btn sidebar-link popup-section-link app-item"
+                                                                      data-app-label="{{ app.app_label }}"
+                                                                      data-popup-section-class="sidebar-popup-section-{{ app.app_label }}"
+                                                                      data-order="{{ forloop.counter }}"
+                                        {% if app.url_blank %} target="_blank"{% endif %}>
+                                    <i class="{{ app.icon }}"></i>
+                                    <p><i class="tim-icons icon-notes"></i> 
+                                        Blogs 
+                                        {% if app.models %}
+                                            <span class="tim-icons icon-minimal-down m-2"></span>
+                                        {% endif %}
+                                    </p>
+                                </a>
+
+                                {% if app.models %}
+                                    <ul class="navbar-dropdown">
+                                        {% for model in app.models %}
+                                        {%if model.label == "Blogs Category"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    <i class="tim-icons icon-components"></i>
+                                                    <a href="{{ model.url }}">
+                                                        <span>{{ model.label }}</span>
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
+                                            {%elif model.label == "Blogs"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    <i class="tim-icons icon-notes"></i>
+                                                    <a href="{{ model.url }}">
+                                                        <span>{{ model.label }}</span>
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
+                                            {%endif%}
+                                            
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                {% if app_list %}
+                    {% for app in app_list %}
+                        {% if app.has_perms and not app.pinned %}
+                            <li>
+                                <a{% if not app.models and app.url %} href="{{ app.url }}"{% endif %}
+                                                                      class="navbar-btn sidebar-link popup-section-link app-item"
+                                                                      data-app-label="{{ app.app_label }}"
+                                                                      data-popup-section-class="sidebar-popup-section-{{ app.app_label }}"
+                                                                      data-order="{{ forloop.counter }}"
+                                        {% if app.url_blank %} target="_blank"{% endif %}>
+                                    <i class="{{ app.icon }}"></i>
+                                    <p><i class="tim-icons icon-money-coins"></i> 
+                                        Payment 
+                                        {% if app.models %}
+                                            <span class="tim-icons icon-minimal-down m-2"></span>
+                                        {% endif %}
+                                    </p>
+                                </a>
+
+                                {% if app.models %}
+                                    <ul class="navbar-dropdown">
+                                        {% for model in app.models %}
+                                        {%if model.label == "Payments History"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    <i class="tim-icons icon-money-coins"></i> 
+                                                    <a href="{{ model.url }}">
+                                                        <span>{{ model.label }}</span>
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
+                                            
+                                            {%endif%}
+                                            
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+
+
+
+                
+                {% if app_list %}
+                    {% for app in app_list %}
+                        {% if app.has_perms and not app.pinned %}
+                            <li>
+                                <a{% if not app.models and app.url %} href="{{ app.url }}"{% endif %}
+                                                                      class="navbar-btn sidebar-link popup-section-link app-item"
+                                                                      data-app-label="{{ app.app_label }}"
+                                                                      data-popup-section-class="sidebar-popup-section-{{ app.app_label }}"
+                                                                      data-order="{{ forloop.counter }}"
+                                        {% if app.url_blank %} target="_blank"{% endif %}>
+                                    <i class="{{ app.icon }}"></i>
+                                    <p><i class="tim-icons icon-gift-2"></i> 
+                                        Coupons 
+                                        {% if app.models %}
+                                            <span class="tim-icons icon-minimal-down m-2"></span>
+                                        {% endif %}
+                                    </p>
+                                </a>
+
+                                {% if app.models %}
+                                    <ul class="navbar-dropdown">
+                                        {% for model in app.models %}
+                                        {%if model.label == "Coupons"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    <i class="tim-icons icon-gift-2"></i> 
+                                                    <a href="{{ model.url }}">
+                                                        <span>{{ model.label }}</span>
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
+                                            {%elif model.label == "Redeemed Coupons"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    <i class="tim-icons icon-molecule-40"></i> 
+                                                    <a href="{{ model.url }}">
+                                                        <span>{{ model.label }}</span>
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
+                                            {%endif%}
+                                            
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+
+
+
+
+
+                {% if app_list %}
+                    {% for app in app_list %}
+                        {% if app.has_perms and not app.pinned %}
+                            <li>
+                                <a{% if not app.models and app.url %} href="{{ app.url }}"{% endif %}
+                                                                      class="navbar-btn sidebar-link popup-section-link app-item"
+                                                                      data-app-label="{{ app.app_label }}"
+                                                                      data-popup-section-class="sidebar-popup-section-{{ app.app_label }}"
+                                                                      data-order="{{ forloop.counter }}"
+                                        {% if app.url_blank %} target="_blank"{% endif %}>
+                                    <i class="{{ app.icon }}"></i>
+                                    <p><i class="tim-icons icon-components"></i> 
+                                        Assets 
+                                        {% if app.models %}
+                                            <span class="tim-icons icon-minimal-down m-2"></span>
+                                        {% endif %}
+                                    </p>
+                                </a>
+
+                                {% if app.models %}
+                                    <ul class="navbar-dropdown">
+                                        {% for model in app.models %}
+                                        {%if model.label == "Newsletter"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    <i class="tim-icons icon-email-85"></i> 
+                                                    <a href="{{ model.url }}">
+                                                        <span>{{ model.label }}</span>
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
+                                            {%elif model.label == "About Span"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    <i class="fa fa-info" aria-hidden="true"></i>
+                                                    <a href="{{ model.url }}">
+                                                        <span>{{ model.label }}</span>
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
+                                            {%elif model.label == "Contact us form"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    <i class="tim-icons icon-book-bookmark"></i> 
+                                                    <a href="{{ model.url }}">
+                                                        <span>{{ model.label }}</span>
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
+                                            {%elif model.label == "FAQ"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    <i class="fa fa-question-circle" aria-hidden="true"></i>
+                                                    <a href="{{ model.url }}">
+                                                        <span>{{ model.label }}</span>
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
+
+                                            {%elif model.label == "Testimonials"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    <i class="fa fa-quote-left" aria-hidden="true"></i>
+                                                    <a href="{{ model.url }}">
+                                                        <span>{{ model.label }}</span>
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
+                                            
+                                            {%endif%}
+                                            
                                         {% endfor %}
                                     </ul>
                                 {% endif %}
