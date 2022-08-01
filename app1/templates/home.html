@@ -8,7 +8,7 @@
   {%include 'header.html'%}
   <section class="home_banner pt-3 pb-lg-5">
     <div class="owl-carousel owl-theme home-banner-slider">
-      <div class="home-banner pt-4 pb-5 py-sm-5">
+      <div class="home-banner banner1 pt-4 pb-5 py-sm-5">
         <div class="container">
           <div class="row">
             <div class="offset-xl-1 offset-xxl-1 col-xxl-5 col-xl-6 col-lg-10 ">
@@ -20,6 +20,28 @@
               <h2 class="">Protect your health with This simple Checkup.</h2>
               <p class="fs-24">To become <b> “One Stop Solution” </b> for all your Diagnostic needs</p>
               <a href="{%url "bookonline"%}"><button>BOOK A TEST ONLINE</button></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="home-banner banner2 pt-4 pb-5 py-sm-5">
+        <div class="container">
+          <div class="row">
+            <div class="offset-xl-1 offset-xxl-1 col-xxl-5 col-xl-6 col-lg-10 ">
+              <h1 class="p-0" style="color:red">#</h1>
+              <h1 class="p-0 m-0" style="color:red; font-weight: bold;">STAY SAFE</h1>
+              <p class="fs-24" style="color:red"><b>HOME SAMPLE COLLECTION NOW AVAILABLE</b></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="home-banner banner3 pt-4 pb-5 py-sm-5">
+        <div class="container">
+          <div class="row">
+            <div class="offset-xl-1 offset-xxl-1 text-end col-md-10 "> </div>
+            <div class="offset-xl-1 offset-xxl-1 text-end col-md-11 ">
+              <h1 class="p-0 m-0" style="color:red; font-weight: bold;">Check out our Span's curated  </h1>
+             <a href="{% url 'packages' %}"> <h2 style="color:orange">Health packages</h2></a>
             </div>
           </div>
         </div>
@@ -238,11 +260,11 @@
           </div>
           <div class="row">
             <div class="col w-100 ">
-              <h1 class="fs-40 cl-light-2-blue font-bold " id="cities">45</h1>
+              <h1 class="fs-40 cl-light-2-blue font-bold " id="cities">7</h1>
               <p class="fs-25 font-bold cl-dark-blue">CITIES</p>
             </div>
             <div class="col w-100 ">
-              <h1 class="fs-40 cl-light-2-blue font-bold " id="visits">543</h1>
+              <h1 class="fs-40 cl-light-2-blue font-bold " id="visits">72812</h1>
               <p class="fs-25 font-bold cl-dark-blue">DAILY VISITS</p>
             </div>
           </div>
@@ -364,7 +386,7 @@
                         Test<span
                         class="cl-red ps-1">*</span></option>
                       {%for test in tests%}
-                      <option value={{test.id}}>{{test.testt}}</option>
+                      <option  value={{test.id}}>{{test.testt}}</option>
                       {%endfor%}
                     </select>
                   </div>
@@ -380,7 +402,7 @@
       </div>
     </div>
   </section>
-  <section>
+  {% comment %} <section>
     <div id="myModal" class="modal fade">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
@@ -410,7 +432,7 @@
         </div>
       </div>
     </div>
-  </section>
+  </section> {% endcomment %}
   {%include "footer.html"%}
 </body>
 {% if messages %}
@@ -474,16 +496,17 @@ $(document).ready(function(){
 
 
   $("#health-care-slider").owlCarousel({
-    loop: true,
+    //loop: true,
     margin: 30,
     items: 2,
     responsiveClass: true,
     autoHeight: false,
-    autoplayTimeout: 3000,
+    autoplayTimeout: 4000,
     smartSpeed: 800,
     dots: false,
     nav: false,
     autoplay: true,
+    stopOnHover:true,
     responsive: {
       0: {
         items: 1,
@@ -506,16 +529,17 @@ $(document).ready(function(){
     },
   });
   $("#testimonial_slider").owlCarousel({
-    loop: true,
+    //loop: true,
     margin: 30,
     items: 2.7,
     responsiveClass: true,
     autoHeight: false,
-    autoplayTimeout: 7000,
+    autoplayTimeout: 4000,
     smartSpeed: 800,
     dots: false,
     nav: false,
     autoplay: true,
+    stopOnHover:true,
     responsive: {
       0: {
         items: 1,
@@ -541,12 +565,15 @@ $(document).ready(function(){
 
   $('.home-banner-slider').owlCarousel({
     loop: true,
+    // autoplay:true,
+    // autoplayTimeout: 7000,
     margin: 20,
     nav: false,
     items: 1.2,
     center: true,
     nav: false,
     dots: false,
+    stopOnHover:true,
     responsive: {
       0: {
         margin: 8,
@@ -709,9 +736,9 @@ console.log(id);
       success: function(resp){
           
           if(!resp['message']){
-              swal('',"Test Already Added",'info');
+              swal('',"Already Added",'info');
           }else{
-              swal('',"Test Added","success");
+              swal('',"Added","success");
               window.setTimeout(function(){location.reload()},1500)
               //window.location.reload();
           }
@@ -772,8 +799,8 @@ console.log(id);
 
       counter("testepeeps", 100000, 123456, 100);
       counter("verified", 100, 3456, 2500);
-      counter("cities", 0, 45, 3000);
-      counter("visits", 0, 543, 3000);
+      counter("cities", 0, 7, 3000);
+      counter("visits", 0, 72812, 3000);
      });
     
 

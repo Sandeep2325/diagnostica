@@ -252,9 +252,9 @@
     success: function(resp){
       console.log(resp)
         if(!resp['message']){
-            swal('',"Test Already Added",'info');
+            swal('',"Already Added",'info');
         }else{
-            swal('',"Test Added",'success');
+            swal('',"Added",'success');
             window.setTimeout(function(){location.reload()},1500)
         }
         

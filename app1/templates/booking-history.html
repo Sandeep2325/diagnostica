@@ -93,7 +93,7 @@
                                                     <td data-label="Date">{{bookhistory.created}}</td>
                                                    
                                                     {%if bookhistory.patient_info == "others" %}
-                                                    <td data-label="Patient Info"><a id="otherspop1" data-bs-toggle="modal" data-bs-target="#otherspop" class="br bg-dark-white cursor" onclick='othersfunc({{bookhistory.testbooking_id}})';>{{bookhistory.patient_info}}</a></td>
+                                                    <td data-label="Patient Info"><a id="otherspop1" data-bs-toggle="modal" data-bs-target="#otherspop" class="br bg-dark-white cursor" onclick='othersfunc("{{bookhistory.uni}}")';>{{bookhistory.patient_info}}</a></td>
                                                     {%else%}
                                                     <td data-label="Patient Info">{{bookhistory.patient_info}}</td>
                                                     {%endif%}
@@ -109,7 +109,7 @@
                                                     {%if bookhistory.amount == None%}
                                                         <td data-label="Amount">-</td>
                                                     {%elif bookhistory.prescription%}
-                                                        <td data-label="Amount">₹ {{bookhistory.amount}}<i  id ="prescriptiontest" data-bs-toggle="modal" data-bs-target="#prescriptionbreaks" class="fa fa-info br-5 cursor" aria-hidden="true" style="text-align:center;background:#d5e6f7; padding:5px 9px;margin-left:5px " onclick='prescrbreak({{bookhistory.testbooking_id}})'></i></td>
+                                                        <td data-label="Amount">₹ {{bookhistory.amount}}<i  id ="prescriptiontest" data-bs-toggle="modal" data-bs-target="#prescriptionbreaks" class="fa fa-info br-5 cursor" aria-hidden="true" style="text-align:center;background:#d5e6f7; padding:5px 9px;margin-left:5px " onclick='prescrbreak("{{bookhistory.uni}}")'></i></td>
                                                     {%else%}
                                                     <td data-label="Amount">₹ {{bookhistory.amount}}</td>
                                                     {%endif%}
@@ -124,8 +124,8 @@
                                                     <td data-label="Report"><button
                                                             class="br br-5 fs-16 font-bold bg-dark-green cl-dark-white download text-center paynow-btn" 
                                                             {% if bookhistory.amount == None %}
-                                                            onclick='paymentFunction({{bookhistory.testbooking_id}}, "false")';
-                                                            {% else %}onclick='paymentFunction({{bookhistory.testbooking_id}}, "true")';{% endif %}id="testbooking{{bookhistory.testbooking_id}}">Pay Now</button>
+                                                            onclick='paymentFunction("{{bookhistory.uni}}", "false")';
+                                                            {% else %}onclick='paymentFunction("{{bookhistory.uni}}", "true")';{% endif %}id="testbooking{{bookhistory.testbooking_id}}">Pay Now</button>
                                                     </td>
                                                     {%else%}
                                                     {%if bookhistory.report %}
@@ -171,7 +171,7 @@
                                                     <td data-label="Booking ID">{{payment.booking_id}}</td>
                                                     <td data-label="Date">{{payment.date}}</td>
                                                     {% comment %} <td data-label="Payment">My Self</td> {% endcomment %}
-                                                    <td data-label="Amount">₹ {{payment.amount}}</td>
+                                                    <td data-label="Amount">₹ {{payment.amount|floatformat:2}}</td>
                                                     <td data-label="Invoice"><a href="{% url "invoice" payment.transid %} " target="_blank"
                                                             class=""><button class="br br-5 fs-16 font-bold bg-dark-green cl-dark-white download text-center">Invoice</button></a>
                                                     </td>
@@ -235,16 +235,14 @@
                     <div class="modal-body">
                         <button type="button" class="btn-close  close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
-                            
                             <div id="prescr" >
-                                
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    
+    {%include "footer.html"%}
 </body>
 {% if messages %}
 {% for message in messages %}
@@ -378,6 +376,7 @@
                 'csrfmiddlewaretoken':'{{ csrf_token }}',
             },
             success: function(resp){
+                
                
               //  $("#choice").text(resp['otherschoice']);
               // $("#firstname").text(resp['firstname']);
@@ -387,7 +386,7 @@
              //   $("#gender").text(resp['phone']);
              $("#othersspop").empty();
              
-               var detail=` <h3 class="fs-20 font-bold cl-dark-blue text-center" id="choice">Others : ${resp['otherschoice']}</h3>
+               var detail=` <h3 class="fs-20 font-bold cl-dark-blue text-center" id="choice">To Whom : ${resp['otherschoice']}</h3>
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="fistname">First Name : ${resp['firstname']}</h3>
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="lastname">Last Name : ${resp['lastname']}</h3>
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="gender">Gender : ${resp['gender']}</h3>

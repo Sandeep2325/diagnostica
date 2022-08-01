@@ -16,7 +16,7 @@ SECRET_KEY = 'django-insecure-q6^hx14a=lgi46rai+=20-31f7&-sfp@5tb7i+yf*f%f8xoz-=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["162.240.55.20","127.0.0.1"]
+ALLOWED_HOSTS = ["162.240.55.20","127.0.0.1","3.134.93.169"]
 env = environ.Env()
 
 
@@ -90,28 +90,28 @@ AUTH_USER_MODEL = 'app1.User'
 #     }
 # }
 
-DATABASES = {  
-    'default': {  
-        'ENGINE': 'django.db.backends.mysql',  
-        'NAME': 'diagnospan1',  
-        'USER': 'root',  
-        'PASSWORD': 'Sandeep@8105',  
-        'HOST': 'localhost',  
-        'PORT': '3306',  
-        
-    }  
-} 
-
 # DATABASES = {  
 #     'default': {  
 #         'ENGINE': 'django.db.backends.mysql',  
-#         'NAME': 'spanDiagnoV2',  
-#         'USER': 'spanDiagnoV2User',  
-#         'PASSWORD': 'spanDiagnoV2User',  
+#         'NAME': 'diagnospan1',  
+#         'USER': 'root',  
+#         'PASSWORD': 'Sandeep@8105',  
 #         'HOST': 'localhost',  
-#         'PORT': '3306',   
+#         'PORT': '3306',  
+        
 #     }  
-# }
+# } 
+
+DATABASES = {  
+    'default': {  
+        'ENGINE': 'django.db.backends.mysql',  
+        'NAME': 'spanDiagnoV2',  
+        'USER': 'spanDiagnoV2User',  
+        'PASSWORD': 'spanDiagnoV2User',  
+        'HOST': 'localhost',  
+        'PORT': '3306',   
+    }  
+}
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 20000
 # Password validation
