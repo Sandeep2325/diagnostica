@@ -1,29 +1,68 @@
 {% extends "admin/base_site.html" %}
-{% load i18n%}
-{% comment %} {% get_jazzmin_settings request as jazzmin_settings %} {% endcomment %}
-{% load static %}
+{% load i18n admin_urls static admin_list %}
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}">
+    {% if cl.formset %}
+        <link rel="stylesheet" type="text/css" href="{% if LANGUAGE_BIDI %}{% static "admin/css/forms_rtl.css" %}{% else %}{% static "admin/css/forms.css" %}{% endif %}">
+    {% endif %}
+    {% if cl.formset or action_form %}
+        <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
+    {% endif %}
+    {{ media.css }}
+    {% if not actions_on_top and not actions_on_bottom %}
+        <style>
+            #changelist table thead th:first-child {
+                width: inherit
+            }
+        </style>
+    {% endif %}
+{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    {{ media.js }}
+{% endblock %}
+
+{% if not is_popup %}
+    {% block breadcrumbs %}
+        <div class="breadcrumbs{% if LANGUAGE_BIDI %} rbc{% else %} lbc{% endif %}">
+            <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+            &rsaquo; {{ cl.opts.app_config.verbose_name }}
+            &rsaquo; {{ cl.opts.verbose_name_plural|capfirst }}
+        </div>
+    {% endblock %}
+{% endif %}
+
 {% block content %}
-    <div>
-        <form action="." method="POST" enctype="multipart/form-data">
-            
-            <div class="custom-file-upload">
-            {{ form.as_p }}
+    <div class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header {{ direction.reverse_panel }}">
+                       
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="{% if cl.has_filters %}col-md-10{% else %}col-md-12{% endif %}">
+                                <div>
+                                    <form action="." method="POST" enctype="multipart/form-data">
+                                        
+                                        <div class="custom-file-upload">
+                                        {{ form.as_p }}
+                                        </div>
+                                        {% csrf_token %}
+                                        {{message}}
+                                        <button class="btn btn-secondary" type="submit">Upload File</button>
+                                    </form>
+                                    <a href="{% static "files/test bulk.csv"%}" download>Sample file</a>
+                                </div> 
+                                <div>
+                            </div>
+                    </div>
+                </div>
             </div>
-            {% csrf_token %}
-            {{message}}
-            <button class="btn btn-secondary" type="submit">Upload File</button>
-        </form>
-        <a href="{% static "files/test bulk.csv"%}" download>Sample file</a>
-    </div> 
-    <div>
-   <Style>
-        {% comment %} .custom-file-upload {
-            border: 2px solid #ccc;
-            display: inline-block;
-            padding: 6px 12px;
-            cursor: pointer;
-           border-color:#3d5c5c;
-   
-        } {% endcomment %}
-    </style>
+        </div>
+    </div>
 {% endblock %}

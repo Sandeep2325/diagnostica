@@ -9,175 +9,134 @@
 {%endfor%} {% endcomment %}
 {% block content %}
     <div class="content">
-        {% comment %} <div class="row">
-            <div class="col-12">
-                <div class="card card-chart">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-sm-6 {{ direction.panel }}">
-                                <h5 class="card-category">{% trans "Total Shipments" %}</h5>
-                                <h2 class="card-title">{% trans "Performance" %}</h2>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="btn-group btn-group-toggle {{ direction.float }}" data-toggle="buttons">
-                                    <label class="btn btn-sm btn-primary btn-simple active" id="0">
-                                        <input type="radio" name="options" checked>
-                                        <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">{% trans "Accounts" %}</span>
-                                        <span class="d-block d-sm-none">
-                                  <i class="tim-icons icon-single-02"></i>
-                                </span>
-                                    </label>
-                                    <label class="btn btn-sm btn-primary btn-simple" id="1">
-                                        <input type="radio" class="d-none d-sm-none" name="options">
-                                        <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">{% trans "Purchases" %}</span>
-                                        <span class="d-block d-sm-none">
-                                  <i class="tim-icons icon-gift-2"></i>
-                                </span>
-                                    </label>
-                                    <label class="btn btn-sm btn-primary btn-simple" id="2">
-                                        <input type="radio" class="d-none" name="options">
-                                        <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">{% trans "Sessions" %}</span>
-                                        <span class="d-block d-sm-none">
-                                  <i class="tim-icons icon-tap-02"></i>
-                                </span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="chart-area">
-                            <canvas id="chartBig1"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> {% endcomment %}
         <div class="row">
-            <div class="col-sm-4 {{ direction.panel }}">
-                <div class="card card-chart indexcard">
-                    <div class="card-header">
-                        <h5 class="card-category">{% trans "Total Shipments" %}</h5>
-                        <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i> 763,215</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="chart-area">
-                            <canvas id="chartLinePurple"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4 {{ direction.panel }}">
-                <div class="card card-chart indexcard">
-                    <div class="card-header">
-                        <h5 class="card-category">{% trans "Daily Sales" %}</h5>
-                        <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info"></i> 3,500€</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="chart-area">
-                            <canvas id="CountryChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4 {{ direction.panel }}">
-                <div class="card card-chart indexcard">
-                    <div class="card-header">
-                        <h5 class="card-category">{% trans "Completed Tasks" %}</h5>
-                        <h3 class="card-title"><i class="tim-icons icon-send text-success"></i> 12,100K</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="chart-area">
-                            <canvas id="chartLineGreen"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4 {{ direction.panel }}">
-                <div class="card card-chart indexcard">
-                    <div class="card-header">
-                        <h5 class="card-category">{% trans "Completed Tasks" %}</h5>
-                        <h3 class="card-title"><i class="tim-icons icon-send text-success"></i> 12,100K</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="chart-area">
-                            <canvas id="chartLineGreen"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4 {{ direction.panel }}">
-                <div class="card card-chart indexcard">
-                    <div class="card-header">
-                        <h5 class="card-category">{% trans "Completed Tasks" %}</h5>
-                        <h3 class="card-title"><i class="tim-icons icon-send text-success"></i> 12,100K</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="chart-area">
-                            <canvas id="chartLineGreen"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="dashboard-box col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12 ">
+				<div class="card">
+					<div class="card-statistic-4 dash">
+						<div class="align-items-center justify-content-between ">							
+							<div class="row ">					
+								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3 ">
+									<div class="card-content">
+										<h5 class="font-15 clr">Prescription Bookings</h5>
+										<h2 class="mb-3 font-18 clr" id="pbcount"></h2>
+										<a id="presc" href="" class="font-weight-bold">View</a>
+									</div>
+								</div>
+								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0 ">
+									<div class="banner-img">
+										<img src="{% static 'images/prescriptionimg.png'%}" alt="">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+            <div class="dashboard-box col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				<div class="card">
+					<div class="card-statistic-4 dash">
+						<div class="align-items-center justify-content-between">							
+							<div class="row ">					
+								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+									<div class="card-content">
+										<h5 class="font-15 clr">Test Bookings</h5>
+										<h2 class="mb-3 font-18 clr" id="tbcount"></h2>
+										<a id="tests" href="" class="font-weight-bold">View</a>
+									</div>
+								</div>
+								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+									<div class="banner-img">
+										<img src="{% static 'images/selected.png'%}" alt="">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+            <div class="dashboard-box col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				<div class="card">
+					<div class="card-statistic-4 dash">
+						<div class="align-items-center justify-content-between">							
+							<div class="row ">					
+								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+									<div class="card-content">
+										<h5 class="font-15 clr">Total Amount</h5>
+										<h2 class="mb-3 font-18 clr" id="acount"></h2>
+										<a id="tamount" href="" class="font-weight-bold">View</a>
+									</div>
+								</div>
+								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+									<div class="banner-img">
+										<img src="{% static 'images/amount.png'%}" alt="">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+            <div class="dashboard-box col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				<div class="card">
+					<div class="card-statistic-4 dash">
+						<div class="align-items-center justify-content-between">							
+							<div class="row ">					
+								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+									<div class="card-content">
+										<h5 class="font-15 clr">Outstanding Amount</h5>
+										<h2 class="mb-3 font-18 clr" id="ocount"></h2>
+										<a id="out" href="" class="font-weight-bold">View</a>
+									</div>
+								</div>
+								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+									<div class="banner-img">
+										<img src="{% static 'images/out.png'%}" alt="">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
         </div>
         <div class="row">
-            <div class="col-lg-6 col-sm-6 text-center">
-                <div class="card card-tasks {{ direction.reverse_panel }}">
+            <div class="col-lg-6 col-sm-6 cont">
+                <div class="card ">
                     <div class="card-header {{ direction.panel }}">
-                        <h6 class="title d-inline">{% trans 'Recent actions' %}</h6>
-                        <p class="card-category d-inline">{% trans 'My actions' %}</p>
-                        {% load log %}
-                        {% get_admin_log 10 as admin_log for_user user %}
+                        <h4 class="card-title">{% trans "Prescription Bookings" %}</h4>
                     </div>
                     <div class="card-body">
-                        {% if admin_log %}
-                            <div class="table-full-width table-responsive">
-                                <table class="table">
-                                    <tbody>
-                                    {% for entry in admin_log %}
-                                        <tr>
-                                            <td class="text-center">
-                                                {% if entry.is_addition %}
-                                                    <span class="fa fa-plus-circle text-success"></span>
-                                                {% endif %}
-                                                {% if entry.is_change %}
-                                                    <span class="fa fa-edit text-warning"></span>
-                                                {% endif %}
-                                                {% if entry.is_deletion %}
-                                                    <span class="fa fa-trash text-danger"></span>
-                                                {% endif %}
-                                            </td>
-                                            <td class="{{ direction.panel }}">
-                                                <p class="title">{{ entry.object_repr }}</p>
-                                                {% if entry.content_type %}
-                                                    <p class="text-muted">
-                                                        {% filter capfirst %}{{ entry.content_type }}{% endfilter %}</p>
-                                                {% else %}
-                                                    <p class="text-muted">{% trans 'Unknown content' %}</p>
-                                                {% endif %}
-                                            </td>
-                                            <td class="td-actions">
-                                                <a href="{{ entry.get_admin_url }}" type="button" rel="tooltip" title=""
-                                                   class="btn btn-link"
-                                                   data-original-title="{{ entry.object_repr }}">
-                                                    <i class="tim-icons icon-settings"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        {% else %}
-                            <p>{% trans 'None available' %}</p>
-                        {% endif %}
+                        <div class="table-responsive">
+                            <table class="table tablesorter table  table-sm .table-scroll" cellspacing="0" id="dtHorizontalExample" width="50%">
+                                <thead class="text-primary">
+                                <tr>
+                                    <th>
+                                        Booking Id
+                                    </th>
+                                    <th>
+                                       Prescription File
+                                    </th>
+                                    <th>
+                                        Firstname
+                                    </th>
+                                    <th class="text-center">
+                                        Gender
+                                    </th>
+                                    
+                                </tr>
+                                </thead>
+                                <tbody class="prescription">
+                               
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-6 col-sm-6">
                 <div class="card ">
                     <div class="card-header {{ direction.panel }}">
-                        <h4 class="card-title">{% trans "Simple Table" %}</h4>
+                        <h4 class="card-title">{% trans "Test Bookings" %}</h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -185,118 +144,21 @@
                                 <thead class="text-primary">
                                 <tr>
                                     <th>
-                                        Name
+                                        Booking Id
                                     </th>
                                     <th>
-                                        Country
+                                        Payment
                                     </th>
                                     <th>
-                                        City
+                                        Firstname
                                     </th>
                                     <th class="text-center">
-                                        Salary
+                                        Gender
                                     </th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                <tr>
-                                    <td>
-                                        Dakota Rice
-                                    </td>
-                                    <td>
-                                        Niger
-                                    </td>
-                                    <td>
-                                        Oud-Turnhout
-                                    </td>
-                                    <td class="text-center">
-                                        $36,738
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Minerva Hooper
-                                    </td>
-                                    <td>
-                                        Curaçao
-                                    </td>
-                                    <td>
-                                        Sinaai-Waas
-                                    </td>
-                                    <td class="text-center">
-                                        $23,789
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Sage Rodriguez
-                                    </td>
-                                    <td>
-                                        Netherlands
-                                    </td>
-                                    <td>
-                                        Baileux
-                                    </td>
-                                    <td class="text-center">
-                                        $56,142
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Philip Chaney
-                                    </td>
-                                    <td>
-                                        Korea, South
-                                    </td>
-                                    <td>
-                                        Overland Park
-                                    </td>
-                                    <td class="text-center">
-                                        $38,735
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Doris Greene
-                                    </td>
-                                    <td>
-                                        Malawi
-                                    </td>
-                                    <td>
-                                        Feldkirchen in Kärnten
-                                    </td>
-                                    <td class="text-center">
-                                        $63,542
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Mason Porter
-                                    </td>
-                                    <td>
-                                        Chile
-                                    </td>
-                                    <td>
-                                        Gloucester
-                                    </td>
-                                    <td class="text-center">
-                                        $78,615
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Jon Porter
-                                    </td>
-                                    <td>
-                                        Portugal
-                                    </td>
-                                    <td>
-                                        Gloucester
-                                    </td>
-                                    <td class="text-center">
-                                        $98,615
-                                    </td>
-                                </tr>
+                                <tbody class="test">
+                               
                                 </tbody>
                             </table>
                         </div>
@@ -305,6 +167,137 @@
             </div>
         </div>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $.getJSON("/dashboard",function (j) {
+        console.log(j)
+        tcount=j.test
+        tbcount=j.test_bookings
+        pbcount=j.prescription_bookings
+        hpcount=j.packages
+        acount=j.totalamount
+        ocount=j.outstandingamount
+        $("#tcount").text(tcount);
+        $("#tbcount").text(tbcount);
+        $("#pbcount").text(pbcount);
+        $("#hpcount").text(hpcount);
+        $("#acount").text(acount);
+        $("#ocount").text(ocount);
+     })    
+$.getJSON("/index",function (j) {
+  console.log(j)
+   $.each(j, function(i, k) {
+
+
+   if (k.fields.gender==="m"){
+    gender="Male"
+   }
+   else{
+    gender="Female"
+   }
+   fileurl=window.location.origin+'/photos/'+k.fields.prescription_file
+   detail=window.location.origin+'/admin/app1/prescriptionbook1/'+k.pk+'/change/'
+   console.log(detail)
+
+   cont= `<tr>
+    
+        <td>
+            <a href="${detail}" target="_blank">
+            ${k.fields.bookingid}
+            <a>
+        </td>
+        <td>
+      <a href="${fileurl}" target="_blank">
+            ${k.fields.prescription_file.slice(0, 20).concat('...')}
+        </a>
+    </td>
+        <td>
+            ${k.fields.firstname}
+        </td>
+        <td class="text-center">
+            ${gender}
+        </td>
+    </tr>`
+  $(".prescription").append(cont)
+});
+  
+
+})
+
+$.getJSON("/index2",function (j) {
+  
+    $.each(j, function(i, k) {
+    console.log(i)
+    console.log(k.fields)
+   // origin   = window.location.origin; 
+    //console.log(window.location.origin)
+ 
+    if (k.fields.gender==="m"){
+     gender="Male"
+    }
+    else{
+     gender="Female"
+    }
+    if(k.fields.payment_status===true){
+        payment="Paid"
+    }
+    else{
+        payment="Not Paid"
+    }
+    c=window.location.origin+'/photos/'+k.fields.prescription_file
+    
+    detail=window.location.origin+'/admin/app1/testbook/'+k.pk+'/change/'
+
+   cont= `<tr>
+     
+         <td>
+             <a href="${detail}" target="_blank" >
+             ${k.fields.bookingid}
+             <a>
+         </td>
+         <td>
+             ${payment}
+     </td>
+         <td>
+             ${k.fields.firstname}
+         </td>
+         <td class="text-center">
+             ${gender}
+         </td>
+     </tr>`
+   $(".test").append(cont)
+ });
+
+ })
+ payments=window.location.origin+"/admin/app1/payment"
+ var oldUrl = $("#out").attr("href"); // Get current url
+var newUrl = oldUrl.replace("", payments); // Create new url
+    $("#out").attr("href", newUrl);
+
+ details=window.location.origin+"/admin/app1/payment"
+ var oldUrl = $("#tamount").attr("href"); // Get current url
+ var newUrl = oldUrl.replace("", payments); // Create new url
+    $("#tamount").attr("href", newUrl);
+
+testb=window.location.origin+"/admin/app1/test"
+var oldUrl = $("#tests").attr("href"); // Get current url
+var newUrl = oldUrl.replace("", testb); // Create new url
+    $("#tests").attr("href", newUrl);
+
+precri=window.location.origin+"/admin/app1/prescriptionbook1"
+var oldUrl = $("#presc").attr("href"); // Get current url
+var newUrl = oldUrl.replace("", precri); // Create new url
+    $("#presc").attr("href", newUrl);
+})
+
+$(document).ready(function () {
+    $('#dtHorizontalExample').DataTable({
+      "scrollX": true
+    });
+    $('.dataTables_length').addClass('bs-select');
+  });
+</script>
 {% endblock %}
 
 {% block extrascript %}{% endblock %}

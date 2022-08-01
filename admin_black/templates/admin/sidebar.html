@@ -14,8 +14,9 @@
                         <p class="home">{% trans 'Site' %}</p>
                     </a> {% endcomment %}
                     <a href="{% url 'admin:index' %}">
-                       <i class="tim-icons icon-chart-pie-36"></i>
-                        <p class="home">{% trans 'Dashboard' %}</p>
+                       
+                        <p class="home">
+                            <i class="tim-icons icon-chart-pie-36"></i>{% trans 'Dashboard' %}</p>
                     </a>
                 </li>
                 
@@ -31,6 +32,7 @@
                                                                       data-order="{{ forloop.counter }}"
                                         {% if app.url_blank %} target="_blank"{% endif %}>
                                     <i class="{{ app.icon }}"></i>
+                                    
                                     <p><i class="tim-icons icon-single-02"></i>
                                         Admin 
                                         {% if app.models %}
@@ -45,7 +47,7 @@
                                         {%if model.label == "City"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
-                                                    <i class="tim-icons icon-square-pin"></i>
+                                                    {% comment %} <i class="tim-icons icon-square-pin"></i> {% endcomment %}
                                                     <a href="{{ model.url }}">
                                                         
                                                         <span>{{ model.label }}</span>
@@ -58,7 +60,7 @@
                                             {%elif model.label == "Prescription Bookings"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
-                                                    <i class="tim-icons icon-paper"></i>
+                                                    {% comment %} <i class="tim-icons icon-paper"></i> {% endcomment %}
                                                     <a href="{{ model.url }}">
                                                         
                                                         <span>{{ model.label }}</span>
@@ -71,7 +73,7 @@
                                             {%elif model.label == "Test Bookings"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
-                                                    <i class="tim-icons icon-tap-02"></i>
+                                                    {% comment %} <i class="tim-icons icon-tap-02"></i> {% endcomment %}
                                                     <a href="{{ model.url }}">
                                                         
                                                         <span>{{ model.label }}</span>
@@ -84,7 +86,7 @@
                                             {%elif model.label == "Booking Histories"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
-                                                    <i class="tim-icons icon-refresh-02"></i>
+                                                    {% comment %} <i class="tim-icons icon-refresh-02"></i> {% endcomment %}
                                                     <a href="{{ model.url }}">
                                                         <span>{{ model.label }}</span>
                                                         <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
@@ -97,7 +99,7 @@
                                             {%elif model.label == "Test Category"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
-                                                    <i class="tim-icons icon-components"></i>
+                                                    {% comment %} <i class="tim-icons icon-components"></i> {% endcomment %}
                                                     <a href="{{ model.url }}">
                                                         <span>{{ model.label }}</span>
                                                         <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
@@ -109,7 +111,7 @@
                                             {%elif model.label == "Tests"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
-                                                    <i class="tim-icons icon-bullet-list-67"></i>
+                                                    {% comment %} <i class="tim-icons icon-bullet-list-67"></i> {% endcomment %}
                                                     <a href="{{ model.url }}">
                                                         <span>{{ model.label }}</span>
                                                         <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
@@ -157,7 +159,7 @@
                                         {%if model.label == "Health Checkups and Lab Tests"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
-                                                    <i class="tim-icons icon-bag-16"></i> 
+                                                    {% comment %} <i class="tim-icons icon-bag-16"></i>  {% endcomment %}
                                                     <a href="{{ model.url }}">
                                                         <span>{{ model.label }}</span>
                                                         <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
@@ -169,7 +171,7 @@
                                             {%elif model.label == "Health Packages"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
-                                                    <i class="tim-icons icon-bag-16"></i> 
+                                                    {% comment %} <i class="tim-icons icon-bag-16"></i>  {% endcomment %}
                                                     <a href="{{ model.url }}">
                                                         <span>{{ model.label }}</span>
                                                         <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
@@ -181,7 +183,7 @@
                                             {%elif model.label == "Health Symptoms"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
-                                                    <i class="tim-icons icon-bag-16"></i> 
+                                                    {% comment %} <i class="tim-icons icon-bag-16"></i>  {% endcomment %}
                                                     <a href="{{ model.url }}">
                                                         <span>{{ model.label }}</span>
                                                         <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
@@ -214,7 +216,7 @@
                                                                       data-order="{{ forloop.counter }}"
                                         {% if app.url_blank %} target="_blank"{% endif %}>
                                     <i class="{{ app.icon }}"></i>
-                                    <p><i class="fa fa-users" aria-hidden="true"></i>
+                                    <p><i class="fa fa-users stroke-transparent" aria-hidden="true"></i>
                                         Users 
                                         {% if app.models %}
                                             <span class="tim-icons icon-minimal-down m-2"></span>
@@ -229,6 +231,7 @@
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
                                                     <a href="{{ model.url }}">
+                                                    {% comment %} <a href="{{ model.url }}"> {% endcomment %}
                                                         <span>{{ model.label }}</span>
                                                         <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
                                                     </a>
@@ -272,7 +275,7 @@
                                         {%if model.label == "Blogs Category"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
-                                                    <i class="tim-icons icon-components"></i>
+                                                    {% comment %} <i class="tim-icons icon-components"></i> {% endcomment %}
                                                     <a href="{{ model.url }}">
                                                         <span>{{ model.label }}</span>
                                                         <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
@@ -284,7 +287,7 @@
                                             {%elif model.label == "Blogs"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
-                                                    <i class="tim-icons icon-notes"></i>
+                                                    {% comment %} <i class="tim-icons icon-notes"></i> {% endcomment %}
                                                     <a href="{{ model.url }}">
                                                         <span>{{ model.label }}</span>
                                                         <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
@@ -328,7 +331,7 @@
                                         {%if model.label == "Payments History"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
-                                                    <i class="tim-icons icon-money-coins"></i> 
+                                                    {% comment %} <i class="tim-icons icon-money-coins"></i>  {% endcomment %}
                                                     <a href="{{ model.url }}">
                                                         <span>{{ model.label }}</span>
                                                         <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
@@ -377,7 +380,7 @@
                                         {%if model.label == "Coupons"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
-                                                    <i class="tim-icons icon-gift-2"></i> 
+                                                    {% comment %} <i class="tim-icons icon-gift-2"></i>  {% endcomment %}
                                                     <a href="{{ model.url }}">
                                                         <span>{{ model.label }}</span>
                                                         <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
@@ -389,7 +392,7 @@
                                             {%elif model.label == "Redeemed Coupons"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
-                                                    <i class="tim-icons icon-molecule-40"></i> 
+                                                    {% comment %} <i class="tim-icons icon-molecule-40"></i>  {% endcomment %}
                                                     <a href="{{ model.url }}">
                                                         <span>{{ model.label }}</span>
                                                         <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
@@ -438,7 +441,7 @@
                                         {%if model.label == "Newsletter"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
-                                                    <i class="tim-icons icon-email-85"></i> 
+                                                    {% comment %} <i class="tim-icons icon-email-85"></i>  {% endcomment %}
                                                     <a href="{{ model.url }}">
                                                         <span>{{ model.label }}</span>
                                                         <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
@@ -450,7 +453,7 @@
                                             {%elif model.label == "About Span"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
-                                                    <i class="fa fa-info" aria-hidden="true"></i>
+                                                    {% comment %} <i class="fa fa-info" aria-hidden="true"></i> {% endcomment %}
                                                     <a href="{{ model.url }}">
                                                         <span>{{ model.label }}</span>
                                                         <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
@@ -462,7 +465,7 @@
                                             {%elif model.label == "Contact us form"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
-                                                    <i class="tim-icons icon-book-bookmark"></i> 
+                                                    {% comment %} <i class="tim-icons icon-book-bookmark"></i>  {% endcomment %}
                                                     <a href="{{ model.url }}">
                                                         <span>{{ model.label }}</span>
                                                         <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
@@ -474,7 +477,7 @@
                                             {%elif model.label == "FAQ"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
-                                                    <i class="fa fa-question-circle" aria-hidden="true"></i>
+                                                    {% comment %} <i class="fa fa-question-circle" aria-hidden="true"></i> {% endcomment %}
                                                     <a href="{{ model.url }}">
                                                         <span>{{ model.label }}</span>
                                                         <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
@@ -487,7 +490,7 @@
                                             {%elif model.label == "Testimonials"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
-                                                    <i class="fa fa-quote-left" aria-hidden="true"></i>
+                                                    {% comment %} <i class="fa fa-quote-left" aria-hidden="true"></i> {% endcomment %}
                                                     <a href="{{ model.url }}">
                                                         <span>{{ model.label }}</span>
                                                         <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>

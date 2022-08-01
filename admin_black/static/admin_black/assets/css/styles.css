@@ -125,6 +125,7 @@ blockquote {
 }
 
 .breadcrumbs_panel .lbc {
+    display: none;
     margin: 80px 32px -5% 22%;
     text-align: left;
 }
