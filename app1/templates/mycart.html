@@ -26,7 +26,6 @@
                         <h1 class="fs-40 font-bold cl-dark-blue text-center py-lg-5 py-3 m-0  px-3">My Cart</h1>
                         <div class="row justify-content-center">
                             <div class="col-lg-12 nodata">
-                                {%if datacount%}
                                 {% comment %} <h1 class="text-center fs-30 font-bold cl-dark-blue mb-4 px-2" id="nodata">No Record Found...</h1>  {% endcomment %}
                                 <div class="table-responsive" id="carttable">
                                     <div class="wrapper">
@@ -48,7 +47,7 @@
                                                 </div>
                                             </div>
                                             
-                                            {%for cart in data%}
+{%for cart in data%}
                                             <div class="row">
                                                 <div class="cell" data-title=" S.No">
                                                     {{ forloop.counter }}
@@ -88,7 +87,7 @@
                                                    Rs. {{cart.price}}
                                                 </div>
                                             </div>
-                                            {%endfor%}                           
+{%endfor%}                           
                                         </div> 
                                         <div class="row py-4">
                                             <div class="col-lg-6">
@@ -133,20 +132,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                {%else%}
-                                <h1 class="text-center fs-30 font-bold cl-dark-blue mb-4 px-2" id="nodata">No Record Found...</h1>
-                            {%endif%}
                             </div>
                         </div>
                     </div>
-                    {%if datacount%}
                     <div class="  check_out">
                         <button 
                             class="float-end fs-18 font-bold cl-dark-white br br-5 bg-sky-blue py-3 my-lg-5 my-3 px-5 br"  data-bs-toggle="modal" data-bs-target="#cart_checkout_modal" type="button" id="checkout1">CHECKOUT</button>
                     </div>
-                    {%else%}
-                    <div></div>
-                    {%endif%}
                 </div>
             </div>
         </div>
@@ -262,7 +254,7 @@
         }
     });
 
-   /* $(document).ready(function(){
+    $(document).ready(function(){
         
         var count =parseInt("{{datacount}}");
         if(count!=0){
@@ -274,10 +266,10 @@
             $("#checkout1").hide();
             $("#carttable").hide();
             //$("#nodata").show();
-            //dataa=`<h1 class="text-center fs-30 font-bold cl-dark-blue mb-4 px-2" id="nodata">No Record Found...</h1>`
-           // $(".nodata").append(dataa);
+            dataa=`<h1 class="text-center fs-30 font-bold cl-dark-blue mb-4 px-2" id="nodata">No Record Found...</h1>`
+            $(".nodata").append(dataa);
         }
-    })*/
+    })
     $('#cart_checkout_modal').on('shown.bs.modal', function (e) {
        
         if("{{ user.is_authenticated }}"==="False"){
@@ -383,6 +375,7 @@ function deletefunc(e){
                     
                     var detail=`
                    
+                    
                     <div class="col-6" id="cleardetail">
                         <h4 class="fs-20 font-bold cl-dark-blue mb-3">Discount Price(${resp['percent']}%)</h4>
                     </div>
@@ -420,14 +413,14 @@ $("#option1").change(function(e){
         },
         dataType: "json",
         success: function(resp){
-            console.log(resp)
+            
         $("#firstname").val(resp['firstname']);
         $("#lastname").val(resp['lastname']);
         $("#age").val(resp['age']);
         //$("#gender").val(resp['gender']);
         $("#phone").val(resp['contact']);
         $("#address").val(resp['address']);
-        if (resp['gender']!=''){
+        if (resp['gender']!=null){
             $("#gender").val(resp['gender']);
         };
         }
