@@ -21,6 +21,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include("app1.urls")),
     path('summernote/', include('django_summernote.urls')),
+    # path('baton/', include('baton.urls')),
 ]
 handler404 = 'app1.views.error_404_view'
+handler500 = 'app1.views.error_500_view'
+# handler500=''
 

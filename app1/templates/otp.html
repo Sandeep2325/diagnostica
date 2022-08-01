@@ -88,7 +88,7 @@
                                         Please check your Mobile or Mail for the OTP.
                                     </p>
                                     <form method="post" class="mt-5" id="form">
-{%csrf_token%}
+                                    {%csrf_token%}
                                     <form action="" class="mt-5">
                                         <input class="otp" type="text" oninput='digitValidate(this)'
                                             onkeyup='tabChange(1)' maxlength=1 name="digit-1" id="digit-1">
@@ -148,7 +148,7 @@
 
 </body>
 
-<script>
+{% comment %} <script>
     let digitValidate = function (ele) {
         console.log(ele.value);
         ele.value = ele.value.replace(/[^0-9]/g, '');
@@ -164,30 +164,23 @@
         }
     }
 
-   /* $("#form").submit(function (event) {
-        var formData = {
-            digit1: $("#digit-1").val(),
-            digit2: $("#digit-2").val()
-            digit3: $("#digit-3").val()
-            digit4: $("#digit-4").val()
-          
-        };
-    
-        $.ajax({
-          type: "POST",
-          url: "process.php",
-          data: formData,
-          dataType: "json",
-          encode: true,
-        }).done(function (data) {
-          console.log(data);
-          location.href="{% url 'user-login' %}"
-        });
-    
-        event.preventDefault();
-      });*/
-</script>
 
+</script> {% endcomment %}
+<script>
+    let digitValidate = function (ele) {
+        console.log(ele.value);
+        ele.value = ele.value.replace(/[^0-9]/g, '');
+
+    }
+    $("input").keyup(function () {
+        if (this.value.length == this.maxLength) {
+          $(this).next('input').focus();
+        }
+        else if(this.value.length < this.maxLength){
+            $(this).prev('input').focus();
+        }
+    });
+</script>
 {% if messages %}
 {% for message in messages %}
 {% if message.tags == "error"%}
