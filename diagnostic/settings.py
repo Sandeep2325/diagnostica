@@ -106,7 +106,7 @@ DATABASES = {
         'NAME': 'spandiagnodb',  
         'USER': 'spandiagno_user',  
         'PASSWORD': 'spanDiagnoV2db',  
-        'HOST': 'spandiagno.cubknyrg0xrn.us-east-2.rds.amazonaws.com',  
+        'HOST': 'spandiagnov2.cubknyrg0xrn.us-east-2.rds.amazonaws.com',  
         'PORT': '3306',   
     }  
 }
