@@ -80,8 +80,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 WSGI_APPLICATION = 'diagnostic.wsgi.application'
 AUTH_USER_MODEL = 'app1.User'
 
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 # DATABASES = {
 #     'default': {
@@ -105,10 +103,10 @@ AUTH_USER_MODEL = 'app1.User'
 DATABASES = {  
     'default': {  
         'ENGINE': 'django.db.backends.mysql',  
-        'NAME': 'spanDiagnoV2',  
-        'USER': 'spanDiagnoV2User',  
-        'PASSWORD': 'spanDiagnoV2User',  
-        'HOST': 'localhost',  
+        'NAME': 'spandiagnodb',  
+        'USER': 'spandiagno_user',  
+        'PASSWORD': 'spanDiagnoV2db',  
+        'HOST': 'spandiagno.cubknyrg0xrn.us-east-2.rds.amazonaws.com',  
         'PORT': '3306',   
     }  
 }
