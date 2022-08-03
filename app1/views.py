@@ -2236,8 +2236,8 @@ def uploadcsv(request):
                 if row.get("SPAN HEALTH PACKAGE -PRIME")=="Y":
                     a=healthpackages.objects.get(package_name="SPAN HEALTH PACKAGE -PRIME")
                     a.test_name.add(n)
-                if row.get("SPAN HEALTH  PACKAGE - PREMIUM ")=="Y":
-                    a=healthpackages.objects.get(package_name="SPAN HEALTH  PACKAGE - PREMIUM ")
+                if row.get("SPAN HEALTH PACKAGE - PREMIUM ")=="Y":
+                    a=healthpackages.objects.get(package_name="SPAN HEALTH PACKAGE - PREMIUM ")
                     a.test_name.add(n)
           
                     # a=healthpackages.objects.get(package_name="SPAN HEALTH PACKAGE -STANDARD")
