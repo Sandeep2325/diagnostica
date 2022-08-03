@@ -15,42 +15,42 @@ div.inline-related {
 
 
 /** Fix bug of adminLTE, since django is using th headers in middle of table **/
-
-.card-body.p-0 .table thead>tr>th:first-of-type,
-.card-body.p-0 .table thead>tr>td:first-of-type,
-.card-body.p-0 .table tfoot>tr>th:first-of-type,
-.card-body.p-0 .table tfoot>tr>td:first-of-type,
-.card-body.p-0 .table tbody>tr>th:first-of-type,
-.card-body.p-0 .table tbody>tr>td:first-of-type {
-    padding-left: 0.75rem;
+.card-body.p-0 .table thead > tr > th:first-of-type,
+.card-body.p-0 .table thead > tr > td:first-of-type,
+.card-body.p-0 .table tfoot > tr > th:first-of-type,
+.card-body.p-0 .table tfoot > tr > td:first-of-type,
+.card-body.p-0 .table tbody > tr > th:first-of-type,
+.card-body.p-0 .table tbody > tr > td:first-of-type {
+  padding-left: 0.75rem;
 }
 
-.card-body.p-0 .table thead>tr>th:last-of-type,
-.card-body.p-0 .table thead>tr>td:last-of-type,
-.card-body.p-0 .table tfoot>tr>th:last-of-type,
-.card-body.p-0 .table tfoot>tr>td:last-of-type,
-.card-body.p-0 .table tbody>tr>th:last-of-type,
-.card-body.p-0 .table tbody>tr>td:last-of-type {
-    padding-right: 0.75rem;
+.card-body.p-0 .table thead > tr > th:last-of-type,
+.card-body.p-0 .table thead > tr > td:last-of-type,
+.card-body.p-0 .table tfoot > tr > th:last-of-type,
+.card-body.p-0 .table tfoot > tr > td:last-of-type,
+.card-body.p-0 .table tbody > tr > th:last-of-type,
+.card-body.p-0 .table tbody > tr > td:last-of-type {
+  padding-right: 0.75rem;
 }
 
-.card-body.p-0 .table thead>tr>th:first-child,
-.card-body.p-0 .table thead>tr>td:first-child,
-.card-body.p-0 .table tfoot>tr>th:first-child,
-.card-body.p-0 .table tfoot>tr>td:first-child,
-.card-body.p-0 .table tbody>tr>th:first-child,
-.card-body.p-0 .table tbody>tr>td:first-child {
-    padding-left: 1.5rem;
+.card-body.p-0 .table thead > tr > th:first-child,
+.card-body.p-0 .table thead > tr > td:first-child,
+.card-body.p-0 .table tfoot > tr > th:first-child,
+.card-body.p-0 .table tfoot > tr > td:first-child,
+.card-body.p-0 .table tbody > tr > th:first-child,
+.card-body.p-0 .table tbody > tr > td:first-child {
+  padding-left: 1.5rem;
 }
 
-.card-body.p-0 .table thead>tr>th:last-child,
-.card-body.p-0 .table thead>tr>td:last-child,
-.card-body.p-0 .table tfoot>tr>th:last-child,
-.card-body.p-0 .table tfoot>tr>td:last-child,
-.card-body.p-0 .table tbody>tr>th:last-child,
-.card-body.p-0 .table tbody>tr>td:last-child {
-    padding-right: 1.5rem;
+.card-body.p-0 .table thead > tr > th:last-child,
+.card-body.p-0 .table thead > tr > td:last-child,
+.card-body.p-0 .table tfoot > tr > th:last-child,
+.card-body.p-0 .table tfoot > tr > td:last-child,
+.card-body.p-0 .table tbody > tr > th:last-child,
+.card-body.p-0 .table tbody > tr > td:last-child {
+  padding-right: 1.5rem;
 }
+
 
 .table tr.form-row {
     display: table-row;
@@ -86,9 +86,7 @@ tr.djn-tr>.original {
     display: none;
 }
 
-
 /* Checkbox selection table header */
-
 .djn-checkbox-select-all {
     padding-right: 0 !important;
     width: 0;
@@ -180,7 +178,6 @@ table.dataTable thead .sorting_desc_disabled::after {
     display: block;
 }
 
-
 /* APP.CSS */
 
 .form-group div .vTextField,
@@ -194,9 +191,6 @@ table.dataTable thead .sorting_desc_disabled::after {
 .form-group .field-file_path select {
     display: block;
     width: 100%;
-    outline: none !important;
-    border-color: #DFF6FF;
-    box-shadow: 0 0 5px #719ECE;
 }
 
 .vTextField,
@@ -258,7 +252,6 @@ table.dataTable thead .sorting_desc_disabled::after {
 .clock-icon:before {
     content: "\f017";
 }
-
 
 /* CALENDARS & CLOCKS */
 
@@ -439,7 +432,6 @@ table.dataTable thead .sorting_desc_disabled::after {
     display: block;
 }
 
-
 /* Selectors - This needs some work TODO */
 
 .selector {
@@ -513,11 +505,9 @@ table.dataTable thead .sorting_desc_disabled::after {
     line-height: 1;
 }
 
-
 /* Might need to import more rules from:
  * https://github.com/django/django/blob/master/django/contrib/admin/static/admin/css/responsive.css
  */
-
 .inline-group {
     overflow: auto;
 }
@@ -546,7 +536,7 @@ table.dataTable thead .sorting_desc_disabled::after {
     padding: 0 10px;
     margin: 0 0 10px;
     /*border-radius: 0 0 4px 4px;*/
-    ;
+;
 }
 
 .selector-add,
@@ -806,9 +796,7 @@ body.layout-navbar-fixed #jazzy-actions.sticky-top {
     top: 67px;
 }
 
-
 /* stacked inlines */
-
 a.inline-deletelink:hover {
     background-color: #c82333;
     border-color: #bd2130;
@@ -824,13 +812,9 @@ a.inline-deletelink {
     border: 1px solid #dc3545;
     transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
-
-
 /* end stacked inlines */
 
-
 /* Support for django-mptt */
-
 #result_list .field-tree_actions {
     width: calc(40px + 2.25rem);
 }
@@ -838,13 +822,9 @@ a.inline-deletelink {
 #result_list .field-tree_actions>div {
     margin-top: 0;
 }
-
-
 /* End support for django-mptt */
 
-
 /* modal tweaks */
-
 .modal.modal-wide .modal-dialog {
     width: 50%;
     max-width: inherit;
@@ -859,9 +839,7 @@ iframe.related-iframe {
     height: 450px;
 }
 
-
 /* Blur background when using modal */
-
 .modal-open .wrapper {
     -webkit-filter: blur(1px);
     -moz-filter: blur(1px);
@@ -869,17 +847,13 @@ iframe.related-iframe {
     -ms-filter: blur(1px);
     filter: blur(1px);
 }
-
-
 /* end modal tweaks */
 
 .control-sidebar {
     overflow: hidden scroll;
 }
 
-
 /* tweaks to allow bootstrap styling */
-
 body.jazzmin-login-page {
     -ms-flex-align: center;
     align-items: center;
@@ -891,14 +865,11 @@ body.jazzmin-login-page {
     -ms-flex-pack: center;
     justify-content: center;
 }
-
 .callout {
     color: black;
 }
 
-
 /* sidebar scrolling */
-
 .layout-fixed #jazzy-sidebar {
     top: 0;
     bottom: 0;
@@ -907,36 +878,23 @@ body.jazzmin-login-page {
     /* May inherit scroll, so we need to explicitly hide */
     overflow-x: hidden;
 }
-
-
 /* calculate height to fit content, we don't to enable scrolling if the content fits */
-
 .layout-fixed #jazzy-sidebar .sidebar {
     height: auto !important;
 }
-
-
 /* Hide scrollbar */
-
 .layout-fixed #jazzy-sidebar {
     scrollbar-width: none;
 }
-
 .layout-fixed #jazzy-sidebar::-webkit-scrollbar {
     width: 0;
 }
-
-
 /* nav-item will overflow container in width if scrollbar is visible */
-
-#jazzy-sidebar .nav-sidebar>.nav-item {
+#jazzy-sidebar .nav-sidebar > .nav-item {
     width: 100%;
 }
-
-
 /* tweeks for django-filer*/
-
-.navigator-top-nav+#content-main {
+.navigator-top-nav + #content-main {
     float: left;
     width: 100%;
 }

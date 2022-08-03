@@ -104,7 +104,7 @@ DATABASES = {
 
 #         'NAME': 'diagnospan1',  
 #         'USER': 'root',  
-#         'PASSWORD': 'Sandeep@8105',  
+#         'PASSWORD': '*****',  
 #         'HOST': 'localhost',  
 #         'PORT': '3306',
 #     }
@@ -154,7 +154,7 @@ USE_TZ = True
 import os
 STATICFILES_DIRS  = [
 
-        os.path.join(BASE_DIR, 'staticfiles/'),
+        os.path.join(BASE_DIR, 'staticfiles/static'),
 
     ]
 # Static files (CSS, JavaScript, Images)
