@@ -16,7 +16,7 @@ SECRET_KEY = 'django-insecure-q6^hx14a=lgi46rai+=20-31f7&-sfp@5tb7i+yf*f%f8xoz-=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["162.240.55.20","127.0.0.1","3.134.93.169"]
+ALLOWED_HOSTS = ["162.240.55.20","127.0.0.1","3.134.93.169","172.31.33.132", "localhost","ec2-3-134-93-169.us-east-2.compute.amazonaws.com",]
 env = environ.Env()
 
 
@@ -80,8 +80,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 WSGI_APPLICATION = 'diagnostic.wsgi.application'
 AUTH_USER_MODEL = 'app1.User'
 
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 # DATABASES = {
 #     'default': {
@@ -93,12 +91,20 @@ AUTH_USER_MODEL = 'app1.User'
 DATABASES = {  
     'default': {  
         'ENGINE': 'django.db.backends.mysql',  
+<<<<<<< HEAD
         'NAME': 'diagnospan1',  
         'USER': 'root',  
         'PASSWORD': 'Sandeep@8105',  
         'HOST': 'localhost',  
         'PORT': '3306',  
         
+=======
+        'NAME': 'spandiagnodb',  
+        'USER': 'spandiagno_user',  
+        'PASSWORD': 'spanDiagnoV2db',  
+        'HOST': 'spandiagnov2.cubknyrg0xrn.us-east-2.rds.amazonaws.com',  
+        'PORT': '3306',   
+>>>>>>> cb7b19f558f538cfc915ccd7af3b9599d65a33e0
     }  
 } 
 
