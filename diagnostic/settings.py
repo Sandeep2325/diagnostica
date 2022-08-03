@@ -91,23 +91,24 @@ AUTH_USER_MODEL = 'app1.User'
 DATABASES = {  
     'default': {  
         'ENGINE': 'django.db.backends.mysql',  
-<<<<<<< HEAD
-        'NAME': 'diagnospan1',  
-        'USER': 'root',  
-        'PASSWORD': 'Sandeep@8105',  
-        'HOST': 'localhost',  
-        'PORT': '3306',  
-        
-=======
         'NAME': 'spandiagnodb',  
         'USER': 'spandiagno_user',  
         'PASSWORD': 'spanDiagnoV2db',  
         'HOST': 'spandiagnov2.cubknyrg0xrn.us-east-2.rds.amazonaws.com',  
         'PORT': '3306',   
->>>>>>> cb7b19f558f538cfc915ccd7af3b9599d65a33e0
     }  
 } 
+# DATABASES = {  
+#     'default': {  
+#         'ENGINE': 'django.db.backends.mysql',  
 
+#         'NAME': 'diagnospan1',  
+#         'USER': 'root',  
+#         'PASSWORD': 'Sandeep@8105',  
+#         'HOST': 'localhost',  
+#         'PORT': '3306',
+#     }
+#     }
 # DATABASES = {  
 #     'default': {  
 #         'ENGINE': 'django.db.backends.mysql',  
