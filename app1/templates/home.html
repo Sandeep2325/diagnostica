@@ -60,35 +60,26 @@
           
         </div>
         <div id="popular_tests" class="owl-carousel owl-theme">
+          {%for checkup in healthcheckup%}
         <div class=" pt-xl-4 pb-xl-5 py-2 ">
+
           <div class=" bg-light-grey br-10 h-100 health_check_height">
             <div class="position-relative ">
               <!-- <div class="batdge">8% OFF </div> -->
             </div>
+           
             <div class="px-xl-4 px-3 py-4 bg-light-grey br-10">
               <div>
-                <h1 class="cl-dark-blue fs-35 font-bold test_head pt-2">CBC</h1>
+                <h1 class="cl-dark-blue fs-35 font-bold test_head pt-2">{{checkup.package_title}}</h1>
               </div>
               <div class="home_ul_li ul-dot m-0 health_care_ ">
-                <p style="margin-top: 3px;" class="more scroll_cus">A complete blood count, also known as a full blood count, is a set of
-                  medical laboratory tests that provide information about the cells in a person's
-                  blood. The CBC indicates the counts of white blood cells, red blood cells and
-                  platelets, the concentration of hemoglobin, and the hematocrit.<br /><strong>HbA1C:</strong> The haemoglobin (Hb) A1c test tells you your average level of blood
-                  sugar over the past 3 months. It's also called glycated haemoglobin test and
-                  glycohaemoglobin. People who have diabetes need this test regularly to see if
-                  their levels are staying within range. It can tell if you need to adjust your
-                  diabetes medicines.<br/><strong>Vit. D:</strong> Vitamin D testing is used to determine whether you have enough
-                  vitamin D in your body to support normal bodily functions. An inadequate
-                  level of vitamin D is called a deficiency. A more mild lack of vitamin D can be
-                  referred to as an insufficiency.<br/>
-                  <strong>Vit. B12:</strong> Vitamin B12 testing measures the extent of this Vitamin in your
-blood.<br/>Having a Vitamin B12 deficiency can cause a variety of health issues, including anemia and nervous system problems.
+                <p style="margin-top: 3px;" class="more scroll_cus">{{checkup.description|safe}}
                 </p>
               </div>
               <div class="position-relative">
                 <p class="my-2 pt-2 fs-20 font-bold cl-light-blue">Price</p>
                 <div class="d-flex align-items-center">
-                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price" id="price1">₹270.00</h2>
+                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price" id="price1">₹{{checkup.dBanglore_price}}</h2>
                   <!-- <strike
                     class="ps-xl-3 ps-2 text-center fs-20 font-bold cl-light-blue health_price_disc">₹799</strike> -->
                   <button
@@ -97,9 +88,11 @@ blood.<br/>Having a Vitamin B12 deficiency can cause a variety of health issues,
                 </div>
               </div>
             </div>
+
           </div>
         </div>
-        <div class=" pt-xl-4 pb-xl-5 py-2 ">
+        {%endfor%}
+        {% comment %} <div class=" pt-xl-4 pb-xl-5 py-2 ">
           <div class=" bg-light-grey br-10 h-100 health_check_height">
             <div class="position-relative ">
               <!-- <div class="batdge">8% OFF </div> -->
@@ -221,8 +214,8 @@ blood.<br/>Having a Vitamin B12 deficiency can cause a variety of health issues,
               </div>
             </div>
           </div>
-        </div>
-        <div class=" pt-xl-4 pb-xl-5 py-2 ">
+        </div> {% endcomment %}
+        {% comment %} <div class=" pt-xl-4 pb-xl-5 py-2 ">
           <div class=" bg-light-grey br-10 h-100 health_check_height">
             <div class="position-relative ">
               <!-- <div class="batdge">8% OFF </div> -->
@@ -251,7 +244,7 @@ blood.<br/>Having a Vitamin B12 deficiency can cause a variety of health issues,
               </div>
             </div>
           </div>
-        </div>
+        </div> {% endcomment %}
         </div>
   </section>
   <!-- <section class="section_synbrome">
@@ -260,7 +253,7 @@ blood.<br/>Having a Vitamin B12 deficiency can cause a variety of health issues,
         <h1 class="fs-40  cl-dark-blue font-bold home_health_symp_header pb-lg-4 pt-lg-0 pt-3">Health Symptoms</h1>
         {%for symptoms in healthsymptom%}
 
-        <div class="col-xl-2 col-lg-4 col-md-4 col-12 py-2 ">
+        <div class=" py-2 ">
           <a href={% url 'health_symptoms' symptoms.slug %}>  
           <div
             class="symptoms px-3 {% cycle 'bg-light-blue' 'bg-light-orange' 'bg-light-green' 'bg-light-pink' %} text-center py-lg-5 py-3 br-10">
@@ -280,68 +273,27 @@ blood.<br/>Having a Vitamin B12 deficiency can cause a variety of health issues,
         <h1 class="fs-40  cl-dark-blue font-bold home_health_symp_header pb-lg-4 pt-lg-0 pt-3">Health Symptoms</h1>
       
         <div id="health_symptoms" class="owl-carousel owl-theme">
-        <div class="py-2 ">
-          <a>  
+          {%for symptoms in healthsymptom%}
+
+        <div class=" py-2 ">
+          <a href={% url 'health_symptoms' symptoms.slug %}>  
           <div
             class="symptoms px-3 {% cycle 'bg-light-blue' 'bg-light-orange' 'bg-light-green' 'bg-light-pink' %} text-center py-lg-5 py-3 br-10">
-            <img src="../static/images/icon-symp-1.png" alt="" class="pb-3">
-            <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold">Cardiac</p>
+            <img src="{{ symptoms.photo.url }}" alt="" class="img-fluid pb-3">
+            <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold">{{symptoms.name}}</p>
           </div>
         </a>
         </div>
-        <div class="py-2 ">
-          <a>  
-          <div
-            class="symptoms px-3 {% cycle 'bg-light-blue' 'bg-light-orange' 'bg-light-green' 'bg-light-pink' %} text-center py-lg-5 py-3 br-10">
-            <img src="../static/images/icon-symp-2.png" alt="" class="pb-3">
-            <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold">Diabetes</p>
-          </div>
-        </a>
-        </div>
-        <div class="py-2 ">
-          <a>  
-          <div
-            class="symptoms px-3 {% cycle 'bg-light-blue' 'bg-light-orange' 'bg-light-green' 'bg-light-pink' %} text-center py-lg-5 py-3 br-10">
-            <img src="../static/images/icon-symp-3.png" alt="" class="pb-3">
-            <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold">Fever/ Infection</p>
-          </div>
-        </a>
-        </div>
-        <div class="py-2 ">
-          <a>  
-          <div
-            class="symptoms px-3 {% cycle 'bg-light-blue' 'bg-light-orange' 'bg-light-green' 'bg-light-pink' %} text-center py-lg-5 py-3 br-10">
-            <img src="../static/images/icon-symp-4.png" alt="" class="pb-3">
-            <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold">Kidney profiles</p>
-          </div>
-        </a>
-        </div>
-        <div class="py-2 ">
-          <a>  
-          <div
-            class="symptoms px-3 {% cycle 'bg-light-blue' 'bg-light-orange' 'bg-light-green' 'bg-light-pink' %} text-center py-lg-5 py-3 br-10">
-            <img src="../static/images/icon-symp-5.png" alt="" class="pb-3">
-            <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold">Liver profiles:</p>
-          </div>
-        </a>
-        </div>
-        <div class="py-2 ">
-          <a>  
-          <div
-            class="symptoms px-3 {% cycle 'bg-light-blue' 'bg-light-orange' 'bg-light-green' 'bg-light-pink' %} text-center py-lg-5 py-3 br-10">
-            <img src="../static/images/icon-symp-6.png" alt="" class="pb-3">
-            <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold">Pregnancy</p>
-          </div>
-        </a>
-        </div>
-        <div class="py-2 ">
-          <a>  
+        {%endfor%}
+        {% comment %} <div class="py-2 ">
+          <a class="cursor">  
           <div
             class="symptoms px-3 {% cycle 'bg-light-blue' 'bg-light-orange' 'bg-light-green' 'bg-light-pink' %} text-center py-lg-5 py-3 br-10">
             <img src="../static/images/icon-symp-1.png" alt="" class="pb-3">
             <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold">Iron studies</p>
           </div>
-        </a>
+        </a> {% endcomment %}
+        {% comment %} </a>
         </div>
         <div class="py-2 ">
           <a>  
@@ -423,7 +375,7 @@ blood.<br/>Having a Vitamin B12 deficiency can cause a variety of health issues,
             <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold">Immunity tests</p>
           </div>
         </a>
-        </div>
+        </div> {% endcomment %}
         </div>
       </div>
     </div>
@@ -1180,7 +1132,7 @@ $("#popular_tests").owlCarousel({
         },
     });
     $("#health_symptoms").owlCarousel({
-        loop: true,
+       // loop: true,
         margin: 20,
         items: 5,
         responsiveClass: true,

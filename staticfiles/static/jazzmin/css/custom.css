@@ -25,6 +25,10 @@ a {
     width: auto;
 }
 
+span.select2-selection.select2-selection--multiple {
+    width: min-content;
+}
+
 
 /* .select2-selection {
     width: 600px;

@@ -596,18 +596,19 @@ def home(request):
         lastname=request.POST["lastname"]
         phone=request.POST["phone"]
         email=request.POST["email"]
-        message = 'Hi\nYou have Call back request for below test.\n{} from {} category from {}'.format(tes.testt,tes.categoryy,c)
-        email_from = settings.EMAIL_HOST_USER
-        recipient_list = ["sandeep.nexevo@gmail.com"]
-        message = message
-        subject = "You have a test query" 
-        send_mail(
-                    subject,
-                    message,
-                    email_from,
-                    recipient_list,
-                    fail_silently=False,
-            )
+        requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,tests=tes).save()
+        # message = 'Hi\nYou have Call back request for below test.\n{} from {} category from {}'.format(tes.testt,tes.categoryy,c)
+        # email_from = settings.EMAIL_HOST_USER
+        # recipient_list = ["sandeep.nexevo@gmail.com"]
+        # message = message
+        # subject = "You have a test query" 
+        # send_mail(
+        #             subject,
+        #             message,
+        #             email_from,
+        #             recipient_list,
+        #             fail_silently=False,
+        #     )
         cit=city.objects.all()
         tests=test.objects.all()
         healthcheckup=healthcheckuppackages.objects.all()[0:4]
@@ -2227,3 +2228,14 @@ def uploadcsv(request):
             res = render(request, "csv.html")
             return res
         return render(request, "csv.html")
+def requestcallheader(request):
+    if request.method=="POST":
+        print("post")
+        firtname=request.POST["firstname"]
+        lastname=request.POST["lastname"]
+        phone=request.POST["phone"]
+        email=request.POST["email"]
+        tests=request.POST["tests"]
+        t=test.objects.get(id=int(tests))
+        requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,tests=t).save()
+        return JsonResponse({"message":True})

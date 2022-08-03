@@ -183,14 +183,14 @@ class categoryadmin(admin.ModelAdmin):
         return format_html(html)
     action_btn.short_description = "Action"
 class healthcheckup_admin(SummernoteModelAdmin):
-    list_display=["package_title","testname","testcount","Banglore_price","dBanglore_price","discount","created","updated","action_btn"]    
+    list_display=["package_title","dBanglore_price","created","updated","action_btn"]    
     readonly_fields=["created","updated"]
     # list_editable=["location"]
     prepopulated_fields = {"slug": ("package_title",)}
     summernote_fields = ('description')
     def get_form(self, request, obj=None, **kwargs):
         # if obj.type == "1":
-        self.exclude = ("Mumbai_price","bhopal_price","nanded_price","pune_price","barshi_price","aurangabad_price","dMumbai_price","dbhopal_price","dnanded_price",'dpune_price','dbarshi_price','daurangabad_price',)
+        self.exclude = ("discount","testcount","Banglore_price","test_name","Banglore_price","Mumbai_price","bhopal_price","nanded_price","pune_price","barshi_price","aurangabad_price","dMumbai_price","dbhopal_price","dnanded_price",'dpune_price','dbarshi_price','daurangabad_price',)
         form = super(healthcheckup_admin, self).get_form(request, obj, **kwargs)
         return form
     def testname(self, obj):
@@ -480,13 +480,16 @@ class priceadmin(admin.ModelAdmin):
 class paymentadmin(admin.ModelAdmin):
     list_display=["user","paymentid","transid","amount","date"]
 class contactusadmin(admin.ModelAdmin):
-    list_display=["fullname","email","phone","subject","message"]
+    list_display=["fullname","email","phone","subject","message",'created','updated']
 class faqadmin(admin.ModelAdmin):
     list_display=["question","answer"]
 class invoiceadmin(admin.ModelAdmin):
     list_display=['order_id',"items","labtest","packages","healthsymptoms","price"]
 class couponredeemadmin(admin.ModelAdmin):
     list_display=['order_id',"coupon","discountpercen","discountamount","created",]
+class requestadmin(admin.ModelAdmin):
+    list_display=['firstname','lastname','phone','email','tests','created','updated']
+    
 admin.site.register(faq,faqadmin)
 admin.site.register(contactus,contactusadmin)
 admin.site.register(payment,paymentadmin)
@@ -512,7 +515,7 @@ admin.site.register(coupons,couponadmin)
 admin.site.register(couponredeem,couponredeemadmin)
 # admin.site.register(invoicee,invoiceadmin)
 admin.site.unregister(Group)
-
+admin.site.register(requestcall,requestadmin)
 admin.site.unregister(get_attachment_model())
 
 

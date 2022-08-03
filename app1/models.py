@@ -334,8 +334,8 @@ m2m_changed.connect(testbookings, sender=Prescriptionbook1.test_name.through)
 post_save.disconnect(testbookings, sender=Prescriptionbook1) 
 
 class healthcheckuppackages(models.Model):
-    package_title=models.CharField(max_length=200,null=True,blank=True,verbose_name="Package Title")
-    test_name=models.ManyToManyField(test)
+    package_title=models.CharField(max_length=200,null=True,blank=True,verbose_name="Test Name")
+    test_name=models.ManyToManyField(test,blank=True)
     Banglore_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Banglore Price")
     Mumbai_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Mumbai Price")
     bhopal_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Bhopal Price")
@@ -344,7 +344,7 @@ class healthcheckuppackages(models.Model):
     barshi_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Barshi Price")
     aurangabad_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Aurangabad Price")
 
-    dBanglore_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Banglore Discount Price")
+    dBanglore_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Banglore Price")
     dMumbai_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Mumbai DiscountPrice")
     dbhopal_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Bhopal Discount Price")
     dnanded_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Nanded Discount Price")
@@ -353,7 +353,7 @@ class healthcheckuppackages(models.Model):
     daurangabad_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Aurangabad DiscountPrice")
     
     description=models.TextField(null=True,blank=True,verbose_name="Description")
-    discount=models.DecimalField(max_digits=5, decimal_places=2, null=True, verbose_name='Discount(%)', validators=[
+    discount=models.DecimalField(max_digits=5, decimal_places=2, null=True,blank=True,verbose_name='Discount(%)', validators=[
         MinValueValidator(1), MaxValueValidator(99)])
     slug = models.SlugField(null=True, unique=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
@@ -361,7 +361,7 @@ class healthcheckuppackages(models.Model):
     def __str__(self):
         return self.package_title
     class Meta:
-        verbose_name_plural = "Health Checkups and Lab Tests"
+        verbose_name_plural = "Popular Tests"
     def save(self, *args, **kwargs):  # new
         if not self.slug:
             self.slug = slugify(self.package_title)
@@ -373,7 +373,7 @@ class healthcheckuppackages(models.Model):
 class healthpackages(models.Model):
     package_name=models.CharField(max_length=300,null=True,blank=True)
     # location=models.ForeignKey(city,null=True,on_delete=models.CASCADE,verbose_name="Location")
-    test_name=models.ManyToManyField(test)
+    test_name=models.ManyToManyField(test,blank=True)
     Banglore_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Banglore Price")
     Mumbai_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Mumbai Price")
     bhopal_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Bhopal Price")
@@ -400,7 +400,7 @@ class healthsymptoms(models.Model):
     name=models.CharField(max_length=200,null=True,blank=True)
     photo=models.ImageField(upload_to='symptoms',max_length=500, verbose_name="Photo", null=True, blank=True)
     symptoms=models.TextField(null=True,blank=True)
-    test_name=models.ManyToManyField(test)
+    test_name=models.ManyToManyField(test,blank=True)
     slug = models.SlugField(null=True, unique=True)
     Banglore_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Banglore Price")
     Mumbai_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Mumbai Price")
@@ -603,6 +603,8 @@ class contactus(models.Model):
     phone=models.CharField(max_length=13,null=True,blank=True)
     subject=models.TextField(null=True,blank=True)
     message=models.TextField(null=True,blank=True)
+    created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
+    updated = models.DateTimeField(auto_now=True,null=True, blank=True)
     def __str__(self):
         return self.fullname
     class Meta:
@@ -628,5 +630,17 @@ class couponredeem(models.Model):
         return self.order_id
     class Meta:
         verbose_name_plural="Redeemed Coupons"
+class requestcall(models.Model):
+    firstname=models.CharField(max_length=100,null=True,blank=True,verbose_name="First Name")
+    lastname=models.CharField(max_length=100,null=True,blank=True,verbose_name="First Name")
+    phone=models.CharField(max_length=14,null=True,blank=True,verbose_name="First Name")
+    email=models.EmailField(max_length=255,null=True,blank=True)
+    tests=models.ForeignKey(test,null=True,blank=True,on_delete=models.PROTECT)
+    created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
+    updated = models.DateTimeField(auto_now=True,null=True, blank=True)
+    def __str__(self):
+        return self.firstname
+    class Meta:
+        verbose_name_plural="Call Back Requests"
 
     

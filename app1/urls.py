@@ -64,7 +64,7 @@ urlpatterns = [
     # path('change-password/<slug:uid>/',views.change_password,name="change-password"),
     path('paymenthandler/<str:str>/<str:amount>/', views.paymenthandler, name='paymenthandler'),
     path("cartsessiondelete",views.cartsessiondelete,name="cartsessiondelete"),
-
+    path("requestcall",views.requestcallheader,name="requestcall"),
     path("health-symptoms/<slug:slug>/",views.HealthSymptoms.as_view(),name="health_symptoms"),
     path("couponsessiondelete",views.couponsessiondelete,name='couponsessiondelete'),
     path("csv",views.uploadcsv,name="csv")

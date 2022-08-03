@@ -35,9 +35,7 @@
                 <p
                   class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">
                   Price</p>
-            {% comment %}                   
-                <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{currentObj.bengaluru_price}}</h1>
-                 {% endcomment %}
+            
                 {%if city == envcity.Bangalore%}
                 <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{currentObj.Banglore_price}}</h1>
                 {%elif city == envcity.Mumbai %}
@@ -80,9 +78,9 @@
               {% if city == envcity.Bangalore%}
               <div class="col-12 h-100 ms-xl-5">
                  <div class="">
-                  <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.Banglore_price}}</h3>
+                  <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}}</h3>
                 </div>
-                <p class="pb-4 pe-lg-5 ">{{test.description}}</p>
+                {% comment %} <p class="pb-4 pe-lg-5 ">{{test.description}}</p> {% endcomment %}
               </div> 
 
               {% elif city == envcity.Mumbai%}

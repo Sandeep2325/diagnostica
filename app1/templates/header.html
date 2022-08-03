@@ -87,7 +87,7 @@
                         </a>
                         </li>
                         <li class="nav-item d-lg-block d-none">
-                            <a class="nav-link" data-bs-toggle="modal" data-bs-target="#cart_checkout_modal">
+                            <a class="nav-link" data-bs-toggle="modal" data-bs-target="#headermodal">
                                <img src="{%static 'images/call_back.png' %}"/>
                             </a>
                             </li>
@@ -97,34 +97,43 @@
         </div>
     </section>
 
-
-    <section class="cart_checkout_modal" id ="infomodal">
-        <div class="modal fade" id="cart_checkout_modal" tabindex="-1" aria-labelledby="cart_checkout_modalLabel"
+    <section class="cart_checkout_modal" id ="infomodal_1">
+        <div class="modal fade" id="headermodal" tabindex="-1" aria-labelledby="headermodal_modalLabel"
             aria-hidden="true">
             <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content  p-3 p-sm-4">
                     <div class="modal-body">
                         <button type="button" class="btn-close  close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
-                        <form method="post" id="homeForm">
+                        {% comment %} <form method="post" id="homeForm">
+                          {%csrf_token%} {% endcomment %}
                             <h3 class="fs-30 font-bold cl-dark-blue text-center">Request a Call Back</h3>
                             <div>
-                                <input class="w-100  form_input mt-3 " placeholder="First Name" name="firstname" id="firstname"
+                                <input class="w-100  form_input mt-3 " placeholder="First Name" name="firstname" id="fname"
                                     type="text" maxlength="250" >
                             </div>
                             <div>
-                                <input class="w-100  form_input mt-3" placeholder="Last Name" name="lastname" id="lastname"
+                                <input class="w-100  form_input mt-3" placeholder="Last Name" name="lastname" id="lname"
                                     type="text" maxlength="250" >
                             </div>
                             <div>
-                                <input class="w-100  form_input mt-3" placeholder="Phone Number" name="phone" id="phone"
+                                <input class="w-100  form_input mt-3" placeholder="Phone Number" name="phone" id="ph"
                                     type="text" maxlength="250">
                             </div>
                             <div>
-                                <input class="w-100  form_input mt-3" placeholder="Email Address" name="email" id="email" type="text" maxlength="250"/>
+                                <input class="w-100  form_input mt-3" placeholder="Email Address" name="email" id="emai" type="text" maxlength="250"/>
                             </div>
                             <div >
-                                <select class="w-100 mt-3  form-select" type="select"
+                              <select class="w-100 mt-2  form-select" type="select" id ="selectt"
+                      name="selectbookhelp">
+                      <option selected="selected" class="opc-5" disabled>Select
+                        Test<span
+                        class="cl-red ps-1">*</span></option>
+                      {%for test in tests%}
+                      <option  value={{test.id}}>{{test.testt}}</option>
+                      {%endfor%}
+                    </select>
+                                {% comment %} <select class="w-100 mt-3  form-select" type="select"
                                   name="selectbookhelp">
                                   <option selected="selected" class="opc-5" disabled>Select
                                     Test<span
@@ -135,22 +144,17 @@
                                   <option>test</option>
                                   <option>test</option>
                                   <option>test</option>
-
-                                </select>
+                                </select> {% endcomment %}
                               </div>
                             <button class="mx-lg-0 mx-3 mt-4 globalsubmitbutton"
                                 type="submit" name="submit" id="request_call_back">SUBMIT</button>
-                       </form> 
+                       {% comment %} </form>  {% endcomment %}
                     </div>
                 </div>
             </div>
         </div>
     </section>
 </body>
-
-
-
-
 <script> 
     
   jQuery.validator.addMethod("name_regex", function (value, element) {
@@ -214,5 +218,36 @@
     }
   });
 
+  $("#request_call_back").on("click", function (e) {
+    var email = $("#emai").val();
+    var firstname = $("#fname").val();
+    var phone = $("#ph").val();
+    var lastname = $("#lname").val();
+    var tests=$("#selectt").val();       
+    $.ajax({
+        url: "{% url 'requestcall' %}",
+        type: "POST",
+        dataType: "json",
+        data: {
+            'email': email,
+            'firstname':firstname,
+            'lastname':lastname,
+            'phone':phone,
+            'tests':tests,
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+        },
+        success: function (resp) {
+            $("#emaill").val('');
+            if (!resp["message"]){
+                swal("Something Went Wrong", "Try Again", "warning");
+                //alert("Already Subscribed Thank you!!")
+            }
+            else{
+                swal("Thank You","Our Time Will Contact You soon","success")
+            }
+        }
+    });
+                
+});
 </script>
 
