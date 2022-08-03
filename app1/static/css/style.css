@@ -431,6 +431,7 @@ textarea {
     align-items: center;
 }
 
+
 .banner2 {
     background: url(../images/banner2.png) no-repeat;
     background-size: cover;
@@ -438,9 +439,7 @@ textarea {
     border-radius: 15px;
     display: flex;
     align-items: center;
-    background-position: 100%;
 }
-
 .banner3 {
     background: url(../images/banner3.png) no-repeat;
     background-size: cover;
@@ -448,7 +447,6 @@ textarea {
     border-radius: 15px;
     display: flex;
     align-items: center;
-    background-position: 100%;
 }
 
 .home-banner h1 {
@@ -1119,7 +1117,7 @@ input::-webkit-inner-spin-button {
 }
 
 .section_booking_history table .t_head,
-.section_booking_history table td {
+table td {
     padding: 18px 10px;
 }
 
@@ -1811,27 +1809,33 @@ textarea {
     width: 22px;
 }
 
-.sec_otp_new .bgWhite {
-    background: white;
-    box-shadow: 0px 3px 6px 0px #cacaca;
-}
 
-.sec_otp_new .title {
-    font-weight: 600;
-    margin-top: 20px;
-    font-size: 24px
-}
 
-.sec_otp_new .customBtn {
-    border-radius: 0px;
-    padding: 10px;
-}
 
-.sec_otp_new form input {
-    display: inline-block;
-    width: 50px;
-    height: 50px;
-    text-align: center;
+
+
+
+.sec_otp_new .bgWhite{
+    background:white;
+    box-shadow:0px 3px 6px 0px #cacaca;
+  }
+  
+ .sec_otp_new .title{
+    font-weight:600;
+    margin-top:20px;
+    font-size:24px
+  }
+  
+.sec_otp_new .customBtn{
+    border-radius:0px;
+    padding:10px;
+  }
+  
+ .sec_otp_new form input{
+    display:inline-block;
+    width:50px;
+    height:50px;
+    text-align:center;
     outline: none;
   }
 
@@ -1849,78 +1853,17 @@ textarea {
     display: unset;
  }
 
- 
- .pack_detail_table table {
-    font-family: Chivo-Regular;
-    border-collapse: collapse;
-    width: 100%;
-  }
-  
-  /* .pack_detail_table td, th { */
-    /* border: 1px solid #dddddd; */
-    /* padding: 8px; */
-  /* } */
-  
-  .pack_detail_table tr:nth-child(even) {
-    background-color: #dddddd;
-  }
 
-
-  .pack_detail_table table {
-    border: 1px solid #ccc;
-    border-collapse: collapse;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    table-layout: fixed;
-  }
-  .pack_detail_table table tr {
-    background-color: #f8f8f8;
-    border: 1px solid #ddd;
-    padding: .35em;
-  }
   
-  .pack_detail_table table th,
-  .pack_detail_table table td {
-    padding: .625em;
-    text-align: center;
-  }
   
-  .pack_detail_table table th {
-    font-size: .85em;
-    letter-spacing: .1em;
-  }
   
-  @media screen and (max-width: 600px) {
-    .pack_detail_table table {
-      border: 0;
-    }
   
-    .pack_detail_table  table caption {
-      font-size: 1.3em;
-    }
-    .pack_detail_table table tr {
-      border-bottom: 3px solid #ddd;
-      display: block;
-      margin-bottom: .625em;
-    }
-    
-    .pack_detail_table table td {
-      border-bottom: 1px solid #ddd;
-      display: block;
-      font-size: .8em;
-      text-align: center;
-    }
-    
-    .pack_detail_table table td::before {
-      content: attr(data-label);
-      float: left;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
-    
-    .pack_detail_table table td:last-child {
-      border-bottom: 0;
-    }
-  }
+  
+  
+  
+  
+  
+  
+  
+  
   

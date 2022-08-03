@@ -25,9 +25,9 @@
                     <li class="nav-item">
                     <a class="px-1" href="{%url "cart"%}"><img src="{%static "images/bg-cart.png"%}" alt="" class="w-22" /></a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="modal" data-bs-target="#cart_checkout_modal">
-                            <img src="{%static 'images/call_back.png' %}"/>
+                    <li class="nav-item cursor">
+                        <a class="nav-link px-2" data-bs-toggle="modal" data-bs-target="#headermodal">
+                            <img src="{%static 'images/call_back.png' %}" class="p-0"/>
                          </a>
                         </li>
                 </ul>
@@ -86,9 +86,9 @@
                             </sup>
                         </a>
                         </li>
-                        <li class="nav-item d-lg-block d-none">
-                            <a class="nav-link" data-bs-toggle="modal" data-bs-target="#cart_checkout_modal">
-                               <img src="{%static 'images/call_back.png' %}"/>
+                        <li class="nav-item d-lg-block d-none cursor">
+                            <a class="nav-link" data-bs-toggle="modal" data-bs-target="#headermodal">
+                               <img src="{%static 'images/call_back.png' %}" class="p-0"/>
                             </a>
                             </li>
                     </ul>
@@ -98,30 +98,30 @@
     </section>
 
 
-    <section class="cart_checkout_modal" id ="infomodal">
-        <div class="modal fade" id="cart_checkout_modal" tabindex="-1" aria-labelledby="cart_checkout_modalLabel"
+    <section class="cart_checkout_modal" id ="infomodal_1">
+        <div class="modal fade" id="headermodal" tabindex="-1" aria-labelledby="headermodal_modalLabel"
             aria-hidden="true">
             <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content  p-3 p-sm-4">
                     <div class="modal-body">
                         <button type="button" class="btn-close  close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
-                        <form method="post" id="homeForm">
+                        <form method="post" id="request_call_back_form">
                             <h3 class="fs-30 font-bold cl-dark-blue text-center">Request a Call Back</h3>
                             <div>
-                                <input class="w-100  form_input mt-3 " placeholder="First Name" name="firstname" id="firstname"
+                                <input class="w-100  form_input mt-3 " placeholder="First Name" name="firstname"
                                     type="text" maxlength="250" >
                             </div>
                             <div>
-                                <input class="w-100  form_input mt-3" placeholder="Last Name" name="lastname" id="lastname"
+                                <input class="w-100  form_input mt-3" placeholder="Last Name" name="lastname"
                                     type="text" maxlength="250" >
                             </div>
                             <div>
-                                <input class="w-100  form_input mt-3" placeholder="Phone Number" name="phone" id="phone"
+                                <input class="w-100  form_input mt-3" placeholder="Phone Number" name="phone"
                                     type="text" maxlength="250">
                             </div>
                             <div>
-                                <input class="w-100  form_input mt-3" placeholder="Email Address" name="email" id="email" type="text" maxlength="250"/>
+                                <input class="w-100  form_input mt-3" placeholder="Email Address" name="email"  type="text" maxlength="250"/>
                             </div>
                             <div >
                                 <select class="w-100 mt-3  form-select" type="select"
@@ -162,7 +162,7 @@
   $.validator.addMethod('filesize', function (value, element, param) {
     return this.optional(element) || (element.files[0].size <= param)
   }, 'File size must be less than {0}');
-  $("#homeForm").validate({
+  $("#request_call_back_form").validate({
     rules: {
 
       'firstname': {

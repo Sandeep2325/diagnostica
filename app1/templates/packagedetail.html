@@ -68,81 +68,80 @@
             <h2 class="fs-35 font-regular cl-dark-blue text-center m-0 pb-lg-5 pb-4">Package includes
               {{package.testcount}} Tests
             </h2>
-            <div class="row px-5">
+            {% comment %} <div class="row px-5">
               {%for test in package.test_name.all %}
               {%if city == envcity.Bangalore%}
               <div class="col-12 h-100 ms-xl-5">
                 <div class="">
                   <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.Banglore_price}}</h3>
                 </div>
-                <p class="pb-4 pe-lg-5 ">{{test.description}}</p>
+                <p class="pb-4 pe-lg-5 m-0">{{test.description}}</p>
               </div>
               {%elif city == envcity.Mumbai%}
               <div class="col-12 h-100 ms-xl-5">
                 <div class="">
                   <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.Mumbai_price}}</h3>
                 </div>
-                <p class="pb-4 pe-lg-5 ">{{test.description}}</p>
+                <p class="pb-4 pe-lg-5  m-0">{{test.description}}</p>
               </div>
               {%elif city == envcity.Bhophal%}
               <div class="col-12 h-100 ms-xl-5">
                 <div class="">
                   <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.bhopal_price}}</h3>
                 </div>
-                <p class="pb-4 pe-lg-5 ">{{test.description}}</p>
+                <p class="pb-4 pe-lg-5  m-0">{{test.description}}</p>
               </div>
               {%elif city == envcity.Nanded%}
               <div class="col-12 h-100 ms-xl-5">
                 <div class="">
                   <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.nanded_price}}</h3>
                 </div>
-                <p class="pb-4 pe-lg-5 ">{{test.description}}</p>
+                <p class="pb-4 pe-lg-5  m-0">{{test.description}}</p>
               </div>
               {%elif city == envcity.Pune%}
               <div class="col-12 h-100 ms-xl-5">
                 <div class="">
                   <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.pune_price}}</h3>
                 </div>
-                <p class="pb-4 pe-lg-5 ">{{test.description}}</p>
+                <p class="pb-4 pe-lg-5  m-0">{{test.description}}</p>
               </div>
               {%elif city == envcity.Barshi%}
               <div class="col-12 h-100 ms-xl-5">
                 <div class="">
                   <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.barshi_price}}</h3>
                 </div>
-                <p class="pb-4 pe-lg-5 ">{{test.description}}</p>
+                <p class="pb-4 pe-lg-5  m-0">{{test.description}}</p>
               </div>
               {%elif city == envcity.Aurangabad%}
               <div class="col-12 h-100 ms-xl-5">
                 <div class="">
                   <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.aurangabad_price}}</h3>
                 </div>
-                <p class="pb-4 pe-lg-5 ">{{test.description}}</p>
+                <p class="pb-4 pe-lg-5  m-0">{{test.description}}</p>
               </div>
               
 {%endif%}
               {%endfor%}
-              {% comment %} <div class="col-lg-5 col-md-12 h-100 mx-auto">
-                <div class="">
-                  <h3 class="fs-30 font-bold cl-dark-blue cbc_test">FBS/RBS</h3>
-                </div>
-                <p class="py-4">A complete blood count (CBC) is a blood test used to evaluate your overall health and
-                  detect a wide range of disorders, including anemia, infection and leukemia.</p>
-              </div>
-              <div class="col-lg-5 col-md-12 h-100 mx-auto">
-                <div class="">
-                  <h3 class="fs-30 font-bold cl-dark-blue cbc_test">CBC</h3>
-                </div>
-                <p class="py-4">A complete blood count (CBC) is a blood test used to evaluate your overall health and
-                  detect a wide range of disorders, including anemia, infection and leukemia.</p>
-              </div>
-              <div class="col-lg-5 col-md-12  h-100 mx-auto">
-                <div class="">
-                  <h3 class="fs-30 font-bold cl-dark-blue cbc_test">FBS/RBS</h3>
-                </div>
-                <p class="py-4">A complete blood count (CBC) is a blood test used to evaluate your overall health and
-                  detect a wide range of disorders, including anemia, infection and leukemia.</p>
-              </div> {% endcomment %}
+       
+            </div> {% endcomment %}
+            <div class="text-center pack_detail_table d-flex justify-content-center">
+
+              <table class="mx-2">
+                <tbody>
+                  <tr>
+                    <td data-label="">Visa - 3412 </td>
+                    <td data-label="">04/01/2016</td>
+                  </tr>
+                  <tr>
+                    <td data-label="">Visa - 3412</td>
+                    <td data-label="">04/01/2016</td>
+                  </tr>
+                  <tr>
+                    <td data-label="">Visa - 3412</td>
+                    <td data-label="">04/01/2016</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
           <div class="row bg-white py-5">
