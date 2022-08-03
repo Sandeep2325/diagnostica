@@ -2220,24 +2220,25 @@ def uploadcsv(request):
             reader = csv.DictReader(decode_utf8(request.FILES['csv_upload']))
            
             for row in reader:
+                print(row)
                 # des = re.sub(r"</?\[\d+>", "", row.get("Description"))
                 # print(row)
                 # try:
                 n,tests=test.objects.get_or_create(testt=row.get("TEST NAME"))
-                if row.get("SPAN HEALTH PACKAGE -STARTER")=="Y":
+                if row.get("STARTER")=="Y":
                     a=healthpackages.objects.get(package_name="STARTER")
                     a.test_name.add(n)
-                if row.get("SPAN HEALTH PACKAGE - BASIC")=="Y":
+                if row.get("BASIC")=="Y":
                     a=healthpackages.objects.get(package_name="BASIC")
                     a.test_name.add(n)
-                if row.get("SPAN HEALTH PACKAGE -STANDARD")=="Y":
+                if row.get("STANDARD")=="Y":
                     a=healthpackages.objects.get(package_name="STANDARD")
                     a.test_name.add(n)
-                if row.get("SPAN HEALTH PACKAGE -PRIME")=="Y":
+                if row.get("PRIME")=="Y":
                     a=healthpackages.objects.get(package_name="PRIME")
                     a.test_name.add(n)
-                if row.get("SPAN HEALTH PACKAGE - PREMIUM ")=="Y":
-                    a=healthpackages.objects.get(package_name="PREMIUM ")
+                if row.get("PREMIUM")=="Y":
+                    a=healthpackages.objects.get(package_name="PREMIUM")
                     a.test_name.add(n)
           
                     # a=healthpackages.objects.get(package_name="SPAN HEALTH PACKAGE -STANDARD")
