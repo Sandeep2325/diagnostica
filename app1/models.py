@@ -103,7 +103,10 @@ class test(models.Model):
     # slug = models.SlugField(null=True, unique=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
     def __str__(self):
-        return self.testt
+        if self.testt==None:
+            return "Tests"
+        else:
+            return self.testt
     # def save(self, *args, **kwargs):  # new
     #     if not self.slug:
     #         self.slug = slugify(self.testt)

@@ -88,23 +88,23 @@ AUTH_USER_MODEL = 'app1.User'
 #     }
 # }
 
-DATABASES = {  
-    'default': {  
-        'ENGINE': 'django.db.backends.mysql',  
-        'NAME': 'spandiagnodb',  
-        'USER': 'spandiagno_user',  
-        'PASSWORD': 'spanDiagnoV2db',  
-        'HOST': 'spandiagnov2.cubknyrg0xrn.us-east-2.rds.amazonaws.com',  
-        'PORT': '3306',   
-    }  
-} 
+# DATABASES = {  
+#     'default': {  
+#         'ENGINE': 'django.db.backends.mysql',  
+#         'NAME': 'spandiagnodb',  
+#         'USER': 'spandiagno_user',  
+#         'PASSWORD': 'spanDiagnoV2db',  
+#         'HOST': 'spandiagnov2.cubknyrg0xrn.us-east-2.rds.amazonaws.com',  
+#         'PORT': '3306',   
+#     }  
+# } 
 # DATABASES = {  
 #     'default': {  
 #         'ENGINE': 'django.db.backends.mysql',  
 
 #         'NAME': 'diagnospan1',  
 #         'USER': 'root',  
-#         'PASSWORD': '*****',  
+#         'PASSWORD': 'Sandeep@8105',  
 #         'HOST': 'localhost',  
 #         'PORT': '3306',
 #     }
@@ -119,7 +119,25 @@ DATABASES = {
 #         'PORT': '3306',   
 #     }  
 # }
+DATABASES = {  
 
+    'default': {  
+
+        'ENGINE': 'django.db.backends.mysql',  
+
+        'NAME': 'diagnospan',  
+
+        'USER': 'root',  
+
+        'PASSWORD': 'mySqlServer@#$432',  
+
+        'HOST': 'localhost',  
+
+        'PORT': '3306',   
+
+    }  
+
+}
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 20000
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -138,7 +156,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/

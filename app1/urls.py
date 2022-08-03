@@ -67,7 +67,7 @@ urlpatterns = [
 
     path("health-symptoms/<slug:slug>/",views.HealthSymptoms.as_view(),name="health_symptoms"),
     path("couponsessiondelete",views.couponsessiondelete,name='couponsessiondelete'),
-
+    path("csv",views.uploadcsv,name="csv")
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

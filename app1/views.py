@@ -2169,5 +2169,61 @@ def error_404_view(request, exception):
 def error_500_view(request):
     # return HttpResponse("404 Page not found")
     return render(request,"500.html")
-
-
+import csv
+import re
+def uploadcsv(request):
+        if request.method == "POST":
+            csv_file = request.FILES["csv_upload"]
+            print(csv_file)
+            if not csv_file.name.endswith('.csv'):
+                messages.warning(
+                    request, 'The wrong file type was uploaded')
+                return HttpResponseRedirect(request.path_info)
+            def decode_utf8(input_iterator):
+                for l in input_iterator:
+                    yield l.decode('cp1252')
+            reader = csv.DictReader(decode_utf8(request.FILES['csv_upload']))
+           
+            for row in reader:
+                # des = re.sub(r"</?\[\d+>", "", row.get("Description"))
+                # print(row)
+                # try:
+                n,tests=test.objects.get_or_create(testt=row.get("ï»¿TEST NAME"))
+                if row.get("SPAN HEALTH PACKAGE -STARTER")=="Y":
+                    a=healthpackages.objects.get(package_name="SPAN HEALTH PACKAGE -STARTER")
+                    a.test_name.add(n)
+                if row.get("SPAN HEALTH PACKAGE - BASIC")=="Y":
+                    a=healthpackages.objects.get(package_name="SPAN HEALTH PACKAGE - BASIC")
+                    a.test_name.add(n)
+                if row.get("SPAN HEALTH PACKAGE -STANDARD")=="Y":
+                    a=healthpackages.objects.get(package_name="SPAN HEALTH PACKAGE -STANDARD")
+                    a.test_name.add(n)
+          
+                    # a=healthpackages.objects.get(package_name="SPAN HEALTH PACKAGE -STANDARD")
+                    # a.test_name.add(tests)
+                    # obj, created = healthpackages.objects.get_or_create(
+                    #         testt=row["Tests"],
+                    #         testcode=row["test_code"],
+                    #         categoryy=categoryy,
+                    #         Banglore_price=row.get("Banglore_price") if row.get("Banglore_price") else None,
+                    #         Mumbai_price=row.get("Mumbai_price") if row.get("Mumbai_price") else None,
+                    #         bhopal_price=row.get("bhopal_price") if row.get("bhopal_price") else None,
+                    #         nanded_price=row.get("nanded_price") if row.get("nanded_price") else None,
+                    #         pune_price=row.get("pune_price") if row.get("pune_price") else None,
+                    #         barshi_price=row.get("barshi_price") if row.get("barshi_price") else None,
+                    #         aurangabad_price=row.get("aurangabad_price") if row.get("aurangabad_price") else None,
+                    #         description=des)
+                # except IndexError:
+                #     pass
+                # except (IntegrityError):
+                #     form = CsvImportForm()
+                #     data = {"form": form}
+                #     message = messages.warning(
+                #         request, 'Something went wrong! check your file again \n 1.Upload correct file \n 2.Check you data once')
+                #     return render(request, "admin/app1/csv_upload.html",)
+            # return redirect("csv")
+            # url = reverse('admin:index')
+            # return HttpResponseRedirect(url)
+            res = render(request, "csv.html")
+            return res
+        return render(request, "csv.html")
