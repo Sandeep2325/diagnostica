@@ -109,17 +109,35 @@ AUTH_USER_MODEL = 'app1.User'
 #         'PORT': '3306',
 #     }
 #     }
+# DATABASES = {  
+#     'default': {  
+#         'ENGINE': 'django.db.backends.mysql',  
+#         'NAME': 'spanDiagnoV2',  
+#         'USER': 'spanDiagnoV2User',  
+#         'PASSWORD': 'spanDiagnoV2User',  
+#         'HOST': 'localhost',  
+#         'PORT': '3306',   
+#     }  
+# }
 DATABASES = {  
-    'default': {  
-        'ENGINE': 'django.db.backends.mysql',  
-        'NAME': 'spanDiagnoV2',  
-        'USER': 'spanDiagnoV2User',  
-        'PASSWORD': 'spanDiagnoV2User',  
-        'HOST': 'localhost',  
-        'PORT': '3306',   
-    }  
-}
 
+    'default': {  
+
+        'ENGINE': 'django.db.backends.mysql',  
+
+        'NAME': 'diagnospan',  
+
+        'USER': 'root',  
+
+        'PASSWORD': 'mySqlServer@#$432',  
+
+        'HOST': 'localhost',  
+
+        'PORT': '3306',   
+
+    }  
+
+}
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 20000
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
