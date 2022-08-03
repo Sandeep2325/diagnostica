@@ -2225,19 +2225,19 @@ def uploadcsv(request):
                 # try:
                 n,tests=test.objects.get_or_create(testt=row.get("TEST NAME"))
                 if row.get("SPAN HEALTH PACKAGE -STARTER")=="Y":
-                    a=healthpackages.objects.get(package_name="SPAN HEALTH PACKAGE -STARTER")
+                    a=healthpackages.objects.get(package_name="STARTER")
                     a.test_name.add(n)
                 if row.get("SPAN HEALTH PACKAGE - BASIC")=="Y":
-                    a=healthpackages.objects.get(package_name="SPAN HEALTH PACKAGE - BASIC")
+                    a=healthpackages.objects.get(package_name="BASIC")
                     a.test_name.add(n)
                 if row.get("SPAN HEALTH PACKAGE -STANDARD")=="Y":
-                    a=healthpackages.objects.get(package_name="SPAN HEALTH PACKAGE -STANDARD")
+                    a=healthpackages.objects.get(package_name="STANDARD")
                     a.test_name.add(n)
                 if row.get("SPAN HEALTH PACKAGE -PRIME")=="Y":
-                    a=healthpackages.objects.get(package_name="SPAN HEALTH PACKAGE -PRIME")
+                    a=healthpackages.objects.get(package_name="PRIME")
                     a.test_name.add(n)
                 if row.get("SPAN HEALTH PACKAGE - PREMIUM ")=="Y":
-                    a=healthpackages.objects.get(package_name="SPAN HEALTH PACKAGE - PREMIUM ")
+                    a=healthpackages.objects.get(package_name="PREMIUM ")
                     a.test_name.add(n)
           
                     # a=healthpackages.objects.get(package_name="SPAN HEALTH PACKAGE -STANDARD")
