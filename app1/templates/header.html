@@ -25,9 +25,9 @@
                     <li class="nav-item">
                     <a class="px-1" href="{%url "cart"%}"><img src="{%static "images/bg-cart.png"%}" alt="" class="w-22" /></a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="modal" data-bs-target="#cart_checkout_modal">
-                            <img src="{%static 'images/call_back.png' %}"/>
+                    <li class="nav-item cursor">
+                        <a class="nav-link px-2" data-bs-toggle="modal" data-bs-target="#headermodal">
+                            <img src="{%static 'images/call_back.png' %}" class="p-0"/>
                          </a>
                         </li>
                 </ul>
@@ -86,9 +86,9 @@
                             </sup>
                         </a>
                         </li>
-                        <li class="nav-item d-lg-block d-none">
+                        <li class="nav-item d-lg-block d-none cursor">
                             <a class="nav-link" data-bs-toggle="modal" data-bs-target="#headermodal">
-                               <img src="{%static 'images/call_back.png' %}"/>
+                               <img src="{%static 'images/call_back.png' %}" class="p-0"/>
                             </a>
                             </li>
                     </ul>
@@ -166,7 +166,7 @@
   $.validator.addMethod('filesize', function (value, element, param) {
     return this.optional(element) || (element.files[0].size <= param)
   }, 'File size must be less than {0}');
-  $("#homeForm").validate({
+  $("#request_call_back_form").validate({
     rules: {
 
       'firstname': {

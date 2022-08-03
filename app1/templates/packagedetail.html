@@ -1,5 +1,6 @@
 {% extends "index.html" %}
 {% load static %}
+{% load custom_tags %}
 {%block content%}
 
 <body>
@@ -27,7 +28,9 @@
             <div class="d-flex justify-content-center align-content-center pt-xl-4 mt-3">
               <div class="home_linear_border  ">
                 <div class="">
-                  <p
+                  <p class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">Price</p>
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.Banglore_price}}</h1>
+                  {% comment %} <p
                     class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">
                     Price</p>
                     {%if city == envcity.Bangalore%}
@@ -44,8 +47,8 @@
                     <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.barshi_price}}</h1>
                     {%elif city == envcity.Aurangabad%}
                     <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.aurangabad_price}}</h1>
-                    {%endif%}
-                  <p
+                    {%endif%}{% endcomment %}
+                  <p 
                     class="d-flex justify-content-center align-content-center align-items-center m-0 fs-18 cl-dark-blue font-bold">
                     Includes {{package.testcount}}
                     Tests
@@ -68,81 +71,89 @@
             <h2 class="fs-35 font-regular cl-dark-blue text-center m-0 pb-lg-5 pb-4">Package includes
               {{package.testcount}} Tests
             </h2>
-            <div class="row px-5">
+            {% comment %} <div class="row px-5">
               {%for test in package.test_name.all %}
               {%if city == envcity.Bangalore%}
               <div class="col-12 h-100 ms-xl-5">
                 <div class="">
                   <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}}</h3>
                 </div>
-                {% comment %} <p class="pb-4 pe-lg-5 ">{{test.description}}</p> {% endcomment %}
+                <p class="pb-4 pe-lg-5 m-0">{{test.description}}</p>
               </div>
               {%elif city == envcity.Mumbai%}
               <div class="col-12 h-100 ms-xl-5">
                 <div class="">
                   <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.Mumbai_price}}</h3>
                 </div>
-                <p class="pb-4 pe-lg-5 ">{{test.description}}</p>
+                <p class="pb-4 pe-lg-5  m-0">{{test.description}}</p>
               </div>
               {%elif city == envcity.Bhophal%}
               <div class="col-12 h-100 ms-xl-5">
                 <div class="">
                   <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.bhopal_price}}</h3>
                 </div>
-                <p class="pb-4 pe-lg-5 ">{{test.description}}</p>
+                <p class="pb-4 pe-lg-5  m-0">{{test.description}}</p>
               </div>
               {%elif city == envcity.Nanded%}
               <div class="col-12 h-100 ms-xl-5">
                 <div class="">
                   <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.nanded_price}}</h3>
                 </div>
-                <p class="pb-4 pe-lg-5 ">{{test.description}}</p>
+                <p class="pb-4 pe-lg-5  m-0">{{test.description}}</p>
               </div>
               {%elif city == envcity.Pune%}
               <div class="col-12 h-100 ms-xl-5">
                 <div class="">
                   <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.pune_price}}</h3>
                 </div>
-                <p class="pb-4 pe-lg-5 ">{{test.description}}</p>
+                <p class="pb-4 pe-lg-5  m-0">{{test.description}}</p>
               </div>
               {%elif city == envcity.Barshi%}
               <div class="col-12 h-100 ms-xl-5">
                 <div class="">
                   <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.barshi_price}}</h3>
                 </div>
-                <p class="pb-4 pe-lg-5 ">{{test.description}}</p>
+                <p class="pb-4 pe-lg-5  m-0">{{test.description}}</p>
               </div>
               {%elif city == envcity.Aurangabad%}
               <div class="col-12 h-100 ms-xl-5">
                 <div class="">
                   <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.aurangabad_price}}</h3>
                 </div>
-                <p class="pb-4 pe-lg-5 ">{{test.description}}</p>
+                <p class="pb-4 pe-lg-5  m-0">{{test.description}}</p>
               </div>
               
 {%endif%}
               {%endfor%}
-              {% comment %} <div class="col-lg-5 col-md-12 h-100 mx-auto">
-                <div class="">
-                  <h3 class="fs-30 font-bold cl-dark-blue cbc_test">FBS/RBS</h3>
-                </div>
-                <p class="py-4">A complete blood count (CBC) is a blood test used to evaluate your overall health and
-                  detect a wide range of disorders, including anemia, infection and leukemia.</p>
-              </div>
-              <div class="col-lg-5 col-md-12 h-100 mx-auto">
-                <div class="">
-                  <h3 class="fs-30 font-bold cl-dark-blue cbc_test">CBC</h3>
-                </div>
-                <p class="py-4">A complete blood count (CBC) is a blood test used to evaluate your overall health and
-                  detect a wide range of disorders, including anemia, infection and leukemia.</p>
-              </div>
-              <div class="col-lg-5 col-md-12  h-100 mx-auto">
-                <div class="">
-                  <h3 class="fs-30 font-bold cl-dark-blue cbc_test">FBS/RBS</h3>
-                </div>
-                <p class="py-4">A complete blood count (CBC) is a blood test used to evaluate your overall health and
-                  detect a wide range of disorders, including anemia, infection and leukemia.</p>
-              </div> {% endcomment %}
+       
+            </div> {% endcomment %}
+            <div class="text-center pack_detail_table d-flex justify-content-center">
+
+              <table class="mx-2">
+                <tbody>
+                  {% comment %} {%for test in tesst %} {% endcomment %}
+                  {%for j in tesst%}
+                  <tr>
+                    {% comment %} {% if forloop.counter < 25 %} {% endcomment %}
+                    {%if j|first_el != None%}
+                    <td data-label="">{{j|first_el}}</td>
+                    {%else%}
+                    
+                    <td data-label="">-</td>
+                    {%endif%}
+                   {% comment %} {%else%} {% endcomment %}
+                   {%if j|last_el != None%}
+                    <td data-label="">{{j|last_el}}</td>
+                    {%else%}
+                    <td data-label="">-</td>
+                    {%endif%}
+                    {% comment %} {%endif%}  {% endcomment %}
+                  </tr>
+                  {% comment %} {%endfor%} {% endcomment %}
+                  {%endfor%}
+                
+                </tbody>
+              </table>
             </div>
           </div>
           <div class="row bg-white py-5">

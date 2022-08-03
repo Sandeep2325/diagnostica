@@ -1,3 +1,4 @@
+import itertools
 import re
 # import sweetify
 from django.shortcuts import render,redirect
@@ -663,45 +664,78 @@ def healthpackageview(request,slug):
         c=request.session.get("city")
         package=healthpackages.objects.get(slug=slug)
         packages=healthpackages.objects.exclude(slug=slug)
+        tests=package.test_name.all()
+        c=package.test_name.all().count()
+        l=int(c)//2
+        a,b=tests[:l],tests[l:]
+        lstt=[]
+        for (a, b) in itertools.zip_longest(a, b,fillvalue=None):
+            # print(a.testt,b.testt, end="--")
+            if a != None:
+                item1=a.testt
+            else:
+                item1=None
+            if b != None:    
+                item2=b.testt
+            else:
+                item2=None
+            lis=[item1,item2]
+            lstt.append(lis) 
+        
+        # for i in range(c):
+        #     # print(tests[i].testt)
+        #     try:
+        #         item1=tests[j].testt
+        #         item2=tests[i+1].testt
+        #         j=i+1
+        #         lis=[item1,item2]
+        #         lstt.append(lis)
+        #     except:
+        #         pass
+        # print(lstt)
+            
         envcity={"Bangalore":Bangalore,"Mumbai":Mumbai,"Bhophal":Bhophal,"Nanded":Nanded,"Pune":Pune,"Barshi":Barshi,"Aurangabad":Aurangabad}
         context={
             "package":package,
             "packages":packages,
             "city":c,
             'envcity':envcity,
+            "firsthalf":a,
+            "secondhalf":b,
+            "tesst":lstt
         }
-        currency = 'INR'
-        if c == Bangalore:
-            amount=int(package.Banglore_price)
-        elif c == Mumbai:
-            amount=int(package.Mumbai_price)
-        elif c == Bhophal:
-            amount=int(package.bhopal_price)
-        elif c == Nanded:
-            amount=int(package.nanded_price)
-        elif c == Pune:
-            amount=int(package.pune_price)
-        elif c == Barshi:
-            amount=int(package.barshi_price)
-        elif c == Aurangabad:
-            amount=int(package.aurangabad_price)
-        client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
-        try:
-            razorpay_order = client.order.create(
-                    {"amount": int(amount) * 100, "currency": "INR", "payment_capture": "1"}
-            )
-        except Exception as e:
-            razorpay_order = client.order.create(
-                    {"amount": 1* 100, "currency": "INR", "payment_capture": "1"}
-            )
-        request.session['amount']=amount
-        razorpay_order_id = razorpay_order['id']
+        # currency = 'INR'
+        # if c == Bangalore:
+        #     amount=int(package.Banglore_price)
+        # elif c == Mumbai:
+        #     amount=int(package.Mumbai_price)
+        # elif c == Bhophal:
+        #     amount=int(package.bhopal_price)
+        # elif c == Nanded:
+        #     amount=int(package.nanded_price)
+        # elif c == Pune:
+        #     amount=int(package.pune_price)
+        # elif c == Barshi:
+        #     amount=int(package.barshi_price)
+        # elif c == Aurangabad:
+        #     amount=int(package.aurangabad_price)
+        # client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+        # try:
+        #     razorpay_order = client.order.create(
+        #             {"amount": int(amount) * 100, "currency": "INR", "payment_capture": "1"}
+        #     )
+        # except Exception as e:
+        #     razorpay_order = client.order.create(
+        #             {"amount": 1* 100, "currency": "INR", "payment_capture": "1"}
+        #     )
+        # # request.session['amount']=amount
+        # razorpay_order_id = razorpay_order['id']
         
-        # callback_url = callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
-        context['razorpay_order_id'] = razorpay_order_id
-        context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
-        context['razorpay_amount'] = amount
-        context['currency'] = currency
+        # # callback_url = callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
+        # context['razorpay_order_id'] = razorpay_order_id
+        # context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
+        # # context['razorpay_amount'] = amount
+        # context['currency'] = currency
         return render(request,'packagedetail.html',context)
 
 def testdetails(request):

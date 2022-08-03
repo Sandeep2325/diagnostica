@@ -9,3 +9,14 @@ register = template.Library()
 def low(value):
     h = html.parser
     return mark_safe(value)
+
+
+@register.filter
+def first_el(value):
+    return value[0]
+
+
+@register.filter
+def last_el(value):
+    return value[-1]
+
