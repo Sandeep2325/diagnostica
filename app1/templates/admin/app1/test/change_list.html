@@ -1,4 +1,14 @@
-{% extends "admin/base_site.html" %}
+{% extends "admin/change_list.html" %} 
+{% load static %}
+{% block content %}
+<div class="">
+<a class="btn btn-primary btn-xs "  href="upload-csv/">Bulk upload </a>
+</div>
+<p>{{i}}</p>
+{{ block.super }}
+{% endblock %}
+
+{% comment %} {% extends "admin/base_site.html" %}
 {% load i18n admin_urls static admin_list %}
 {% block extrastyle %}
     {{ block.super }}
@@ -108,4 +118,4 @@
             </div>
         </div>
     </div>
-{% endblock %}
+{% endblock %} {% endcomment %}

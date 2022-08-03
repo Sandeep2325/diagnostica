@@ -625,3 +625,5 @@ class couponredeem(models.Model):
         return self.order_id
     class Meta:
         verbose_name_plural="Redeemed Coupons"
+
+    
