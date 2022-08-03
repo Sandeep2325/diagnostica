@@ -212,7 +212,7 @@ class healthcheckup_admin(SummernoteModelAdmin):
         return format_html(html)
     action_btn.short_description = "Action"
 class healthpackage_admin(SummernoteModelAdmin):
-    list_display=["package_name","testname","Banglore_price","created","updated","action_btn"]
+    list_display=["package_name","Banglore_price","created","updated","action_btn"]
     readonly_fields=["created","updated"]
     # list_editable=["location"]
     prepopulated_fields = {"slug": ("package_name",)}
@@ -222,11 +222,11 @@ class healthpackage_admin(SummernoteModelAdmin):
         self.exclude = ("Mumbai_price","bhopal_price","nanded_price","pune_price","barshi_price","aurangabad_price",)
         form = super(healthpackage_admin, self).get_form(request, obj, **kwargs)
         return form
-    def testname(self, obj):
-        return ", ".join([
-            test.testt for test in obj.test_name.all()
-        ])
-    testname.short_description = "Tests"
+    # def testname(self, obj):
+    #     return ", ".join([
+    #         test.testt for test in obj.test_name.all()
+    #     ])
+    # testname.short_description = "Tests"
     def action_btn(self, obj):
         html = "<div class='field-action_btn d-flex m-8'> <a class='fa fa-edit ml-2' href='/admin/app1/healthpackages/" + \
             str(obj.id)+"/change/'></a><br></br>"
