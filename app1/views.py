@@ -2224,10 +2224,11 @@ def uploadcsv(request):
                 # des = re.sub(r"</?\[\d+>", "", row.get("Description"))
                 # print(row)
                 # try:
-                n,tests=test.objects.get_or_create(testt=row.get("TEST NAME"))
+                n,tests=test.objects.get_or_create(testt=row.get("ï»¿TEST NAME"))
                 if row.get("STARTER")=="Y":
                     a=healthpackages.objects.get(package_name="STARTER")
                     a.test_name.add(n)
+                    
                 if row.get("BASIC")=="Y":
                     a=healthpackages.objects.get(package_name="BASIC")
                     a.test_name.add(n)
