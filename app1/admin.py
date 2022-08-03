@@ -32,7 +32,7 @@ class cityadmin(admin.ModelAdmin):
     imagee.short_description = 'City Icon'
     # readonly_fields = ["cityname"]
 class testadmin(admin.ModelAdmin):
-    list_display=["testt","categoryy","Banglore_price","is_active","created","updated","action_btn"]
+    list_display=["testcode","testt","categoryy","Banglore_price","is_active","created","updated","action_btn"]
     list_editable=["is_active"]
     list_filter = ('categoryy', 'is_active')
     search_fields = ('testt', 'categoryy__categoryy')
@@ -74,11 +74,10 @@ class testadmin(admin.ModelAdmin):
                 for row in reader:
                     des = re.sub(r"</?\[\d+>", "", row.get("Description"))
                     try:
-                        # print(row)
-                        # print(row.get("Banglore_price"))
                         categoryy=category.objects.get(pk=row.get("category_id"))
                         obj, created = test.objects.get_or_create(
                                 testt=row["Tests"],
+                                testcode=row["test_code"],
                                 categoryy=categoryy,
                                 Banglore_price=row.get("Banglore_price") if row.get("Banglore_price") else None,
                                 Mumbai_price=row.get("Mumbai_price") if row.get("Mumbai_price") else None,
@@ -104,14 +103,15 @@ class testadmin(admin.ModelAdmin):
 
 class prescriptionbookadmin(admin.ModelAdmin):
     list_display=["users","testname","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address","prescription_file","report","created","updated","action_btn"]        
-    readonly_fields=["user","myself","payment_status","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location","bookingid"]
+    readonly_fields=["user","myself","payment_status","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location","bookingid",'price']
     exclude = ('unique',)
     list_filter = ("user","myself","others","gender")
     fieldsets = (
-        (_('Prescription'), {'fields': ('user','prescription_file', 'test_name')}),
+        (_('Prescription'), {'fields': ('user','prescription_file', 'test_name','price')}),
         (_('Patient Details'), {'fields': ("bookingid","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address")}),
         (_('Report'),{'fields':("report",)})
     )
+    
     # search_fields = ('testt', 'categoryy__categoryy')
     # list_editable=[""]
     def get_form(self, request, obj=None, **kwargs):
@@ -235,6 +235,63 @@ class healthpackage_admin(SummernoteModelAdmin):
         html += "<a class='text-danger fa fa-trash ml-2' href='/admin/app1/healthpackages/"+str(obj.id)+"/delete/'></a></div>"
         return format_html(html)
     action_btn.short_description = "Action"
+    
+    
+    def get_urls(self):
+            urls = super().get_urls()
+            new_urls = [path('upload-csv/', self.upload_csv), ]
+            return new_urls + urls
+
+    def upload_csv(self, request):
+            if request.method == "POST":
+                csv_file = request.FILES["csv_upload"]
+                if not csv_file.name.endswith('.csv'):
+                    messages.warning(
+                        request, 'The wrong file type was uploaded')
+                    return HttpResponseRedirect(request.path_info)
+                def decode_utf8(input_iterator):
+                    for l in input_iterator:
+                        yield l.decode('cp1252')
+                reader = csv.DictReader(decode_utf8(request.FILES['csv_upload']))
+                for row in reader:
+                    des = re.sub(r"</?\[\d+>", "", row.get("Description"))
+                    print(row)
+                    try:
+                        tests=test.objects.get_or_create(testt=row.get("Test Name"))
+                        if row.get("basic")=="Y":
+                            a=healthpackages.objects.get(package_name="Basic")
+                            a.test_name.add(tests)
+                        if row.get("standard")=="Y":
+                             a=healthpackages.objects.get(package_name="Standard")
+                             a.test_name.add(tests)
+                        if row.get("starter")=="Y":
+                             a=healthpackages.objects.get(package_name="Starter")
+                             a.test_name.add(tests)
+                        # obj, created = healthpackages.objects.get_or_create(
+                        #         testt=row["Tests"],
+                        #         testcode=row["test_code"],
+                        #         categoryy=categoryy,
+                        #         Banglore_price=row.get("Banglore_price") if row.get("Banglore_price") else None,
+                        #         Mumbai_price=row.get("Mumbai_price") if row.get("Mumbai_price") else None,
+                        #         bhopal_price=row.get("bhopal_price") if row.get("bhopal_price") else None,
+                        #         nanded_price=row.get("nanded_price") if row.get("nanded_price") else None,
+                        #         pune_price=row.get("pune_price") if row.get("pune_price") else None,
+                        #         barshi_price=row.get("barshi_price") if row.get("barshi_price") else None,
+                        #         aurangabad_price=row.get("aurangabad_price") if row.get("aurangabad_price") else None,
+                        #         description=des)
+                    except IndexError:
+                        pass
+                    except (IntegrityError):
+                        form = CsvImportForm()
+                        data = {"form": form}
+                        message = messages.warning(
+                            request, 'Something went wrong! check your file again \n 1.Upload correct file \n 2.Check you data once')
+                        return render(request, "admin/app1/csv_upload.html", data)
+                url = reverse('admin:index')
+                return HttpResponseRedirect(url)
+            form = CsvImportForm()
+            data = {"form": form}
+            return render(request, "admin/app1/csv_upload.html", data)
     
 class healthsymptoms_admin(SummernoteModelAdmin):
     list_display=["name","testname","symptoms","created","updated","action_btn"]

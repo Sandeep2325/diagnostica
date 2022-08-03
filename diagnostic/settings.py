@@ -16,14 +16,17 @@ SECRET_KEY = 'django-insecure-q6^hx14a=lgi46rai+=20-31f7&-sfp@5tb7i+yf*f%f8xoz-=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["162.240.55.20","127.0.0.1"]
+ALLOWED_HOSTS = ["162.240.55.20","127.0.0.1","3.134.93.169","172.31.33.132", "localhost","ec2-3-134-93-169.us-east-2.compute.amazonaws.com",]
 env = environ.Env()
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    
+    # 'admin_black.apps.AdminBlackConfig',
     'jazzmin',
+    # 'baton',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -32,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "app1",
     "django.contrib.humanize",
+    # 'baton.autodiscover',
     
 ]
 INSTALLED_APPS += ('django_summernote', ) 
@@ -48,7 +52,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'diagnostic.urls'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -77,8 +80,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 WSGI_APPLICATION = 'diagnostic.wsgi.application'
 AUTH_USER_MODEL = 'app1.User'
 
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 # DATABASES = {
 #     'default': {
@@ -87,28 +88,37 @@ AUTH_USER_MODEL = 'app1.User'
 #     }
 # }
 
-# DATABASES = {  
-#     'default': {  
-#         'ENGINE': 'django.db.backends.mysql',  
-#         'NAME': 'diagnospan',  
-#         'USER': 'root',  
-#         'PASSWORD': 'Sandeep@8105',  
-#         'HOST': 'localhost',  
-#         'PORT': '3306',  
-        
-#     }  
-# } 
-
 DATABASES = {  
     'default': {  
         'ENGINE': 'django.db.backends.mysql',  
-        'NAME': 'diagnospan',  
-        'USER': 'root',  
-        'PASSWORD': 'mySqlServer@#$432',  
-        'HOST': 'localhost',  
+        'NAME': 'spandiagnodb',  
+        'USER': 'spandiagno_user',  
+        'PASSWORD': 'spanDiagnoV2db',  
+        'HOST': 'spandiagnov2.cubknyrg0xrn.us-east-2.rds.amazonaws.com',  
         'PORT': '3306',   
     }  
-}
+} 
+# DATABASES = {  
+#     'default': {  
+#         'ENGINE': 'django.db.backends.mysql',  
+
+#         'NAME': 'diagnospan1',  
+#         'USER': 'root',  
+#         'PASSWORD': '*****',  
+#         'HOST': 'localhost',  
+#         'PORT': '3306',
+#     }
+#     }
+# DATABASES = {  
+#     'default': {  
+#         'ENGINE': 'django.db.backends.mysql',  
+#         'NAME': 'spanDiagnoV2',  
+#         'USER': 'spanDiagnoV2User',  
+#         'PASSWORD': 'spanDiagnoV2User',  
+#         'HOST': 'localhost',  
+#         'PORT': '3306',   
+#     }  
+# }
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 20000
 # Password validation
@@ -142,28 +152,48 @@ USE_I18N = True
 USE_TZ = True
 
 import os
+STATICFILES_DIRS  = [
+
+        os.path.join(BASE_DIR, 'staticfiles/static'),
+
+    ]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 X_FRAME_OPTIONS = 'SAMEORIGIN'
-MEDIA_URL = '/photos/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'photos/')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'photos/')
-STATIC_ROOT = os.path.join(BASE_DIR, 'app1/static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
+
 RAZOR_KEY_ID = "rzp_test_JiD8eNtJ2aNwZr"
 RAZOR_KEY_SECRET = "gtukARkLZ5U4Bjo9EfCSWkMf"
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_USE_TLS = True
+# # EMAIL_USE_SSL=FALSE
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = "gowdasandeep8105@gmail.com"
+# EMAIL_HOST_PASSWORD = 'atkzlpfgzcvpdhai'
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'mail.spandiagno.com'
+# EMAIL_USE_SSL = True
+# EMAIL_PORT = 465
+# EMAIL_HOST_USER = "donotreplay@spandiagno.com"
+# EMAIL_HOST_PASSWORD = 'Fullmoon22@'
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp-mail.outlook.com'
 EMAIL_USE_TLS = True
 # EMAIL_USE_SSL=FALSE
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "gowdasandeep8105@gmail.com"
-# EMAIL_HOST_PASSWORD = 'Sandeep@1234'
-EMAIL_HOST_PASSWORD = 'atkzlpfgzcvpdhai'
+EMAIL_HOST_USER = "enquiry@spanhealth.com"
+EMAIL_HOST_PASSWORD = 'Ravi@123'
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-SESSION_SAVE_EVERY_REQUEST =True
+# SESSION_SAVE_EVERY_REQUEST =True
 SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)

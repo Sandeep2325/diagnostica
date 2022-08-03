@@ -86,6 +86,7 @@ class category(models.Model):
         verbose_name_plural = "Test Category"
 class test(models.Model):
     testt=models.TextField(null=True,blank=True,verbose_name="Test")
+    testcode=models.CharField(max_length=50,null=True,blank=True,verbose_name="Test Code")
     description=models.TextField(null=True,blank=True)
     categoryy=models.ForeignKey(category,null=True,blank=True,on_delete=models.CASCADE)
     is_active=models.BooleanField(default=True,verbose_name="Is Active?")
@@ -217,23 +218,28 @@ class testbook(models.Model):
         return "Test booking"
     class Meta:
         verbose_name_plural="Test Bookings" 
+    
 @receiver(post_save, sender=testbook)
 def reportresponse(sender, instance, **kwargs):
-  
     if (instance.payment_status== True) and (bool(instance.report) == True):
-        # print("sent")
-        send_mail(str("DIAGNOSTICA SPAN TEST REPORT"),
-                  ("Dear Customer,\n Your Report is Added to your dashboard,Please Checkit out"),
+        send_mail(str("Tests Report | Dignostica Span"),
+                  (f"Hi {instance.user.first_name},\n Thank for using our Services.\nThis mail is regarding the booking id: {instance.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please visit to review and download it..\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"),
                   settings.EMAIL_HOST_USER,
                   [instance.user.email],
-                  fail_silently=False)                
+                  fail_silently=False)
+    # if (instance.payment_status== True) and (bool(instance.report) == True):
+    #     # print("sent")
+    #     send_mail(str("DIAGNOSTICA SPAN TEST REPORT"),
+    #               ("Dear Customer,\n Your Report is Added to your dashboard,Please Checkit out"),
+    #               settings.EMAIL_HOST_USER,
+    #               [instance.user.email],
+    #               fail_silently=False)                
 class Prescriptionbook1(models.Model):
     bookingid=models.CharField(max_length=20,null=True,blank=True)
     unique=models.UUIDField(null=True,blank=True)
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
     prescription_file=models.FileField(upload_to="prescription",null=True,blank=True)
     test_name=models.ManyToManyField(test,blank=True)
-    
     # price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
     myself=models.BooleanField(default=False)
     others=models.BooleanField(default=False)
@@ -263,11 +269,17 @@ class Prescriptionbook1(models.Model):
         return "Prescription booking"
     class Meta:
         verbose_name_plural="Prescription Bookings"
-    # def save(self, *args, **kwargs):  # new
-    #     if not self.slug:
-    #         self.slug = slugify(self.package_title)
-    #     return super().save(*args, **kwargs)  
-      
+
+    # def save(self,*args,**kwargs):
+    #     if (self.payment_status== True) and (bool(self.report) == True):
+    #         print("--------in")
+    #         send_mail(str("Tests Report | Dignostica Span"),
+    #                   (f"Hi {self.user.first_name},\n Thank for using our Services.\nThis mail is regarding the booking id: {instance.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please visit to review and download it..\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"),
+    #                   settings.EMAIL_HOST_USER,
+    #                   [self.user.email],
+    #                   fail_silently=False)
+    #     return super().save(self,*args,**kwargs)
+
 @receiver(post_save, sender=Prescriptionbook1)
 def testbookings(sender, instance, **kwargs):
     print("qwertyu")
@@ -298,25 +310,29 @@ def testbookings(sender, instance, **kwargs):
          
     book_history.objects.filter(uni=instance.bookingid).update(amount=sum(a))
     # instance.price=sum(a)
-   
+    
+    Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=sum(a))
     if (instance.payment_status== True) and (bool(instance.report) == True):
-        send_mail(str("DIAGNOSTICA SPAN TEST REPORT"),
-                  ("Dear Customer,\n Your Report is Added to your dashboard,Please Checkit out"),
+        print("--------in")
+        send_mail(str("Tests Report | Dignostica Span"),
+                  (f"Hi {instance.user.first_name},\n Thank for using our Services.\nThis mail is regarding the booking id: {instance.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please visit to review and download it..\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"),
                   settings.EMAIL_HOST_USER,
                   [instance.user.email],
                   fail_silently=False)
     if (instance.test_name.first()!=None) and (bool(instance.prescription_file)==True and bool(instance.report) == False): 
-            # print("sent")
-            send_mail(str("Dear Customer" ),
-                        ("After reviewing your Prescription ,\nTests are added as per your Prescription \nPlease check and make payment to further steps"),
+            print("sent")
+            # link=request.build_absolute_uri('/bookinghistory/')
+            send_mail(str("Booking Confirmation | Dignostica Span" ),
+                        (f"Hi {instance.user.first_name} ,\nThis mail is regarding the booking id: {instance.bookingid}, recently booked by you, \nWe have reviewed your prescription and have added the tests for your testing Please check your dashboard,\nKindly visit your dashboard to review it and pay the mentioned amount to confirm the booking.\nHave a speedy and healthy recovery.\nThank you,\nDignostica Span"),
                         settings.EMAIL_HOST_USER,
                         [instance.user.email],
                         fail_silently=False)
 m2m_changed.connect(testbookings, sender=Prescriptionbook1.test_name.through)
+post_save.disconnect(testbookings, sender=Prescriptionbook1) 
+
 class healthcheckuppackages(models.Model):
     package_title=models.CharField(max_length=200,null=True,blank=True,verbose_name="Package Title")
     test_name=models.ManyToManyField(test)
-
     Banglore_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Banglore Price")
     Mumbai_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Mumbai Price")
     bhopal_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Bhopal Price")
@@ -495,13 +511,21 @@ class book_history(models.Model):
         return "Book History"
     class Meta:
         verbose_name_plural="Booking Histories"
-    # def save(self, *args, **kwargs):
-    #     a=Prescriptionbook1.objects.get(bookingid=self.bookingid)
-    #     a.price=self.amount
-    #     a.save()
-    #     super(book_history, self).save(*args, **kwargs)
+    # print("----------")
+    # def update(self, *args, **kwargs):
+    #     print("-----")
+    #     try:
+    #         a=Prescriptionbook1.objects.filter(bookingid=self.bookingid).update(price=self.amount)
+    #         # a.price=self.amount
+    #         # a.save()
+    #         super().update(*args, **kwargs) 
+    #         # super(book_history, self).update(*args, **kwargs)
+    #     except:
+    #         pass
 @receiver(post_save, sender=book_history)
 def reportresponse(sender, instance, **kwargs):
+    # a=Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=instance.amount)
+    # print("--------------------",a)
     if (instance.payment_status== True) and (bool(instance.report) == True):
         print("sent")
         send_mail(str("DIAGNOSTICA SPAN TEST REPORT"),
@@ -512,8 +536,9 @@ def reportresponse(sender, instance, **kwargs):
 class payment(models.Model):
     booking_id=models.CharField(max_length=50,null=True,blank=True)
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
-    paymentid=models.CharField(max_length=400,null=True,blank=True)
-    transid=models.CharField(max_length=400,null=True,blank=True)
+    paymentid=models.CharField(max_length=400,null=True,blank=True,verbose_name="Payment Id")
+    transid=models.CharField(max_length=400,null=True,blank=True,verbose_name="Order Id")
+    # signatureid=models.CharField(max_length=500,null=True,blank=True,verbose_name="signature Id Id"),
     date=models.DateTimeField(auto_now_add=True,max_length=30,null=True,blank=True)
     amount=models.CharField(max_length=50,null=True,blank=True)
     
@@ -580,15 +605,15 @@ class contactus(models.Model):
     class Meta:
         verbose_name_plural="Contact us form"
 
-class paymentids(models.Model):
-    orderid=models.CharField(max_length=200,null=True,blank=True),
-    paymentid=models.CharField(max_length=200,null=True,blank=True),
-    signatureid=models.CharField(max_length=500,null=True,blank=True),
+# class paymentids(models.Model):
+#     orderid=models.CharField(max_length=200,null=True,blank=True),
+#     paymentid=models.CharField(max_length=200,null=True,blank=True),
+#     signatureid=models.CharField(max_length=500,null=True,blank=True),
     
-    def __str__(self):
-        return self.paymentid
-    class Meta:
-        verbose_name_plural="Payment Ids"
+#     def __str__(self):
+#         return self.paymentid
+#     class Meta:
+#         verbose_name_plural="Payment Ids"
 class couponredeem(models.Model):
     order_id=models.CharField(max_length=200,null=True,blank=True)
     coupon=models.CharField(max_length=200,null=True,blank=True)
@@ -600,7 +625,5 @@ class couponredeem(models.Model):
         return self.order_id
     class Meta:
         verbose_name_plural="Redeemed Coupons"
-# class dummycart(models.Model):
-#     name=models.CharField(max_length=500,null=True,blank=True)
-#     category=models.CharField(max_length=500,null=True,blank=True)
-#     price=models.CharField(max_length=10,null=True,blank=True)
+
+    

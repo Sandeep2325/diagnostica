@@ -1,6 +1,6 @@
 {% extends "admin/base_site.html" %}
-{% load i18n static jazzmin %}
-{% get_jazzmin_ui_tweaks as jazzmin_ui %}
+ {% load i18n static jazzmin %}
+{% get_jazzmin_ui_tweaks as jazzmin_ui %} 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 {% block bodyclass %}
 {{ block.super }}
@@ -90,7 +90,7 @@ Dashboard
 {%endfor%}
 {%endfor%}
 </div>
-  <div class="col-lg-3 col-12">
+  {% comment %} <div class="col-lg-3 col-12">
     <div id="content-related">
         <div class="module" id="recent-actions-module">
             <h3>{% trans 'Recent actions' %}</h3>
@@ -151,7 +151,7 @@ Dashboard
             {% endif %} 
         </div>
     </div>
-</div>
+</div> {% endcomment %}
 <style>
     .button {
         top:50%;

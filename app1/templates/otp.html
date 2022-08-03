@@ -20,13 +20,8 @@
             </div>
         </div>
     </section>
-<<<<<<< HEAD
     <!-- 
     <section class="section_register mb-5">
-=======
-
-    {% comment %} <section class="section_register mb-5">
->>>>>>> 912c8e6940fd3d117a3ef693caf068fc33b784a3
         <div class="container">
             <div class="row">
 
@@ -90,22 +85,22 @@
                                         Enter OTP
                                     </h1>
                                     <p class="fs18 font-regular cl-dark-blue opc-5 m-0 pe-xl-5">
-                                        Lorem Ipsum is simply dummy text of the printing and
-                                        typesetting industry.
+                                        Please check your Mobile or Mail for the OTP.
                                     </p>
-
+                                    <form method="post" class="mt-5" id="form">
+                                    {%csrf_token%}
                                     <form action="" class="mt-5">
                                         <input class="otp" type="text" oninput='digitValidate(this)'
-                                            onkeyup='tabChange(1)' maxlength=1>
+                                            onkeyup='tabChange(1)' maxlength=1 name="digit-1" id="digit-1">
                                         <input class="otp" type="text" oninput='digitValidate(this)'
-                                            onkeyup='tabChange(2)' maxlength=1>
+                                            onkeyup='tabChange(2)' maxlength=1 name="digit-2" id="digit-1">
                                         <input class="otp" type="text" oninput='digitValidate(this)'
-                                            onkeyup='tabChange(3)' maxlength=1>
+                                            onkeyup='tabChange(3)' maxlength=1 name="digit-3" id="digit-1">
                                         <input class="otp " type="text" oninput='digitValidate(this)'
-                                            onkeyup='tabChange(4)' maxlength=1>
+                                            onkeyup='tabChange(4)' maxlength=1  name="digit-4" id="digit-1">
                                         <br>
                                         <div class="pt-3">
-                                            <a href="" class="col-lg-3 col-5  cursor">Resend OTP</a>
+                                            <a href="{% url 'resend' %}" class="col-lg-3 col-5  cursor">Resend OTP</a>
                                         </div>
                                         <div class="mt-xl-5 my-4">
                                             <button class="globalsubmitbutton" type="submit">Submit</button>
@@ -116,7 +111,7 @@
 
                             </div>
                             <div class="col-lg-5  p-0">
-                                <img src="{% static 'images/login.png' %}" alt="" class="img-fluid h-100 br-15" />
+                                <img src="{% static 'images/login.png' %}" alt="" class="img-fluid h-100 w-100 br-15" />
 
                             </div>
                         </div>
@@ -124,7 +119,6 @@
                 </div>
             </div>
         </div>
-
     </section>
 
     <!-- 
@@ -154,7 +148,7 @@
 
 </body>
 
-<script>
+{% comment %} <script>
     let digitValidate = function (ele) {
         console.log(ele.value);
         ele.value = ele.value.replace(/[^0-9]/g, '');
@@ -170,8 +164,23 @@
         }
     }
 
-</script>
 
+</script> {% endcomment %}
+<script>
+    let digitValidate = function (ele) {
+        console.log(ele.value);
+        ele.value = ele.value.replace(/[^0-9]/g, '');
+
+    }
+    $("input").keyup(function () {
+        if (this.value.length == this.maxLength) {
+          $(this).next('input').focus();
+        }
+        else if(this.value.length < this.maxLength){
+            $(this).prev('input').focus();
+        }
+    });
+</script>
 {% if messages %}
 {% for message in messages %}
 {% if message.tags == "error"%}
