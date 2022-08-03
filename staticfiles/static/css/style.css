@@ -506,17 +506,31 @@ textarea {
     height: 200px;
     overflow-y: hidden;
 }
-
 .section_home_health_check .health_care_ {
-    padding-bottom: 25px;
-    margin: 0px;
-    padding-left: 20px;
-    padding-top: 20px;
-    height: 200px;
-    overflow-y: hidden;
     border-bottom: 1px solid #17235A;
+    height: 200px;
+    overflow-y: auto;
 }
 
+.section_home_health_check .health_care_ p{
+    padding-bottom: 25px;
+    margin: 0px;
+    padding-left: 0px;
+    padding-top: 20px;
+  
+}
+
+.morecontent span {
+    display: none;
+}
+.morelink {
+    display: block;
+}
+
+.moretext {
+    display: none;
+  }
+  
 .section_home_health_check .home_ul_li li {
     padding-bottom: 12px;
     font-size: 18px;
@@ -1780,8 +1794,8 @@ textarea {
     height: 20px;
     background: #17235A;
     position: absolute;
-    top: -20px;
-    right: -15px;
+    top: -14px;
+    right: -10px;
     border-radius: 50%;
     text-align: center;
     vertical-align: middle;
@@ -1819,4 +1833,22 @@ textarea {
     height: 50px;
     text-align: center;
     outline: none;
+<<<<<<< HEAD:app1/static/css/style.css
+  }
+
+  .home_ul_li::-webkit-scrollbar {
+    width: 3px;
+  }
+  
+  
+  .home_ul_li::-webkit-scrollbar-thumb {
+    background: #17235A;
+  }
+
+ .section_synbrome .owl-carousel .owl-item img{
+    width: unset;
+    display: unset;
+ }
+=======
 }
+>>>>>>> b5cb84c991a8240545c2209618791188992364d5:staticfiles/static/css/style.css

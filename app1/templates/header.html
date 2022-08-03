@@ -25,6 +25,11 @@
                     <li class="nav-item">
                     <a class="px-1" href="{%url "cart"%}"><img src="{%static "images/bg-cart.png"%}" alt="" class="w-22" /></a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="modal" data-bs-target="#cart_checkout_modal">
+                            <img src="{%static 'images/call_back.png' %}"/>
+                         </a>
+                        </li>
                 </ul>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"><i class="fa fa-bars header_tgl_btn" aria-hidden="true"></i>
@@ -50,8 +55,7 @@
                         </li>
                         <li class="nav-item">
                         <a class="nav-link nav_button book" href="{%url "testselect"%}"><i class="fa fa-search pe-2"
-                            aria-hidden="true"></i>Book A
-                        Test</a>
+                            aria-hidden="true"></i>Lab Tests</a>
                         </li>
                         <li class="nav-item dropdown d-lg-block d-none">
                             <a class="nav-link dropdown-toggle DropDownToggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -67,6 +71,7 @@
                                 <li><a class="dropdown-item" href="{% url 'user-login' %}">Login</a></li>
                                 <li><a class="dropdown-item" href="{% url 'Registration' %}">Register</a></li>
                                 {% endif%}
+
                             </ul>
                         </li>
                         <li class="nav-item d-lg-block d-none">
@@ -81,9 +86,133 @@
                             </sup>
                         </a>
                         </li>
+                        <li class="nav-item d-lg-block d-none">
+                            <a class="nav-link" data-bs-toggle="modal" data-bs-target="#cart_checkout_modal">
+                               <img src="{%static 'images/call_back.png' %}"/>
+                            </a>
+                            </li>
                     </ul>
                 </div>
             </nav>
         </div>
     </section>
+
+
+    <section class="cart_checkout_modal" id ="infomodal">
+        <div class="modal fade" id="cart_checkout_modal" tabindex="-1" aria-labelledby="cart_checkout_modalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content  p-3 p-sm-4">
+                    <div class="modal-body">
+                        <button type="button" class="btn-close  close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                        <form method="post" id="homeForm">
+                            <h3 class="fs-30 font-bold cl-dark-blue text-center">Request a Call Back</h3>
+                            <div>
+                                <input class="w-100  form_input mt-3 " placeholder="First Name" name="firstname" id="firstname"
+                                    type="text" maxlength="250" >
+                            </div>
+                            <div>
+                                <input class="w-100  form_input mt-3" placeholder="Last Name" name="lastname" id="lastname"
+                                    type="text" maxlength="250" >
+                            </div>
+                            <div>
+                                <input class="w-100  form_input mt-3" placeholder="Phone Number" name="phone" id="phone"
+                                    type="text" maxlength="250">
+                            </div>
+                            <div>
+                                <input class="w-100  form_input mt-3" placeholder="Email Address" name="email" id="email" type="text" maxlength="250"/>
+                            </div>
+                            <div >
+                                <select class="w-100 mt-3  form-select" type="select"
+                                  name="selectbookhelp">
+                                  <option selected="selected" class="opc-5" disabled>Select
+                                    Test<span
+                                    class="cl-red ps-1">*</span></option>
+                                  <option>test</option>
+                                  <option>test</option>
+                                  <option>test</option>
+                                  <option>test</option>
+                                  <option>test</option>
+                                  <option>test</option>
+
+                                </select>
+                              </div>
+                            <button class="mx-lg-0 mx-3 mt-4 globalsubmitbutton"
+                                type="submit" name="submit" id="request_call_back">SUBMIT</button>
+                       </form> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </body>
+
+
+
+
+<script> 
+    
+  jQuery.validator.addMethod("name_regex", function (value, element) {
+    return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);
+  }, "Enter valid name");
+  jQuery.validator.addMethod("phone_regex", function (value, element) {
+    return this.optional(element) || /^[0-9\.\-_]{10,30}$/i.test(value);
+  }, "Enter valid phone number");
+  $.validator.addMethod('filesize', function (value, element, param) {
+    return this.optional(element) || (element.files[0].size <= param)
+  }, 'File size must be less than {0}');
+  $("#homeForm").validate({
+    rules: {
+
+      'firstname': {
+        required: true,
+        minlength: 1,
+        name_regex: true,
+      },
+      'lastname': {
+        required: true,
+        minlength: 1,
+        name_regex: true,
+      },
+      'email': {
+        required: true,
+        email: true
+      },
+      'phone': {
+        required: true,
+        phone_regex: true,
+        minlength: 10
+      },
+      'selectbookhelp': {
+        required: true,
+      },
+
+    },
+
+    messages: {
+
+      'firstname': {
+        required: "This field is required."
+      },
+      'lastname': {
+        required: "This field is required."
+      },
+      'email': {
+        required: "This field is required.",
+        email: "Enter valid email"
+      },
+      'phone': {
+        required: "This field is required."
+      },
+      'selectbookhelp': {
+        required: "This field is required."
+      },
+    },
+    submitHandler: function (form) {
+      form.submit();
+    }
+  });
+
+</script>
+
