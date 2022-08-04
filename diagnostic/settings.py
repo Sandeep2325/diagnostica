@@ -105,17 +105,17 @@ AUTH_USER_MODEL = 'app1.User'
 #         'PORT': '3306',   
 #     }  
 # } 
-DATABASES = {  
-    'default': {  
-        'ENGINE': 'django.db.backends.mysql',  
+# DATABASES = {  
+#     'default': {  
+#         'ENGINE': 'django.db.backends.mysql',  
 
-        'NAME': 'diagnospan1',  
-        'USER': 'root',  
-        'PASSWORD': 'Sandeep@8105',  
-        'HOST': 'localhost',  
-        'PORT': '3306',
-    }
-    }
+#         'NAME': 'diagnospan1',  
+#         'USER': 'root',  
+#         'PASSWORD': 'Sandeep@8105',  
+#         'HOST': 'localhost',  
+#         'PORT': '3306',
+#     }
+#     }
 # DATABASES = {  
 #     'default': {  
 #         'ENGINE': 'django.db.backends.mysql',  
@@ -126,25 +126,25 @@ DATABASES = {
 #         'PORT': '3306',   
 #     }  
 # }
-# DATABASES = {  
+DATABASES = {  
 
-#     'default': {  
+    'default': {  
 
-#         'ENGINE': 'django.db.backends.mysql',  
+        'ENGINE': 'django.db.backends.mysql',  
 
-#         'NAME': 'diagnospan',  
+        'NAME': 'diagnospan',  
 
-#         'USER': 'root',  
+        'USER': 'root',  
 
-#         'PASSWORD': 'mySqlServer@#$432',  
+        'PASSWORD': 'mySqlServer@#$432',  
 
-#         'HOST': 'localhost',  
+        'HOST': 'localhost',  
 
-#         'PORT': '3306',   
+        'PORT': '3306',   
 
-#     }  
+    }  
 
-# }
+}
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 20000
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
