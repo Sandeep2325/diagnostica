@@ -493,7 +493,7 @@ class requestadmin(admin.ModelAdmin):
 admin.site.register(faq,faqadmin)
 admin.site.register(contactus,contactusadmin)
 admin.site.register(payment,paymentadmin)
-admin.site.register(city,cityadmin)
+# admin.site.register(city,cityadmin)
 admin.site.register(blogcategory,blogcategoryadmin)
 admin.site.register(test,testadmin)
 # admin.site.register(prescription_book,prescriptionbookadmin)

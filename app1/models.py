@@ -285,7 +285,7 @@ class Prescriptionbook1(models.Model):
 
 @receiver(post_save, sender=Prescriptionbook1)
 def testbookings(sender, instance, **kwargs):
-    print("qwertyu")
+    # print("qwertyu")
     a=[]
     for i in instance.test_name.all():
         if instance.location=="Bangalore":
@@ -316,14 +316,14 @@ def testbookings(sender, instance, **kwargs):
     
     Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=sum(a))
     if (instance.payment_status== True) and (bool(instance.report) == True):
-        print("--------in")
+        # print("--------in")
         send_mail(str("Tests Report | Dignostica Span"),
                   (f"Hi {instance.user.first_name},\n Thank for using our Services.\nThis mail is regarding the booking id: {instance.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please visit to review and download it..\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"),
                   settings.EMAIL_HOST_USER,
                   [instance.user.email],
                   fail_silently=False)
     if (instance.test_name.first()!=None) and (bool(instance.prescription_file)==True and bool(instance.report) == False): 
-            print("sent")
+            # print("sent")
             # link=request.build_absolute_uri('/bookinghistory/')
             send_mail(str("Booking Confirmation | Dignostica Span" ),
                         (f"Hi {instance.user.first_name} ,\nThis mail is regarding the booking id: {instance.bookingid}, recently booked by you, \nWe have reviewed your prescription and have added the tests for your testing Please check your dashboard,\nKindly visit your dashboard to review it and pay the mentioned amount to confirm the booking.\nHave a speedy and healthy recovery.\nThank you,\nDignostica Span"),

@@ -84,21 +84,21 @@
                 {%elif test.labtest != None%}
                 <tr style="padding-top:5px;">
                     <td style="font-size:12px; width:100px  " class="f-family"> {{ forloop.counter }}</td>
-                    <td style="font-size:12px;  width:170px" class="f-family">{{test.labtest}}{{test.id}}</td>
+                    <td style="font-size:12px;  width:170px" class="f-family">{{test.labtest}}</td>
                     <td style="font-size:12px;  width:350px" class="f-family">{{test.labtest}}</td>
                     <td style="font-size:12px; " class="f-family">Rs.{{test.price|floatformat:2}}</td>
                 </tr>
                 {%elif test.packages != None%}
                 <tr style="padding-top:5px;">
                     <td style="font-size:12px; width:100px  " class="f-family"> {{ forloop.counter }}</td>
-                    <td style="font-size:12px;  width:170px" class="f-family">{{test.packages}}{{test.id}}</td>
+                    <td style="font-size:12px;  width:170px" class="f-family">{{test.packages}}</td>
                     <td style="font-size:12px;  width:350px" class="f-family">{{test.packages}}</td>
                     <td style="font-size:12px; " class="f-family">Rs.{{test.price|floatformat:2}}</td>
                 </tr>
                 {%elif test.healthsymptoms != None%}
                 <tr style="padding-top:5px;">
                     <td style="font-size:12px; width:100px  " class="f-family"> {{ forloop.counter }}</td>
-                    <td style="font-size:12px;  width:170px" class="f-family">{{test.healthsymptoms}}{{test.id}}</td>
+                    <td style="font-size:12px;  width:170px" class="f-family">{{test.healthsymptoms}}</td>
                     <td style="font-size:12px;  width:350px" class="f-family">{{test.healthsymptoms}}</td>
                     <td style="font-size:12px; " class="f-family">Rs.{{test.price|floatformat:2}}</td>
                 </tr>
