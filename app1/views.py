@@ -1,3 +1,4 @@
+import itertools
 import re
 # import sweetify
 from django.shortcuts import render,redirect
@@ -596,18 +597,19 @@ def home(request):
         lastname=request.POST["lastname"]
         phone=request.POST["phone"]
         email=request.POST["email"]
-        message = 'Hi\nYou have Call back request for below test.\n{} from {} category from {}'.format(tes.testt,tes.categoryy,c)
-        email_from = settings.EMAIL_HOST_USER
-        recipient_list = ["sandeep.nexevo@gmail.com"]
-        message = message
-        subject = "You have a test query" 
-        send_mail(
-                    subject,
-                    message,
-                    email_from,
-                    recipient_list,
-                    fail_silently=False,
-            )
+        requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,tests=tes).save()
+        # message = 'Hi\nYou have Call back request for below test.\n{} from {} category from {}'.format(tes.testt,tes.categoryy,c)
+        # email_from = settings.EMAIL_HOST_USER
+        # recipient_list = ["sandeep.nexevo@gmail.com"]
+        # message = message
+        # subject = "You have a test query" 
+        # send_mail(
+        #             subject,
+        #             message,
+        #             email_from,
+        #             recipient_list,
+        #             fail_silently=False,
+        #     )
         cit=city.objects.all()
         tests=test.objects.all()
         healthcheckup=healthcheckuppackages.objects.all()[0:4]
@@ -662,45 +664,78 @@ def healthpackageview(request,slug):
         c=request.session.get("city")
         package=healthpackages.objects.get(slug=slug)
         packages=healthpackages.objects.exclude(slug=slug)
+        tests=package.test_name.all()
+        c=package.test_name.all().count()
+        l=int(c)//2
+        a,b=tests[:l],tests[l:]
+        lstt=[]
+        for (a, b) in itertools.zip_longest(a, b,fillvalue=None):
+            # print(a.testt,b.testt, end="--")
+            if a != None:
+                item1=a.testt
+            else:
+                item1=None
+            if b != None:    
+                item2=b.testt
+            else:
+                item2=None
+            lis=[item1,item2]
+            lstt.append(lis) 
+        
+        # for i in range(c):
+        #     # print(tests[i].testt)
+        #     try:
+        #         item1=tests[j].testt
+        #         item2=tests[i+1].testt
+        #         j=i+1
+        #         lis=[item1,item2]
+        #         lstt.append(lis)
+        #     except:
+        #         pass
+        # print(lstt)
+            
         envcity={"Bangalore":Bangalore,"Mumbai":Mumbai,"Bhophal":Bhophal,"Nanded":Nanded,"Pune":Pune,"Barshi":Barshi,"Aurangabad":Aurangabad}
         context={
             "package":package,
             "packages":packages,
             "city":c,
             'envcity':envcity,
+            "firsthalf":a,
+            "secondhalf":b,
+            "tesst":lstt
         }
-        currency = 'INR'
-        if c == Bangalore:
-            amount=int(package.Banglore_price)
-        elif c == Mumbai:
-            amount=int(package.Mumbai_price)
-        elif c == Bhophal:
-            amount=int(package.bhopal_price)
-        elif c == Nanded:
-            amount=int(package.nanded_price)
-        elif c == Pune:
-            amount=int(package.pune_price)
-        elif c == Barshi:
-            amount=int(package.barshi_price)
-        elif c == Aurangabad:
-            amount=int(package.aurangabad_price)
-        client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
-        try:
-            razorpay_order = client.order.create(
-                    {"amount": int(amount) * 100, "currency": "INR", "payment_capture": "1"}
-            )
-        except Exception as e:
-            razorpay_order = client.order.create(
-                    {"amount": 1* 100, "currency": "INR", "payment_capture": "1"}
-            )
-        request.session['amount']=amount
-        razorpay_order_id = razorpay_order['id']
+        # currency = 'INR'
+        # if c == Bangalore:
+        #     amount=int(package.Banglore_price)
+        # elif c == Mumbai:
+        #     amount=int(package.Mumbai_price)
+        # elif c == Bhophal:
+        #     amount=int(package.bhopal_price)
+        # elif c == Nanded:
+        #     amount=int(package.nanded_price)
+        # elif c == Pune:
+        #     amount=int(package.pune_price)
+        # elif c == Barshi:
+        #     amount=int(package.barshi_price)
+        # elif c == Aurangabad:
+        #     amount=int(package.aurangabad_price)
+        # client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+        # try:
+        #     razorpay_order = client.order.create(
+        #             {"amount": int(amount) * 100, "currency": "INR", "payment_capture": "1"}
+        #     )
+        # except Exception as e:
+        #     razorpay_order = client.order.create(
+        #             {"amount": 1* 100, "currency": "INR", "payment_capture": "1"}
+        #     )
+        # # request.session['amount']=amount
+        # razorpay_order_id = razorpay_order['id']
         
-        # callback_url = callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
-        context['razorpay_order_id'] = razorpay_order_id
-        context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
-        context['razorpay_amount'] = amount
-        context['currency'] = currency
+        # # callback_url = callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
+        # context['razorpay_order_id'] = razorpay_order_id
+        # context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
+        # # context['razorpay_amount'] = amount
+        # context['currency'] = currency
         return render(request,'packagedetail.html',context)
 
 def testdetails(request):
@@ -2185,18 +2220,26 @@ def uploadcsv(request):
             reader = csv.DictReader(decode_utf8(request.FILES['csv_upload']))
            
             for row in reader:
+                print(row)
                 # des = re.sub(r"</?\[\d+>", "", row.get("Description"))
                 # print(row)
                 # try:
                 n,tests=test.objects.get_or_create(testt=row.get("ï»¿TEST NAME"))
-                if row.get("SPAN HEALTH PACKAGE -STARTER")=="Y":
-                    a=healthpackages.objects.get(package_name="SPAN HEALTH PACKAGE -STARTER")
+                if row.get("STARTER")=="Y":
+                    a=healthpackages.objects.get(package_name="STARTER")
                     a.test_name.add(n)
-                if row.get("SPAN HEALTH PACKAGE - BASIC")=="Y":
-                    a=healthpackages.objects.get(package_name="SPAN HEALTH PACKAGE - BASIC")
+                    
+                if row.get("BASIC")=="Y":
+                    a=healthpackages.objects.get(package_name="BASIC")
                     a.test_name.add(n)
-                if row.get("SPAN HEALTH PACKAGE -STANDARD")=="Y":
-                    a=healthpackages.objects.get(package_name="SPAN HEALTH PACKAGE -STANDARD")
+                if row.get("STANDARD")=="Y":
+                    a=healthpackages.objects.get(package_name="STANDARD")
+                    a.test_name.add(n)
+                if row.get("PRIME")=="Y":
+                    a=healthpackages.objects.get(package_name="PRIME")
+                    a.test_name.add(n)
+                if row.get("PREMIUM")=="Y":
+                    a=healthpackages.objects.get(package_name="PREMIUM")
                     a.test_name.add(n)
           
                     # a=healthpackages.objects.get(package_name="SPAN HEALTH PACKAGE -STANDARD")
@@ -2227,3 +2270,14 @@ def uploadcsv(request):
             res = render(request, "csv.html")
             return res
         return render(request, "csv.html")
+def requestcallheader(request):
+    if request.method=="POST":
+        print("post")
+        firtname=request.POST["firstname"]
+        lastname=request.POST["lastname"]
+        phone=request.POST["phone"]
+        email=request.POST["email"]
+        tests=request.POST["tests"]
+        t=test.objects.get(id=int(tests))
+        requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,tests=t).save()
+        return JsonResponse({"message":True})

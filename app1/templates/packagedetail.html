@@ -1,5 +1,6 @@
 {% extends "index.html" %}
 {% load static %}
+{% load custom_tags %}
 {%block content%}
 
 <body>
@@ -27,7 +28,9 @@
             <div class="d-flex justify-content-center align-content-center pt-xl-4 mt-3">
               <div class="home_linear_border  ">
                 <div class="">
-                  <p
+                  <p class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">Price</p>
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.Banglore_price}}</h1>
+                  {% comment %} <p
                     class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">
                     Price</p>
                     {%if city == envcity.Bangalore%}
@@ -44,8 +47,8 @@
                     <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.barshi_price}}</h1>
                     {%elif city == envcity.Aurangabad%}
                     <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.aurangabad_price}}</h1>
-                    {%endif%}
-                  <p
+                    {%endif%}{% endcomment %}
+                  <p 
                     class="d-flex justify-content-center align-content-center align-items-center m-0 fs-18 cl-dark-blue font-bold">
                     Includes {{package.testcount}}
                     Tests
@@ -73,7 +76,7 @@
               {%if city == envcity.Bangalore%}
               <div class="col-12 h-100 ms-xl-5">
                 <div class="">
-                  <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.Banglore_price}}</h3>
+                  <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}}</h3>
                 </div>
                 <p class="pb-4 pe-lg-5 m-0">{{test.description}}</p>
               </div>
@@ -128,18 +131,27 @@
 
               <table class="mx-2">
                 <tbody>
+                  {% comment %} {%for test in tesst %} {% endcomment %}
+                  {%for j in tesst%}
                   <tr>
-                    <td data-label="">Visa - 3412 </td>
-                    <td data-label="">04/01/2016</td>
+                    {% comment %} {% if forloop.counter < 25 %} {% endcomment %}
+                    {%if j|first_el != None%}
+                    <td data-label="">{{j|first_el}}</td>
+                    {%else%}
+                    
+                    <td data-label="">-</td>
+                    {%endif%}
+                   {% comment %} {%else%} {% endcomment %}
+                   {%if j|last_el != None%}
+                    <td data-label="">{{j|last_el}}</td>
+                    {%else%}
+                    <td data-label="">-</td>
+                    {%endif%}
+                    {% comment %} {%endif%}  {% endcomment %}
                   </tr>
-                  <tr>
-                    <td data-label="">Visa - 3412</td>
-                    <td data-label="">04/01/2016</td>
-                  </tr>
-                  <tr>
-                    <td data-label="">Visa - 3412</td>
-                    <td data-label="">04/01/2016</td>
-                  </tr>
+                  {% comment %} {%endfor%} {% endcomment %}
+                  {%endfor%}
+                
                 </tbody>
               </table>
             </div>
