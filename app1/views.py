@@ -1049,6 +1049,7 @@ def cartt(request):
         # bookingid ="DP"+str(bid)
         book=book_history.objects.all().order_by("-created")[0:1]
         # book=book_history.objects.filter(bookingid=bookingid)
+        
         for i in book:
             temp = re.compile("([a-zA-Z]+)([0-9]+)")
             res = temp.match(i.bookingid).groups()
@@ -1061,7 +1062,11 @@ def cartt(request):
                 bookingid="DP"+str(booking)
         except:
             bookingid="DP"+str(bid)
-        
+        # tee=testbook.objects.filter(bookingid=bookingid)
+        # print("-----------tee-------",tee)
+        # tee.delete()
+        # te=testbook.objects.filter(bookingid=bookingid)
+        # print("-----------te-------",te)
         b=prescription_book.objects.create(
                 unique=uniquee,
                 user=request.user,
@@ -1488,7 +1493,7 @@ def paymenthandler(request,str,amount):
             paymentid=request.POST.get("razorpay_payment_id")
             if paymentid:
                 if verify_signature(request.POST):
-                    print("-------------",request.POST)
+                    # print("-------------",request.POST)
                     transid=request.POST["razorpay_order_id"]
                     cart.objects.filter(user=usr).delete()
                     history=book_history.objects.get(payment_id=transid)
@@ -2143,7 +2148,8 @@ class BookingHistoryPay(LoginRequiredMixin,View):
             #         invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.aurangabad_price)   
         
         if request.POST.get("action") == "payment_canceled":
-            mod = book_history.objects.get(testbooking_id=request.POST.get('id'))
+            print("------------------",request.POST)
+            mod = book_history.objects.get(payment_id=request.POST.get('order_id'))
             mod.payment_id = None
             mod.payment_status = False
             mod.save()

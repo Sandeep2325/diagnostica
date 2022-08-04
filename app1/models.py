@@ -157,35 +157,7 @@ class prescription_book(models.Model):
         return "Prescription booking1"
     class Meta:
         verbose_name_plural="Prescription Bookings1" 
-        
-# @receiver(post_save, sender=prescription_book)
-# def testbookings(sender, instance, **kwargs):
-#     a=[]
-#     for i in instance.test_name.all():
-#         if instance.location=="Bangalore":
-#             a.append(i.Banglore_price)
-#         elif instance.location=="Mumbai":
-#             a.append(i.Mumbai_price)
-#         elif instance.location=="Bhophal":
-#             a.append(i.bhopal_price)
-#         elif instance.location=="Nanded":
-#             a.append(i.nanded_price)
-#         elif instance.location=="Pune":
-#             a.append(i.pune_price)
-#         elif instance.location=="Barshi":
-#             a.append(i.barshi_price)
-#         elif instance.location=="Aurangabad":
-#             a.append(i.aurangabad_price)
-#     book_history.objects.filter(testbooking_id=instance.id).update(amount=sum(a))
-#     # print(bool(instance.prescription_file))
-#     if (instance.test_name.first()!=None) and (bool(instance.prescription_file)==True): 
-#             print("sent")
-#             send_mail(str("Dear Customer" ),
-#                         ("After reviewing your Prescription ,\nTests are added as per your Prescription \nPlease check and make payment to further steps"),
-#                         settings.EMAIL_HOST_USER,
-#                         [instance.user.email],
-#                         fail_silently=False)
-# m2m_changed.connect(testbookings, sender=prescription_book.test_name.through)
+
 class testbook(models.Model):
     bookingid=models.CharField(max_length=20,null=True,blank=True)
     unique=models.UUIDField(null=True,blank=True)
@@ -415,7 +387,7 @@ class healthsymptoms(models.Model):
     def __str__(self):
         return self.name
     class Meta:
-        verbose_name_plural = "Health Symptoms"
+        verbose_name_plural = "Life Style Assesments"
     def save(self, *args, **kwargs):  # new
         if not self.slug:
             self.slug = slugify(self.name)
@@ -514,21 +486,9 @@ class book_history(models.Model):
         return "Book History"
     class Meta:
         verbose_name_plural="Booking Histories"
-    # print("----------")
-    # def update(self, *args, **kwargs):
-    #     print("-----")
-    #     try:
-    #         a=Prescriptionbook1.objects.filter(bookingid=self.bookingid).update(price=self.amount)
-    #         # a.price=self.amount
-    #         # a.save()
-    #         super().update(*args, **kwargs) 
-    #         # super(book_history, self).update(*args, **kwargs)
-    #     except:
-    #         pass
+   
 @receiver(post_save, sender=book_history)
 def reportresponse(sender, instance, **kwargs):
-    # a=Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=instance.amount)
-    # print("--------------------",a)
     if (instance.payment_status== True) and (bool(instance.report) == True):
         print("sent")
         send_mail(str("DIAGNOSTICA SPAN TEST REPORT"),
@@ -557,7 +517,7 @@ class subscription(models.Model):
     def __str__(self):
         return self.email
     class Meta:
-        verbose_name_plural="Newsletter"
+        verbose_name_plural="Subscriptions"
 class socialmedialinks(models.Model):
     name=models.CharField(max_length=100,null=True,blank=True)
     url=models.URLField(null=True,blank=True)
