@@ -151,25 +151,27 @@ def otpRegistration(request):
         hash_pwd = make_password(request.session.get('password'))
         p_number = request.session.get('number')
         email_address = request.session.get('email') 
-
-        if int(a) == otp:
-            User.objects.create(
-                            first_name = firstname,
-                            last_name=lastname,
-                            email=email_address,
-                            phone_no=p_number,
-                            password=hash_pwd
-            )
-            request.session.delete('otp')
-            request.session.delete('firstname')
-            request.session.delete('lastname')
-            request.session.delete('email')
-            request.session.delete('password')
-            request.session.delete('phone_number')
-            messages.success(request,'Registration Successfully Done !!')
-            return redirect('/login/')
-        else:
-            messages.error(request,'Wrong OTP')
+        try:
+            if int(a) == otp:
+                User.objects.create(
+                                first_name = firstname,
+                                last_name=lastname,
+                                email=email_address,
+                                phone_no=p_number,
+                                password=hash_pwd
+                )
+                request.session.delete('otp')
+                request.session.delete('firstname')
+                request.session.delete('lastname')
+                request.session.delete('email')
+                request.session.delete('password')
+                request.session.delete('phone_number')
+                messages.success(request,'Registration Successfully Done !!')
+                return redirect('/login/')
+            else:
+                messages.error(request,'Wrong OTP')
+        except:
+            messages.error(request,"Please Fill all Required Fields")
     return render(request,'otp.html')
 
 def resendotp(request):
@@ -312,25 +314,28 @@ def changepasswordotp(request):
         password=request.session.get("ppassword")
         # request.session.get("newpassword")
         newpassword=make_password(request.session.get("conpassword"))
-        if int(a) == otp:
-            data = User.objects.filter(
-                            email=request.user.email)
-            if data.exists():
+        try:
+            if int(a) == otp:
                 data = User.objects.filter(
-                            email=request.user.email).update(password=newpassword)
-            # user_instance = User.objects.get(username=user)
-            # User.objects.create(
-            #                 user = user_instance,phone_number=p_number
-            # )
-                request.session.delete("ppassword")
-            # request.session.delete("newpassword")
-                request.session.delete("conpassword")
-                messages.success(request,'Password changed successfully!! Please Login Again.')
-                return redirect('user-login')
+                                email=request.user.email)
+                if data.exists():
+                    data = User.objects.filter(
+                                email=request.user.email).update(password=newpassword)
+                # user_instance = User.objects.get(username=user)
+                # User.objects.create(
+                #                 user = user_instance,phone_number=p_number
+                # )
+                    request.session.delete("ppassword")
+                # request.session.delete("newpassword")
+                    request.session.delete("conpassword")
+                    messages.success(request,'Password changed successfully!! Please Login Again.')
+                    return redirect('user-login')
+                else:
+                    print("not exists")
             else:
-                print("not exists")
-        else:
-            messages.error(request,'Wrong OTP')
+                messages.error(request,'Wrong OTP')
+        except:
+            messages.error(request,"Please Fill all Required Fields")
     return render(request,'otpchange.html')    
 def passwordcheck(request):
     if request.method=="POST":
@@ -360,19 +365,21 @@ def otpforgotpassword(request):
         hash_pwd = make_password(request.session.get('password'))
         # p_number = request.session.get('number')
         email_address = request.session.get('email') 
-        
-        if int(a) == otp:
-            User.objects.filter(
-                            email=email_address
-            ).update(password=hash_pwd)
-            
-            request.session.delete('otp')
-            request.session.delete('email')
-            request.session.delete('password')
-            messages.success(request,"Password Changed")
-            return redirect('user-login')
-        else:
-            messages.error(request,'Wrong OTP')
+        try:
+            if int(a) == otp:
+                User.objects.filter(
+                                email=email_address
+                ).update(password=hash_pwd)
+
+                request.session.delete('otp')
+                request.session.delete('email')
+                request.session.delete('password')
+                messages.success(request,"Password Changed")
+                return redirect('user-login')
+            else:
+                messages.error(request,'Wrong OTP')
+        except:
+            messages.error(request,"Please Fill all Required Fields")
     return render(request,'otpforgot.html') 
 def forgotresendotp(request):
     # if request.method=="POST":
