@@ -90,7 +90,7 @@
                                 <div class="col-lg-4 pt-3">
                                     <label class="fs-18 cl-dark-blue font-regular" for="phone">Mobile Number</label>
                                     <input class="w-100 mt-2 form_input "
-                                        placeholder="Enter your mobile number" type="text" name="phone" id="phone"
+                                        placeholder="Enter your mobile number" type="number" name="phone" id="phone" max={10}
                                         value={{profile.phone_no}} >
                                 </div>
                                 <div class="col-lg-4 pt-3">
@@ -137,19 +137,19 @@
                                 {%if profile.age == None%}
                                 <div class="col-lg-4 pt-3">
                                     <label class="fs-18 cl-dark-blue font-regular" for="date">Age</label>
-                                    <input class="w-100 mt-2 form_input " type="text"
+                                    <input class="w-100 mt-2 form_input " type="number"
                                          name="age" id="text" maxlength="3">
                                 </div>
                                 {% elif profile.age == '' %}
                                 <div class="col-lg-4 pt-3">
                                     <label class="fs-18 cl-dark-blue font-regular" for="date">Age</label>
-                                    <input class="w-100 mt-2 form_input " type="text"
+                                    <input class="w-100 mt-2 form_input " type="number"
                                          name="age" id="text" maxlength="3">
                                 </div>
                                 {%else%}
                                 <div class="col-lg-4 pt-3">
                                     <label class="fs-18 cl-dark-blue font-regular" for="date">Age</label>
-                                    <input class="w-100 mt-2 form_input " type="text"
+                                    <input class="w-100 mt-2 form_input " type="number"
                                         value={{profile.age}} name="age" id="text" maxlength="3">
                                 </div>
                                 {%endif%}
@@ -248,7 +248,9 @@
     jQuery.validator.addMethod("phone_regex", function (value, element) {
         return this.optional(element) || /^[0-9\.\-_]{10,30}$/i.test(value);
     }, "Enter valid phone number");
-
+    jQuery.validator.addMethod("age_regex", function (value, element) {
+        return this.optional(element) || /^[0-9\.\-_]{1,2}$/i.test(value);
+    }, "Enter valid age");
     $.validator.addMethod('filesize', function (value, element, param) {
         return this.optional(element) || (element.files[0].size <= param)
     }, 'File size must be less than {0}');
@@ -275,7 +277,8 @@
             'phone': {
                 required: true,
                 phone_regex: true,
-                minlength: 10
+                minlength: 7,
+                maxlength:10
             },
             'gender': {
                 required: true,
@@ -285,6 +288,8 @@
             },
             'age': {
                 required: true,
+                minlength: 1,
+                maxlength: 3
                 //greaterThan: true
             },
             'address': {

@@ -565,6 +565,11 @@ textarea {
     filter: grayscale(0);
 }
 
+.symp_height{
+    height: 30px;
+    overflow: hidden;
+}
+
 .batdge {
     content: '';
     position: absolute;
@@ -1371,11 +1376,21 @@ textarea {
     opacity: 0.7;
 }
 
-.section_about_why_choose_us i {
+/* .section_about_why_choose_us i {
     font-size: 75px;
     color: #332a61;
     display: flex;
     justify-content: center;
+} */
+
+.section_about_why_choose_us .owl-carousel .owl-item img {
+        display: flex;
+        justify-content: center;
+    width: unset; 
+}
+.section_about_why_choose_us img{
+    display: flex;
+    justify-content:center ;
 }
 
 .section_about_why_choose_us .about_carousel {
