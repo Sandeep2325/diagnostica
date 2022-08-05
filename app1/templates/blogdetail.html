@@ -64,26 +64,28 @@
         </div>
     </section>
 
-    <section class="section_care pb-lg-5 pb-3">
+    <section class="section_care mb-lg-5 pb-3">
         <div class="container">
             <div class="">
-                <div class="row">
+                <div class="row h-100">
                     <h1 class="fs-40  cl-dark-blue font-bold home_health_symp_header m-0 pb-lg-5 pb-2">Recent Blog</h1>
                     <div id="health-care-slider" class="col-lg-12 health-care-slider owl-carousel owl-theme">
                         {%for blog in blogs%}
                         <div class="col-lg-6 w-100 ">
                             <div class="row">
-                                <div class="col-lg-6 ">
-                                    <div class="pe-4">
+                                <div class="col-lg-6">
+                                    <div class="pe-4 h-100">
                                         <img src="{{blog.image.url}}" alt="" class="img-fluid br-15">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <h1 class="fs-35 font-bold cl-dark-blue m-0">{{blog.title}}</h1>
-                                    <p class="m-0 fs-18 cl-dark-blue health_care_p pt-4 pb-5 ">{{blog.description|striptags|truncatechars:140|safe}}
+                                    <div class="h-100">
+                                        <h1 class="fs-35 font-bold cl-dark-blue m-0 blog_head_height">{{blog.title}}</h1>
+                                    <p class="m-0 fs-18 cl-dark-blue health_care_p py-3 ">{{blog.description|striptags|truncatechars:140|safe}}
                                         </p>
-                                    <a  href="{% url "blogsdetail" blog.slug%}"class="py-3 px-4 bg-dark-orange cl-dark-blue font-bold fs-16 br-30 mb-5">READ
-                                        MORE</a>
+                                   <div class="px-3 py-3" > <a  href="{% url "blogsdetail" blog.slug%}"class="px-4 py-2 bg-dark-orange cl-dark-blue font-bold fs-16 br-30">READ
+                                    MORE</a></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -95,6 +97,9 @@
         </div>
     </section>
    {%include "footer.html"%}
+
+
+   
 </body>
 <script>
     $("#health-care-slider").owlCarousel({
@@ -102,8 +107,9 @@
         margin: 30,
         items: 2,
         responsiveClass: true,
+       autoplayHoverPause:true,
         autoHeight: false,
-        autoplayTimeout: 3000,
+        autoplayTimeout: 5000,
         smartSpeed: 800,
         dots: false,
         nav: false,

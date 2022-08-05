@@ -509,6 +509,11 @@ textarea {
     height: 200px;
     overflow-y: auto;
 }
+.blog_head_height{
+    height: 96px;
+    overflow: hidden;
+}
+
 
 .section_home_health_check .health_care_ p{
     padding-bottom: 25px;
