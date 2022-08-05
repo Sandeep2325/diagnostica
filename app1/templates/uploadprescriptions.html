@@ -131,12 +131,12 @@
                                         </div>
                                         <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
                                             <div class="px-lg-0 px-3">
-                                                <input class="w-100  form_input" placeholder="Mobile Number" name="phone" id="phone" type="text" maxlength="250"/>
+                                                <input class="w-100  form_input" placeholder="Mobile Number" name="phone" id="phone" type="number"/>
                                             </div>
                                         </div>
                                         <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
                                             <div class="px-lg-0 px-3">
-                                                <input class="w-100  form_input" placeholder="Age" name="age" id="age" type="text" maxlength="250"/>
+                                                <input class="w-100  form_input" placeholder="Age" name="age" id="age" type="number" maxlength="3"/>
                                             </div>
                                         </div>
                                         <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
@@ -221,12 +221,15 @@
             },
             'age': {
                 required: true,
-                age_regex:true
+                age_regex:true,
+                minlength: 1,
+                maxlength: 3
             },
             'phone': {
                 required: true,
                 phone_regex: true,
-                minlength: 10
+                minlength: 7,
+                maxlength: 10,
             },
             'gender': {
                 required: true,

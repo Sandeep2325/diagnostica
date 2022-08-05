@@ -43,7 +43,7 @@
                                         </div>
                                         <div class="col-lg-6 pt-4 mt-lg-2">
                                             <input class="w-100 form_input"
-                                                placeholder="Phone Number" name="phone" maxlength="250" />
+                                                placeholder="Phone Number" type="number" name="phone" maxlength="250" />
                                         </div>
                                         <div class="col-lg-6 pt-4 mt-lg-2">
                                             <input class="w-100 form_input"
@@ -75,7 +75,7 @@
                                     </li>
                                     <li>
                                         <i class="fa fa-phone " aria-hidden="true"></i>
-                                        <a href="tel:+919769351301">+91 9769 351 301</a>
+                                        <a href="tel:+919769351301">+ 91 98887 99994</a>
                                     </li>
                                     <li>
                                         <i class="fa fa-envelope-o " aria-hidden="true"></i>
@@ -127,7 +127,8 @@
             'phone': {
                 required: true,
                 phone_regex: true,
-                minlength: 10
+                minlength: 10,
+                maxlength: 10
             },
         },
 

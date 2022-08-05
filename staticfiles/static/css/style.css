@@ -506,31 +506,32 @@ textarea {
     height: 200px;
     overflow-y: hidden;
 }
+
 .section_home_health_check .health_care_ {
     border-bottom: 1px solid #17235A;
     height: 200px;
     overflow-y: auto;
 }
 
-.section_home_health_check .health_care_ p{
+.section_home_health_check .health_care_ p {
     padding-bottom: 25px;
     margin: 0px;
     padding-left: 0px;
     padding-top: 20px;
-  
 }
 
 .morecontent span {
     display: none;
 }
+
 .morelink {
     display: block;
 }
 
 .moretext {
     display: none;
-  }
-  
+}
+
 .section_home_health_check .home_ul_li li {
     padding-bottom: 12px;
     font-size: 18px;
@@ -562,6 +563,11 @@ textarea {
     transform: scale(1.05);
     -webkit-filter: grayscale(0);
     filter: grayscale(0);
+}
+
+.symp_height{
+    height: 30px;
+    overflow: hidden;
 }
 
 .batdge {
@@ -1370,11 +1376,21 @@ textarea {
     opacity: 0.7;
 }
 
-.section_about_why_choose_us i {
+/* .section_about_why_choose_us i {
     font-size: 75px;
     color: #332a61;
     display: flex;
     justify-content: center;
+} */
+
+.section_about_why_choose_us .owl-carousel .owl-item img {
+        display: flex;
+        justify-content: center;
+    width: unset; 
+}
+.section_about_why_choose_us img{
+    display: flex;
+    justify-content:center ;
 }
 
 .section_about_why_choose_us .about_carousel {
@@ -1833,94 +1849,99 @@ textarea {
     height: 50px;
     text-align: center;
     outline: none;
-  }
+}
 
-  .home_ul_li::-webkit-scrollbar {
+.home_ul_li::-webkit-scrollbar {
     width: 3px;
-  }
-  
-  
-  .home_ul_li::-webkit-scrollbar-thumb {
-    background: #17235A;
-  }
+}
 
- .section_synbrome .owl-carousel .owl-item img{
+.home_ul_li::-webkit-scrollbar-thumb {
+    background: #17235A;
+}
+
+.section_synbrome .owl-carousel .owl-item img {
     width: unset;
     display: unset;
- }
+}
 
- 
- .pack_detail_table table {
+.symp_height {
+    height: 30px;
+    overflow: hidden;
+}
+
+.pack_detail_table table {
     font-family: Chivo-Regular;
     border-collapse: collapse;
     width: 100%;
-  }
-  
-  /* .pack_detail_table td, th { */
-    /* border: 1px solid #dddddd; */
-    /* padding: 8px; */
-  /* } */
-  
-  .pack_detail_table tr:nth-child(even) {
+}
+
+
+/* .pack_detail_table td, th { */
+
+
+/* border: 1px solid #dddddd; */
+
+
+/* padding: 8px; */
+
+
+/* } */
+
+.pack_detail_table tr:nth-child(even) {
     background-color: #dddddd;
-  }
+}
 
-
-  .pack_detail_table table {
+.pack_detail_table table {
     border: 1px solid #ccc;
     border-collapse: collapse;
     margin: 0;
     padding: 0;
     width: 100%;
     table-layout: fixed;
-  }
-  .pack_detail_table table tr {
+}
+
+.pack_detail_table table tr {
     background-color: #f8f8f8;
     border: 1px solid #ddd;
     padding: .35em;
-  }
-  
-  .pack_detail_table table th,
-  .pack_detail_table table td {
+}
+
+.pack_detail_table table th,
+.pack_detail_table table td {
     padding: .625em;
     text-align: center;
-  }
-  
-  .pack_detail_table table th {
+}
+
+.pack_detail_table table th {
     font-size: .85em;
     letter-spacing: .1em;
-  }
-  
-  @media screen and (max-width: 600px) {
+}
+
+@media screen and (max-width: 600px) {
     .pack_detail_table table {
-      border: 0;
+        border: 0;
     }
-  
-    .pack_detail_table  table caption {
-      font-size: 1.3em;
+    .pack_detail_table table caption {
+        font-size: 1.3em;
     }
     .pack_detail_table table tr {
-      border-bottom: 3px solid #ddd;
-      display: block;
-      margin-bottom: .625em;
+        border-bottom: 3px solid #ddd;
+        display: block;
+        margin-bottom: .625em;
     }
-    
     .pack_detail_table table td {
-      border-bottom: 1px solid #ddd;
-      display: block;
-      font-size: .8em;
-      text-align: center;
+        border-bottom: 1px solid #ddd;
+        display: block;
+        font-size: .8em;
+        text-align: center;
     }
-    
     .pack_detail_table table td::before {
-      content: attr(data-label);
-      float: left;
-      font-weight: bold;
-      text-transform: uppercase;
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        text-transform: uppercase;
     }
-    
     .pack_detail_table table td:last-child {
-      border-bottom: 0;
+        border-bottom: 0;
     }
-  }
-  
+}

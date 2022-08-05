@@ -151,25 +151,27 @@ def otpRegistration(request):
         hash_pwd = make_password(request.session.get('password'))
         p_number = request.session.get('number')
         email_address = request.session.get('email') 
-
-        if int(a) == otp:
-            User.objects.create(
-                            first_name = firstname,
-                            last_name=lastname,
-                            email=email_address,
-                            phone_no=p_number,
-                            password=hash_pwd
-            )
-            request.session.delete('otp')
-            request.session.delete('firstname')
-            request.session.delete('lastname')
-            request.session.delete('email')
-            request.session.delete('password')
-            request.session.delete('phone_number')
-            messages.success(request,'Registration Successfully Done !!')
-            return redirect('/login/')
-        else:
-            messages.error(request,'Wrong OTP')
+        try:
+            if int(a) == otp:
+                User.objects.create(
+                                first_name = firstname,
+                                last_name=lastname,
+                                email=email_address,
+                                phone_no=p_number,
+                                password=hash_pwd
+                )
+                request.session.delete('otp')
+                request.session.delete('firstname')
+                request.session.delete('lastname')
+                request.session.delete('email')
+                request.session.delete('password')
+                request.session.delete('phone_number')
+                messages.success(request,'Registration Successfully Done !!')
+                return redirect('/login/')
+            else:
+                messages.error(request,'Wrong OTP')
+        except:
+            messages.error(request,"Please Fill all Required Fields")
     return render(request,'otp.html')
 
 def resendotp(request):
@@ -255,7 +257,44 @@ def forgotpassword(request):
             messages.error(request,"Email is not registered")
             return render(request,"forgotpassword.html")
     return render(request,"forgotpassword.html")
-
+def resendotpforgot(request):
+    # if request.method=="POST":
+    email_address = request.session.get('email')
+    otp = random.randint(1000,9999)
+    request.session['otp'] = otp
+    message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDignostica Span"
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = [email_address]
+    message = message
+    subject = "OTP Verification | Dignostica Span" 
+    send_mail(
+            subject,
+            message,
+            email_from,
+            recipient_list,
+            fail_silently=False,
+    )
+    messages.success(request,"resend otp sent")
+    return redirect('forgotpassword/otp/')
+def changeresend(request):
+    # if request.method=="POST":
+    email_address = request.session.get('email')
+    otp = random.randint(1000,9999)
+    request.session['otp'] = otp
+    message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDignostica Span"
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = [email_address]
+    message = message
+    subject = "OTP Verification | Dignostica Span" 
+    send_mail(
+            subject,
+            message,
+            email_from,
+            recipient_list,
+            fail_silently=False,
+    )
+    messages.success(request,"resend otp sent")
+    return redirect('changepasswordotp/')
 def changepasswordotp(request):
     print(request.user)
     if request.user.is_anonymous:
@@ -267,7 +306,6 @@ def changepasswordotp(request):
         u_otp4 = request.POST['digit-4']
         a=str(u_otp1)+str(u_otp2)+str(u_otp3)+str(u_otp4)
         otp = request.session.get('otp')
-        
         # user = request.session['username']
         # hash_pwd=request.session.get('password')
         # hash_pwd = make_password(request.session.get('password'))
@@ -276,26 +314,29 @@ def changepasswordotp(request):
         password=request.session.get("ppassword")
         # request.session.get("newpassword")
         newpassword=make_password(request.session.get("conpassword"))
-        if int(a) == otp:
-            data = User.objects.filter(
-                            email=request.user.email)
-            if data.exists():
+        try:
+            if int(a) == otp:
                 data = User.objects.filter(
-                            email=request.user.email).update(password=newpassword)
-            # user_instance = User.objects.get(username=user)
-            # User.objects.create(
-            #                 user = user_instance,phone_number=p_number
-            # )
-                request.session.delete("ppassword")
-            # request.session.delete("newpassword")
-                request.session.delete("conpassword")
-                messages.success(request,'Password changed successfully!! Please Login Again.')
-                return redirect('user-login')
+                                email=request.user.email)
+                if data.exists():
+                    data = User.objects.filter(
+                                email=request.user.email).update(password=newpassword)
+                # user_instance = User.objects.get(username=user)
+                # User.objects.create(
+                #                 user = user_instance,phone_number=p_number
+                # )
+                    request.session.delete("ppassword")
+                # request.session.delete("newpassword")
+                    request.session.delete("conpassword")
+                    messages.success(request,'Password changed successfully!! Please Login Again.')
+                    return redirect('user-login')
+                else:
+                    print("not exists")
             else:
-                print("not exists")
-        else:
-            messages.error(request,'Wrong OTP')
-    return render(request,'otpforgot.html')    
+                messages.error(request,'Wrong OTP')
+        except:
+            messages.error(request,"Please Fill all Required Fields")
+    return render(request,'otpchange.html')    
 def passwordcheck(request):
     if request.method=="POST":
         password=request.POST.get("password")
@@ -324,19 +365,21 @@ def otpforgotpassword(request):
         hash_pwd = make_password(request.session.get('password'))
         # p_number = request.session.get('number')
         email_address = request.session.get('email') 
-        
-        if int(a) == otp:
-            User.objects.filter(
-                            email=email_address
-            ).update(password=hash_pwd)
-            
-            request.session.delete('otp')
-            request.session.delete('email')
-            request.session.delete('password')
-            messages.success(request,"Password Changed")
-            return redirect('user-login')
-        else:
-            messages.error(request,'Wrong OTP')
+        try:
+            if int(a) == otp:
+                User.objects.filter(
+                                email=email_address
+                ).update(password=hash_pwd)
+
+                request.session.delete('otp')
+                request.session.delete('email')
+                request.session.delete('password')
+                messages.success(request,"Password Changed")
+                return redirect('user-login')
+            else:
+                messages.error(request,'Wrong OTP')
+        except:
+            messages.error(request,"Please Fill all Required Fields")
     return render(request,'otpforgot.html') 
 def forgotresendotp(request):
     # if request.method=="POST":
@@ -359,7 +402,6 @@ def forgotresendotp(request):
     )
     messages.success(request,"resend otp sent")
     return redirect('/forgotpassword/otp/') 
-
 def userinfo(request):
    a= request.user
    return JsonResponse({"message":True,"firstname":a.first_name,"lastname":a.last_name,"contact":a.phone_no,"gender":a.gender,"address":a.address,"age":a.age}) 
@@ -383,10 +425,10 @@ def profilee(request):
         location=request.POST.get("location")
         age=request.POST.get("age",request.user.age)
         address=request.POST.get("address",request.user.address)
-        try:
-            c=city.objects.get(id=int(location))
-        except:
-            messages.error(request,"Please Update every field")
+        # try:
+        #     c=city.objects.get(id=int(location))
+        # except:
+        #     messages.error(request,"Please Update every field")
         if bool(firstname)==False or bool(lastname)==False or bool(phone)==False:
             messages.error(request,"Please Update every field") 
         else:
@@ -399,7 +441,7 @@ def profilee(request):
                 a.email=email
                 a.phone_no=phone
                 a.gender=gender
-                a.location=c
+                # a.location=c
                 a.age=age
                 a.address=address
                 a.save()
@@ -909,7 +951,7 @@ def prescriptionbookview(request):
 def testselect(request):
     c=request.session.get("city")
     tcategories=category.objects.all()
-    tests=test.objects.all()
+    tests=test.objects.filter(Banglore_price__isnull=False)
     envcity={"Bangalore":Bangalore,"Mumbai":Mumbai,"Bhophal":Bhophal,"Nanded":Nanded,"Pune":Pune,"Barshi":Barshi,"Aurangabad":Aurangabad}
     
     context={
@@ -967,6 +1009,7 @@ def testselect(request):
         messages.success(request,"Your booking added to cart successfully")
         return render(request,"choose-test-list.html",context)
     return render(request,"choose-test-list.html",context)
+
 def couponsessiondelete(request):
     coupon=request.session.get("coupon")
     discountamount=request.session.get("discountamount")
@@ -979,7 +1022,7 @@ def couponsessiondelete(request):
     if couponpercent!=None:
         del request.session['couponpercent']
     if actualamount!=None:
-            del request.session['actualamount']
+        del request.session['actualamount']
     return JsonResponse({"message":True})
 razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
 
@@ -1006,6 +1049,7 @@ def cartt(request):
         # bookingid ="DP"+str(bid)
         book=book_history.objects.all().order_by("-created")[0:1]
         # book=book_history.objects.filter(bookingid=bookingid)
+        
         for i in book:
             temp = re.compile("([a-zA-Z]+)([0-9]+)")
             res = temp.match(i.bookingid).groups()
@@ -1018,7 +1062,11 @@ def cartt(request):
                 bookingid="DP"+str(booking)
         except:
             bookingid="DP"+str(bid)
-        
+        # tee=testbook.objects.filter(bookingid=bookingid)
+        # print("-----------tee-------",tee)
+        # tee.delete()
+        # te=testbook.objects.filter(bookingid=bookingid)
+        # print("-----------te-------",te)
         b=prescription_book.objects.create(
                 unique=uniquee,
                 user=request.user,
@@ -1338,7 +1386,7 @@ def cartt(request):
             da['id']=i.id
             da['test']=i.labtest
             da['price']=str(i.price)
-            da["categoryy"]="Health Checks & Lab Tests"
+            da["categoryy"]="Popular Tests"
             data.append(da)
         elif i.items == None and i.packages:
             da={}
@@ -1352,7 +1400,7 @@ def cartt(request):
             da['id']=i.id
             da['test']=i.healthsymptoms.name
             da['price']=str(i.price)  
-            da["categoryy"]="Health Symptoms Pack"
+            da["categoryy"]="Life Style Assessments"
             data.append(da)
         elif i.items: 
             da={}
@@ -1431,8 +1479,9 @@ def othersdetail(request):
         return JsonResponse({"message":True,"firstname":detail.firstname,"lastname":detail.lastname,"gender":gender,"otherschoice":choice,"age":detail.age,"phone":detail.contact})
 @csrf_exempt
 def paymenthandler(request,str,amount):
-
+    print(request)
     def verify_signature(response_data):
+        print("----------------",response_data)
         client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
         b = client.utility.verify_payment_signature(response_data)
         request.session['signatureid']=response_data['razorpay_signature']
@@ -1444,6 +1493,7 @@ def paymenthandler(request,str,amount):
             paymentid=request.POST.get("razorpay_payment_id")
             if paymentid:
                 if verify_signature(request.POST):
+                    # print("-------------",request.POST)
                     transid=request.POST["razorpay_order_id"]
                     cart.objects.filter(user=usr).delete()
                     history=book_history.objects.get(payment_id=transid)
@@ -1740,6 +1790,11 @@ def razorpayclose(request):
         a=book_history.objects.filter(payment_id=paymentid)
         b=invoicee.objects.filter(order_id=paymentid)
         c=couponredeem.objects.filter(order_id=paymentid)
+        d=book_history.objects.get(payment_id=paymentid)
+        tes=testbook.objects.filter(bookingid=d.bookingid)
+        pres=Prescriptionbook1.objects.filter(bookingid=d.bookingid)
+        tes.delete()
+        pres.delete()
         b.delete()
         a.delete()
         c.delete()
@@ -2093,7 +2148,8 @@ class BookingHistoryPay(LoginRequiredMixin,View):
             #         invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.aurangabad_price)   
         
         if request.POST.get("action") == "payment_canceled":
-            mod = book_history.objects.get(testbooking_id=request.POST.get('id'))
+            print("------------------",request.POST)
+            mod = book_history.objects.get(payment_id=request.POST.get('order_id'))
             mod.payment_id = None
             mod.payment_status = False
             mod.save()

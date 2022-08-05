@@ -190,10 +190,10 @@
                             </div>
                             <div>
                                 <input class="w-100  form_input mt-3" placeholder="Mobile Number" name="phone" id="phone"
-                                    type="text" maxlength="250">
+                                    type="number" maxlength="250">
                             </div>
                             <div>
-                                <input class="w-100  form_input mt-3" placeholder="Age" name="age" id="age" type="text" maxlength="250"/>
+                                <input class="w-100  form_input mt-3" placeholder="Age" name="age" id="age" type="number" maxlength="250"/>
                             </div>
                             <div>
                                 <select class="w-100 mt-3 form-select myself_other" type="select" name="gender" id="gender">
@@ -494,12 +494,15 @@ $(document).ready(function(){
             },
             'age': {
                 required: true,
-                age_regex: true
+                age_regex: true,
+                minlength: 1,
+                maxlength: 3
             },
             'phone': {
                 required: true,
                 phone_regex: true,
-                minlength: 10
+                minlength: 7,
+                maxlength:10
             },
             'gender': {
                 required: true,
@@ -615,7 +618,7 @@ $(document).ready(function(){
                                         },
                                         dataType: 'json',
                                         success: function (response) {
-                                            confirm("Want to close!!");
+                                            //confirm("Want to close!!");
                                             window.location.reload()
                                         }
                                         });
