@@ -497,7 +497,10 @@ textarea {
     font-size: 18px;
     color: orange;
 }
-
+.blog_head_height{
+    height: 96px;
+    overflow: hidden;
+}
 .section_home_health_check .home_ul_li ul,
 .section_home_health_check .home_ul_li ol {
     padding-bottom: 25px;
