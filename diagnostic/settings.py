@@ -22,7 +22,9 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "18.116.13.187",
     "172.31.8.226",
-     "ec2-18-116-13-187.us-east-2.compute.amazonaws.com",
+    "ec2-18-116-13-187.us-east-2.compute.amazonaws.com",
+    "spandiagno.com"
+    "www.spandiagno.com"
      ]
 env = environ.Env()
 
