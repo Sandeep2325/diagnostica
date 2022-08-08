@@ -70,6 +70,7 @@
             <div class="px-xl-4 px-3 py-4 bg-light-grey br-10">
               <div>
                 <h1 class="cl-dark-blue fs-35 font-bold test_head pt-2">{{checkup.package_title}}</h1>
+                {% comment %} <h2 id="loading">Loading<h3> {% endcomment %}
               </div>
               <div class="home_ul_li ul-dot m-0 health_care_ ">
                 <p style="margin-top: 3px;" class="more scroll_cus">{{checkup.description|safe}}
@@ -1271,6 +1272,9 @@ $("#health_pack_carousel").owlCarousel({
 
 
     $(document).ready(function() {
+      //$(window).load(function() {
+      //  $('#loading').hide();
+     // });
     // Configure/customize these variables.
     var showChar = 200;  // How many characters are shown by default
     var ellipsestext = "";

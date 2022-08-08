@@ -133,3 +133,7 @@ blockquote {
 #add_id_groups {
     float: right;
 }
+
+.field-password {
+    display: none!important;
+}

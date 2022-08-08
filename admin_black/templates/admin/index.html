@@ -227,7 +227,7 @@ $.getJSON("/index",function (j) {
    else{
     gender="Female"
    }
-   fileurl=window.location.origin+'/photos/'+k.fields.prescription_file
+   fileurl=window.location.origin+'/media/'+k.fields.prescription_file
    detail=window.location.origin+'/admin/app1/prescriptionbook1/'+k.pk+'/change/'
    console.log(detail)
 
@@ -276,7 +276,7 @@ $.getJSON("/index2",function (j) {
     else{
         payment="Not Paid"
     }
-    c=window.location.origin+'/photos/'+k.fields.prescription_file
+    c=window.location.origin+'/media/'+k.fields.prescription_file
     
     detail=window.location.origin+'/admin/app1/testbook/'+k.pk+'/change/'
 

@@ -50,11 +50,11 @@ Barshi=env("Barshi")
 Aurangabad=env("Aurangabad")
 from django.core import serializers
 def indextable1(request):
-    precriptionb = serializers.serialize("json", Prescriptionbook1.objects.all())
+    precriptionb = serializers.serialize("json", Prescriptionbook1.objects.all().order_by('-created'))
     return HttpResponse(precriptionb)
     # return HttpResponse(json.dumps(prescription_bookings),content_type="application/json")
 def indextable2(request):
-    precriptionb = serializers.serialize("json", testbook.objects.all())
+    precriptionb = serializers.serialize("json", testbook.objects.all().order_by('-created'))
     return HttpResponse(precriptionb)    
 def dashboard(request):
     # test_bookings=prescription_book.objects.filter(test_name__isnull=True, prescription_file='').count()
@@ -1584,16 +1584,13 @@ def subscriptionview(request):
         form=subscriptionform
         return render(request,"home",{"form":form})
 
-
 def addtocart(request):
     cityy=request.session.get("city")
     deviceCookie = request.COOKIES['device']
     RES = {}
-
     if request.method=="POST":
         pk=request.POST["pk"]
         item=test.objects.get(id=pk)
-
         if cityy==Bangalore:
             obj, created = cart.objects.get_or_create(
                 device = deviceCookie,
