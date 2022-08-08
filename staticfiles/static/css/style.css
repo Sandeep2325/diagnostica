@@ -422,6 +422,14 @@ textarea {
 
 /* ---------------home page----------------- */
 
+.page_loader {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+}
+
 .banner1 {
     background: url(../images/home_banner.jpeg) no-repeat;
     background-size: cover;
@@ -474,14 +482,18 @@ textarea {
     /* transition: all 1s ease; */
     animation: book 3s infinite;
 }
-.home_banner .owl-theme .owl-nav.disabled+.owl-dots{
+
+.home_banner .owl-theme .owl-nav.disabled+.owl-dots {
     margin-top: 5px;
 }
-.home_banner .owl-theme .owl-dots .owl-dot span{
+
+.home_banner .owl-theme .owl-dots .owl-dot span {
     width: 70px;
     height: 3px;
 }
-.home_banner .owl-theme .owl-dots .owl-dot.active span, .owl-theme .owl-dots .owl-dot:hover span{
+
+.home_banner .owl-theme .owl-dots .owl-dot.active span,
+.owl-theme .owl-dots .owl-dot:hover span {
     background: transparent linear-gradient(90deg, #20C7BA 0%, #1686F1 100%) 0% 0% no-repeat
 }
 
@@ -507,10 +519,12 @@ textarea {
     font-size: 18px;
     color: orange;
 }
-.blog_head_height{
+
+.blog_head_height {
     height: 96px;
     overflow: hidden;
 }
+
 .section_home_health_check .home_ul_li ul,
 .section_home_health_check .home_ul_li ol {
     padding-bottom: 25px;
@@ -578,7 +592,7 @@ textarea {
     filter: grayscale(0);
 }
 
-.symp_height{
+.symp_height {
     height: 30px;
     overflow: hidden;
 }
@@ -1389,6 +1403,7 @@ textarea {
     opacity: 0.7;
 }
 
+
 /* .section_about_why_choose_us i {
     font-size: 75px;
     color: #332a61;
@@ -1397,13 +1412,14 @@ textarea {
 } */
 
 .section_about_why_choose_us .owl-carousel .owl-item img {
-        display: flex;
-        justify-content: center;
-    width: unset; 
-}
-.section_about_why_choose_us img{
     display: flex;
-    justify-content:center ;
+    justify-content: center;
+    width: unset;
+}
+
+.section_about_why_choose_us img {
+    display: flex;
+    justify-content: center;
 }
 
 .section_about_why_choose_us .about_carousel {
@@ -1743,7 +1759,7 @@ textarea {
         color: #969696;
         display: block;
     }
-    .health_symptoms_table_td{
+    .health_symptoms_table_td {
         min-width: 400px;
     }
 }
