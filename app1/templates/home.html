@@ -269,8 +269,12 @@
   <section class="section_synbrome">
     <div class="container">
       <div class="row h-100">
-        <h1 class="fs-40  cl-dark-blue font-bold home_health_symp_header pb-lg-4 pt-lg-0 pt-3">Lifestyle Assessment</h1>
-      
+        <div class="col-lg-12 d-flex justify-content-between py-lg-3 py-2">
+          <h1 class="fs-40 font-bold home_health_h1 w-100 m-0 cl-dark-blue">Lifestyle Assessment
+          </h1>
+          <a href="{%url 'lifestyles'%}"><button class="home_pack_viewpack py-2 px-0 fs-16 br-50 " style="min-width: 150px;">VIEW ALL</button></a>
+          
+        </div>
         <div id="health_symptoms" class="owl-carousel owl-theme">
           {%for symptoms in healthsymptom%}
 
@@ -532,7 +536,7 @@
 
   <section class="section_about_span bg-light-grey mt-5" id="about">
     <div class="container">
-      <div class="row py-lg-5 py-3">
+      <div class="row  py-3">
         <div class="col-lg-6 pe-lg-5 py-3">
           <h1 class="fs-40 font-bold cl-dark-blue pb-lg-3">About Span</h1>
           <p class="fs-24 font-regular cl-dark-brown m-0">On December 1 2018, SPAN (www.spanhealth.com) took
@@ -740,6 +744,14 @@
     </div>
   </section> {% endcomment %}
   {%include "footer.html"%}
+<section>
+    <div id="ajax-loadol" class=" text-center" style="">
+      <p><img loading="lazy"
+              src="https://c.tenor.com/I6kN-6X7nhAAAAAj/loading-buffering.gif"width="150px" height="150px"
+              class="b-lazy">
+      </p>
+  </div>
+  </section>  
 </body>
 {% if messages %}
 {% for message in messages %}
@@ -881,7 +893,7 @@ $(document).ready(function(){
     items: 1.2,
     center: true,
     nav: false,
-    dots: false,
+    dots: true,
     stopOnHover:true,
     responsive: {
       0: {

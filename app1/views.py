@@ -2337,3 +2337,5 @@ def requestcallheader(request):
         t=test.objects.get(id=int(tests))
         requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,tests=t).save()
         return JsonResponse({"message":True})
+def lifestyleassessment(request):
+    return render(request,"lifestyleassessmentall.html")
