@@ -404,14 +404,11 @@ class healthsymptoms(models.Model):
 def lifestyleprice(sender, instance, **kwargs):
     a=[]
     for i in instance.test_name.all():
-        print(i.Banglore_price)
-        if i!=None:
+        if i.Banglore_price is not None:
+            print(i.Banglore_price)
             a.append(i.Banglore_price)
         else:
             a.append(0)
-    # print(a)
-    print(sum(a))
-    # instance.Banglore_price=sum(a) 
     healthsymptoms.objects.filter(id=instance.id).update(Banglore_price=sum(a))
 m2m_changed.connect(lifestyleprice, sender=healthsymptoms.test_name.through)
 post_save.disconnect(lifestyleprice, sender=healthsymptoms)  
