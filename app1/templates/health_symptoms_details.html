@@ -117,13 +117,16 @@
                           <th scope="col">Price</th>
                         </tr>
                       </thead>
+                     
                       <tbody class="table-striped">
+                        {%for test in currentObj.test_name.all %}
                         <tr>
                           <th scope="row"><input type="checkbox"/></th>
-                          <td class="health_symptoms_table_td pe-4">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a ambled it to make a type specimen book.</td>
-                          <td >799 </td>
+                          <td class="health_symptoms_table_td pe-4">{{test.testt}}</td>
+                          <td >{{test.Banglore_price}}</td>
                         </tr>
-                        <tr>
+                        {%endfor%}
+                        {% comment %} <tr>
                           <th scope="row"><input type="checkbox"/></th>
                           <td class="health_symptoms_table_td pe-4">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a ambled it to make a type specimen book.</td>
                           <td >799 </td>
@@ -132,8 +135,9 @@
                           <th scope="row"><input type="checkbox"/></th>
                           <td class="health_symptoms_table_td pe-4">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a ambled it to make a type specimen book.</td>
                           <td >799 </td>
-                        </tr>
+                        </tr> {% endcomment %}
                       </tbody>
+                      
                     </table>
                    </div>
               </div> 

@@ -161,7 +161,7 @@
                                 {% if app.models %}
                                     <ul class="navbar-dropdown">
                                         {% for model in app.models %}
-                                        {%if model.label == "Health Checkups and Lab Tests"%}
+                                        {%if model.label == "Popular Tests"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
                                                     {% comment %} <i class="tim-icons icon-bag-16"></i>  {% endcomment %}
@@ -187,7 +187,7 @@
                                             {% else %}
                                                 <li>{{ model.label }}</li>
                                             {% endif %}
-                                            {%elif model.label == "Health Symptoms"%}
+                                            {%elif model.label == "Life Style Assesments"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
                                                     {% comment %} <i class="tim-icons icon-bag-16"></i>  {% endcomment %}

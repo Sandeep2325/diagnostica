@@ -833,7 +833,7 @@ def healthcareblogsview(request,slug):
     }
     return render(request,'blogdetail.html',context)
 def categoryblog(request,slug):
-    detail=healthcareblogs.objects.get(category__slug=slug)
+    detail=healthcareblogs.objects.first()
     blogs=healthcareblogs.objects.filter(category__slug=slug).order_by("-created")
     category=blogcategory.objects.all()
     context={
@@ -842,7 +842,6 @@ def categoryblog(request,slug):
         "category":category,
     }
     return render(request,'blogdetail.html',context)
-
 @login_required(login_url="/login/")   
 def prescriptionbookview(request):
     # if request.user.is_anonymous:
@@ -2335,4 +2334,9 @@ def requestcallheader(request):
         requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,tests=t).save()
         return JsonResponse({"message":True})
 def lifestyleassessment(request):
-    return render(request,"lifestyleassessmentall.html")
+    healthsymptom=healthsymptoms.objects.all()
+    context={
+         "healthsymptom":healthsymptom,
+    }
+   
+    return render(request,"lifestyleassessmentall.html",context)

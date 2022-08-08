@@ -5,6 +5,14 @@
 {%block content%}
 
 <body>
+<section id="loaderr">
+  <div id="ajax-loadol" class=" text-center" style="">
+    <p><img loading="lazy"
+            src="https://c.tenor.com/I6kN-6X7nhAAAAAj/loading-buffering.gif"width="150px" height="150px"
+            class="b-lazy">
+    </p>
+</div>
+</section>   
   {%include 'header.html'%}
   <section class="home_banner pt-3 pb-lg-5">
     <div class="owl-carousel owl-theme home-banner-slider">
@@ -745,15 +753,9 @@
     </div>
   </section> {% endcomment %}
   {%include "footer.html"%}
-<section>
-    <div id="ajax-loadol" class=" text-center" style="">
-      <p><img loading="lazy"
-              src="https://c.tenor.com/I6kN-6X7nhAAAAAj/loading-buffering.gif"width="150px" height="150px"
-              class="b-lazy">
-      </p>
-  </div>
-  </section>  
+
 </body>
+
 {% if messages %}
 {% for message in messages %}
 {% if message.tags == "error"%}
@@ -787,6 +789,9 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js">
 </script>
   <script>
+    $(window).on('load', function() {
+      $("#loaderr").hide();
+    })
 $(document).ready(function(){
    $("#myModal").modal({
     backdrop: 'static',

@@ -22,7 +22,20 @@
     <section class="section_health_pack py-lg-3 pb-lg-5 pb-4">
         <div class="container">
             <div class="row">
+              {%for lifestyle in healthsymptom%}
                 <div class="col-lg-3 col-md-4 ">
+                    <div class="py-2 ">
+                        <a class="cursor" href={% url 'health_symptoms' lifestyle.slug %}>  
+                        <div
+                          class="symptoms px-3 {% cycle 'bg-light-blue' 'bg-light-orange' 'bg-light-green' 'bg-light-pink' %} text-center py-lg-5 py-3 br-10">
+                          <img src="{{lifestyle.photo.url}}" alt="" class="pb-3">
+                          <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold">{{lifestyle.name}}</p>
+                        </div>
+                      </a>
+                      </div>
+                </div>
+                {%endfor%}
+                {% comment %} <div class="col-lg-3 col-md-4 ">
                     <div class="py-2 ">
                         <a>  
                         <div
@@ -65,18 +78,7 @@
                         </div>
                       </a>
                       </div>
-                </div>
-                <div class="col-lg-3 col-md-4 ">
-                    <div class="py-2 ">
-                        <a>  
-                        <div
-                          class="symptoms px-3 {% cycle 'bg-light-blue' 'bg-light-orange' 'bg-light-green' 'bg-light-pink' %} text-center py-lg-5 py-3 br-10">
-                          <img src="../static/images/vitamins.png" alt="" class="pb-3">
-                          <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold">Vitamin tests</p>
-                        </div>
-                      </a>
-                      </div>
-                </div>
+                </div> {% endcomment %}
             </div>
         </div>
     </section>
