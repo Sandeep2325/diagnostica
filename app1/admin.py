@@ -294,7 +294,7 @@ class healthpackage_admin(SummernoteModelAdmin):
             return render(request, "admin/app1/csv_upload.html", data)
     
 class healthsymptoms_admin(SummernoteModelAdmin):
-    list_display=["name","testname","symptoms","created","updated","action_btn"]
+    list_display=["name","testname","Banglore_price","created","updated","action_btn"]
     readonly_fields=["created","updated"]
     prepopulated_fields = {"slug": ("name",)}
     summernote_fields = ('symptoms',)
