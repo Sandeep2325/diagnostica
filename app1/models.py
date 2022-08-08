@@ -400,18 +400,19 @@ class healthsymptoms(models.Model):
     #     if not self.slug:
     #         self.slug = slugify(self.name)
     #     return super().save(*args, **kwargs)
-@receiver(post_save, sender=healthsymptoms)
-def lifestyleprice(sender, instance, **kwargs):
-    a=[]
-    for i in instance.test_name.all():
-        if i.Banglore_price is not None:
-            print(i.Banglore_price)
-            a.append(i.Banglore_price)
-        else:
-            a.append(0)
-    healthsymptoms.objects.filter(id=instance.id).update(Banglore_price=sum(a))
-m2m_changed.connect(lifestyleprice, sender=healthsymptoms.test_name.through)
-post_save.disconnect(lifestyleprice, sender=healthsymptoms)  
+# @receiver(post_save, sender=healthsymptoms)
+# def lifestyleprice(sender, instance, **kwargs):
+#     # print(instance)
+#     a=[]
+#     for i in instance.test_name.all():
+#         if i.Banglore_price is not None:
+#             #print(i.Banglore_price)
+#             a.append(i.Banglore_price)
+#         else:
+#             a.append(0)
+#     healthsymptoms.objects.filter(id=instance.id).update(Banglore_price=sum(a))
+# m2m_changed.connect(lifestyleprice, sender=healthsymptoms.test_name.through)
+# post_save.disconnect(lifestyleprice, sender=healthsymptoms)  
 class healthcareblogs(models.Model):
     image=models.ImageField(upload_to='blog',max_length=500, verbose_name="Blog photo", null=True, blank=True)
     title=models.CharField(max_length=300,blank=True,null=True)
