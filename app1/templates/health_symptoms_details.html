@@ -73,23 +73,78 @@
             <h2 class="fs-35 font-regular cl-dark-blue text-center m-0 pb-lg-5 pb-4">Package includes
               {{currentObj.test_name.all.count}} Tests
             </h2>
-            <div class="row px-5">
+            {% comment %} <div class="row px-lg-5 px-2">
               {%for test in currentObj.test_name.all %}
               {% if city == envcity.Bangalore%}
-              <div class="col-12 h-100 ms-xl-5">
-                 <div class="">
-                  <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}}</h3>
-                </div>
-                {% comment %} <p class="pb-4 pe-lg-5 ">{{test.description}}</p> {% endcomment %}
-              </div> 
+              <div class="col-12 h-100 ">
+              <div class="row">
+                <div class="d-flex pb-2">
+                 <p class="m-0"><input type="checkbox" class="me-2"></p>
+                  <p class="fs-30 m-0 cl-dark-blue cbc_test">{{test.testt}}</p>
+                
+                  <p class="fs-30 m-0 font-bold cl-dark-blue cbc_test ps-2"> ₹799</p>
+               </div> 
+              </div> {% endcomment %}
+                   {% comment %} <div class="mx-2">
+                    <div id="no-more-tables">
+                      <table class="col-md-12 table-bordered table-striped table-condensed cf">
+                      <thead class="cf">
+                        <tr>
+                          <th>Check</th>
+                          <th>Test</th>
+                          <th class="numeric">Price</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td data-title="Check">AAC</td>
+                          <td data-title="Test">AUSTRALIAN AGRICULTURAL COMPANY LIMITED.</td>
+                          <td data-title="Price" class="numeric">799</td>
+                        </tr>
+                        
+                      </tbody>
+                    </table>
+                  </div>
+                   </div> {% endcomment %}
 
-              {% elif city == envcity.Mumbai%}
+
+                   <div class="table-responsive-lg mx-2 ">
+                    <table class="table caption-top table-striped">
+                      <thead>
+                        <tr>
+                          <th scope="col">Select</th>
+                          <th scope="col">Test</th>
+                          <th scope="col">Price</th>
+                        </tr>
+                      </thead>
+                      <tbody class="table-striped">
+                        <tr>
+                          <th scope="row"><input type="checkbox"/></th>
+                          <td class="health_symptoms_table_td pe-4">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a ambled it to make a type specimen book.</td>
+                          <td >799 </td>
+                        </tr>
+                        <tr>
+                          <th scope="row"><input type="checkbox"/></th>
+                          <td class="health_symptoms_table_td pe-4">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a ambled it to make a type specimen book.</td>
+                          <td >799 </td>
+                        </tr>
+                         <tr>
+                          <th scope="row"><input type="checkbox"/></th>
+                          <td class="health_symptoms_table_td pe-4">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a ambled it to make a type specimen book.</td>
+                          <td >799 </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                   </div>
+              </div> 
+             
+              {% comment %} {% elif city == envcity.Mumbai%}
               <div class="col-12 h-100 ms-xl-5">
                 <div class="">
                   <h3 class="fs-30 font-bold cl-dark-blue cbc_test">{{test.testt}} - ₹ {{test.Mumbai_price}}</h3>
                 </div>
                 <p class="pb-4 pe-lg-5 ">{{test.description}}</p>
-              </div>
+              </div> 
 
               {% elif city == envcity.Bhophal%}
               <div class="col-12 h-100 ms-xl-5">
@@ -131,7 +186,7 @@
                 <p class="pb-4 pe-lg-5 ">{{test.description}}</p>
               </div>
 {%endif%}
-              {%endfor%}
+              {%endfor%}{% endcomment %}
               {% comment %} <div class="col-lg-5 col-md-12 h-100 mx-auto">
                 <div class="">
                   <h3 class="fs-30 font-bold cl-dark-blue cbc_test">FBS/RBS</h3>
@@ -267,3 +322,10 @@
    //});
 </script>
 {%endblock%}
+{% comment %} 
+
+<div class="d-flex">
+  <input type="checkbox">
+<h3 class="fs-30 font-bold cl-dark-blue cbc_test">Tsh Receptor Antibodies Lats, Tsi</h3>
+   <h3 class="fs-30 font-bold cl-dark-blue cbc_test">₹799</h3>
+</div> {% endcomment %}

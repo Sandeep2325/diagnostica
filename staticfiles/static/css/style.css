@@ -474,6 +474,16 @@ textarea {
     /* transition: all 1s ease; */
     animation: book 3s infinite;
 }
+.home_banner .owl-theme .owl-nav.disabled+.owl-dots{
+    margin-top: 5px;
+}
+.home_banner .owl-theme .owl-dots .owl-dot span{
+    width: 70px;
+    height: 3px;
+}
+.home_banner .owl-theme .owl-dots .owl-dot.active span, .owl-theme .owl-dots .owl-dot:hover span{
+    background: transparent linear-gradient(90deg, #20C7BA 0%, #1686F1 100%) 0% 0% no-repeat
+}
 
 @keyframes book {
     0% {
@@ -1732,6 +1742,9 @@ textarea {
         text-transform: uppercase;
         color: #969696;
         display: block;
+    }
+    .health_symptoms_table_td{
+        min-width: 400px;
     }
 }
 
