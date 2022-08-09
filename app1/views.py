@@ -2340,3 +2340,23 @@ def lifestyleassessment(request):
     }
    
     return render(request,"lifestyleassessmentall.html",context)
+import os
+def readfile(request):
+    a=test.objects.filter(Banglore_price__isnull=True)
+    file_path1 = os.path.join(settings.STATIC_ROOT)
+    file_path= os.path.join(settings.BASE_DIR, 'staticfiles/static')
+    print(file_path)
+    f = open("{}/tests.txt".format(file_path), "w")
+    f1 = open("{}/tests.txt".format(file_path1), "w")
+    for i in a:
+        # f.next()
+        # line=next(f)
+        aa="{} {} \n".format(i.id,i.testt)
+        f.write(aa)
+        f1.write(aa)
+    f.close()
+    f1.close()
+    #open and read the file after the appending:
+    # print(f.read())
+    # return FileResponse(f,as_attachment=True,filename="tests.txt",content_type='application/text') 
+    return render (request,"tests.html")

@@ -4,7 +4,7 @@ from django.contrib.auth import views as auth_view
 from django.views.generic import TemplateView
 from django.conf.urls.static import static
 from django.conf import settings 
-
+from django.conf import settings
 """<a href="{% url 'update' slug=instance.slug %}"> Edit </a>
 <a href="{% url 'delete' slug=instance.slug %}"> Delete</a> """
 urlpatterns = [
@@ -70,7 +70,8 @@ urlpatterns = [
     path("health-symptoms/<slug:slug>/",views.HealthSymptoms.as_view(),name="health_symptoms"),
     path("couponsessiondelete",views.couponsessiondelete,name='couponsessiondelete'),
     path("csv",views.uploadcsv,name="csv"),
-    path('lifestyles',views.lifestyleassessment,name="lifestyles")
-
+    path('lifestyles',views.lifestyleassessment,name="lifestyles"),
+    path('readfile',views.readfile,name="readfile")
+    # url('download/<path>', serve, {'document root': settings.MEDIA_ROOT}),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

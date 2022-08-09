@@ -121,7 +121,7 @@
                       <tbody class="table-striped">
                         {%for test in currentObj.test_name.all %}
                         <tr>
-                          <th scope="row"><input type="checkbox"/></th>
+                          <th scope="row"><input onchange=myfunction("{{test.id}}") type="checkbox"/></th>
                           <td class="health_symptoms_table_td pe-4">{{test.testt}}</td>
                           <td >{{test.Banglore_price}}</td>
                         </tr>
@@ -320,10 +320,28 @@
   });
 
  
-  //$("#navbarScrollingDropdown")   
-  //$(".dropdown-toggle").on('click'.function(){
-   // $("#navbarScrollingDropdown").attr("class","show");
-   //});
+  function myfunction(id){
+    $.ajax({
+        url: "{% url 'addtocart' %}",
+        type: "POST",
+        dataType: "json",
+        data: {
+            'pk':id,
+            'csrfmiddlewaretoken':'{{ csrf_token }}',
+        },
+        success: function(resp){
+           console.log(resp['message'])
+            if(!resp['message']){
+                swal('',"Test Already Added","info");
+            }
+            else{
+                //alert("Test Added");
+                window.location.reload();
+            }
+            
+        },
+    });
+   }
 </script>
 {%endblock%}
 {% comment %} 
