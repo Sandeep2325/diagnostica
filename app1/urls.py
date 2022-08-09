@@ -32,6 +32,7 @@ urlpatterns = [
     path('razorclose/',views.razorpayclose,name="razorpayclose"),
     path("cart",views.cartt,name="cart"),
     path("addtocart/",views.addtocart,name="addtocart"),
+    path("addtocartt/",views.addtocart1,name="addtocartt"),
     path("healthcheckupadd",views.healthcheckupadd,name="healthcheckupadd"),
     path("bookinghistory/",views.BookingHistoryPay.as_view(),name="booking-history"),
     path("invoice/<str:orderid>/",views.invoice,name="invoice"),
@@ -70,8 +71,10 @@ urlpatterns = [
     path("health-symptoms/<slug:slug>/",views.HealthSymptoms.as_view(),name="health_symptoms"),
     path("couponsessiondelete",views.couponsessiondelete,name='couponsessiondelete'),
     path("csv",views.uploadcsv,name="csv"),
+    path("lifestyletests",views.lifestyletests,name="lifestyletests"),
     path('lifestyles',views.lifestyleassessment,name="lifestyles"),
-    path('readfile',views.readfile,name="readfile")
+    path('readfile',views.readfile,name="readfile"),
+    # path('sms',views.smstest,name="sms")
     # url('download/<path>', serve, {'document root': settings.MEDIA_ROOT}),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

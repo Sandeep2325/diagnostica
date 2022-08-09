@@ -25,11 +25,11 @@
                         <div class="row">
                             <div class="col-lg-11 col-md-12 mx-auto py-lg-5">
                                 <div class="row">
-                                    <div class="px-xl-4 col-lg-6 mx-auto py-4  opc-5">
+                                    <div class="px-xl-4 col-lg-6 mx-auto px-lg-5 px-4 py-4  opc-5">
                                         <div class="bg-sky-blue br-15 px-5 py-4 text-center ">
                                             <h2 class="cl-dark-white fs-40  font-bold mb-3 pb-2">Upload Prescription
                                             </h2>
-                                            <p class="cl-dark-white fs-18  font-regular">We'll do the rest.</p>
+                                            <p class="cl-dark-white fs-18  font-regular" style="height:50px">We'll do the rest.</p>
                                             <a href="{% url "prescription-upload"%}"> <img
                                                     src="{%static "images/uploadprescription.png"%}" alt=""
                                                     class="img-fluid mb-2" /></a>
@@ -39,11 +39,11 @@
                                         </div>
                                     </div>
 
-                                    <div class="px-xl-4 col-lg-6 mx-auto py-4">
+                                    <div class="px-xl-4 col-lg-6 mx-auto  px-lg-5 px-4 py-4">
                                         <div class="bg-dark-green br-15 px-5 py-4 text-center ">
                                             <h2 class="cl-dark-white fs-40  font-bold mb-3 pb-2">Choose Test Lists
                                             </h2>
-                                            <p class="cl-dark-white fs-18  font-regular ">Choose a test to assess your general state of health.</p>
+                                            <p class="cl-dark-white fs-18  font-regular" style="height:50px">Choose a test to assess your general state of health.</p>
                                             <a>
                                                 <div class="pb-4"> <button
                                                         class="bg-dark-orange px-4 py-3 fs-16 font-bold cl-dark-blue br-50 br mb-2">CHOOSE
@@ -79,10 +79,10 @@
                                         {%for test in tests%}
                                         
                                         <div class="bg-white br-5 px-4 py-3 mt-2">
-                                            <h5 class="fs-20 font-regular cl-dark-blue ">{{test.testt}}</h5>
+                                            <h5 class="fs-20 font-regular cl-dark-blue overflow-hidden">{{test.testt}}</h5>
                                             <div class="row">
                                                 <div class="col-xl-6 col-md-6 test-list">
-                                                    <p> {{test.description}} </p>
+                                                    <p class="overflow-hidden"> {{test.description}} </p>
                                                 </div>
                                               
                                                 

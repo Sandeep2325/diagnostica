@@ -12,6 +12,21 @@
             class="b-lazy">
     </p>
 </div>
+{% comment %} <div class="modal fade" id="loader" tabindex="-1" aria-labelledby="loader"
+  aria-hidden="true">
+  <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content  p-3 p-sm-4" style="background: transparent; border:none">
+          <div class="modal-body">
+            <div id="ajax-loadol" class=" text-center" style="">
+              <p><img loading="lazy"
+                      src="https://c.tenor.com/I6kN-6X7nhAAAAAj/loading-buffering.gif"width="150px" height="150px"
+                      class="b-lazy">
+              </p>
+          </div>
+          </div>
+      </div>
+  </div>
+</div> {% endcomment %}
 </section>   
   {%include 'header.html'%}
   <section class="home_banner pt-3 pb-lg-5">
@@ -396,7 +411,12 @@
   <section class="section_health_pack pb-3">
     <div class="container">
       <div class="row">
-        <h1 class="fs-40  cl-dark-blue font-bold home_health_symp_header py-lg-4 m-0 pt-3">Health Packages</h1>
+        <div class="col-lg-12 d-flex justify-content-between pt-lg-3 ">
+          <h1 class="fs-40 font-bold home_health_h1 w-100 m-0 cl-dark-blue">Health Packages
+          </h1>
+          <a href="{%url "packages"%}"><button class="home_pack_viewpack py-2 px-0 fs-16 br-50 " style="min-width: 150px;">VIEW ALL</button></a>
+          
+        </div>
         {% comment %} {%for package in healthpackage%}
         <div class="col-xl-3  col-lg-4 col-md-6 pt-3">
           <div class="py-5 bg-light-grey br-30 health_hover">
@@ -789,10 +809,20 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js">
 </script>
   <script>
-    $(window).on('load', function() {
-      $("#loaderr").hide();
+   $(window).on('load', function() {
+    $("#loaderr").hide();
     })
+  $(document).ready(function () {
+    //$("#loader").modal('show');
+   //$('#loader').modal({
+   //backdrop: 'static',
+   // keyboard: false
+   //})
+   });
+
 $(document).ready(function(){
+  
+
    $("#myModal").modal({
     backdrop: 'static',
    keyboard: false
@@ -974,8 +1004,6 @@ $(document).ready(function(){
     }
   });
 
- 
-
         function myfunction(city){
           
           $.ajax({
@@ -997,59 +1025,6 @@ $(document).ready(function(){
          };
 
 
-/*$("#testnow").click(function(){
-  var id=$("#testnow").attr("name");
-console.log(id);
-        $.ajax({
-          url:"{% url 'home' %}",
-          type:"POST",
-          data: {
-              action:"retreive_data",
-              'id' :id,
-              csrfmiddlewaretoken: '{{ csrf_token }}',
-             },
-             dataType: "json",
-             success: function(resp){
-              var options = {
-                      key: resp["razorpay_merchant_key"],
-                      amount: resp["razorpay_amount"], 
-                      currency: "INR",
-                      description: "Test Transaction",
-                      image: "{% static 'assets/img/invoice_logo.png' %}",
-                      order_id:resp["razorpay_order_id"],
-                      callback_url: resp["callback_url"],
-                      redirect: true,
-                      theme: {
-                          "color": "#005aeb"
-                      },
-                      modal: { 
-                          escape: false,
-                          ondismiss: function()
-                          { 
-                              confirm("Want to close!!")
-                              $.ajax({
-                                type: 'POST',
-                                headers: {
-                                    'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val(),
-                                },
-                                data: {
-                                csrfmiddlewaretoken: '{{ csrf_token }}',
-                                action:"payment_canceled",
-                                obj_id:ids,
-                                order_id:"{{razorpay_order_id}}",
-                                },
-                                dataType: 'json',
-                                success: function (response) {
-                                }
-                              });
-                          }
-                      }
-                  };
-                  var rzp1 = new Razorpay(options);
-                  rzp1.open();
-           }  
-      });
-    });*/
    function testnow(e){
     //localStorage.setItem("healthcheckup",[e]);
     $.ajax({
@@ -1329,5 +1304,6 @@ $("#health_pack_carousel").owlCarousel({
 });
 
 </script>
+
 
 {% endblock %}

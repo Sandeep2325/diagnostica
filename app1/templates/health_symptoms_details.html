@@ -68,7 +68,7 @@
           </div>
         </div>
         <div class="col-xl-9  col-lg-8 col-md-6 pt-3">
-          <div class="py-lg-5  py-3 bg-light-grey br-30 ">
+          <div class="py-lg-4  py-3 bg-light-grey br-30 ">
             <h1 class="fs-40 font-bold cl-dark-blue text-center pt-lg-3 m-0 pb-4">What’s Included in the Health Symptoms Package</h1>
             <h2 class="fs-35 font-regular cl-dark-blue text-center m-0 pb-lg-5 pb-4">Package includes
               {{currentObj.test_name.all.count}} Tests
@@ -120,11 +120,12 @@
                      
                       <tbody class="table-striped">
                         {%for test in currentObj.test_name.all %}
-                        <tr>
-                          <th scope="row"><input onchange=myfunction("{{test.id}}") type="checkbox"/></th>
+                        <tr class="tesst">
+                          <th scope="row"><input id="tests" class="cursor" value="{{test.id}}" name="{{test.id}}" type="checkbox"/></th>
                           <td class="health_symptoms_table_td pe-4">{{test.testt}}</td>
                           <td >{{test.Banglore_price}}</td>
                         </tr>
+
                         {%endfor%}
                         {% comment %} <tr>
                           <th scope="row"><input type="checkbox"/></th>
@@ -139,6 +140,9 @@
                       </tbody>
                       
                     </table>
+                    <div class="d-flex justify-content-center  pt-3 my-3">
+                      <button class="home_pack_viewpack py-2 fs-16 font-bold br-50" onclick=addtocart()>Add To Cart</button>
+                    </div>
                    </div>
               </div> 
              
@@ -271,6 +275,13 @@
   {%include "footer.html"%}
 
 </body>
+{% comment %} {%for cart in carts%}
+{%for test in cart.items.all%}
+<scripts>
+
+<scripts>
+{%endfor%}
+{%endfor%} {% endcomment %}
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
   $.validator.addMethod('filesize', function (value, element, param) {
@@ -342,6 +353,65 @@
         },
     });
    }
+   function addtocart(){
+    //alert()
+    var selected = [];
+
+    $("input:checkbox[id=tests]:checked").each(function() {
+      selected.push($(this).attr('name'));
+    });
+    console.log(selected)
+    //var jsonText = JSON.stringify(selected);
+    $.ajax({
+      url: "{% url 'addtocartt' %}",
+      type: "POST",
+      dataType: "json",
+      data: {
+          'pk':selected,
+          'csrfmiddlewaretoken':'{{ csrf_token }}',
+      },
+      success: function(resp){
+         console.log(resp['message'])
+          if(!resp['message']){
+              swal('',"Test Already Added","info");
+          }
+          else{
+              //alert("Test Added");
+              window.location.reload();
+          }
+          
+      },
+  });
+
+   }
+   $(document).ready(function() {
+    selected=[]
+    $("input:checkbox[id=tests]").each(function() {
+      selected.push($(this).attr('name'));
+    });
+    id = $("#tests").attr("name")
+    console.log(selected)
+    $.ajax({
+      url: "{% url 'lifestyletests' %}",
+      type: "POST",
+      dataType: "json",
+      data: {
+          'pk':selected,
+          'csrfmiddlewaretoken':'{{ csrf_token }}',
+      },
+      success: function(resp){
+        $(resp['message']).each(function(index) {
+          id=resp['message']
+          a=id[index].toString()
+          var val= 'input[name="'+a+'"]';
+          $(val).prop('checked', true);
+        });
+            
+      },
+ });
+
+});
+   
 </script>
 {%endblock%}
 {% comment %} 

@@ -86,7 +86,6 @@ def dashboard(request):
 
 def aboutus(request):
     return render (request,"aboutus.html")
-
 def cityy(request):
     city=request.POST.get("city")
     request.session["city"]=city
@@ -119,12 +118,14 @@ def Registration(request):
             request.session['otp'] = otp
             
                 # f"Hi {f},\nThere was a request to change your password!\nIf you did not make this request then please ignore this email.\nOtherwise, please click this link to change your password: [link]"
-            message=f"Hi {f},\n\nGreetings!\nYou are just a step away from accessing your Diagnostica Span account.\nWe are sharing a verification code to access your account. Once you have verified the code, you'll be prompted to access our portal immediately.\n\nYour OTP: {otp}\n\nThank You,\nDiagnostica Span"
+            # message=f"Hi {f},\n\nGreetings!\nYou are just a step away from accessing your Diagnostica Span account.\nWe are sharing a verification code to access your account. Once you have verified the code, you'll be prompted to access our portal immediately.\n\nYour OTP: {otp}\n\nThank You,\nDiagnostica Span"
             # message = f'Welcome your otp is {otp} '
+            message=f"{otp}- is your one time password for Spandiagno user registration. Please do not share this OTP with anyone. Spandiagno."
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [e]
             message = message
             subject = "DIGNOSTICA SPAN OTP Confirmation" 
+            sms(message,p_number)
             send_mail(
                     subject,
                     message,
@@ -179,11 +180,14 @@ def resendotp(request):
     email_address = request.session.get('email')
     otp = random.randint(1000,9999)
     request.session['otp'] = otp
-    message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDignostica Span"
+    message=f"{otp}- is your one time password for Spandiagno resend password. Please do not share this OTP with anyone. Spandiagno."
+    # message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDignostica Span"
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [email_address]
     message = message
     subject = "OTP Verification | Dignostica Span" 
+    userr=User.objects.get(email=email_address) 
+    sms(message,userr.phone_no)
     send_mail(
             subject,
             message,
@@ -208,12 +212,15 @@ def changepassword(request):
         request.session["ppassword"]=password 
         request.session["conpassword"]=conpassword
         request.session['otp'] = otp
-        message=f"Hi {request.user.first_name},\nYou have requested to change your password credentials to login, please use below OTP to do the same\n\nOTP: {otp}\nIf the wish to keep your old password, kindly ignore the mail.\nThank you,\nDignostica Span"
+        message=f"{otp}- is your one time password for Spandiagno reset password. Please do not share this OTP with anyone. Spandiagno."
+        # message=f"Hi {request.user.first_name},\nYou have requested to change your password credentials to login, please use below OTP to do the same\n\nOTP: {otp}\nIf the wish to keep your old password, kindly ignore the mail.\nThank you,\nDignostica Span"
         # message = f'Hello,\nWelcome your Change Password OTP is {otp} '
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [email_address]
         message = message
         subject = "DIGNOSTICA SPAN" 
+        p_number=request.user.phone_no
+        sms(message,p_number)
         send_mail(
                 subject,
                 message,
@@ -233,6 +240,7 @@ def forgotpassword(request):
         user=User.objects.filter(email=e)
         
         if user.exists():
+            userr=User.objects.get(email=e)
             request.session['email'] = e
             request.session['password'] = p
             otp = random.randint(1000,9999)
@@ -240,11 +248,14 @@ def forgotpassword(request):
             request.session['otp'] = otp
                 # message = f'your otp is {otp}'
                 # send_otp(p_number,message)
-            message = f"Hi Dear Customer,\nThere was a request to Forgot password! Password change\nIf you did not make this request then please ignore this email.\nOtherwise, Please enter the OTP {otp}"
+            message=f"{otp}- is your one time password for Spandiagno forgot password. Please do not share this OTP with anyone. Spandiagno. "
+            # message = f"Hi Dear Customer,\nThere was a request to Forgot password! Password change\nIf you did not make this request then please ignore this email.\nOtherwise, Please enter the OTP {otp}"
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [e]
             message = message
-            subject = "DIAGNOSTICA SPAN | FORGOT PASSWORD" 
+            subject = "DIAGNOSTICA SPAN | FORGOT PASSWORD"
+            p_number=userr.phone_no 
+            sms(message,p_number)
             send_mail(
                     subject,
                     message,
@@ -262,11 +273,14 @@ def resendotpforgot(request):
     email_address = request.session.get('email')
     otp = random.randint(1000,9999)
     request.session['otp'] = otp
-    message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDignostica Span"
+    message=f"{otp}- is your one time password for Spandiagno resend password. Please do not share this OTP with anyone. Spandiagno."
+    # message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDignostica Span"
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [email_address]
     message = message
-    subject = "OTP Verification | Dignostica Span" 
+    subject = "OTP Verification | Dignostica Span"
+    userr=User.objects.get(email=email_address) 
+    sms(message,userr.phone_no)
     send_mail(
             subject,
             message,
@@ -281,11 +295,14 @@ def changeresend(request):
     email_address = request.session.get('email')
     otp = random.randint(1000,9999)
     request.session['otp'] = otp
-    message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDignostica Span"
+    message=f"{otp}- is your one time password for Spandiagno resend password. Please do not share this OTP with anyone. Spandiagno."
+    # message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDignostica Span"
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [email_address]
     message = message
     subject = "OTP Verification | Dignostica Span" 
+    userr=User.objects.get(email=email_address) 
+    sms(message,userr.phone_no)
     send_mail(
             subject,
             message,
@@ -814,11 +831,13 @@ def prescriptionbreak(request):
         # listToStr = '/'.join(map(str, strr))
         return JsonResponse({"message":strr})
 def healthsymptomview(request,slug):
+    deviceCookie = request.COOKIES.get('device')
     c=request.session.get("city")
     data=healthsymptoms.objects.filter(slug=slug)
+    
     context={
         "data":data,
-        "city":c
+        "city":c,
     }
     return render(request,'',context)
 def healthcareblogsview(request,slug):
@@ -1669,6 +1688,33 @@ def addtocart(request):
         else:
             request.session['cart_count']= cart.objects.filter(user = request.user).count()
         return JsonResponse(RES)
+    
+def addtocart1(request):
+    cityy=request.session.get("city")
+    deviceCookie = request.COOKIES['device']
+    RES = {}
+    if request.method=="POST":
+        pk=request.POST.getlist("pk[]")
+        print(request.POST)
+        print(pk)
+       
+        item=test.objects.filter(id__in=pk)
+        if cityy==Bangalore:
+            for i in item:
+                obj, created = cart.objects.get_or_create(
+                    device = deviceCookie,
+                    items = i,
+                    user = request.user if not request.user.is_anonymous else None,
+                    price=i.Banglore_price,
+                    )
+                res = {"message":created}
+                RES = res
+        if request.user.is_anonymous:
+            request.session['cart_count']= cart.objects.filter(device = deviceCookie).count()
+        else:
+            request.session['cart_count']= cart.objects.filter(user = request.user).count()
+        
+        return JsonResponse(RES)
 def categoryy(request):
     if request.method=="POST":
         city=request.session.get("city")
@@ -2340,23 +2386,57 @@ def lifestyleassessment(request):
     }
    
     return render(request,"lifestyleassessmentall.html",context)
+
+def lifestyletests(request):
+    if request.method=="POST":
+        id=request.POST.getlist("pk[]")
+        deviceCookie = request.COOKIES.get('device')
+        if not request.user.is_anonymous:
+            carts = cart.objects.filter(user=request.user)
+        else:
+            carts = cart.objects.filter(device=deviceCookie)
+        test1=[]
+        for carrt in carts:
+            if str(carrt.items.id) in id:
+                test1.append(str(carrt.items.id))
+        return JsonResponse({"message":test1})
+           
 import os
 def readfile(request):
     a=test.objects.filter(Banglore_price__isnull=True)
     file_path1 = os.path.join(settings.STATIC_ROOT)
     file_path= os.path.join(settings.BASE_DIR, 'staticfiles/static')
-    print(file_path)
+    # print(file_path)
     f = open("{}/tests.txt".format(file_path), "w")
-    # f1 = open("{}/tests.txt".format(file_path1), "w")
+    f1 = open("{}/tests.txt".format(file_path1), "w")
     for i in a:
         # f.next()
         # line=next(f)
         aa="{} {} \n".format(i.id,i.testt)
         f.write(aa)
-        # f1.write(aa)
+        f1.write(aa)
     f.close()
-    # f1.close()
+    f1.close()
     #open and read the file after the appending:
     # print(f.read())
     # return FileResponse(f,as_attachment=True,filename="tests.txt",content_type='application/text') 
     return render (request,"tests.html")
+
+import requests
+def sms(message,mobile):
+    try:
+        url=f"""https://www.smsidea.co.in/smsstatuswithid.aspx?mobile=9986788880&pass=Malatesh@78&senderid=TSTMSG&to={mobile}&msg={message}"""
+        connection=requests.get(url)
+        a=connection.text.split(":")
+        deliveryurl=f"""https://www.smsidea.co.in/sms/api/msgstatus.aspx?mobile=9986788880&pass=Malatesh@78&msgtempid={a[1].strip()}"""
+        deliveryconnection=requests.get(deliveryurl)
+        if deliveryconnection.status_code=="200":
+            ...
+    except Exception as e:
+        print(e)
+def smstest(request):
+    mobile="8105486993"
+    message="Diagnostica Span"
+    sms(message,mobile)
+    return HttpResponse("Sent")
+    
