@@ -95,16 +95,16 @@ AUTH_USER_MODEL = 'app1.User'
 #     }
 # }
 
-DATABASES = {  
-    'default': {  
-        'ENGINE': 'django.db.backends.mysql',  
-        'NAME': 'spandiagnodb',  
-        'USER': 'spandiagno_user',  
-        'PASSWORD': 'spanDiagnoV2db',  
-        'HOST': 'spandiagnov2.cubknyrg0xrn.us-east-2.rds.amazonaws.com',  
-        'PORT': '3306',   
-    }  
-} 
+# DATABASES = {  
+#     'default': {  
+#         'ENGINE': 'django.db.backends.mysql',  
+#         'NAME': 'spandiagnodb',  
+#         'USER': 'spandiagno_user',  
+#         'PASSWORD': 'spanDiagnoV2db',  
+#         'HOST': 'spandiagnov2.cubknyrg0xrn.us-east-2.rds.amazonaws.com',  
+#         'PORT': '3306',   
+#     }  
+# } 
 # DATABASES = {  
 #     'default': {  
 #         'ENGINE': 'django.db.backends.mysql',  
@@ -126,25 +126,25 @@ DATABASES = {
 #         'PORT': '3306',   
 #     }  
 # }
-# DATABASES = {  
+DATABASES = {  
 
-#     'default': {  
+    'default': {  
 
-#         'ENGINE': 'django.db.backends.mysql',  
+        'ENGINE': 'django.db.backends.mysql',  
 
-#         'NAME': 'diagnospan',  
+        'NAME': 'diagnospan',  
 
-#         'USER': 'root',  
+        'USER': 'root',  
 
-#         'PASSWORD': 'mySqlServer@#$432',  
+        'PASSWORD': 'mySqlServer@#$432',  
 
-#         'HOST': 'localhost',  
+        'HOST': 'localhost',  
 
-#         'PORT': '3306',   
+        'PORT': '3306',   
 
-#     }  
+    }  
 
-# }
+}
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 20000
 FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760
 # Password validation
