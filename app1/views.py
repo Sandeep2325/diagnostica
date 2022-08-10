@@ -1397,7 +1397,7 @@ def cartt(request):
             del request.session['couponpercent']
         if actualamount!=None:
             del request.session['actualamount']
-        print(razorpay_order)
+        # print(razorpay_order)
         return JsonResponse({"message":True,"razorpay_key":settings.RAZOR_KEY_ID,"currency":currency,"razorpayorder":razorpay_order_id,"callback":callback_url})
     
     if not request.user.is_anonymous:
@@ -1557,10 +1557,10 @@ def paymenthandler(request,str,amount):
                             fail_silently=False,
                     )
                     messages.info(request, "Thankyou for making payment our team will come and collect the sample soon.")
-                    return HttpResponseRedirect(reverse("booking-history"))
+                    return redirect ("booking-history")
                 else:
                     messages.error(request, "Payment Failed")
-                    return HttpResponseRedirect(reverse("booking-history"))
+                    return redirect ("booking-history")
             else:
                 transid=request.POST["razorpay_order_id"]
                 history=book_history.objects.get(payment_id=transid)
@@ -1587,11 +1587,11 @@ def paymenthandler(request,str,amount):
                 a=book_history.objects.filter(payment_id=c["order_id"])
                 error = request.POST.get('error[description]')
                 messages.error(request, error)
-                return HttpResponseRedirect(reverse("booking-history"))
+                return redirect ("booking-history")
     except Exception as e:
         print(e)
         messages.error(request, "Payment failed Please Retry")
-        return HttpResponseRedirect(reverse("booking-history"))
+        return redirect ("booking-history")
 
 def subscriptionview(request):
     if request.method=="POST":
