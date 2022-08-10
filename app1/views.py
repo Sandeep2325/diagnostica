@@ -425,7 +425,7 @@ def forgotresendotp(request):
     return redirect('/forgotpassword/otp/') 
 def userinfo(request):
    a= request.user
-   return JsonResponse({"message":True,"firstname":a.first_name,"lastname":a.last_name,"contact":a.phone_no,"gender":a.gender,"address":a.address,"age":a.age}) 
+   return JsonResponse({"message":True,"firstname":a.first_name,"lastname":a.last_name,"contact":a.phone_no,"gender":a.gender,"address":a.address,"age":a.age,"email":a.email}) 
 @login_required(login_url="/login/")
 def profilee(request):
     cityy=city.objects.filter(active=True)

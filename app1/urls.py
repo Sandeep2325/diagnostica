@@ -72,7 +72,7 @@ urlpatterns = [
     path("couponsessiondelete",views.couponsessiondelete,name='couponsessiondelete'),
     path("csv",views.uploadcsv,name="csv"),
     path("lifestyletests",views.lifestyletests,name="lifestyletests"),
-    path('lifestyles',views.lifestyleassessment,name="lifestyles"),
+    path('lifestyle-assessments',views.lifestyleassessment,name="lifestyles"),
     path('readfile',views.readfile,name="readfile"),
     # path('sms',views.smstest,name="sms")
     # url('download/<path>', serve, {'document root': settings.MEDIA_ROOT}),

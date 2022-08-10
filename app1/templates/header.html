@@ -26,9 +26,9 @@
                     <a class="px-1" href="{%url "cart"%}"><img src="{%static "images/bg-cart.png"%}" alt="" class="w-22" /></a>
                     </li>
                     <li class="nav-item cursor">
-                        <a class="nav-link px-2" data-bs-toggle="modal" data-bs-target="#headermodal">
-                            <img src="{%static 'images/call_back.png' %}" class="p-0"/>
-                         </a>
+                        <button onclick="userinfoo()" class="nav-link px-2 br" data-bs-toggle="modal" data-bs-target="#headermodal">
+                            <img onclick="userinfoo()" src="{%static 'images/call_back.png' %}" class="p-0"/>
+                        </button>
                         </li>
                 </ul>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,9 +87,9 @@
                         </a>
                         </li>
                         <li class="nav-item d-lg-block d-none cursor">
-                             <a class="nav-link" data-bs-toggle="modal" data-bs-target="#headermodal">
+                             <button onclick="userinfoo()" class="nav-link br" data-bs-toggle="modal" data-bs-target="#headermodal">
                                <img src="{%static 'images/call_back.png' %}" class="p-0"/>
-                            </a> 
+                             </button> 
                             {% comment %} <i class="fa fa-phone" aria-hidden="true"></i> {% endcomment %}
                             </li>
                     </ul>
@@ -245,10 +245,33 @@
             }
             else{
                 swal("Thank You","Our Team Will Contact You soon","success")
-            }
+            }subtotauserinfo
         }
     });
                 
 });
+function userinfoo(){
+
+  $.ajax({
+      url:"{% url 'userinfo' %}",
+      method:"get",
+      data:{
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+      },
+      dataType: "json",
+      success: function(resp){
+          
+      $("#fname").val(resp['firstname']);
+      $("#lname").val(resp['lastname']);
+      //$("#age").val(resp['age']);
+      //$("#gender").val(resp['gender']);
+      $("#ph").val(resp['contact']);
+      $("#emai").val(resp['email']);
+      //$("#address").val(resp['address']);
+     
+      }
+  })
+
+};
 </script>
 
