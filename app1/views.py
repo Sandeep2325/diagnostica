@@ -125,14 +125,15 @@ def Registration(request):
             recipient_list = [e]
             message = message
             subject = "DIGNOSTICA SPAN OTP Confirmation" 
-            sms(message,p_number)
-            send_mail(
-                    subject,
-                    message,
-                    email_from,
-                    recipient_list,
-                    fail_silently=False,
-            )
+            a=sms(message,p_number)
+            # send_mail(
+            #         subject,
+            #         message,
+            #         email_from,
+            #         recipient_list,
+            #         fail_silently=False,
+            # )
+            messages.info(request,a)
             return redirect('/registration/otp/')
     return render(request,'register.html')
 
@@ -187,15 +188,15 @@ def resendotp(request):
     message = message
     subject = "OTP Verification | Dignostica Span" 
     userr=User.objects.get(email=email_address) 
-    sms(message,userr.phone_no)
-    send_mail(
-            subject,
-            message,
-            email_from,
-            recipient_list,
-            fail_silently=False,
-    )
-    messages.success(request,"resend otp sent")
+    a=sms(message,userr.phone_no)
+    # send_mail(
+    #         subject,
+    #         message,
+    #         email_from,
+    #         recipient_list,
+    #         fail_silently=False,
+    # )
+    messages.success(request,a)
     return redirect('/registration/otp/')
 @login_required(login_url="/login/")
 def changepassword(request):
@@ -220,14 +221,15 @@ def changepassword(request):
         message = message
         subject = "DIGNOSTICA SPAN" 
         p_number=request.user.phone_no
-        sms(message,p_number)
-        send_mail(
-                subject,
-                message,
-                email_from,
-                recipient_list,
-                fail_silently=False,
-            )
+        a=sms(message,p_number)
+        # send_mail(
+        #         subject,
+        #         message,
+        #         email_from,
+        #         recipient_list,
+        #         fail_silently=False,
+        #     )
+        messages.info(request,a)
         return redirect('/changepasswordotp/')
     return render (request,"changepassword.html")
 
@@ -255,14 +257,15 @@ def forgotpassword(request):
             message = message
             subject = "DIAGNOSTICA SPAN | FORGOT PASSWORD"
             p_number=userr.phone_no 
-            sms(message,p_number)
-            send_mail(
-                    subject,
-                    message,
-                    email_from,
-                    recipient_list,
-                    fail_silently=False,
-            )
+            a=sms(message,p_number)
+            # send_mail(
+            #         subject,
+            #         message,
+            #         email_from,
+            #         recipient_list,
+            #         fail_silently=False,
+            # )
+            messages.info(request,a)
             return redirect('/forgotpassword/otp/')
         else:
             messages.error(request,"Email is not registered")
@@ -280,15 +283,15 @@ def resendotpforgot(request):
     message = message
     subject = "OTP Verification | Dignostica Span"
     userr=User.objects.get(email=email_address) 
-    sms(message,userr.phone_no)
-    send_mail(
-            subject,
-            message,
-            email_from,
-            recipient_list,
-            fail_silently=False,
-    )
-    messages.success(request,"resend otp sent")
+    a=sms(message,userr.phone_no)
+    # send_mail(
+    #         subject,
+    #         message,
+    #         email_from,
+    #         recipient_list,
+    #         fail_silently=False,
+    # )
+    messages.success(request,a)
     return redirect('forgotpassword/otp/')
 def changeresend(request):
     # if request.method=="POST":
@@ -302,15 +305,15 @@ def changeresend(request):
     message = message
     subject = "OTP Verification | Dignostica Span" 
     userr=User.objects.get(email=email_address) 
-    sms(message,userr.phone_no)
-    send_mail(
-            subject,
-            message,
-            email_from,
-            recipient_list,
-            fail_silently=False,
-    )
-    messages.success(request,"resend otp sent")
+    a=sms(message,userr.phone_no)
+    # send_mail(
+    #         subject,
+    #         message,
+    #         email_from,
+    #         recipient_list,
+    #         fail_silently=False,
+    # )
+    messages.success(request,a)
     return redirect('changepasswordotp/')
 def changepasswordotp(request):
     print(request.user)
@@ -410,13 +413,13 @@ def forgotresendotp(request):
     recipient_list = [email_address]
     message = message
     subject = "OTP" 
-    send_mail(
-            subject,
-            message,
-            email_from,
-            recipient_list,
-            fail_silently=False,
-    )
+    # send_mail(
+    #         subject,
+    #         message,
+    #         email_from,
+    #         recipient_list,
+    #         fail_silently=False,
+    # )
     messages.success(request,"resend otp sent")
     return redirect('/forgotpassword/otp/') 
 def userinfo(request):
@@ -2430,10 +2433,14 @@ def sms(message,mobile):
         a=connection.text.split(":")
         deliveryurl=f"""https://www.smsidea.co.in/sms/api/msgstatus.aspx?mobile=9986788880&pass=Malatesh@78&msgtempid={a[1].strip()}"""
         deliveryconnection=requests.get(deliveryurl)
-        if deliveryconnection.status_code=="200":
-            ...
+        print(deliveryconnection.status_code)
+        if deliveryconnection.status_code!=200:
+            return "Your OTP is not delivered Please try again!"
+        else:
+            return "Your OTP sent your registered mobile number"
     except Exception as e:
         print(e)
+        
 def smstest(request):
     mobile="8105486993"
     message="Diagnostica Span"
