@@ -2057,9 +2057,19 @@ def invoice(request,orderid):
         testbooking=testbook.objects.get(bookingid=order.uni)
     invoic=invoicee.objects.filter(order_id=orderid)
     amount=payments.amount
+    # couponamount=num2words(int(float(couponamount)), lang = 'en_IN')
+    # a=couponamount.replace(",","")
+    # amount=num2words(int(float(amount)), lang = 'en_IN')
+    # b=amount.replace(",","")
+    amount1=num2words(int(float(amount)), lang = 'en_IN')
+    c=amount1.replace(",","")
     try:
         coupoonn=couponredeem.objects.get(order_id=orderid)
         couponamount=coupoonn.actualamount
+        couponamount=num2words(int(float(couponamount)), lang = 'en_IN')
+        a=couponamount.replace(",","")
+        amount=num2words(int(float(amount)), lang = 'en_IN')
+        b=amount.replace(",","")
         context_dict={
         
         "order":order,
@@ -2067,9 +2077,10 @@ def invoice(request,orderid):
         "testbooking":testbooking,
         "tests":invoic,
         "coupon":coupoonn,
-        "couponamount":num2words(int(float(couponamount)), to = 'ordinal'),
-        "amount":num2words(int(float(amount)), to = 'ordinal')
+        "couponamount":a,
+        "amount":b
             }
+        
     except:
         # coupoonn=couponredeem.objects.get(order_id=orderid)
         context_dict={
@@ -2078,7 +2089,7 @@ def invoice(request,orderid):
         "testbooking":testbooking,
         "tests":invoic,
         # "couponamount":num2words(int(couponamount), to = 'ordinal'),
-        "amount":num2words(int(float(amount)), to = 'ordinal')
+        "amount":c
             }
     template_name='invoice2.html'
     pdf = html_to_pdf(template_name,context_dict)
