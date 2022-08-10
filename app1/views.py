@@ -1557,10 +1557,10 @@ def paymenthandler(request,str,amount):
                             fail_silently=False,
                     )
                     messages.info(request, "Thankyou for making payment our team will come and collect the sample soon.")
-                    return HttpResponseRedirect ("booking-history")
+                    return redirect("booking-history")
                 else:
                     messages.error(request, "Payment Failed")
-                    return HttpResponseRedirect ("booking-history")
+                    return redirect("booking-history")
             else:
                 transid=request.POST["razorpay_order_id"]
                 history=book_history.objects.get(payment_id=transid)
@@ -1587,7 +1587,9 @@ def paymenthandler(request,str,amount):
                 a=book_history.objects.filter(payment_id=c["order_id"])
                 error = request.POST.get('error[description]')
                 messages.error(request, error)
-                return HttpResponseRedirect ("booking-history")
+                return redirect("booking-history")
+        else:
+            return redirect("booking-history")
     except Exception as e:
         print(e)
         messages.error(request, "Payment failed Please Retry")
