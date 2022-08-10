@@ -371,9 +371,13 @@
           'csrfmiddlewaretoken':'{{ csrf_token }}',
       },
       success: function(resp){
-         console.log(resp['message'])
           if(!resp['message']){
+            if(selected.length==0){
+              swal('',"Please Select Tests to add","info");
+            }
+            else{
               swal('',"Test Already Added","info");
+            }
           }
           else{
               //alert("Test Added");
