@@ -49,9 +49,9 @@
                                     </div>
 
                                 </div>
-                                {%for message in messages%}
+                                {% comment %} {%for message in messages%}
                                         {{message}}
-                                        {%endfor%}
+                                        {%endfor%} {% endcomment %}
                                 <form method="post" id="prescription" enctype="multipart/form-data">
                                     {%csrf_token%}
                                     <div class="row py-lg-0 py-3">

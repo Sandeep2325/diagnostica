@@ -262,22 +262,6 @@
         }
     });
 
-   /* $(document).ready(function(){
-        
-        var count =parseInt("{{datacount}}");
-        if(count!=0){
-          $("#checkout1").show();  
-          $("#carttable").show();
-         // $("#nodata").hide();
-        }
-        else{
-            $("#checkout1").hide();
-            $("#carttable").hide();
-            //$("#nodata").show();
-            //dataa=`<h1 class="text-center fs-30 font-bold cl-dark-blue mb-4 px-2" id="nodata">No Record Found...</h1>`
-           // $(".nodata").append(dataa);
-        }
-    })*/
     $('#cart_checkout_modal').on('shown.bs.modal', function (e) {
        
         if("{{ user.is_authenticated }}"==="False"){
@@ -285,14 +269,6 @@
         }
       })
 
-      //if("{{ user.is_authenticated }}"==="True"){
-        
-      //  $("#delete").hide()
-      //  }
-       // else{
-            
-      //      $("#delete1").hide()
-      //  }
     $("#delete1").on("click", function(e){
         
         var idd = $(this).attr('name');
@@ -335,23 +311,8 @@ function deletefunc(e){
                 }
             });
 
-         /*   a=$("#delete").attr("name");
-            $.ajax({
-                url: "{% url 'cartsessiondelete' %}",
-                type: "POST",
-                dataType: "json",
-                data: {
-                    'action':'fordatabse',
-                    'pk':a,
-                    'csrfmiddlewaretoken':'{{ csrf_token }}',
-                },
-                success: function(resp){
-                   console.log(resp)
-                   window.location.reload();
-                }
-            });*/
         return false;
-   // });
+ 
 }
     $('#cpnbtn').on('click', function(e){
         var a=$("#total").text();
@@ -402,11 +363,7 @@ function deletefunc(e){
            });
                 });
 
-//$("#coupondelete").on('click',function(){
- //   $("#cleardetail").remove()
-    //window.location.reload()
-   
-//})
+
 $("#option1").change(function(e){
     var opt = $(this).val();
     console.log("{{data}}" )

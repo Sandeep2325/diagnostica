@@ -242,4 +242,4 @@ SESSION_COOKIE_AGE = 1209600
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-CSRF_TRUSTED_ORIGINS  = ['https://spandiagno.com','https://www.spandiagno.com']
+CSRF_TRUSTED_ORIGINS  = ['https://spandiagno.com','https://www.spandiagno.com','https://api.razorpay.com']

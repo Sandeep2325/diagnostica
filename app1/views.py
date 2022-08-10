@@ -892,8 +892,6 @@ def prescriptionbookview(request):
         bid = s.random(length=5)
         # bookingid="DP"+str(bid)
         book=book_history.objects.all().order_by("-created")[0:1]
-        # book=book_history.objects.filter(bookingid=bookingid)
-        print("=--------",book)
         for i in book:
             temp = re.compile("([a-zA-Z]+)([0-9]+)")
             res = temp.match(i.bookingid).groups()
@@ -1536,6 +1534,7 @@ def paymenthandler(request,str,amount):
                     # print("=====",signatureid)
                     request.session.delete("amount")
                     link=request.build_absolute_uri('/bookinghistory/')
+                    print("--------",link)
                     # message1 = f"Hi there,\nWe have successfully received your payment for booking id: {history.bookingid}.\nOur Medical team will get in touch with you for your mentioned tests.\nClick (link: {link}) to track your bookings.\nThank you\nDignostica Span"
                     email_from = settings.EMAIL_HOST_USER
                     message1=f"""Hi there,
