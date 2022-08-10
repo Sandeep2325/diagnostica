@@ -1537,7 +1537,7 @@ def paymenthandler(request,str,amount):
 
                             Our Medical team will get in touch with you for your mentioned tests.\n
 
-                            Click (link: {link}) to track your bookings.\n 
+                            Click (link:https://spandiagno.com/bookinghistory/) to track your bookings.\n 
                             
                             Thank you\n
                             Dignostica Span"""

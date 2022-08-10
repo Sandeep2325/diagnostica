@@ -3,25 +3,10 @@
 {% load static %}
 {% load custom_tags %}
 {%block content%}
-
 <body>
-{% comment %} <section id="loaderr" class="page_loader">
-  <div id="ajax-loadol" class=" text-center" style="">
-    <p><img loading="lazy"
-            src="https://c.tenor.com/I6kN-6X7nhAAAAAj/loading-buffering.gif"width="150px" height="150px"
-            class="b-lazy">
-    </p>
-</div>
-
-</section>    {% endcomment %}
-<div class="loader-wrapper">
-  <span class="loader"><div id="ajax-loadol" class=" text-center page_loader" style="">
-    <p><img loading="lazy"
-            src="https://c.tenor.com/I6kN-6X7nhAAAAAj/loading-buffering.gif"width="150px" height="150px"
-            class="b-lazy">
-    </p>
-</div></span>
-</div>
+  <div class="preload"><img src="http://i.imgur.com/KUJoe.gif">
+  </div>
+  <div  class="content">
   {%include 'header.html'%}
   <section class="home_banner pt-3 pb-lg-5">
     <div class="owl-carousel owl-theme home-banner-slider">
@@ -767,11 +752,11 @@
     </div>
   </section> {% endcomment %}
   {%include "footer.html"%}
-
+</div>
 </body>
 
 {% if messages %}
-{% for message in messages %}
+{% for message in messages %}div>difdffferhgygbyr
 {% if message.tags == "error"%}
 <script>
   $(document).ready(function(){
@@ -809,10 +794,7 @@
     $(window).on("load",function(){
       $(".loader-wrapper").fadeOut("slow");
     });
-
 $(document).ready(function(){
-  
-
    $("#myModal").modal({
     backdrop: 'static',
    keyboard: false
@@ -1291,6 +1273,12 @@ $("#health_pack_carousel").owlCarousel({
         $(this).prev().toggle();
         return false;
     });
+});
+
+$(function() {
+  $(".preload").fadeOut(2000, function() {
+      $(".content").fadeIn(2000);        
+  });
 });
 
 </script>
