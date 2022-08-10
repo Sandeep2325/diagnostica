@@ -209,13 +209,13 @@ EMAIL_HOST_PASSWORD = 'atkzlpfgzcvpdhai'
 # EMAIL_HOST_USER = "donotreplay@spandiagno.com"
 # EMAIL_HOST_PASSWORD = 'Fullmoon22@'
 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp-mail.outlook.com'
-# EMAIL_USE_TLS = True
-# # EMAIL_USE_SSL=FALSE
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = "enquiry@spanhealth.com"
-# EMAIL_HOST_PASSWORD = 'Ravi@123'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp-mail.outlook.com'
+EMAIL_USE_TLS = True
+# EMAIL_USE_SSL=FALSE
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "enquiry@spanhealth.com"
+EMAIL_HOST_PASSWORD = 'Ravi@123'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # SESSION_SAVE_EVERY_REQUEST =True
