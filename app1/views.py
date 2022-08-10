@@ -627,7 +627,7 @@ def home(request):
     if request.method =="GET":
         cit=city.objects.filter(active=True)
         tests=test.objects.all()
-        healthcheckup=healthcheckuppackages.objects.all()[0:4]
+        healthcheckup=healthcheckuppackages.objects.all()
         healthpackage=healthpackages.objects.all()
         healthsymptom=healthsymptoms.objects.all()
         healthcareblog=healthcareblogs.objects.all()
@@ -647,7 +647,8 @@ def home(request):
             "currentcity":c,
             "tests":tests,
             "envcity":envcity,
-            "blogcount":healthcareblog.count()
+            "blogcount":healthcareblog.count(),
+            "testimonialcount":testimonial.count(),
         }
         res = render(request,'home.html',context)
         return res
@@ -1124,8 +1125,8 @@ def cartt(request):
         request.session["order_id"]=razorpay_order['id']
         # request.session['amount']=amount
         razorpay_order_id = razorpay_order['id']
-        # callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
-        callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
+        callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
+        # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
         context['razorpay_order_id'] = razorpay_order_id
         context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
         context['razorpay_amount'] = amount
@@ -2036,6 +2037,7 @@ def html_to_pdf(template_src, context_dict={}):
         return HttpResponse(result.getvalue(), content_type='application/pdf')
     return None
 
+@login_required(login_url="/login/")
 def invoice(request,orderid):
     order=book_history.objects.get(payment_id=orderid)
     payments=payment.objects.get(transid=orderid)
