@@ -1124,9 +1124,8 @@ def cartt(request):
         request.session["order_id"]=razorpay_order['id']
         # request.session['amount']=amount
         razorpay_order_id = razorpay_order['id']
-        request.build_absolute_uri('/bands/?print=true')
-        callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
-        # callback_url = 'http://127.0.0.1:8000/paymenthandler/{}/{}/'.format(request.user.email,amount)
+        # callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
+        callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
         context['razorpay_order_id'] = razorpay_order_id
         context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
         context['razorpay_amount'] = amount
@@ -2147,7 +2146,8 @@ class BookingHistoryPay(LoginRequiredMixin,View):
             )
             mod.payment_id = razorpay_order['id']
             mod.save()
-            callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
+            # callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
+            callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100) 
             to_return = {
                 "razorKey":settings.RAZOR_KEY_ID,
                 "valid":True,
@@ -2439,7 +2439,8 @@ def sms(message,mobile):
         else:
             return "Your OTP sent your registered mobile number"
     except Exception as e:
-        print(e)
+        # print(e)
+        return "Your OTP is not delivered Please try again!"
         
 def smstest(request):
     mobile="8105486993"
