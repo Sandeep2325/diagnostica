@@ -1127,10 +1127,10 @@ def cartt(request):
         scheme=request.scheme
         urll=request.get_host()
         # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,amount)
-        callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
+        # callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
         # print(call)
         # print(callback_url)
-        # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
+        callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
         context['razorpay_order_id'] = razorpay_order_id
         context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
         context['razorpay_amount'] = amount
@@ -1557,10 +1557,10 @@ def paymenthandler(request,str,amount):
                             fail_silently=False,
                     )
                     messages.info(request, "Thankyou for making payment our team will come and collect the sample soon.")
-                    return redirect ("booking-history")
+                    return HttpResponseRedirect ("booking-history")
                 else:
                     messages.error(request, "Payment Failed")
-                    return redirect ("booking-history")
+                    return HttpResponseRedirect ("booking-history")
             else:
                 transid=request.POST["razorpay_order_id"]
                 history=book_history.objects.get(payment_id=transid)
@@ -1587,7 +1587,7 @@ def paymenthandler(request,str,amount):
                 a=book_history.objects.filter(payment_id=c["order_id"])
                 error = request.POST.get('error[description]')
                 messages.error(request, error)
-                return redirect ("booking-history")
+                return HttpResponseRedirect ("booking-history")
     except Exception as e:
         print(e)
         messages.error(request, "Payment failed Please Retry")
@@ -2159,8 +2159,8 @@ class BookingHistoryPay(LoginRequiredMixin,View):
             scheme=request.scheme
             urll=request.get_host()
             # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100)
-            callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
-            # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100) 
+            # callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
+            callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100) 
             to_return = {
                 "razorKey":settings.RAZOR_KEY_ID,
                 "valid":True,
