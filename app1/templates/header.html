@@ -23,7 +23,15 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                    <a class="px-1" href="{%url "cart"%}"><img src="{%static "images/bg-cart.png"%}" alt="" class="w-22" /></a>
+                    <a class="px-1" href="{%url "cart"%}"><img src="{%static "images/bg-cart.png"%}" alt="" class="w-22" />
+                     <sup>
+                        {% if request.session.cart_count %}
+                        <div class="cart_indication">{{request.session.cart_count|default:"0"}}</div>
+                        {% else %}
+                        <div class="cart_indication">0</div>
+                        {% endif %}
+                    </sup>
+                  </a>
                     </li>
                     <li class="nav-item cursor">
                         <button onclick="userinfoo()" class="nav-link px-2 br" data-bs-toggle="modal" data-bs-target="#headermodal">
