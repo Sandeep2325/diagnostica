@@ -1,6 +1,7 @@
 {% extends "index.html" %}
 {% load static %}
 {%block content%}
+{% load custom_tags %}
 <body>
 {%include "header.html"%}
 <section class="sub_header py-xl-4 py-3">
@@ -124,8 +125,7 @@
                                                     class="globalsubmitbutton" >Added</button></div>
                                                
                                                      <div class="col-xl-3 col-md-4 test-list-button"><button id="addtocart"
-                                                        name={{test.id}}  class="globalsubmitbutton {{test.id}}" onclick=myfunction("{{test.id}}")>Add to
-                                                          Cart</button></div>
+                                                        name={{test.id}}  class="globalsubmitbutton {{test.id}}" onclick=myfunction("{{test.id}}")>{% if test.id in cartlist %}Added{%else%}Add to cart{%endif%}</button></div>
                                                      
                                             </div>
                                         </div>
@@ -300,13 +300,20 @@
         },
     });
    }
-$( document ).ready(function() {
-arr={{cartlist}}
+/*$( document ).ready(function() {
+   arr={{cartlist}};
    for (let i = 0; i < arr.length; i++) {
    a=arr[i]
+   console.log(a)
+   b=$('.'+a).attr("name");
+   if(b==a){
     $('.'+a).html('Added');
     $('.'+a).prop('disabled', true);
+   }
+   else{
+    $('.'+a).html('Add to Cart');
+}
   }
-});
+});*/
 </script>
 {%endblock%}
