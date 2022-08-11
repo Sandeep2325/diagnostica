@@ -6,7 +6,6 @@ from django.shortcuts import render,redirect
 from .forms import UserProfileForm,UserRegistrationForm, forgotpasswordform, prescriptionform, subscriptionform
 from django.contrib.auth.hashers import make_password
 import random
-# from django.contrib.auth.models import User
 from app1.models import *
 from django.contrib import messages
 from django.contrib.auth import authenticate, login 
@@ -317,7 +316,6 @@ def changeresend(request):
     messages.success(request,a)
     return redirect('changepasswordotp/')
 def changepasswordotp(request):
-    print(request.user)
     if request.user.is_anonymous:
         return HttpResponseRedirect(reverse("user-login"))
     if request.method == "POST":
@@ -446,10 +444,10 @@ def profilee(request):
         location=request.POST.get("location")
         age=request.POST.get("age",request.user.age)
         address=request.POST.get("address",request.user.address)
-        # try:
-        #     c=city.objects.get(id=int(location))
-        # except:
-        #     messages.error(request,"Please Update every field")
+        try:
+            c=city.objects.get(id=int(location))
+        except:
+            messages.error(request,"Please Update every field")
         if bool(firstname)==False or bool(lastname)==False or bool(phone)==False:
             messages.error(request,"Please Update every field") 
         else:
@@ -462,7 +460,7 @@ def profilee(request):
                 a.email=email
                 a.phone_no=phone
                 a.gender=gender
-                # a.location=c
+                a.location=c
                 a.age=age
                 a.address=address
                 a.save()
@@ -499,7 +497,6 @@ def userLogin(request):
             if user is not None:
                 if remind=='on':
                     settings.SESSION_COOKIE_AGE=2630000  
-               
                 login(request,user)
                 a=request.session.get("cartt")
                 city=request.session.get("city")
@@ -594,6 +591,7 @@ def userLogin(request):
                         cart.objects.create(user=request.user,items=j,price=price,categoryy=j.categoryy).save()
                 except:
                     pass
+                request.session['cart_count']= cart.objects.filter(user =user).count()
                 next = request.POST.get('next', '/')
                 return HttpResponseRedirect(next)  
                 # return redirect('/')
@@ -601,7 +599,6 @@ def userLogin(request):
                 messages.error(request,'Invalid Password')
         except:
             messages.error(request,'Email ID is not registered')
-    
     return render(request,'login.html')
 
 def booktestonline(request):
@@ -662,18 +659,18 @@ def home(request):
         phone=request.POST["phone"]
         email=request.POST["email"]
         requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,tests=tes).save()
-        # message = 'Hi\nYou have Call back request for below test.\n{} from {} category from {}'.format(tes.testt,tes.categoryy,c)
-        # email_from = settings.EMAIL_HOST_USER
-        # recipient_list = ["sandeep.nexevo@gmail.com"]
-        # message = message
-        # subject = "You have a test query" 
-        # send_mail(
-        #             subject,
-        #             message,
-        #             email_from,
-        #             recipient_list,
-        #             fail_silently=False,
-        #     )
+        message = 'Hi\nYou have Call back request for below test.\n{} from {} category from {}'.format(tes.testt,tes.categoryy,c)
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = ["enquiry@spanhealth.com"]
+        message = message
+        subject = "Request Call back" 
+        send_mail(
+                    subject,
+                    message,
+                    email_from,
+                    recipient_list,
+                    fail_silently=False,
+            )
         cit=city.objects.all()
         tests=test.objects.all()
         healthcheckup=healthcheckuppackages.objects.all()[0:4]
@@ -970,16 +967,27 @@ def prescriptionbookview(request):
         
 # @login_required(login_url="login/")  
 def testselect(request):
+    deviceCookie = request.COOKIES['device']
     c=request.session.get("city")
     tcategories=category.objects.all()
     tests=test.objects.filter(Banglore_price__isnull=False)
     envcity={"Bangalore":Bangalore,"Mumbai":Mumbai,"Bhophal":Bhophal,"Nanded":Nanded,"Pune":Pune,"Barshi":Barshi,"Aurangabad":Aurangabad}
-    
+    if request.user.is_anonymous:
+        carts=cart.objects.filter(device = deviceCookie)
+    else:
+        carts=cart.objects.filter(user = request.user)
+    cartlist=[]
+    for carrt in carts:
+        try:
+           cartlist.append(int(carrt.items.id)) 
+        except:
+            pass
     context={
         "tests":tests,
         "categories":tcategories,
         "city":c,
-        'envcity':envcity
+        'envcity':envcity,
+        "cartlist":cartlist
     }
     if request.method=="POST":
         test_name=request.POST.getlist("test_name")
@@ -1128,6 +1136,7 @@ def cartt(request):
         urll=request.get_host()
         # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,amount)
         # callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
+        # print("----------------",callback_url)
         # print(call)
         # print(callback_url)
         callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
@@ -1504,9 +1513,9 @@ def othersdetail(request):
         return JsonResponse({"message":True,"firstname":detail.firstname,"lastname":detail.lastname,"gender":gender,"otherschoice":choice,"age":detail.age,"phone":detail.contact})
 @csrf_exempt
 def paymenthandler(request,str,amount):
-    print(request)
+    # print("---------------",request)
     def verify_signature(response_data):
-        print("----------------",response_data)
+        # print("----------------",response_data)
         client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
         b = client.utility.verify_payment_signature(response_data)
         request.session['signatureid']=response_data['razorpay_signature']
@@ -1534,7 +1543,6 @@ def paymenthandler(request,str,amount):
                     # print("=====",signatureid)
                     request.session.delete("amount")
                     link=request.build_absolute_uri('/bookinghistory/')
-                    print("--------",link)
                     # message1 = f"Hi there,\nWe have successfully received your payment for booking id: {history.bookingid}.\nOur Medical team will get in touch with you for your mentioned tests.\nClick (link: {link}) to track your bookings.\nThank you\nDignostica Span"
                     email_from = settings.EMAIL_HOST_USER
                     message1=f"""Hi there,
@@ -1557,9 +1565,11 @@ def paymenthandler(request,str,amount):
                             fail_silently=False,
                     )
                     messages.info(request, "Thankyou for making payment our team will come and collect the sample soon.")
+                    # return HttpResponseRedirect(reverse("booking-history"))
                     return redirect("booking-history")
                 else:
                     messages.error(request, "Payment Failed")
+                    # return HttpResponseRedirect(reverse("booking-history"))
                     return redirect("booking-history")
             else:
                 transid=request.POST["razorpay_order_id"]
@@ -1587,13 +1597,15 @@ def paymenthandler(request,str,amount):
                 a=book_history.objects.filter(payment_id=c["order_id"])
                 error = request.POST.get('error[description]')
                 messages.error(request, error)
+                # return HttpResponseRedirect(reverse("booking-history"))
                 return redirect("booking-history")
         else:
             return redirect("booking-history")
     except Exception as e:
         print(e)
         messages.error(request, "Payment failed Please Retry")
-        return redirect ("booking-history")
+        # return HttpResponseRedirect(reverse("booking-history"))
+        return redirect("booking-history")
 
 def subscriptionview(request):
     if request.method=="POST":
@@ -1838,6 +1850,7 @@ def coupon(request):
             # request.session["couponamount"]=totall
             return JsonResponse({"message":True,"total":float(totall),"percent":c.discount,"discount":"{:.2f}".format(discount)})
         except:
+            
             return JsonResponse({"message":False})
 def razorpayclose(request):
     if request.method=="POST":
@@ -1893,7 +1906,7 @@ def healthcheckupadd(request):
                     user = request.user if not request.user.is_anonymous else None,
                     price=labtest.dBanglore_price
                 )
-                res = {"message":created}
+                res = {"message":created,"test":labtest.package_title}
                 RES = res
             
             elif cityy == Mumbai:
@@ -1965,7 +1978,7 @@ def healthcheckupadd(request):
                 user = request.user if not request.user.is_anonymous else None,
                 price=package.Banglore_price,
                 )
-                res = {"message":created}
+                res = {"message":created,"pack":package.package_name}
                 RES = res
 
             elif cityy == Mumbai:
@@ -2219,7 +2232,6 @@ class BookingHistoryPay(LoginRequiredMixin,View):
             #         invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.aurangabad_price)   
         
         if request.POST.get("action") == "payment_canceled":
-            print("------------------",request.POST)
             mod = book_history.objects.get(payment_id=request.POST.get('order_id'))
             mod.payment_id = None
             mod.payment_status = False
@@ -2255,7 +2267,7 @@ class HealthSymptoms(View):
             healthsymptoms = healthSympObj,
             user = request.user if not request.user.is_anonymous else None,
             price=healthSympObj.Banglore_price,)
-            res = {"message":created}
+            res = {"message":created,"pack":healthSympObj.name}
             RES = res
 
         elif cityy == Mumbai:
@@ -2399,21 +2411,34 @@ def uploadcsv(request):
         return render(request, "csv.html")
 def requestcallheader(request):
     if request.method=="POST":
-        print("post")
         firtname=request.POST["firstname"]
         lastname=request.POST["lastname"]
         phone=request.POST["phone"]
         email=request.POST["email"]
         tests=request.POST["tests"]
-        t=test.objects.get(id=int(tests))
+        try:
+            t=test.objects.get(id=int(tests))
+        except:
+            return JsonResponse({"message":"error"})
         requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,tests=t).save()
+        message = 'Hi\nYou have Call back request for below test.\n{} from {} category'.format(t.testt,t.categoryy)
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = ["enquiry@spanhealth.com"]
+        message = message
+        subject = "Request Call back" 
+        send_mail(
+                    subject,
+                    message,
+                    email_from,
+                    recipient_list,
+                    fail_silently=False,
+            )
         return JsonResponse({"message":True})
 def lifestyleassessment(request):
     healthsymptom=healthsymptoms.objects.all()
     context={
          "healthsymptom":healthsymptom,
     }
-   
     return render(request,"lifestyleassessmentall.html",context)
 
 def lifestyletests(request):

@@ -238,8 +238,8 @@ JAZZMIN_SETTINGS = {
     }
 # from app1.views import TIME
 SESSION_COOKIE_AGE = 1209600
-
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SAMESITE="None"
 CSRF_COOKIE_SECURE = True
 CSRF_TRUSTED_ORIGINS  = ['https://spandiagno.com','https://www.spandiagno.com','https://api.razorpay.com']

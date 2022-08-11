@@ -224,7 +224,11 @@
     var firstname = $("#fname").val();
     var phone = $("#ph").val();
     var lastname = $("#lname").val();
-    var tests=$("#selectt").val();       
+    var tests=$("#selectt").val();
+    if (email=='' || firstname=='' || phone=='' || lastname==''){
+      swal("", "Please update every field", "warning");
+    }    
+    else{ 
     $.ajax({
         url: "{% url 'requestcall' %}",
         type: "POST",
@@ -243,12 +247,15 @@
                 swal("Something Went Wrong", "Try Again", "warning");
                 //alert("Already Subscribed Thank you!!")
             }
+            else if(resp["message"]=="error"){
+              swal("", "Please select test", "warning");
+            }
             else{
                 swal("Thank You","Our Team Will Contact You soon","success")
-            }subtotauserinfo
+            }
         }
     });
-                
+  }            
 });
 function userinfoo(){
 

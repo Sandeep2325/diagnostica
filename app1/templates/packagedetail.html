@@ -250,14 +250,11 @@
         'csrfmiddlewaretoken':'{{ csrf_token }}',
     },
     success: function(resp){
-        //console.log(resp);
-       // if(resp['message']==="login"){
-        //  alert("please login to add")
-       // }
         if(!resp['message']){
             swal('',"Already Added",'info');
         }else{
-            swal('',"Added",'success');
+          a=resp['pack']
+            swal(a,"Package Added",'success');
             window.setTimeout(function(){location.reload()},1500)
            // window.location.reload();
         }
@@ -265,8 +262,6 @@
     },
 });
   });
-
- 
   //$("#navbarScrollingDropdown")   
   //$(".dropdown-toggle").on('click'.function(){
    // $("#navbarScrollingDropdown").attr("class","show");

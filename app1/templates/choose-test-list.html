@@ -84,9 +84,11 @@
                                                 <div class="col-xl-6 col-md-6 test-list">
                                                     <p class="overflow-hidden"> {{test.description}} </p>
                                                 </div>
-                                              
+                                                <div class="col-xl-3 col-md-2 test-list-price">
+                                                    <p>₹ {{test.Banglore_price}}</p>
+                                                </div>
                                                 
-                                                {%if city == envcity.Bangalore %}
+                                                {% comment %} {%if city == envcity.Bangalore %}
                                                 <div class="col-xl-3 col-md-2 test-list-price">
                                                     <p>₹ {{test.Banglore_price}}</p>
                                                 </div>
@@ -116,18 +118,21 @@
                                                 <div class="col-xl-3 col-md-2 test-list-price">
                                                     <p>₹ {{test.aurangabad_price}}</p>
                                                 </div>
-                                                {%endif%}
-                                                <div class="col-xl-3 col-md-4 test-list-button"><button id="addtocart"
-                                                      name={{test.id}}  class="globalsubmitbutton" onclick=myfunction("{{test.id}}")>Add to
-                                                        Cart</button></div>
+                                                {%endif%} {% endcomment %}
+                                                
+                                                <div class="col-xl-3 col-md-4 test-list-button" style="display:none"><button id="added"
+                                                    class="globalsubmitbutton" >Added</button></div>
+                                               
+                                                     <div class="col-xl-3 col-md-4 test-list-button"><button id="addtocart"
+                                                        name={{test.id}}  class="globalsubmitbutton {{test.id}}" onclick=myfunction("{{test.id}}")>Add to
+                                                          Cart</button></div>
+                                                     
                                             </div>
                                         </div>
                                         {%endfor%}
                                     </div>
                                     </div>
-                                    <!--<div class="text-center py-4 test-list-load-button">
-                                        <button class="py-3 px-5 br br-30 bg-dark-orange  fs-18 font-bold" id="load_more">Load
-                                            More</button>-->
+                                  
                                     </div>
                                 </div>
                             </div>
@@ -151,7 +156,6 @@
                 email: true
             },
         },
-
         messages: {
             'email': {
                 required: "This field is required.",
@@ -296,5 +300,13 @@
         },
     });
    }
+$( document ).ready(function() {
+arr={{cartlist}}
+   for (let i = 0; i < arr.length; i++) {
+   a=arr[i]
+    $('.'+a).html('Added');
+    $('.'+a).prop('disabled', true);
+  }
+});
 </script>
 {%endblock%}

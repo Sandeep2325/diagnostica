@@ -140,10 +140,17 @@
                         </div>
                     </div>
                     {%if datacount%}
+                    {%if user.is_authenticated%}
                     <div class="  check_out">
                         <button 
                             class="float-end fs-18 font-bold cl-dark-white br br-5 bg-sky-blue py-3 my-lg-5 my-3 px-5 br"  data-bs-toggle="modal" data-bs-target="#cart_checkout_modal" type="button" id="checkout1">CHECKOUT</button>
                     </div>
+                    {%else%}
+                    <div class="  check_out">
+                        <button 
+                            class="float-end fs-18 font-bold cl-dark-white br br-5 bg-sky-blue py-3 my-lg-5 my-3 px-5 br" id="checkout11">CHECKOUT</button>
+                    </div>
+                    {%endif%}
                     {%else%}
                     <div></div>
                     {%endif%}
@@ -262,13 +269,11 @@
         }
     });
 
-    $('#cart_checkout_modal').on('shown.bs.modal', function (e) {
-       
+    $("#checkout11").click(function() {
         if("{{ user.is_authenticated }}"==="False"){
             window.location.replace("{% url 'user-login' %}?next={% url 'cart' %}");
         }
       })
-
     $("#delete1").on("click", function(e){
         
         var idd = $(this).attr('name');
@@ -306,7 +311,6 @@ function deletefunc(e){
                     'csrfmiddlewaretoken':'{{ csrf_token }}',
                 },
                 success: function(resp){
-                   console.log(resp)
                    window.location.reload();
                 }
             });
@@ -316,8 +320,11 @@ function deletefunc(e){
 }
     $('#cpnbtn').on('click', function(e){
         var a=$("#total").text();
-
         var coupon=$("#coupon").val()
+        if (coupon== ''){
+            swal("", "Please Enter Coupon", "error")
+        }
+        else{
           $.ajax({
                url: "{% url 'coupon' %}",
                type : "POST", 
@@ -327,9 +334,7 @@ function deletefunc(e){
                 csrfmiddlewaretoken: '{{ csrf_token }}',
                },
                dataType: "json",
-
                success: function(resp){
-                console.log(resp)
                 $(".discount").empty();
                 if (!resp['message']){
                    // alert("Invalid Coupon")
@@ -361,12 +366,12 @@ function deletefunc(e){
                 }
                },
            });
+        }
                 });
 
 
 $("#option1").change(function(e){
     var opt = $(this).val();
-    console.log("{{data}}" )
     if(opt === "m"){
         $("#option").hide();
     $.ajax({
@@ -377,7 +382,6 @@ $("#option1").change(function(e){
         },
         dataType: "json",
         success: function(resp){
-            console.log(resp)
         $("#firstname").val(resp['firstname']);
         $("#lastname").val(resp['lastname']);
         $("#age").val(resp['age']);
@@ -390,7 +394,6 @@ $("#option1").change(function(e){
         }
     })
 }
-
     else if(opt === "o"){
         $("#firstname").val('');
         $("#lastname").val('');
@@ -410,7 +413,6 @@ function coupRemove(){
         type: "GET",
         dataType: "json",
         success: function(resp){
-            console.log(resp)
            window.location.reload();
         }
     });
@@ -506,9 +508,7 @@ $(document).ready(function(){
     
         },
         submitHandler: function (form) {
-           
             a=$("#total").text();
-            
             var firstname=$("#firstname").val();
                     var lastname=$("#lastname").val();
                     var phone=$("#phone").val();
@@ -522,7 +522,6 @@ $(document).ready(function(){
                         
                         total=parseInt(a.split("Rs.")[1]);
                         //total=parseInt(tot/100);
-                        console.log(total)
                     }
                     else{
                         
@@ -545,7 +544,6 @@ $(document).ready(function(){
                            },
                            dataType: "json",
                            success: function(resp){
-                            console.log(resp)
                             $("#infomodal").hide();
                             var options = {
                                 key: resp["razorpay_key"],

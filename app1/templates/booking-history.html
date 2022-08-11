@@ -324,8 +324,8 @@
                             key: resp['razorKey'],
                             amount: amount, 
                             currency: "INR",
-                            description: "Test Transaction",
-                            image: "{% static 'assets/img/invoice_logo.png' %}",
+                            description: "Diagnostica Span",
+                            //image: "{% static 'img/invoice_logo.png' %}",
                             order_id: resp["order_id"],
                             callback_url: resp['callbackUrl'],
                             redirect: true,
@@ -336,7 +336,6 @@
                                 escape: false,
                                 ondismiss: function()
                                 { 
-                                    confirm("Want to close!!")
                                     $.ajax({
                                     type: 'post',
                                     headers: {
