@@ -20,3 +20,7 @@ def first_el(value):
 def last_el(value):
     return value[-1]
 
+@register.filter
+def is_in(v2,value):
+    if v2 in value:
+        return True

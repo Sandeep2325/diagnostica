@@ -152,13 +152,17 @@
     });
 
     $("#newsletter").on("click", function (e) {
+       
         var email = $("#emaill").val();
-
+        var pattern = /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i
         if (email == "") {
-                        $("#emaill").html("Please enter Email.");
-                        $("#emaill").focus();
-                        return false;
-                    } else {                         
+            swal("","Please Enter Email to Submit","warning")
+                    }
+        else {   
+            if(!pattern.test(email)){
+            swal("","Please Enter Valid Email","warning")
+            } 
+        else{             
         $.ajax({
             url: "{% url 'newsletter' %}",
             type: "POST",
@@ -178,6 +182,7 @@
                 }
             }
         });
+    }   
                     }
         return false;
     });

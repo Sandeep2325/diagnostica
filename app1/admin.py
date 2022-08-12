@@ -17,6 +17,7 @@ import csv
 import re
 from django.contrib.auth.models import Group
 from django.utils.translation import gettext_lazy as _
+from app1.views import sms
 # Register your models here.
 class cityadmin(admin.ModelAdmin):
     list_display=["cityname","imagee","active","created","updated"]
@@ -136,6 +137,47 @@ class prescriptionbookadmin(admin.ModelAdmin):
         html += "<a class='text-danger fa fa-trash ml-2' href='/admin/app1/prescriptionbook1/"+str(obj.id)+"/delete/'></a></div>"
         return format_html(html)
     action_btn.short_description = "Action"
+    
+    def sendreportemail(self, request, queryset):
+        for i in queryset:
+            print("--------",bool(i.report))
+            if (i.payment_status== True) and (bool(i.report) == True):
+                send_mail(str("Tests Report | Dignostica Span"),
+                (f"Hi {i.user.first_name},\n Thank for using our Services.\nThis mail is regarding the booking id: {i.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please visit to review and download it..\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"),
+                  settings.EMAIL_HOST_USER,
+                  [i.user.email],
+                  fail_silently=False)
+                return messages.Success(request, 'Report Sent Successfully')
+            elif(i.payment_status== False) and (bool(i.report) == True):
+                return messages.warning(request, 'Payment Is Pending')
+            elif(i.payment_status== True) and (bool(i.report) == False):
+                return messages.warning(request, 'Please Upload Report')
+            elif(i.payment_status== False) and (bool(i.report) == False):
+                return messages.warning(request, 'Please Check Payment and Report')
+    sendreportemail.short_description = "SMS Report"
+    
+    def sendreportsms(self, request, queryset):
+        for i in queryset:
+            if (i.payment_status== True) and (bool(i.report) == True):
+                message=f"Hi {i.user.first_name},\n Thank for using our Services.\nThis mail is regarding the booking id: {i.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please visit to review and download it..\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"
+                sms(message,i.user.phone_no)
+                return messages.Success(request, 'Report Sent Successfully')
+            elif(i.payment_status== False) and (bool(i.report) == True):
+                return messages.warning(request, 'Payment Is Pending')
+            elif(i.payment_status== True) and (bool(i.report) == False):
+                return messages.warning(request, 'Please Upload Report')
+            elif(i.payment_status== False) and (bool(i.report) == False):
+                return messages.warning(request, 'Please Check Payment and Report')
+    sendreportsms.short_description = "Report Email"
+    actions = [sendreportsms,sendreportemail]
+    # def reportt(self):
+    #     print("hello")
+    # def report_action(self, obj):
+    #     html = "<div class='field-action_btn d-flex m-8'> <a class='fa fa-edit ml-2' href='/admin/app1/prescriptionbook1/" + \
+    #         str(obj.id)+"/change/'></a><br></br>"
+    #     html += "<a class='text-danger fa fa-trash ml-2' href='/admin/app1/prescriptionbook1/"+str(obj.id)+"/delete/'></a></div>"
+    #     return format_html(html)
+    # report_action.short_description = "Report Action"
     def has_add_permission(self, request):
         return False
 
@@ -170,6 +212,37 @@ class testbookadmin(admin.ModelAdmin):
     action_btn.short_description = "Action"
     def has_add_permission(self, request):
         return False
+    def sendreportemail(self, request, queryset):
+        for i in queryset:
+            print("--------",bool(i.report))
+            if (i.payment_status== True) and (bool(i.report) == True):
+                send_mail(str("Tests Report | Dignostica Span"),
+                (f"Hi {i.user.first_name},\n Thank for using our Services.\nThis mail is regarding the booking id: {i.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please visit to review and download it..\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"),
+                  settings.EMAIL_HOST_USER,
+                  [i.user.email],
+                  fail_silently=False)
+                return messages.Success(request, 'Report Sent Successfully')
+            elif(i.payment_status== False) and (bool(i.report) == True):
+                return messages.warning(request, 'Payment Is Pending')
+            elif(i.payment_status== True) and (bool(i.report) == False):
+                return messages.warning(request, 'Please Upload Report')
+            elif(i.payment_status== False) and (bool(i.report) == False):
+                return messages.warning(request, 'Please Check Payment and Report')
+    sendreportemail.short_description = "Report Email"
+    def sendreportsms(self, request, queryset):
+        for i in queryset:
+            if (i.payment_status== True) and (bool(i.report) == True):
+                message=f"Hi {i.user.first_name},\n Thank for using our Services.\nThis mail is regarding the booking id: {i.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please visit to review and download it..\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"
+                sms(message,i.user.phone_no)
+                return messages.Success(request, 'Report Sent Successfully')
+            elif(i.payment_status== False) and (bool(i.report) == True):
+                return messages.warning(request, 'Payment Is Pending')
+            elif(i.payment_status== True) and (bool(i.report) == False):
+                return messages.warning(request, 'Please Upload Report')
+            elif(i.payment_status== False) and (bool(i.report) == False):
+                return messages.warning(request, 'Please Check Payment and Report')
+    sendreportsms.short_description = "Report SMS"
+    actions = [sendreportsms,sendreportemail]
 class categoryadmin(admin.ModelAdmin):
     list_display=["id","categoryy","created","updated","action_btn"]
     readonly_fields=["created","updated"]

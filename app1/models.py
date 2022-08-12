@@ -196,19 +196,21 @@ class testbook(models.Model):
     
 @receiver(post_save, sender=testbook)
 def reportresponse(sender, instance, **kwargs):
-    if (instance.payment_status== True) and (bool(instance.report) == True):
-        send_mail(str("Tests Report | Dignostica Span"),
-                  (f"Hi {instance.user.first_name},\n Thank for using our Services.\nThis mail is regarding the booking id: {instance.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please visit to review and download it..\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"),
-                  settings.EMAIL_HOST_USER,
-                  [instance.user.email],
-                  fail_silently=False)
+    
+    # if (instance.payment_status== True) and (bool(instance.report) == True):
+    #     send_mail(str("Tests Report | Dignostica Span"),
+    #               (f"Hi {instance.user.first_name},\n Thank for using our Services.\nThis mail is regarding the booking id: {instance.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please visit to review and download it..\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"),
+    #               settings.EMAIL_HOST_USER,
+    #               [instance.user.email],
+    #               fail_silently=False)
     # if (instance.payment_status== True) and (bool(instance.report) == True):
     #     # print("sent")
     #     send_mail(str("DIAGNOSTICA SPAN TEST REPORT"),
     #               ("Dear Customer,\n Your Report is Added to your dashboard,Please Checkit out"),
     #               settings.EMAIL_HOST_USER,
     #               [instance.user.email],
-    #               fail_silently=False)                
+    #               fail_silently=False)    
+    ...            
 class Prescriptionbook1(models.Model):
     bookingid=models.CharField(max_length=20,null=True,blank=True)
     unique=models.UUIDField(null=True,blank=True)
@@ -282,18 +284,17 @@ def testbookings(sender, instance, **kwargs):
             a.append(i.aurangabad_price)
     # print(sender)
     # print(sum(a))
-         
+          
     book_history.objects.filter(uni=instance.bookingid).update(amount=sum(a))
     # instance.price=sum(a)
     
     Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=sum(a))
-    if (instance.payment_status== True) and (bool(instance.report) == True):
-        # print("--------in")
-        send_mail(str("Tests Report | Dignostica Span"),
-                  (f"Hi {instance.user.first_name},\n Thank for using our Services.\nThis mail is regarding the booking id: {instance.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please visit to review and download it..\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"),
-                  settings.EMAIL_HOST_USER,
-                  [instance.user.email],
-                  fail_silently=False)
+    # if (instance.payment_status== True) and (bool(instance.report) == True):
+    #     send_mail(str("Tests Report | Dignostica Span"),
+    #               (f"Hi {instance.user.first_name},\n Thank for using our Services.\nThis mail is regarding the booking id: {instance.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please visit to review and download it..\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"),
+    #               settings.EMAIL_HOST_USER,
+    #               [instance.user.email],
+    #               fail_silently=False)
     if (instance.test_name.first()!=None) and (bool(instance.prescription_file)==True and bool(instance.report) == False): 
             # print("sent")
             # link=request.build_absolute_uri('/bookinghistory/')

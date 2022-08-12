@@ -168,6 +168,22 @@ def otpRegistration(request):
                 request.session.delete('email')
                 request.session.delete('password')
                 request.session.delete('phone_number')
+                    # f"Hi {f},\nThere was a request to change your password!\nIf you did not make this request then please ignore this email.\nOtherwise, please click this link to change your password: [link]"
+            # message=f"Hi {f},\n\nGreetings!\nYou are just a step away from accessing your Diagnostica Span account.\nWe are sharing a verification code to access your account. Once you have verified the code, you'll be prompted to access our portal immediately.\n\nYour OTP: {otp}\n\nThank You,\nDiagnostica Span"
+            # message = f'Welcome your otp is {otp} '
+                message=f"Hi {firstname},Thank you for Registering to Diagnostica Span,\n Enjoy Our Services \n Thank You\nDiagnostica Span"
+                email_from = settings.EMAIL_HOST_USER
+                recipient_list = [email_address]
+                message = message
+                subject = "DIGNOSTICA SPAN OTP Confirmation" 
+                a=sms(message,p_number)
+                send_mail(
+                        subject,
+                        message,
+                        email_from,
+                        recipient_list,
+                        fail_silently=False,
+                )
                 messages.success(request,'Registration Successfully Done !!')
                 return redirect('/login/')
             else:
@@ -1135,11 +1151,11 @@ def cartt(request):
         scheme=request.scheme
         urll=request.get_host()
         # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,amount)
-        # callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
+        callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
         # print("----------------",callback_url)
         # print(call)
         # print(callback_url)
-        callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
+        # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
         context['razorpay_order_id'] = razorpay_order_id
         context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
         context['razorpay_amount'] = amount
@@ -2049,7 +2065,8 @@ def healthcheckupadd(request):
 
 def faqs(request):
     faqss=faq.objects.all()
-    return render(request,"faq.html",{"faqs":faqss})
+    faqscount=faq.objects.all().count()
+    return render(request,"faq.html",{"faqs":faqss,"faqscount":faqscount})
 
 def html_to_pdf(template_src, context_dict={}):
     template = get_template(template_src)
@@ -2185,8 +2202,8 @@ class BookingHistoryPay(LoginRequiredMixin,View):
             scheme=request.scheme
             urll=request.get_host()
             # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100)
-            # callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
-            callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100) 
+            callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
+            # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100) 
             to_return = {
                 "razorKey":settings.RAZOR_KEY_ID,
                 "valid":True,
@@ -2421,7 +2438,7 @@ def requestcallheader(request):
         except:
             return JsonResponse({"message":"error"})
         requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,tests=t).save()
-        message = 'Hi\nYou have Call back request for below test.\n{} from {} category'.format(t.testt,t.categoryy)
+        message = 'Hi\nYou have Call back request for below test.\n{}\n'.format(t.testt)
         email_from = settings.EMAIL_HOST_USER
         recipient_list = ["enquiry@spanhealth.com"]
         message = message
@@ -2493,9 +2510,9 @@ def sms(message,mobile):
         # print(e)
         return "Your OTP is not delivered Please try again!"
         
-def smstest(request):
-    mobile="8105486993"
-    message="Diagnostica Span"
-    sms(message,mobile)
-    return HttpResponse("Sent")
+# def smstest(request):
+#     mobile="8105486993"
+#     message="Diagnostica Span"
+#     sms(message,mobile)
+#     return HttpResponse("Sent")
     
