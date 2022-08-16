@@ -630,7 +630,7 @@ class medications(models.Model):
     afternoon=models.BooleanField(default=True)
     evening=models.BooleanField(default=True)
     night=models.BooleanField(default=True)
-    
+    # created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     def __str__(self):
         return self.medic
     class Meta:

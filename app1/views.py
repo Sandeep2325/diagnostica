@@ -976,7 +976,7 @@ def prescriptionbookview(request):
                 recipient_list,
                 fail_silently=False,
         )
-        msg="Hi\nThere is an Prescription Upload order booked with below details\nBookingID:{bookingid}\nFirstname:{firstname}\nLastname:{lastname}\n"
+        msg="Hi\nThere is an Prescription Upload order booked with below details\nBookingID:{bookingid}\nFullname:{firstname}{lastname}\nLocation={c}\nPhone Number:{contact}"
         number=8105486993
         sms(msg,number)
         return HttpResponseRedirect(reverse("booking-history"))
@@ -1207,7 +1207,7 @@ def cartt(request):
                          amount="{0:1.2f}".format(float(amount)),
                          payment_id=razorpay_order_id,
                          payment_status=False).save()
-        msg=f"Hi\nThere is an Order booked with below details\nBookingID:{bookingid}\nFirstname:{firstname}\nLastname:{lastname}\n"
+        msg=f"Hi\nThere is an Order booked with below details\nBookingID:{bookingid}\nFullname:{firstname}{lastname}\nLocation={c}\nPhone Number:{contact}"
         number=8105486993
         sms(msg,number)
         # for i in data1:
@@ -2482,17 +2482,31 @@ def lifestyletests(request):
         return JsonResponse({"message":test1})
     
 def medicationsview(request):
-    print(request.method)
     if request.method=="POST":
         print(request.POST)
-        medic=request.POST["medico"]
-        morning=request.POST["tab_morning"]
-        afternoon=request.POST["tab_afternoon"]
-        evening=request.POST["tab_evening"]
-        night=request.POST["tab_night"]
-        print("--------",morning,afternoon,evening,night)
+        try:
+            medic=request.POST["medico"]
+        except:
+            medic="off"
+        try:
+            morning=request.POST["tab_morning"]
+        except:
+            morning="off"
+        try:
+            afternoon=request.POST["tab_afternoon"]
+        except:
+            afternoon="off"
+        try:
+            evening=request.POST["tab_evening"]
+        except:
+            evening="off"
+        try:
+            night=request.POST["tab_night"]
+        except:
+            night="off"
         medications.objects.create(user=request.user,medic=medic,morning=True if morning == 'on' else False,afternoon=True if afternoon == 'on' else False,evening=True if evening == 'on' else False,night=True if night == 'on' else False).save()
         return JsonResponse({"message":True})    
+    
 def medicationdelete(request):
     if request.method=="POST":
         id=request.POST["pk"]

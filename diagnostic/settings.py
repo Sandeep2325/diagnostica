@@ -110,7 +110,7 @@ DATABASES = {
     'default': {  
         'ENGINE': 'django.db.backends.mysql',  
 
-        'NAME': 'diagnospan1',  
+        'NAME': 'spandiango2',  
         'USER': 'root',  
         'PASSWORD': 'Sandeep@8105',  
         'HOST': 'localhost',  
