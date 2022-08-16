@@ -293,29 +293,32 @@
                     <button type="button" class="btn-close  close" data-bs-dismiss="modal"
                         aria-label="Close">
                     </button>
+                    <form action="javascript:void(0)" method='post' id="medicofrom">
+                        {%csrf_token%}
                     <h2 class="cl-dark-blue text-center fs-40  font-bold ">Medication</h2>
                     <div>
                         <label>Medicine Name</label>
-                        <input class="w-100  form_input" placeholder="Tablet Name" name="" id="medico" type="text" maxlength="250" >
+                        <input class="w-100  form_input" placeholder="Tablet Name" name="medico" id="medico" type="text" maxlength="250" >
                     </div>
                     <div  class="pt-2">
-                        <input class="cursor me-2" type="checkbox" id="tab_morning"/>
+                        <input class="cursor me-2" type="checkbox" name="tab_morning" id="tab_morning"/>
                         <label class="cursor" for="tab_morning">Morning</label>
                     </div>
                     <div  class="pt-2">
-                        <input class="cursor me-2" type="checkbox" id="tab_afternoon"/>
+                        <input class="cursor me-2" type="checkbox" name="tab_afternoon" id="tab_afternoon"/>
                         <label class="cursor" for="tab_afternoon">Afternoon</label>
                     </div>
                     <div  class="pt-2">
-                        <input class="cursor me-2" type="checkbox" id="tab_evening"/>
+                        <input class="cursor me-2" type="checkbox" name="tab_evening" id="tab_evening"/>
                         <label class="cursor" for="tab_evening">Evening</label>
                     </div>
                     <div  class="pt-2">
-                        <input class="cursor me-2" type="checkbox" id="tab_night"/>
+                        <input class="cursor me-2" type="checkbox" name="tab_night" id="tab_night"/>
                         <label class="cursor" for="tab_night">Night</label>
                     </div>
                     <button class="px-5 py-2 bg-sky-blue br-5  fs-18  cl-dark-white br mt-2" type="submit" id="medication"
                     value="submit">Submit</button>
+                </form>
                 </div>
             </div>
         </div>
@@ -577,29 +580,16 @@ function prescrbreak(e){
     });
 }
 
-$("#medication").on("click", function (e) {
-    var medic = $("#medico").val();
-    var morning = $("#tab_morning").val();
-    var afternoon = $("#tab_afternoon").val();
-    var evening = $("#tab_evening").val();
-    var night=$("#tab_night").val();
-    var a=$("#tab_morning").attr("checked")
-  if (medic=""){
-      swal("", "Please update every field", "warning");
-    }    
-    else{ 
+$("#medicofrom").on("submit", function (e) {
+    var datafrom = $('#medicofrom').serialize();
+   
+   
+
     $.ajax({
         url: "{% url 'medicationpost' %}",
         type: "POST",
         dataType: "json",
-        data: {
-            'medic': medic,
-            'morning':morning,
-            'afternoon':afternoon,
-            'evening':evening,
-            'night':night,
-            'csrfmiddlewaretoken': '{{ csrf_token }}',
-        },
+        data: datafrom,
         success: function (resp) {
             $("#medico").val('');
             if (!resp["message"]){
@@ -611,7 +601,7 @@ $("#medication").on("click", function (e) {
             }
         }
     });
-  }            
+             
 })
 
 function deletefunc(e){

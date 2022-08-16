@@ -2482,12 +2482,14 @@ def lifestyletests(request):
         return JsonResponse({"message":test1})
     
 def medicationsview(request):
+    print(request.method)
     if request.method=="POST":
-        medic=request.POST["medic"]
-        morning=request.POST["morning"]
-        afternoon=request.POST["afternoon"]
-        evening=request.POST["evening"]
-        night=request.POST["night"]
+        print(request.POST)
+        medic=request.POST["medico"]
+        morning=request.POST["tab_morning"]
+        afternoon=request.POST["tab_afternoon"]
+        evening=request.POST["tab_evening"]
+        night=request.POST["tab_night"]
         print("--------",morning,afternoon,evening,night)
         medications.objects.create(user=request.user,medic=medic,morning=True if morning == 'on' else False,afternoon=True if afternoon == 'on' else False,evening=True if evening == 'on' else False,night=True if night == 'on' else False).save()
         return JsonResponse({"message":True})    
