@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "app1",
+    "django_celery_beat",
     "django.contrib.humanize",
     # 'baton.autodiscover',
     
@@ -95,27 +96,27 @@ AUTH_USER_MODEL = 'app1.User'
 #     }
 # }
 
-DATABASES = {  
-    'default': {  
-        'ENGINE': 'django.db.backends.mysql',  
-        'NAME': 'spandiagnodb',  
-        'USER': 'spandiagno_user',  
-        'PASSWORD': 'spanDiagnoV2db',  
-        'HOST': 'spandiagnov2.cubknyrg0xrn.us-east-2.rds.amazonaws.com',  
-        'PORT': '3306',   
-    }  
-} 
 # DATABASES = {  
 #     'default': {  
 #         'ENGINE': 'django.db.backends.mysql',  
+#         'NAME': 'spandiagnodb',  
+#         'USER': 'spandiagno_user',  
+#         'PASSWORD': 'spanDiagnoV2db',  
+#         'HOST': 'spandiagnov2.cubknyrg0xrn.us-east-2.rds.amazonaws.com',  
+#         'PORT': '3306',   
+#     }  
+# } 
+DATABASES = {  
+    'default': {  
+        'ENGINE': 'django.db.backends.mysql',  
 
-#         'NAME': 'diagnospan1',  
-#         'USER': 'root',  
-#         'PASSWORD': 'Sandeep@8105',  
-#         'HOST': 'localhost',  
-#         'PORT': '3306',
-#     }
-#     }
+        'NAME': 'diagnospan1',  
+        'USER': 'root',  
+        'PASSWORD': 'Sandeep@8105',  
+        'HOST': 'localhost',  
+        'PORT': '3306',
+    }
+    }
 # DATABASES = {  
 #     'default': {  
 #         'ENGINE': 'django.db.backends.mysql',  
@@ -236,6 +237,14 @@ JAZZMIN_SETTINGS = {
     "default_icon_parents": "",
     "default_icon_children": "",
     }
+# CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Kolkata'
+CELERY_RESULT_BACKEND = 'django-db'
+#CELERY BEAT
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 # from app1.views import TIME
 SESSION_COOKIE_AGE = 1209600
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

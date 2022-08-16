@@ -189,26 +189,54 @@
                                         <table class="paymentc">
                                             <thead>
                                                 <tr class="text-center">
+                                                    <td class="t_head text-center" scope="col">Sl No</td>
                                                     <td class="t_head text-center" scope="col">Tablet Name</td>
                                                     <td class="t_head text-center" scope="col">Morning</td>
                                                     <td class="t_head text-center" scope="col">Afternoon</td>
                                                     <td class="t_head text-center" scope="col">Evening</td>
                                                     <td class="t_head text-center" scope="col">Night</td>
-                                                    <td class="t_head text-center" scope="col">Date</td>
+                                                    {% comment %} <td class="t_head text-center" scope="col">Date</td> {% endcomment %}
                                                     <td class="t_head text-center" scope="col">Delete</td>
                                                 </tr>
                                             </thead>
 
                                             <tbody>
+                                                {%for medic in medics%}
                                                 <tr>
-                                                    <td class="text-center" data-label="Tablet Name">Test</td>
-                                                    <td class="text-center" data-label="Morning"><input class="" type="checkbox" disabled/></td>
-                                                    <td class="text-center" data-label="Afternoon"><input class="" type="checkbox" disabled/></td>
+                                                    <td class="text-center" data-label="Tablet Name">{{forloop.counter}}</td>
+                                                    <td class="text-center" data-label="Tablet Name">{{medic.morning}}</td>
+                                                     {%if medic.morning == True %} 
+                                                     <td class="text-center" data-label="Morning"><i class="fa fa-check" aria-hidden="true"></i></td>
+                                                     {%else%}
+                                                    <td class="text-center" data-label="Morning">-</td>
+                                                    {%endif%} 
+
+                                                    {%if medic.morning == True %} 
+                                                     <td class="text-center" data-label="Afternoon"><i class="fa fa-check" aria-hidden="true"></i></td>
+                                                     {%else%}
+                                                    <td class="text-center" data-label="Afternoon">-</td>
+                                                    {%endif%} 
+
+
+                                                    {%if medic.morning == True %}
+                                                     <td class="text-center" data-label="Evening"><i class="fa fa-check" aria-hidden="true"></i></td>
+                                                     {%else%}
+                                                    <td class="text-center" data-label="Evening">-</td>
+                                                    {%endif%} 
+                                                    {%if medic.morning == True %}
+                                                     <td class="text-center" data-label="Night"><i class="fa fa-check" aria-hidden="true"></i></td>
+                                                     {%else%}
+                                                    <td class="text-center" data-label="Night">-</td>
+                                                    {%endif%} 
+
+                                                    {% comment %} <td class="text-center" data-label="morning"><input class="" type="checkbox"  disabled/></td>
+                                                    <td class="text-center" data-label="Afternoon"><input class="" type="checkbox"  disabled/></td>
                                                     <td class="text-center" data-label="Evening"><input class="" type="checkbox" disabled/></td>
-                                                    <td class="text-center" data-label="Night"><input class="" type="checkbox" disabled/></td>
-                                                    <td class="text-center" data-label="Date">16/11/2022</td>
-                                                    <td class="text-center" style="font-size:21px; color:red" data-label="Delete"><i class="fa fa-trash-o cursor" aria-hidden="true"></i></td>
+                                                    <td class="text-center" data-label="Night"><input class="" type="checkbox"  disabled/></td> {% endcomment %}
+                                                    {% comment %} <td class="text-center" data-label="Date">16/11/2022</td> {% endcomment %}
+                                                    <td class="text-center" data-label="Delete"><button class="br" onclick="deletefunc('{{medic.id}}')"><i class="fa fa-trash-o cursor "  style="font-size:21px; color:red" aria-hidden="true"></i></button></td>
                                                 </tr>
+                                                {%endfor%}
                                             </tbody>
                                         </table>
                                     </div>
@@ -256,7 +284,6 @@
         </div>
     </div>
     </section>
-
     <section class="section_mediation_modal">
         <div class="modal fade" id="mediation_modal" tabindex="-1" aria-labelledby="mediation_modal-Label"
         aria-hidden="true">
@@ -269,7 +296,7 @@
                     <h2 class="cl-dark-blue text-center fs-40  font-bold ">Medication</h2>
                     <div>
                         <label>Medicine Name</label>
-                        <input class="w-100  form_input" placeholder="Tablet Name" name="" id="" type="text" maxlength="250" >
+                        <input class="w-100  form_input" placeholder="Tablet Name" name="" id="medico" type="text" maxlength="250" >
                     </div>
                     <div  class="pt-2">
                         <input class="cursor me-2" type="checkbox" id="tab_morning"/>
@@ -287,7 +314,7 @@
                         <input class="cursor me-2" type="checkbox" id="tab_night"/>
                         <label class="cursor" for="tab_night">Night</label>
                     </div>
-                    <button class="px-5 py-2 bg-sky-blue br-5  fs-18  cl-dark-white br mt-2" type="submit"
+                    <button class="px-5 py-2 bg-sky-blue br-5  fs-18  cl-dark-white br mt-2" type="submit" id="medication"
                     value="submit">Submit</button>
                 </div>
             </div>
@@ -550,41 +577,64 @@ function prescrbreak(e){
     });
 }
 
+$("#medication").on("click", function (e) {
+    var medic = $("#medico").val();
+    var morning = $("#tab_morning").val();
+    var afternoon = $("#tab_afternoon").val();
+    var evening = $("#tab_evening").val();
+    var night=$("#tab_night").val();
+    var a=$("#tab_morning").attr("checked")
+  if (medic=""){
+      swal("", "Please update every field", "warning");
+    }    
+    else{ 
+    $.ajax({
+        url: "{% url 'medicationpost' %}",
+        type: "POST",
+        dataType: "json",
+        data: {
+            'medic': medic,
+            'morning':morning,
+            'afternoon':afternoon,
+            'evening':evening,
+            'night':night,
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+        },
+        success: function (resp) {
+            $("#medico").val('');
+            if (!resp["message"]){
+                swal("Something Went Wrong", "Try Again", "warning");
+                //alert("Already Subscribed Thank you!!")
+            }
+            else{
+                window.location.reload()
+            }
+        }
+    });
+  }            
+})
 
-$("#testimonial_slider").owlCarousel({
-    //loop: true,
-    margin: 30,
-    items: 2.7,
-    responsiveClass: true,
-    autoplayHoverPause:true,
-    autoHeight: false,
-    autoplayTimeout: 4000,
-    smartSpeed: 800,
-    dots: false,
-    nav: false,
-    autoplay: true,
-    stopOnHover:true,
-    responsive: {
-      0: {
-        items: 1,
-      },
-
-      576: {
-        items: 1,
-      },
-      768: {
-        items: 3,
-      },
-
-      992: {
-        items: 3,
-      },
-
-      1199: {
-        items: 3,
-      },
-    },
-  });
-
+function deletefunc(e){
+    //  $("#delete").on("click", function(e){ 
+            
+            var idd = $(this).attr('name');
+           a=$("#delete").attr("name");
+                $.ajax({
+                    url: "{% url 'medicationdelete' %}",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'action':'forsession',
+                        'pk':e,
+                        'csrfmiddlewaretoken':'{{ csrf_token }}',
+                    },
+                    success: function(resp){
+                       window.location.reload();
+                    }
+                });
+    
+            return false;
+     
+    }
 </script>
 {%endblock%}

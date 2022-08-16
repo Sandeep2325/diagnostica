@@ -623,5 +623,17 @@ class requestcall(models.Model):
         return self.firstname
     class Meta:
         verbose_name_plural="Call Back Requests"
+class medications(models.Model):
+    user=models.ForeignKey(User,null=True,blank=True,on_delete=models.PROTECT)
+    medic=models.TextField(null=True,blank=True)
+    morning=models.BooleanField(default=True)
+    afternoon=models.BooleanField(default=True)
+    evening=models.BooleanField(default=True)
+    night=models.BooleanField(default=True)
+    
+    def __str__(self):
+        return self.medic
+    class Meta:
+        verbose_name_plural="User Medications"
 
     

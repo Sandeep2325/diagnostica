@@ -976,6 +976,9 @@ def prescriptionbookview(request):
                 recipient_list,
                 fail_silently=False,
         )
+        msg="Hi\nThere is an Prescription Upload order booked with below details\nBookingID:{bookingid}\nFirstname:{firstname}\nLastname:{lastname}\n"
+        number=8105486993
+        sms(msg,number)
         return HttpResponseRedirect(reverse("booking-history"))
         # return render(request,"uploadprescriptions.html",{"fm":fm})
     else:
@@ -1151,11 +1154,11 @@ def cartt(request):
         scheme=request.scheme
         urll=request.get_host()
         # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,amount)
-        # callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
+        callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
         # print("----------------",callback_url)
         # print(call)
         # print(callback_url)
-        callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
+        # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
         context['razorpay_order_id'] = razorpay_order_id
         context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
         context['razorpay_amount'] = amount
@@ -1204,7 +1207,9 @@ def cartt(request):
                          amount="{0:1.2f}".format(float(amount)),
                          payment_id=razorpay_order_id,
                          payment_status=False).save()
-        
+        msg=f"Hi\nThere is an Order booked with below details\nBookingID:{bookingid}\nFirstname:{firstname}\nLastname:{lastname}\n"
+        number=8105486993
+        sms(msg,number)
         # for i in data1:
         #     print(i.items)
         #     print(i.labtest)
@@ -2129,10 +2134,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 class BookingHistoryPay(LoginRequiredMixin,View):
     login_url = '/login/'
     def get(self, request,*args, **kwargs):
+        medics=medications.objects.filter(user=request.user)
         his = []
         bookhistories=book_history.objects.filter(user=request.user).order_by('-created')
         testbooking=prescription_book.objects.filter(user=request.user)
         payments=payment.objects.filter(user=request.user).order_by('-date')
+        
         for i in bookhistories:
             try:
                 testbooking=Prescriptionbook1.objects.get(bookingid=i.uni)
@@ -2180,6 +2187,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 his.append(hi)
 
         context={
+            "medics":medics,
             "bookhistories":his,
             "bookinghistorylength":len(his),
             "paymentcount":payments.count(),
@@ -2458,6 +2466,7 @@ def lifestyleassessment(request):
     }
     return render(request,"lifestyleassessmentall.html",context)
 
+
 def lifestyletests(request):
     if request.method=="POST":
         id=request.POST.getlist("pk[]")
@@ -2471,7 +2480,22 @@ def lifestyletests(request):
             if str(carrt.items.id) in id:
                 test1.append(str(carrt.items.id))
         return JsonResponse({"message":test1})
-           
+    
+def medicationsview(request):
+    if request.method=="POST":
+        medic=request.POST["medic"]
+        morning=request.POST["morning"]
+        afternoon=request.POST["afternoon"]
+        evening=request.POST["evening"]
+        night=request.POST["night"]
+        print("--------",morning,afternoon,evening,night)
+        medications.objects.create(user=request.user,medic=medic,morning=True if morning == 'on' else False,afternoon=True if afternoon == 'on' else False,evening=True if evening == 'on' else False,night=True if night == 'on' else False).save()
+        return JsonResponse({"message":True})    
+def medicationdelete(request):
+    if request.method=="POST":
+        id=request.POST["pk"]
+        medications.objects.get(id=id).delete()
+        return JsonResponse({"message":True})         
 import os
 def readfile(request):
     a=test.objects.filter(Banglore_price__isnull=True)
