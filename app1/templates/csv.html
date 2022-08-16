@@ -1,0 +1,9 @@
+<form action="" method="POST" enctype="multipart/form-data">
+                                        
+    <div class="custom-file-upload">
+    <input type="file" name="csv_upload">
+    </div>
+    {% csrf_token %}
+    {{message}}
+    <button class="btn btn-secondary" type="submit">Upload File</button>
+</form>

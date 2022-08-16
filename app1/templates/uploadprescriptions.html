@@ -1,0 +1,353 @@
+{% extends "index.html" %}
+{% load static %}
+{%block content%}
+<body>
+    {%include "header.html"%}
+    <section class="sub_header py-xl-4 py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="d-flex ">
+                        <p class="m-0 fs-18 font-regular cl-dark-blue opc-5 pe-1 sub_nav_bar"><a
+                                href="{%url "home"%}">Home</a></p>
+                        /
+                        <p class="m-0 fs-18 font-regular cl-dark-blue ps-1 sub_nav_bar">Upload Prescription</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section_book-test-online pb-5">
+        <div class="container">
+            <div class="row">
+                <diV class="col-lg-12">
+                    <div class="bg-light-grey br-15">
+                        <div class="row">
+                            <div class="col-lg-11 col-md-12 mx-auto py-lg-5">
+                                <div class="row">
+                                    <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto py-4">
+                                        <div class="bg-sky-blue br-15 px-lg-5 px-4 py-4 text-center ">
+                                            <h2 class="cl-dark-white fs-40  font-bold mb-3 pb-2">Upload Prescription</h2>
+                                            <p class="cl-dark-white fs-18  font-regular" style="height:50px">We'll do the rest.</p>
+                                            <a> <img src="{%static "images/uploadprescription.png"%}" alt="" class="img-fluid mb-2" /></a>
+                                            <br>
+                                            <a class="cl-dark-white fs-14 font-bold lh-10">Upload Here</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto py-4 opc-5">
+                                        <div class="bg-dark-green br-15 px-lg-5 px-4 py-4 text-center ">
+                                            <h2 class="cl-dark-white fs-40  font-bold mb-3 pb-2">Choose Test Lists
+                                            </h2>
+                                            <p class="cl-dark-white fs-18  font-regular" style="height:50px">Choose a test to assess your general state of health.</p>
+                                            <a href="{%url "testselect"%}">
+                                                <div class="pb-4"> <button class="bg-dark-orange px-4 py-3 fs-16 font-bold cl-dark-blue br-50 br mb-2">CHOOSE
+                                                        HERE
+                                                    </button></div>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                {% comment %} {%for message in messages%}
+                                        {{message}}
+                                        {%endfor%} {% endcomment %}
+                                <form method="post" id="prescription" enctype="multipart/form-data">
+                                    {%csrf_token%}
+                                    <div class="row py-lg-0 py-3">
+
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto">
+                                            <h3 class="px-lg-0 px-3 fs-30 font-bold cl-dark-blue"> Upload Prescription
+                                            </h3>
+                                        </div>
+                                        
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto"></div>
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-4">
+                                            <div class="px-lg-0 px-3 position-relative ">
+                                                <input class="w-100 form_input" placeholder="Choose File" type="file" name="file" id="file" accept="image/x-png,image/jpeg,application/pdf" />
+                                                <label class="folder_icon"><i class="fa fa-folder"
+                                                    aria-hidden="true"></i></label>
+                                                    <span style="font-size: 12px;float: right;color: #585858;">Only pdf/images (png/jpeg)</span>
+                                            </div>
+                                        </div>
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-4">
+                                            <div class="px-lg-3 py-lg-3 br-10 px-3 d-lg-block d-none">
+                                                <h3 class="fs-30 font-bold cl-dark-blue">How it Works</h3>
+
+
+                                                <p class="m-0 mb-1">1. Upload your prescription as a PDF or JPEG. 
+                                                </p>
+                                                <p class="m-0 mb-1"> 2.  Our experienced team will review the prescription and add  appropriate tests to your cart. 
+                                                </p>
+                                                <p class="m-0 mb-1"> 3. We will reach out to you once your cart is ready.  </p>
+                                                <p class="m-0 mb-1"> 4. Login to your profile to review cart and checkout.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3 h-100" style="margin-top:-50px ;">
+                                            <div class="row ">
+                                                <div class="col-6">
+                                                    <div class="bg-white myself_other ms-3 ms-lg-0 mt-lg-0 mt-3 form_input">
+                                                        <input class="form_input cursor" type="radio" name="radio_self" id="myself" />
+                                                        <label for="myself" class="cursor">My Self</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="bg-white myself_other me-3 me-lg-0 mt-lg-0 mt-3  form_input">
+                                                        <input class="form_input cursor" checked type="radio" name="radio_others" id="others" />
+                                                        <label for="others" class="cursor">Others</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3"> </div>
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-lg-5 pt-3 pb-3 ">
+                                            <h3 class="px-lg-0 px-3 font-bold fs-30  cl-dark-blue m-0" id="PatientInformation">Patient Information (It will be used on Reports)</h3>
+                                        </div> 
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto"></div>
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
+                                            <div class="px-lg-0 px-3 ">
+                                                <select class="w-100 form-select myself_other m-0" type="select" name="option" id="option">
+                                                <option selected="selected"  class="opc-5" disabled>To Whom</option>
+                                                <option value="m">Mother</option>
+                                                <option value="f">Father</option>
+                                                <option value="w">Wife</option>
+                                                <option value="s">Son</option>
+                                                <option value="s">Daughter</option>
+                                                <option value="s">Others</option>
+                                            </select>
+                                            </div>
+                                        </div>
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-lg-3"></div>
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
+                                            <div class="px-lg-0 px-3">
+                                                <input class="w-100  form_input" placeholder="First Name" name="firstname" id="firstname" type="text" maxlength="250"/>
+                                            </div>
+                                        </div>
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
+                                            <div class="px-lg-0 px-3">
+                                                <input class="w-100  form_input" placeholder="Last Name" name="lastname" id="lastname" type="text" maxlength="250"/>
+                                            </div>
+                                        </div>
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
+                                            <div class="px-lg-0 px-3">
+                                                <input class="w-100  form_input" placeholder="Mobile Number" name="phone" id="phone" type="number"/>
+                                            </div>
+                                        </div>
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
+                                            <div class="px-lg-0 px-3">
+                                                <input class="w-100  form_input" placeholder="Age" name="age" id="age" type="number" maxlength="3"/>
+                                            </div>
+                                        </div>
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3">
+                                            <div class="px-lg-0 px-3">
+                                                <select class="w-100 form-select myself_other m-0" type="select" name="gender" id="gender" placeholder="Gender ">
+                                                <option selected="selected" value="g" disabled>Gender</option>
+                                                    <option  value="m">Male</option>
+                                                    <option value="f">Female</option>
+                                                    <option>Others</option>
+                                            </select>
+                                            </div>
+                                        </div>
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-lg-3"> </div>
+                                        <div class="px-xl-4 col-12 mx-auto pt-3">
+                                            <div class="px-lg-0 px-3">
+                                                <textarea class="w-100  form_input" rows="2" placeholder="Address" name="address" id="address" type="text" maxlength="250"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-lg-4 py-3 ">
+                                            <button class="mx-lg-0 mx-3 globalsubmitbutton " type="submit" name="submit" id="submit">SUBMIT</button>
+                                        </div>
+                                        <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-lg-5 ">
+                                            <div class="px-lg-0 px-3 d-lg-none">
+                                                <h3 class="fs-30 font-bold cl-dark-blue">How it Works</h3>
+                                                <p class="m-0 mb-1">1. Upload the respective prescription the test to be conducted.
+                                                </p>
+                                                <p class="m-0 mb-1"> 2. Our internal team will reveiw the prescription and test to the cart.
+                                                </p>
+                                                <p class="m-0 mb-1"> 3. You will get the update once the cart is updated with the test. </p>
+                                                <p class="m-0 mb-1"> 4. Kindly login to the account and make the checkout sucessfully.
+                                                </p>
+                                                <p class="m-0 mb-1"> 5. Reports will be updated once the tests is conducted.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="col-xxl-11 col-xl-12 col-lg-12 mx-auto">
+                                        test
+                                    </div> -->
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </diV>
+            </div>
+        </div>
+    </section>
+{%include "footer.html"%}
+</body>
+<script>
+    jQuery.validator.addMethod("name_regex", function (value, element) {
+        return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);
+    }, "Enter valid name");
+    jQuery.validator.addMethod("phone_regex", function (value, element) {
+        return this.optional(element) || /^[0-9\.\-_]{10,30}$/i.test(value);
+    }, "Enter valid phone number");
+    jQuery.validator.addMethod("age_regex", function (value, element) {
+        return this.optional(element) || /^[0-9\.\-_]{1,2}$/i.test(value);
+    }, "Enter valid age");
+    $.validator.addMethod('filesize', function (value, element, param) {
+        return this.optional(element) || (element.files[0].size <= param)
+    }, 'File size must be less than {0}');
+    $("#prescription").validate({
+        rules: {
+           
+            'file': {
+                required: true,
+            },
+            'option': {
+                required: true,
+            },
+            'firstname': {
+                required: true,
+                minlength: 1,
+                name_regex: true,
+            },
+            'lastname': {
+                required: true,
+                minlength: 1,
+                name_regex: true,
+            },
+            'age': {
+                required: true,
+                age_regex:true,
+                minlength: 1,
+                maxlength: 3
+            },
+            'phone': {
+                required: true,
+                phone_regex: true,
+                minlength: 7,
+                maxlength: 10,
+            },
+            'gender': {
+                required: true,
+            },
+            'address':{
+                required:true
+            }
+        },
+
+        messages: {
+            'file': {
+                required: "This field is required."
+            },
+           
+            'phone': {
+                required: "This field is required."
+            },
+            'gender': {
+                required: "This field is required."
+            },
+            'firstname' : {
+                required: "This field is required."
+            },
+            'lastname' : {
+                required: "This field is required."
+            },
+            'age': {
+                required: "This field is required." 
+            },
+            'address': {
+                required: "This field is required." 
+            }
+
+
+        },
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+
+  /*$("#myself").change(function(e){
+        console.log("{{data}}" )
+        var opt = $(this).val();
+       // $('#myCheckbox').prop('checked', true);
+        $("#others").prop("checked",false);
+            $("#firstname").hide();
+            $("#lastname").hide();
+            $("#phone").hide();
+            $("#gender").hide()
+            $("#age").hide();
+            $(".error").empty();
+            $("#PatientInformation").hide();
+            //$("#lastname").attr("disabled", true);
+        $("#option").hide();
+    });
+    $("#others").change(function(e){
+        console.log("{{data}}" )
+        var opt = $(this).val();
+        $("#myself").prop("checked",false);
+            $("#firstname").show();
+            $("#lastname").show();
+            $("#phone").show();
+            $("#gender").show()
+            $("#age").show();
+            $("#option").show();
+            $(".error").empty();
+            $("#PatientInformation").show();
+    });
+*/
+
+
+    $("#myself").change(function(e){
+        $("#others").prop("checked",false);
+    var opt = $(this).val();
+    console.log("{{data}}" )
+    //$("#option").prop('disabled', true);
+   // $("#option").attr(disabled,true)
+        $("#option").hide();
+    $.ajax({
+        url:"{% url 'userinfo' %}",
+        method:"get",
+        data:{
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+        },
+        dataType: "json",
+        success: function(resp){
+        //console.log(resp)  
+        a=resp['gender'];
+        //console.log(a)
+        $("#firstname").val(resp['firstname']);
+        $("#lastname").val(resp['lastname']);
+        $("#age").val(resp['age']);
+        $("#phone").val(resp['contact']);
+        $("#address").val(resp['address']);
+        if (resp['gender']!=''){
+            console.log(resp['gender'])
+            $("#gender").val(resp['gender']);
+        };
+        }
+    })
+
+});
+
+      $("#others").change(function(e){
+        $("#myself").prop("checked",false)
+        console.log("{{data}}" )
+        //$("#option").prop('disabled', false);
+        $("#option").show();
+        var opt = $(this).val();
+        $("#myself").prop("checked",false);
+            $("#firstname").val('');
+            $("#lastname").val('');
+            $("#phone").val('');
+            //$("#gender").val('');
+            $("#age").val('');
+           // $("#option").val('');
+            $(".error").val('');
+            $("#PatientInformation").show();
+    });
+</script>
+{%endblock%}

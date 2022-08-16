@@ -1,0 +1,594 @@
+{% extends "index.html" %}
+{% load static %}
+
+{%block content%}
+<body>
+    {%include 'header.html'%}
+    <section class="sub_header py-xl-4 py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="d-flex ">
+                        <p class="m-0 fs-18 font-regular cl-dark-blue opc-5 pe-1 sub_nav_bar"><a
+                                href="{%url "home"%}">Home</a></p>
+                        /
+                        <p class="m-0 fs-18 font-regular cl-dark-blue ps-1 sub_nav_bar">Cart</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="cart_table pb-lg-5 pb-4">
+        <div class="container">
+            <div class="row ">
+                <div class="col-lg-12 position-relative">
+                    <div class="bg-light-grey br-15">
+                        <h1 class="fs-40 font-bold cl-dark-blue text-center py-lg-5 py-3 m-0  px-3">My Cart</h1>
+                        <div class="row justify-content-center">
+                            <div class="col-lg-12 nodata">
+                                {%if datacount%}
+                                {% comment %} <h1 class="text-center fs-30 font-bold cl-dark-blue mb-4 px-2" id="nodata">No Record Found...</h1>  {% endcomment %}
+                                <div class="table-responsive" id="carttable">
+                                    <div class="wrapper">
+                                        <div class="table test_row">
+                                            <div class="row header row_data_header">
+                                                <div class="cell">
+                                                    S.No
+                                                </div>
+                                                <div class="cell">
+                                                    Test Name
+                                                </div>
+                                                <div class="cell">
+                                                    Category Name
+                                                </div>
+                                                <div class="cell">
+                                                </div>
+                                                <div class="cell">
+                                                    Price
+                                                </div>
+                                            </div>
+                                            
+                                            {%for cart in data%}
+                                            <div class="row">
+                                                <div class="cell" data-title=" S.No">
+                                                    {{ forloop.counter }}
+                                                </div>
+                                                {% comment %} {%if cart.items == None and cart.packages == None%}
+                                                <div class="cell" data-title="Test Name">
+                                                    {{cart.labtest}}
+                                                </div>
+                                                {%elif cart.items == None and cart.labtest == None%}
+                                                <div class="cell" data-title="Test Name">
+                                                    {{cart.packages}}
+                                                </div>
+                                                {%else%}
+                                                <div class="cell" data-title="Test Name">
+                                                    {{cart.items}}
+                                                </div>
+                                                {%endif%} {% endcomment %}
+                                                <div class="cell" data-title="Test Name">
+                                                    {{cart.test}}
+                                                </div>
+                                                {%if cart.categoryy == None%}
+                                                <div class="cell" data-title="Category Name">
+                                                    -
+                                                </div>
+                                                {%else%}
+                                                <div class="cell" data-title="Category Name">
+                                                    {{cart.categoryy}}
+                                                </div>
+                                                {%endif%}
+                                                <div class="cell" data-title="">
+                                                    
+                                                <button   id="delete" name="{{cart.id}}" onclick="deletefunc('{{cart.id}}')" type="button" class="link-delete br"><i class="fa fa-trash cursor" aria-hidden="true"></i></button>
+                                                {% comment %} <button  name="{{cart.id}}"  id="delete1" type="button" class="link-delete br"><i class="fa fa-trash cursor" aria-hidden="true"></i>a</button> {% endcomment %}
+                                                </div>
+                                                
+                                                <div class="cell" data-title="Price">
+                                                   Rs. {{cart.price}}
+                                                </div>
+                                            </div>
+                                            {%endfor%}                           
+                                        </div> 
+                                        <div class="row py-4">
+                                            <div class="col-lg-6">
+                                                {% comment %} <form method="post" id="couponForm">
+                                                    {%csrf_token%}  {% endcomment %}
+                                                    <h3 class="fs-24 font-bold cl-dark-blue m-0 pb-lg-4 pb-3">Enter
+                                                        Coupon
+                                                        Code
+                                                    </h3>
+                                                    <div class="row">
+                                                        <div class="col-8 col-xl-7">
+                                                            <input class="w-100 coupon_input" placeholder="Apply Coupon"
+                                                                id="coupon" name="coupon" type="search" onsearch="coupRemove()" maxlength="250"/>
+                                                                
+                                                        </div>
+                                                        <div class="col-4 col-xl-5 ps-0">
+                                                            <button
+                                                                class="coupon_apply br br-5 text-center fs-18 font-regular" id="cpnbtn" >APPLY</button>
+                                                        </div>
+                                                    </div>
+                                                {% comment %} </form> {% endcomment %}
+                                            </div>
+                                            <div class="col-lg-6 pt-4 pt-lg-0">
+                                                <div class="row text-center" id="details">
+
+                                                    <div class="col-6">
+                                                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Sub Total</h4>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Rs. {{subtotal}}</h4>
+                                                    </div>
+                                                </div>
+                                                <div class="row py-4 text-center bg-white sub_total">
+                                                    <div class="col-6">
+                                                        <h4 class="fs-30 font-bold cl-dark-blue">Total</h4>
+                                                    </div>
+                                                    <div class="col-6 discount">
+                                                        <h4 class="fs-30 font-bold cl-dark-blue" id="total">Rs. {{subtotal}}</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {%else%}
+                                <h1 class="text-center fs-30 font-bold cl-dark-blue mb-4 px-2" id="nodata">No Record Found...</h1>
+                            {%endif%}
+                            </div>
+                        </div>
+                    </div>
+                    {%if datacount%}
+                    {%if user.is_authenticated%}
+                    <div class="  check_out">
+                        <button 
+                            class="float-end fs-18 font-bold cl-dark-white br br-5 bg-sky-blue py-3 my-lg-5 my-3 px-5 br"  data-bs-toggle="modal" data-bs-target="#cart_checkout_modal" type="button" id="checkout1">CHECKOUT</button>
+                    </div>
+                    {%else%}
+                    <div class="  check_out">
+                        <button 
+                            class="float-end fs-18 font-bold cl-dark-white br br-5 bg-sky-blue py-3 my-lg-5 my-3 px-5 br" id="checkout11">CHECKOUT</button>
+                    </div>
+                    {%endif%}
+                    {%else%}
+                    <div></div>
+                    {%endif%}
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="cart_checkout_modal" id ="infomodal">
+        <div class="modal fade" id="cart_checkout_modal" tabindex="-1" aria-labelledby="cart_checkout_modalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content  p-3 p-sm-4">
+                    <div class="modal-body">
+                        <button type="button" class="btn-close  close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                        <form method="post" id="patientInformationForm">
+                           {% comment %} {%csrf_token%} {% endcomment %}
+                            <h3 class="fs-30 font-bold cl-dark-blue text-center">Patient Information</h3>
+                            <div>
+                                <select class="w-100 mt-3 form-select " type="select" name="option1" id="option1">
+                                    <option selected="selected" class="opc-5" disabled>Select Test For</option>
+                                    <option value="m">My-Self</option>
+                                    <option value="o">Others</option>
+                                </select>
+                            </div>
+                            <div>
+                                <select class="w-100 mt-3 form-select " type="select" name="option" id="option">
+                                    <option selected="selected" class="opc-5" disabled>To Whom</option>
+                                    <option value="m">Mother</option>
+                                    <option value="f">Father</option>
+                                    <option value="w">Wife</option>
+                                    <option value="s">Son</option>
+                                    <option value="s">Daughter</option>
+                                    <option value="s">Others</option>
+                                </select>
+                            </div>
+                            <div>
+                                <input class="w-100  form_input mt-3 " placeholder="First Name" name="firstname" id="firstname"
+                                    type="text" maxlength="250" >
+                            </div>
+                            <div>
+                                <input class="w-100  form_input mt-3" placeholder="Last Name" name="lastname" id="lastname"
+                                    type="text" maxlength="250" >
+                            </div>
+                            <div>
+                                <input class="w-100  form_input mt-3" placeholder="Mobile Number" name="phone" id="phone"
+                                    type="number" maxlength="250">
+                            </div>
+                            <div>
+                                <input class="w-100  form_input mt-3" placeholder="Age" name="age" id="age" type="number" maxlength="250"/>
+                            </div>
+                            <div>
+                                <select class="w-100 mt-3 form-select myself_other" type="select" name="gender" id="gender">
+                                    <option selected="selected" class="opc-5" disabled>
+                                        Gender</option>
+                                        <option value="m">Male</option>
+                                        <option value="f">Female</option>
+                                        <option value="o">Others</option>
+                                </select>
+                            </div>
+                            <div>
+                                <textarea rows="2" class="w-100 myself_other form_input mt-3" placeholder="Address" name="address1" id="address" type="text" ></textarea>
+                            </div>
+                            <button class="mx-lg-0 mx-3 mt-4 globalsubmitbutton"
+                                type="submit" name="submit" id="checkout">SUBMIT</button>
+                        {% comment %} </form> {% endcomment %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{%include "footer.html"%}
+</body>
+<script src="https://checkout.razorpay.com/v1/checkout.js">
+</script>
+<script src="path/to/boostrap.min.js"></script>
+<script type = "text/javascript">
+ var AMOUNT=0; 
+
+    $.validator.addMethod('filesize', function (value, element, param) {
+        return this.optional(element) || (element.files[0].size <= param)
+    }, 'File size must be less than {0}');
+    $("#couponForm").validate({
+        rules: {
+            'coupon': {
+                required: true,
+            },
+        },
+        messages: {
+            'coupon': {
+                required: "This field is required."
+            },
+        },
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+    $.validator.addMethod('filesize', function (value, element, param) {
+        return this.optional(element) || (element.files[0].size <= param)
+    }, 'File size must be less than {0}');
+    $("#subscribes").validate({
+        rules: {
+            'email': {
+                required: true,
+                email: true
+            },
+        },
+        messages: {
+            'email': {
+                required: "This field is required.",
+                email: "Enter valid email ID"
+            },
+        },
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+
+    $("#checkout11").click(function() {
+        if("{{ user.is_authenticated }}"==="False"){
+            window.location.replace("{% url 'user-login' %}?next={% url 'cart' %}");
+        }
+      })
+    $("#delete1").on("click", function(e){
+        
+        var idd = $(this).attr('name');
+        
+        
+            $.ajax({
+                url: "{% url 'destroy' %}",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    'pk':idd,
+                    'csrfmiddlewaretoken':'{{ csrf_token }}',
+                },
+                success: function(resp){
+                   
+                   window.location.reload();
+                }
+            });
+        
+        return false;
+    });
+
+function deletefunc(e){
+//  $("#delete").on("click", function(e){ 
+        
+        var idd = $(this).attr('name');
+       a=$("#delete").attr("name");
+            $.ajax({
+                url: "{% url 'cartsessiondelete' %}",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    'action':'forsession',
+                    'pk':e,
+                    'csrfmiddlewaretoken':'{{ csrf_token }}',
+                },
+                success: function(resp){
+                   window.location.reload();
+                }
+            });
+
+        return false;
+ 
+}
+    $('#cpnbtn').on('click', function(e){
+        var a=$("#total").text();
+        var coupon=$("#coupon").val()
+        if (coupon== ''){
+            swal("", "Please Enter Coupon", "error")
+        }
+        else{
+          $.ajax({
+               url: "{% url 'coupon' %}",
+               type : "POST", 
+               data: {
+                "coupon" : coupon,
+                "total":a.split("Rs.")[1],
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+               },
+               dataType: "json",
+               success: function(resp){
+                $(".discount").empty();
+                if (!resp['message']){
+                   // alert("Invalid Coupon")
+                   var h4 =`<h4 class="fs-30 font-bold cl-dark-blue" id="total"> ${a}</h4>`;
+                 swal("Invalid Coupon", "Please Enter valid Coupon Code", "error")
+                  // alert("Invalid Coupon");
+                   /* $('#output').html(data.msg) response message */
+                   $(".discount").append(h4);
+                }
+                else if(resp['message']){
+                    AMOUNT = resp['total'];
+                    
+                    var detail=`
+                   
+                    <div class="col-6" id="cleardetail">
+                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Discount Price(${resp['percent']}%)</h4>
+                    </div>
+                    <div class="col-6" id="cleardetail">
+                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Rs. ${resp['discount']}</h4>
+                    </div>
+                `
+                var h4 =`<h4 class="fs-30 font-bold cl-dark-blue" id="total">Rs. ${resp['total']}.00</h4>`;
+                   /* $('#output').html(data.msg) response message */
+                   //details
+                   $("#details").append(detail);
+                   $(".discount").append(h4);
+                  // $("#coupon").prop('disabled', true);
+                   $("#cpnbtn").prop('disabled', true);
+                }
+               },
+           });
+        }
+                });
+
+
+$("#option1").change(function(e){
+    var opt = $(this).val();
+    if(opt === "m"){
+        $("#option").hide();
+    $.ajax({
+        url:"{% url 'userinfo' %}",
+        method:"get",
+        data:{
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+        },
+        dataType: "json",
+        success: function(resp){
+        $("#firstname").val(resp['firstname']);
+        $("#lastname").val(resp['lastname']);
+        $("#age").val(resp['age']);
+        //$("#gender").val(resp['gender']);
+        $("#phone").val(resp['contact']);
+        $("#address").val(resp['address']);
+        if (resp['gender']!=''){
+            $("#gender").val(resp['gender']);
+        };
+        }
+    })
+}
+    else if(opt === "o"){
+        $("#firstname").val('');
+        $("#lastname").val('');
+        $("#age").val('');
+        //$("#gender").val('');
+        $("#phone").val('');
+        $("address").val('');
+        $("#option").show();
+    }
+
+});
+
+function coupRemove(){
+    //$("#cleardetail").remove()
+    $.ajax({
+        url: "{% url 'couponsessiondelete' %}",
+        type: "GET",
+        dataType: "json",
+        success: function(resp){
+           window.location.reload();
+        }
+    });
+    window.location.reload()
+   }
+
+$(document).ready(function(){
+    jQuery.validator.addMethod("name_regex", function (value, element) {
+        return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);
+    }, "Enter valid name");
+    jQuery.validator.addMethod("phone_regex", function (value, element) {
+        return this.optional(element) || /^[0-9\.\-_]{10,30}$/i.test(value);
+    }, "Enter valid phone number");
+    jQuery.validator.addMethod("age_regex", function (value, element) {
+        return this.optional(element) || /^[0-9\.\-_]{1,2}$/i.test(value);
+    }, "Enter valid age");
+    $.validator.addMethod('filesize', function (value, element, param) {
+        return this.optional(element) || (element.files[0].size <= param)
+    }, 'File size must be less than {0}');
+    $("#patientInformationForm").validate({
+        rules: {
+            'radio_self': {
+                required: true,
+            },
+            'file': {
+                required: true,
+            },
+            
+            'firstname': {
+                required: true,
+                minlength: 1,
+                name_regex: true,
+            },
+            'lastname': {
+                required: true,
+                minlength: 1,
+                name_regex: true,
+            },
+            'age': {
+                required: true,
+                age_regex: true,
+                minlength: 1,
+                maxlength: 3
+            },
+            'phone': {
+                required: true,
+                phone_regex: true,
+                minlength: 7,
+                maxlength:10
+            },
+            'gender': {
+                required: true,
+            },
+            'address1': {
+                required: true,
+                minlength: 1,
+            },
+            'option1': {
+                required: true,
+            },
+            'option': {
+                required: true,
+            },
+        },
+    
+        messages: {
+            'radio_self': {
+                required: "Select any one",
+            },
+    
+            'file': {
+                required: "This field is required."
+            },
+            
+            'phone': {
+                required: "This field is required."
+            },
+            'gender': {
+                required: "This field is required."
+            },
+            'firstname': {
+                required: "This field is required."
+            },
+            'lastname': {
+                required: "This field is required."
+            },
+            'age': {
+                required: "This field is required."
+            },
+            'address': {
+                required: "This field is required."
+            }
+    
+        },
+        submitHandler: function (form) {
+            a=$("#total").text();
+            var firstname=$("#firstname").val();
+                    var lastname=$("#lastname").val();
+                    var phone=$("#phone").val();
+                    var age=$("#age").val();
+                    var gender=$("#gender").val();
+                    var option1=$("#option1").val();
+                    var option=$("#option").val();
+                    var address=$("#address").val();
+                    var total;
+                    if(AMOUNT==0){
+                        
+                        total=parseInt(a.split("Rs.")[1]);
+                        //total=parseInt(tot/100);
+                    }
+                    else{
+                        
+                        total=AMOUNT;
+                    }
+                      $.ajax({
+                           url: "{% url 'cart' %}",
+                           type : "POST", 
+                           data: {
+                            "amount":total,
+                            "firstname" : firstname,
+                            "lastname":lastname,
+                            "phone":phone,
+                            "age" : age,
+                            "gender":gender,
+                            "option1":option1,
+                            "option":option,
+                            "address":address,
+                            csrfmiddlewaretoken:'{{ csrf_token }}',
+                           },
+                           dataType: "json",
+                           success: function(resp){
+                            $("#infomodal").hide();
+                            var options = {
+                                key: resp["razorpay_key"],
+                               // amount:AMOUNT ? AMOUNT :100,
+                                amount: total,
+                                currency: resp["currency"],
+                                // Your/store name.
+                                name: "Diagnostica Span",
+                                order_id: resp["razorpayorder"],
+                                callback_url: resp["callback"],
+                                redirect:true,
+                                modal: { 
+                                    escape: false,
+                                    ondismiss: function()
+                                    { 
+                                        $.ajax({
+                                        url: "{% url 'razorpayclose' %}",
+                                        type: 'post',
+                                        headers: {
+                                            
+                                            'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
+                                        },
+                                        data: {
+                                        "paymentid":resp["razorpayorder"],
+                                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                                        
+                                        },
+                                        dataType: 'json',
+                                        success: function (response) {
+                                            //confirm("Want to close!!");
+                                            window.location.reload()
+                                        }
+                                        });
+                                    }
+                                }
+                              };
+                              var rzp1 = new Razorpay(options);
+                            rzp1.open();  
+                           },
+                    
+                       });
+        }
+    });
+}); 
+    </script>
+{%endblock%}
+
+

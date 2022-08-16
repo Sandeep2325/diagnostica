@@ -1,0 +1,319 @@
+{% extends "index.html" %}
+{% load static %}
+{%block content%}
+{% load custom_tags %}
+<body>
+{%include "header.html"%}
+<section class="sub_header py-xl-4 py-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="d-flex ">
+                    <p class="m-0 fs-18 font-regular cl-dark-blue opc-5 pe-1 sub_nav_bar"><a
+                            href="{%url "home"%}">Home</a></p>
+                    /
+                    <p class="m-0 fs-18 font-regular cl-dark-blue ps-1 sub_nav_bar">Select Test</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+    <section class="section_book-test-online pb-5">
+        <div class="container">
+            <div class="row">
+                <diV class="col-lg-12">
+                    <div class="bg-light-grey px-3 pb-lg-0 pb-4 br-15">
+                        <div class="row">
+                            <div class="col-lg-11 col-md-12 mx-auto py-lg-5">
+                                <div class="row">
+                                    <div class="px-xl-4 col-lg-6 mx-auto px-lg-5 px-4 py-4  opc-5">
+                                        <div class="bg-sky-blue br-15 px-5 py-4 text-center ">
+                                            <h2 class="cl-dark-white fs-40  font-bold mb-3 pb-2">Upload Prescription
+                                            </h2>
+                                            <p class="cl-dark-white fs-18  font-regular" style="height:50px">We'll do the rest.</p>
+                                            <a href="{% url "prescription-upload"%}"> <img
+                                                    src="{%static "images/uploadprescription.png"%}" alt=""
+                                                    class="img-fluid mb-2" /></a>
+                                            <br>
+                                            <a href="uploadprescriptions.html"
+                                                class="cl-dark-white fs-14 font-bold lh-10">Upload Here</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="px-xl-4 col-lg-6 mx-auto  px-lg-5 px-4 py-4">
+                                        <div class="bg-dark-green br-15 px-5 py-4 text-center ">
+                                            <h2 class="cl-dark-white fs-40  font-bold mb-3 pb-2">Choose Test Lists
+                                            </h2>
+                                            <p class="cl-dark-white fs-18  font-regular" style="height:50px">Choose a test to assess your general state of health.</p>
+                                            <a>
+                                                <div class="pb-4"> <button
+                                                        class="bg-dark-orange px-4 py-3 fs-16 font-bold cl-dark-blue br-50 br mb-2">CHOOSE
+                                                        HERE
+                                                    </button></div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xl-11 mx-auto choose_test_header">
+                                        {% comment %} <form method="get" action="{%url "search"%}" >
+                                            {% csrf_token%} {% endcomment %}
+                                        <div class="row">
+                                            <div class="col-lg-5 col-sm-6 position-relative py-lg-4 pb-3">
+                                                <select
+                                                    class="br-5 cl-dark-blue fs-18 form-select br select_option"
+                                                    type="select" name="" id="category">
+                                                    <option selected class="opc-5" value="all">All Category</option>
+                                                    
+                                                    {%for category in categories%}
+                                                    <option  value={{category.id}}>{{category.categoryy}}</option>
+                                                    {%endfor%}
+                                                </select>
+                                            </div>
+
+                                            <div class="col-lg-5 col-sm-6 position-relative py-lg-4 pb-3">
+                                                <input class="w-100 form_input" id="searched" placeholder="Search" name="searched" maxlength="250" />
+                                                {% comment %} <button  type="submit"class="br">  <i class="fa fa-search test-list-search" aria-hidden="true"></i></button> {% endcomment %}
+                                            </div>
+                                        </div>
+                                        <div id="main-test-div">
+                                        {%for test in tests%}
+                                        
+                                        <div class="bg-white br-5 px-4 py-3 mt-2">
+                                            <h5 class="fs-20 font-regular cl-dark-blue overflow-hidden">{{test.testt}}</h5>
+                                            <div class="row">
+                                                <div class="col-xl-6 col-md-6 test-list">
+                                                    <p class="overflow-hidden"> {{test.description}} </p>
+                                                </div>
+                                                <div class="col-xl-3 col-md-2 test-list-price">
+                                                    <p>₹ {{test.Banglore_price}}</p>
+                                                </div>
+                                                
+                                                {% comment %} {%if city == envcity.Bangalore %}
+                                                <div class="col-xl-3 col-md-2 test-list-price">
+                                                    <p>₹ {{test.Banglore_price}}</p>
+                                                </div>
+                                                {%elif city == envcity.Mumbai %}
+                                                <div class="col-xl-3 col-md-2 test-list-price">
+                                                    <p>₹ {{test.Mumbai_price}}</p>
+                                                </div>
+                                                {%elif city == envcity.Bhophal %}
+                                                <div class="col-xl-3 col-md-2 test-list-price">
+                                                    <p>₹ {{test.bhopal_price}}</p>
+                                                </div>
+                                                {%elif city == envcity.Nanded %}
+                                                <div class="col-xl-3 col-md-2 test-list-price">
+                                                    <p>₹ {{test.nanded_price}}</p>
+                                                </div>
+
+
+                                                {%elif city == envcity.Pune %}
+                                                <div class="col-xl-3 col-md-2 test-list-price">
+                                                    <p>₹ {{test.pune_price}}</p>
+                                                </div>
+                                                {%elif city == envcity.Barshi %}
+                                                <div class="col-xl-3 col-md-2 test-list-price">
+                                                    <p>₹ {{test.barshi_price}}</p>
+                                                </div>
+                                                {%elif city == envcity.Aurangabad %}
+                                                <div class="col-xl-3 col-md-2 test-list-price">
+                                                    <p>₹ {{test.aurangabad_price}}</p>
+                                                </div>
+                                                {%endif%} {% endcomment %}
+                                                
+                                                <div class="col-xl-3 col-md-4 test-list-button" style="display:none"><button id="added"
+                                                    class="globalsubmitbutton" >Added</button></div>
+                                               
+                                                     <div class="col-xl-3 col-md-4 test-list-button"><button id="addtocart"
+                                                        name={{test.id}}  class="globalsubmitbutton {{test.id}}" onclick=myfunction("{{test.id}}")>{% if test.id in cartlist %}Added{%else%}Add to cart{%endif%}</button></div>
+                                                     
+                                            </div>
+                                        </div>
+                                        {%endfor%}
+                                    </div>
+                                    </div>
+                                  
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </diV>
+            </div>
+        </div>
+    </section>
+    {%include "footer.html"%}
+</body>
+
+<script>
+    $.validator.addMethod('filesize', function (value, element, param) {
+        return this.optional(element) || (element.files[0].size <= param)
+    }, 'File size must be less than {0}');
+    $("#subscribes").validate({
+        rules: {
+            'email': {
+                required: true,
+                email: true
+            },
+        },
+        messages: {
+            'email': {
+                required: "This field is required.",
+                email: "Enter valid email ID"
+            },
+        },
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+
+    $("#category").on("change", function(e){
+        var idd = $(this).val();
+        var searched = $("#searched").val();
+            $.ajax({
+                url: "{% url 'category' %}",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    'pk':idd,
+                    "searched":searched,
+                    'csrfmiddlewaretoken':'{{ csrf_token }}',
+                },
+                success: function(resp){
+                    if(resp.length >0){
+                    $("#main-test-div").empty();
+                    for(var i=0; i<resp.length ; i++){
+                    var divs = `<div class="bg-white br-5 px-4 py-3 mt-2">
+                        <h5 class="fs-20 font-regular cl-dark-blue ">${resp[i]['testt']}</h5>
+                        <div class="row">
+                            <div class="col-xl-6 col-md-6 test-list">
+                                <p>${resp[i]['description']} </p>
+                            </div>
+                            <div class="col-xl-3 col-md-2 test-list-price">
+                                <p>₹ ${resp[i]['pricel1']}</p>
+                            </div>
+                            <div class="col-xl-3 col-md-4 test-list-button"><button id="addtocart"
+                                    name=${resp[i]['id']} class="bg-sky-blue br br-5 cl-dark-white px-5 py-3" onclick=myfunction("${resp[i]['id']}")>Add to
+                                    Cart</button></div>
+                        </div>
+                    </div>`;
+                    $("#main-test-div").append(divs);
+
+                   }
+                }else{
+                    $("#main-test-div").empty();
+                    var divs = `<div class="bg-white br-5 px-4 py-3 mt-2">
+                        <center><h5 class="fs-20 font-regular cl-dark-blue ">No Test Result Found....</h5></center>
+                    
+                    </div>`;
+                    $("#main-test-div").append(divs);
+                }
+                  
+                }
+            });
+        
+
+    });
+
+
+    $("#searched").keyup(function(e){
+        var searched = $(this).val();
+        var cat = $("#category").val();
+            $.ajax({
+                url: "{% url 'search' %}",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    "action":"search",
+                    'searched':searched,
+                    "cat":cat,
+                    'csrfmiddlewaretoken':'{{ csrf_token }}',
+                },
+                success: function(resp){
+                    if(resp.length>0){
+
+                    $("#main-test-div").empty();
+                   for(var i=0; i<resp.length ; i++){
+                    var divs = `<div class="bg-white br-5 px-4 py-3 mt-2">
+                        <h5 class="fs-20 font-regular cl-dark-blue ">${resp[i]['testt']}</h5>
+                        <div class="row">
+                            <div class="col-xl-6 col-md-6 test-list">
+                                <p>${resp[i]['description']} </p>
+                            </div>
+                            <div class="col-xl-3 col-md-2 test-list-price">
+                                <p>₹ ${resp[i]['pricel1']}</p>
+                            </div>
+                            <div class="col-xl-3 col-md-4 test-list-button"><button id="addtocart"
+                                name=${resp[i]['id']} class="bg-sky-blue br br-5 cl-dark-white px-5 py-3" onclick=myfunction("${resp[i]['id']}")>Add to
+                                    Cart</button></div>
+                        </div>
+                    </div>`;
+                    $("#main-test-div").append(divs);
+                    }
+                }else{
+                    $("#main-test-div").empty();
+                    var divs = `<div class="bg-white br-5 px-4 py-3 mt-2">
+                        <center><h5 class="fs-20 font-regular cl-dark-blue ">No Test Result Found....</h5></center>
+                    
+                    </div>`;
+                    $("#main-test-div").append(divs);
+                }
+                  
+                }
+            });
+    });
+   
+    $("#load_more").on("click", function(e){
+            $.ajax({
+                url: "{% url 'search' %}",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    'action':"load_more",
+                    'csrfmiddlewaretoken':'{{ csrf_token }}',
+                },
+                success: function(resp){
+                  console.log(resp);
+                }
+            });
+    });
+   
+   function myfunction(id){
+    $.ajax({
+        url: "{% url 'addtocart' %}",
+        type: "POST",
+        dataType: "json",
+        data: {
+            'pk':id,
+            'csrfmiddlewaretoken':'{{ csrf_token }}',
+        },
+        success: function(resp){
+           console.log(resp['message'])
+            if(!resp['message']){
+                swal('',"Test Already Added","info");
+            }
+            else{
+                //alert("Test Added");
+                window.location.reload();
+            }
+            
+        },
+    });
+   }
+/*$( document ).ready(function() {
+   arr={{cartlist}};
+   for (let i = 0; i < arr.length; i++) {
+   a=arr[i]
+   console.log(a)
+   b=$('.'+a).attr("name");
+   if(b==a){
+    $('.'+a).html('Added');
+    $('.'+a).prop('disabled', true);
+   }
+   else{
+    $('.'+a).html('Add to Cart');
+}
+  }
+});*/
+</script>
+{%endblock%}

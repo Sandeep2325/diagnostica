@@ -1,0 +1,302 @@
+{% extends "index.html" %}
+{% load static %}
+{%block content%}
+
+<body>
+  {%include "header.html"%}
+  <section class="sub_header py-xl-4 py-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="d-flex ">
+                    <p class="m-0 fs-18 font-regular cl-dark-blue opc-5 pe-1 sub_nav_bar"><a
+                            href="{%url "home"%}">Home</a></p>
+                    /
+                    <p class="m-0 fs-18 font-regular cl-dark-blue ps-1 sub_nav_bar">Lifestyle Assessments</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+  <section class="section_health_pack section_health_pack_started">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-3  col-lg-4 col-md-6 pt-3">
+          <div class="py-lg-5 py-3 bg-light-grey br-30 ">
+            <h2 class="fs-35 font-bold cl-dark-blue text-center m-0">{{currentObj.name}}</h2>
+            <div class="d-flex justify-content-center align-content-center pt-xl-4 mt-3">
+              <div class="home_linear_border  ">
+                <img src="{{ currentObj.photo.url }}" alt="" class="img-fluid">
+
+              </div>
+            </div>
+            <div>
+              <div class="">
+                <p
+                  class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">
+                  Price</p>
+            
+                {%if city == envcity.Bangalore%}
+                <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{currentObj.Banglore_price}}</h1>
+                {%elif city == envcity.Mumbai %}
+                <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{currentObj.Mumbai_price}}</h1>
+                {%elif city == envcity.Bhophal %}
+                <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{currentObj.bhopal_price}}</h1>
+                {%elif city == envcity.Nanded %}
+                <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{currentObj.nanded_price}}</h1>
+                {%elif city == envcity.Pune %}
+                <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{currentObj.pune_price}}</h1>
+                {%elif city == envcity.Barshi %}
+                <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{currentObj.barshi_price}}</h1>
+                {%elif city == envcity.Aurangabad %}
+                <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{currentObj.aurangabad_price}}</h1>
+            {%endif%}
+            
+            
+            
+                <p
+                  class="d-flex justify-content-center align-content-center align-items-center m-0 fs-18 cl-dark-blue font-bold">
+                  Includes {{currentObj.test_name.all.count}}
+                  Tests
+                </p>
+            
+              </div>
+            </div>
+            <div class="d-flex justify-content-center pt-xl-5 pt-3">
+              <button class="home_pack_viewpack py-3 fs-16 font-bold br-50 " id="packagebuy" name="{{currentObj.id}}">BUY PACK</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-9  col-lg-8 col-md-6 pt-3">
+          <div class="py-lg-4  py-3 bg-light-grey br-30 ">
+            <h1 class="fs-40 font-bold cl-dark-blue text-center pt-lg-3 m-0 pb-4">What’s Included in the {{currentObj.name}} Package</h1>
+            <h2 class="fs-35 font-regular cl-dark-blue text-center m-0 pb-lg-5 pb-4">Package includes
+              {{currentObj.test_name.all.count}} Tests
+            </h2>
+
+                   <div class="table-responsive-lg mx-2 ">
+                    <table class="table caption-top table-striped">
+                      <thead>
+                        <tr>
+                          <th scope="col">Select</th>
+                          <th scope="col">Test</th>
+                          <th scope="col">Price</th>
+                        </tr>
+                      </thead>
+                     
+                      <tbody class="table-striped">
+                        {%for test in currentObj.test_name.all %}
+                        <tr class="tesst">
+                          <th scope="row"><input id="tests" class="cursor" value="{{test.id}}" name="{{test.id}}" type="checkbox"/></th>
+                          <td class="health_symptoms_table_td pe-4">{{test.testt}}</td>
+                          <td >{{test.Banglore_price}}</td>
+                        </tr>
+
+                        {%endfor%}
+
+                      </tbody>
+                      
+                    </table>
+                    <div class="d-flex justify-content-center  pt-3 my-3">
+                      <button class="home_pack_viewpack py-2 fs-16 font-bold br-50" onclick=addtocart()>Add To Cart</button>
+                    </div>
+                   </div>
+              </div> 
+
+            </div>
+          </div>
+          <div class="row bg-white py-5">
+            <h1 class="fs-40  cl-dark-blue font-bold home_health_symp_header">Other Health Symptoms</h1>
+            {%for pack in others %}
+            <div class="col-xl-4  col-lg-6 col-md-12 pt-3 ">
+
+              <div class="py-5 bg-light-grey br-30 ">
+                <h2 class="fs-35 font-bold cl-dark-blue text-center m-0">{{pack.name}}</h2>
+                <div class="d-flex justify-content-center align-content-center pt-4 mt-3">
+                  <div class="home_linear_border  ">
+                    <img src="{{ pack.photo.url }}" alt="" class="img-fluid">
+                    
+                  </div>
+                </div>
+                <div>
+                  <p
+                    class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">
+                    Price</p>
+                    {%if city == envcity.Bangalore%}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.Banglore_price}}</h1>
+                  {%elif city == envcity.Mumbai %}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.Mumbai_price}}</h1>
+                  {%elif city == envcity.Bhophal %}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.bhopal_price}}</h1>
+                  {%elif city == envcity.Nanded %}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.nanded_price}}</h1>
+                  {%elif city == envcity.Pune %}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.pune_price}}</h1>
+                  {%elif city == envcity.Barshi %}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.barshi_price}}</h1>
+                  {%elif city == envcity.Aurangabad %}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.aurangabad_price}}</h1>
+{%endif%}
+                  <p
+                    class="d-flex justify-content-center align-content-center align-items-center m-0 fs-18 cl-dark-blue font-bold">
+                    Includes {{pack.test_name.all.count}}
+                    Tests
+                  </p>
+                </div>
+                <div class="d-flex justify-content-center pt-5">
+                  <a href={% url 'health_symptoms' pack.slug %}><button
+                      class="home_pack_viewpack py-3 fs-16 font-bold br-50 ">VIEW PACK</button></a>
+                </div>
+              </div>
+
+            </div>
+            {%endfor%}
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%include "footer.html"%}
+
+</body>
+{% comment %} {%for cart in carts%}
+{%for test in cart.items.all%}
+<scripts>
+
+<scripts>
+{%endfor%}
+{%endfor%} {% endcomment %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  $.validator.addMethod('filesize', function (value, element, param) {
+    return this.optional(element) || (element.files[0].size <= param)
+  }, 'File size must be less than {0}');
+  $("#subscribes").validate({
+    rules: {
+      'email': {
+        required: true,
+        email: true
+      },
+    },
+
+    messages: {
+      'email': {
+        required: "This field is required.",
+        email: "Enter valid email ID"
+      },
+    },
+    submitHandler: function (form) {
+      form.submit();
+    }
+  });
+  
+  $("#packagebuy").click(function () {
+   
+   a=$(this).attr("name");
+   
+   $.ajax({
+    type: "POST",
+    dataType: "json",
+    data: {
+        'ids':a,
+        'csrfmiddlewaretoken':'{{ csrf_token }}',
+    },
+    success: function(resp){
+        if(!resp['message']){
+            swal('',"Already Added",'info');
+        }else{
+          a=resp['pack']
+            swal(a,"Added to Cart",'success');
+            window.setTimeout(function(){location.reload()},1500)
+        }
+        
+    },
+});
+  });
+
+ 
+  function myfunction(id){
+    $.ajax({
+        url: "{% url 'addtocart' %}",
+        type: "POST",
+        dataType: "json",
+        data: {
+            'pk':id,
+            'csrfmiddlewaretoken':'{{ csrf_token }}',
+        },
+        success: function(resp){
+            if(!resp['message']){
+                swal('',"Test Already Added","info");
+            }
+            else{
+                //alert("Test Added");
+                window.location.reload();
+            }
+            
+        },
+    });
+   }
+   function addtocart(){
+    //alert()
+    var selected = [];
+
+    $("input:checkbox[id=tests]:checked").each(function() {
+      selected.push($(this).attr('name'));
+    });
+    //var jsonText = JSON.stringify(selected);
+    $.ajax({
+      url: "{% url 'addtocartt' %}",
+      type: "POST",
+      dataType: "json",
+      data: {
+          'pk':selected,
+          'csrfmiddlewaretoken':'{{ csrf_token }}',
+      },
+      success: function(resp){
+          if(!resp['message']){
+            if(selected.length==0){
+              swal('',"Please Select Tests to add","info");
+            }
+            else{
+              swal('',"Test Already Added","info");
+            }
+          }
+          else{
+              swal("","Test Added to Cart","success");
+              window.setTimeout(function(){location.reload()},1500);
+          }
+          
+      },
+  });
+
+   }
+   $(document).ready(function() {
+    selected=[]
+    $("input:checkbox[id=tests]").each(function() {
+      selected.push($(this).attr('name'));
+    });
+    id = $("#tests").attr("name")
+    $.ajax({
+      url: "{% url 'lifestyletests' %}",
+      type: "POST",
+      dataType: "json",
+      data: {
+          'pk':selected,
+          'csrfmiddlewaretoken':'{{ csrf_token }}',
+      },
+      success: function(resp){
+        $(resp['message']).each(function(index) {
+          id=resp['message']
+          a=id[index].toString()
+          var val= 'input[name="'+a+'"]';
+          $(val).prop('checked', true);
+        });    
+      },
+ });
+});
+   
+</script>
+{%endblock%}

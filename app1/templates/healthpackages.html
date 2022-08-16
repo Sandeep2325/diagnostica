@@ -1,0 +1,81 @@
+{% extends "index.html" %}
+{% load static %}
+
+{%block content%}
+
+<body>
+    {%include "header.html"%}
+    <section class="sub_header py-xl-4 py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="d-flex ">
+                        <p class="m-0 fs-18 font-regular cl-dark-blue opc-5 pe-1 sub_nav_bar"><a
+                                href="{%url "home"%}">Home</a></p>
+                        /
+                        <p class="m-0 fs-18 font-regular cl-dark-blue ps-1 sub_nav_bar">Health Packages</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section_health_pack py-lg-3 pb-lg-5 pb-4">
+        <div class="container">
+            <div class="row">
+                {%for package in packages%}
+                <div class="col-xl-3  col-lg-4 col-md-6 pt-3">
+                    <div class="py-lg-5 py-3 bg-light-grey br-30 ">
+                        <h2 class="fs-35 font-bold cl-dark-blue text-center  m-0">{{package.package_name}}</h2>
+                        <div class="d-flex justify-content-center align-content-center pt-xl-4 mt-3">
+                            <div class="home_linear_border  ">
+                                <div>
+                                    <p
+                                        class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">
+                                        Price</p>
+                                    
+                                    {% comment %} {%if %} {% endcomment %}
+                                    {%if city == envcity.Bangalore%}
+                                    <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">
+                                        ₹{{package.Banglore_price}}</h1>
+                                    {%elif city == envcity.Mumbai%}
+                                    <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">
+                                        ₹{{package.Mumbai_price}}</h1>
+                                    {%elif city == envcity.Bhophal%}
+                                    <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">
+                                        ₹{{package.bhopal_price}}</h1>
+                                    {%elif city == envcity.Nanded%}
+                                    <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">
+                                        ₹{{package.nanded_price}}</h1>
+                                    {%elif city == envcity.Pune%}
+                                    <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">
+                                        ₹{{package.pune_price}}</h1>
+                                    {%elif city == envcity.Barshi%}
+                                    <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">
+                                        ₹{{package.barshi_price}}</h1>
+                                    {%elif city == envcity.Aurangabad%}
+                                        <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">
+                                        ₹{{package.aurangabad_price}}</h1>
+                                    {%endif%}
+                                    <p
+                                        class="d-flex justify-content-center align-content-center align-items-center m-0 fs-18 cl-dark-blue font-bold">
+                                        Includes {{package.testcount}}
+                                        Tests
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center pt-5">
+                            <a href="{%url "Health-package" package.slug%}"><button
+                                    class="home_pack_viewpack py-3 fs-16 font-bold br-50 ">VIEW PACK</button></a>
+                        </div>
+                    </div>
+                </div>
+                {%endfor%}
+            </div>
+        </div>
+    </section>
+
+    {%include "footer.html"%}
+
+</body>
+{%endblock%}

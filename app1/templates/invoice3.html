@@ -1,0 +1,170 @@
+<div class="invoice-box">
+    <div class="line">
+     <div class="invoive_logo " style="border-top:1px solid">
+         <img src="{%static "images/image_logo.png"%}" alt="" class="img-fluid logo-img" />
+     </div>
+     <h4 style="color: #402f64; padding-top: 30px; margin-bottom: 0px; text-align:right;font-size:15px">Diagnostica <span style="color:#7a2020 ;"> SPAN </span> Private Limited</h4>
+     <div class="" style="border:None; font-size:12px;font-weight: 900">
+        Diagnostica Span Pvt. Ltd,
+     </div>
+     <div class="" style="text-align:start; font-size:10px; border:None;">
+       <p style="width:20px">  Ground Floor, No. 79, Deccan Central,<br> 40th Main,
+         M.E.I Road, 2nd Stage,<br> Industrial Suburb, Yeshwanthpur,
+         Bengaluru 560022</p>
+     </div>
+    </div>
+   
+     <h5 class="invoice_header" style="text-align:center">BILL/RECEIPT</h6>
+         
+     <table class="first_t_row ">
+         <tr>
+             <th class="first_t_row_th_1 invoice_font" style="">Receipt No. :{{order.bookingid}} </th>
+             <th class="first_t_row_th_2 invoice_font">Name : {{testbooking.firstname}} {{testbooking.lastname}}</th> 
+             {% if testbooking.gender == 'm'%}
+             <th class="first_t_row_th_3 invoice_font">Sex / Age: <p>Male / {{testbooking.age}} years</th>
+             {%elif testbooking.gender == 'f' %}
+             <th class="first_t_row_th_3 invoice_font">Sex / Age: <p>Female / {{testbooking.age}} years</th>
+             {%elif testbooking.gender == 'o' %}
+             <th class="first_t_row_th_3 invoice_font">Sex / Age: <p>Other / {{testbooking.age}} years</th>
+             {%endif%}
+         </tr><br>
+         <tr class="test">
+             <th class="first_t_row_th_1 invoice_font test">Status :Completed</th>
+             {%if testbooking.myself == True%}
+             <th class="first_t_row_th_2 invoice_font test">Referral : Myself</th> 
+             {%elif testbooking.others_choice == 'm' %}
+             <th class="first_t_row_th_2 invoice_font test">Referral : Mother</th> 
+             {%elif testbooking.others_choice == 'f' %}
+             <th class="first_t_row_th_2 invoice_font test">Referral : Father</th> 
+             {%elif testbooking.others_choice == 'w'%}
+             <th class="first_t_row_th_2 invoice_font test">Referral : Wife</th> 
+             {%elif testbooking.others_choice == 's'%}
+             <th class="first_t_row_th_2 invoice_font test">Referral : Son</th> 
+             {%elif testbooking.others_choice == 'd'%}
+             <th class="first_t_row_th_2 invoice_font test">Referral : Daughter</th> 
+             {%elif testbooking.others_choice == 'o'%}
+             <th class="first_t_row_th_2 invoice_font test">Referral : Other</th>
+             {%endif%}
+             <th class="first_t_row_th_3 invoice_font test">Date & Time:{{testbooking.created}}</th>
+         </tr>
+     </table>
+     
+     <br>
+     <br>
+     <table class="">
+         <thead style="text-align:start">
+             <tr>
+                 <th class=" invoice_font">SL no. </th>
+                 <th class=" invoice_font">Test Code</th> 
+                 <th class=" invoice_font">Test Name</th>
+                 <th class="invoice_font" style="text-align:end ;">Test Price</th>
+             </tr>
+         </thead>
+         <tbody style="text-align:start">
+             {%for test in tests%}
+             {% comment %} {{test}} {% endcomment %}
+             {%if test.items != None%}
+             <tr>
+                 <td class="fs" data-label="SL no.">{{ forloop.counter }}</td>
+                 <td class="fs" data-label="Test Code">{{test.items}}{{test.id}}</td>
+                 <td class="fs" data-label="Test Name">{{test.items}}</td>
+                 <td class="fs" data-label="Test Price" style="text-align:end ;">{{test.price}}</td>
+             </tr>
+             {%elif test.labtest != None%}
+             <tr>
+                 <td class="fs" data-label="SL no.">{{ forloop.counter }}</td>
+                 <td class="fs" data-label="Test Code">{{test.labtest}}{{test.id}}</td>
+                 <td class="fs" data-label="Test Name">{{test.labtest}}</td>
+                 <td class="fs" data-label="Test Price" style="text-align:end ;">{{test.price}}</td>
+             </tr>
+             {%elif test.packages != None%}
+             <tr>
+                 <td class="fs" data-label="SL no.">{{ forloop.counter }}</td>
+                 <td class="fs" data-label="Test Code">{{test.packages}}{{test.id}}</td>
+                 <td class="fs" data-label="Test Name">{{test.packages}}</td>
+                 <td class="fs" data-label="Test Price" style="text-align:end ;">{{test.price}}</td>
+             </tr>
+             {%elif test.healthsymptoms != None%}
+             <tr>
+                 <td class="fs" data-label="SL no.">{{ forloop.counter }}</td>
+                 <td class="fs" data-label="Test Code">{{test.healthsymptoms}}{{test.id}}</td>
+                 <td class="fs" data-label="Test Name">{{test.healthsymptoms}}</td>
+                 <td class="fs" data-label="Test Price" style="text-align:end ;">{{test.price}}</td>
+             </tr>
+             {%endif%}
+             {%endfor%}
+         </tbody>
+     </table> 
+     <table class="first_t_row">
+         {% comment %} {{coupon.order_id}} {% endcomment %}
+         {%if coupon.order_id %}
+         <tr class="first_t_row_3">
+             <th class="first_t_row_th_1 invoice_font" style="padding: 5px 0px ;">Payable Amount (in words) :{{coupon.actualamount|intword}}</th>
+             <th class="first_t_row_th_total invoice_font"><p>Total :</p></th> 
+             <th class="first_t_row_th_total_p invoice_font ">{{coupon.actualamount}}</th> 
+         </tr>
+         {%else%}
+         <tr class="first_t_row_3">
+             <td class="first_t_row_th_1 invoice_font" style="padding: 5px 0px ;">Payable Amount (in words) :{{payments.amount|intword}}</td>
+             <td class="first_t_row_th_total invoice_font"><p>Total :</p></td> 
+             <td class="first_t_row_th_total_p invoice_font "><p>{{payments.amount}}</p></td> 
+         </tr>
+         {%endif%}
+     </table>  
+     <table class="first_t_row" style="padding:5px 0px ;">
+         <tbody>
+             {%if coupon.order_id %}
+             <tr>
+                 <th class="" style="text-align:end; color: black;">Discount :{{coupon.discountamount}}</th>
+             </tr>
+             {%endif%}
+             <tr>
+                 <th class="" style="text-align:end; color: black;">Payable Amount :{{payments.amount}}</th>
+             </tr>
+         </tbody>
+     </table> 
+     <table  class="first_t_row_Final">
+         <tbody>
+             <tr>
+                 <td class="fs">Payment Mode : Online</td>
+                 <td class="fs">Payment Date : {{testbooking.created}}</td>
+                 <td class="fs" style="text-align:end;">Paid Amount : {{payments.amount}}</td>
+             </tr>
+             {% comment %} <tr>
+                 <td class="fs">Payment Mode : CASH</td>
+                 <td class="fs">Payment Date : 21/06/22, 06:45 p.m.</td>
+                 <td class="fs" style="text-align:end;">Paid Amount : 0.00</td>
+             </tr>
+             <tr>
+                 <td class="fs">Payment Mode : CASH</td>
+                 <td class="fs">Payment Date : 21/06/22, 06:45 p.m.</td>
+                 <td class="fs" style="text-align:end;">Total Amount : 0.00</td>
+             </tr> {% endcomment %}
+         </tbody>
+     </table>  
+     <table class="first_t_row">
+         <tbody>
+             {%if coupon.order_id %}
+             <tr>
+
+                 <th class="first_t_row_th_1 invoice_font">Comments : {{coupon.coupon}} Discount @ {{coupon.discountpercen}}%</th>
+                 <th class="signatute-invoice" style="text-align:center;  padding-top: 70px;">Cashier's Signature</th>
+             </tr>
+             {%else%}
+             <tr>
+
+                 
+                 <th class="signatute-invoice" style="text-align:center;  padding-top: 70px;">Cashier's Signature</th>
+             </tr>
+             {%endif%}
+
+         </tbody>
+     </table>   
+     <div>
+     <table class="text-center header-content"  id="header-content" >
+         <h4 style="color: #402f64; padding-top: 30px; margin-bottom: 0px;">Diagnostica <span style="color:#7a2020 ;"> SPAN </span> Private Limited</h4>
+         <p class="fs">H.O.: NO. 79, Deccan Central, 40th Main, M.E.I Road, 2nd Stage, Industrial Suburb, Yeshwanthpur, Bengaluru 560022 | Website: www.spandiagno.com
+             Customer Care No: +91 9769351301 / +91 9888799994 | CIN No: U85300KA2021PTC151331 | Email: enquiry@spanhealth.com</p>
+     </div> 
+</div>
+</div>

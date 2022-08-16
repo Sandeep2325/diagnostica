@@ -1,0 +1,222 @@
+
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Diagnostica Diagno</title>
+		<!-- Favicon -->
+		<link rel="icon" href="" type="image/x-icon" />
+
+	</head>
+
+    <style>
+        .f-family{
+            font-family:'Times New Roman', Times, serif
+        }
+  
+    </style>
+	<body>
+      <div style="text-align:right; margin-left:565px; padding-bottom:50px">
+        
+       <div style="margin:0px"><img src="static/images/image_logo.png"></div>
+      </div>
+      <div style="padding-right:395px">
+        <p style="font-size:14px; margin:0px; font-weight:bold;" class="f-family"><span>Diagnostica Span Pvt. Ltd,</span></p>
+        <p style="font-size:13px; margin:0px; " class="f-family">Ground Floor, No. 79, Deccan Central, 40th Main,
+            M.E.I Road, 2nd Stage, Industrial Suburb, Yeshwanthpur,
+            Bengaluru 560022</p>
+      </div>
+      <div class="f-family" style="font-size:16px; text-align:center; font-weight:bold; padding-top:30px">BILL/RECEIPT</div>
+		<div >
+            <table  >
+                <tr style="padding-top:5px;">
+                    <td style="font-size:13px; font-weight:bold; border-top:1px solid black" class="f-family"> Receipt No. : <span style="font-weight:none; " >{{order.bookingid}}</span></td>
+                    {% if testbooking.gender == 'm'%}
+                    <td style="font-size:13px; font-weight:bold; border-top:1px solid black; margin-left:20px " class="f-family">Name :Mr {{testbooking.firstname}} {{testbooking.lastname}}</td>
+                    <td style="font-size:13px; font-weight:bold; border-top:1px solid black; margin-left:50px" class="f-family">Sex / Age : <span style="font-weight:none; " >Male / {{testbooking.age}} years</span></td>
+                    {%elif testbooking.gender == 'f' %}
+                    <td style="font-size:13px; font-weight:bold; border-top:1px solid black; margin-left:20px " class="f-family">Name :Mrs {{testbooking.firstname}} {{testbooking.lastname}}</td>
+                    <td style="font-size:13px; font-weight:bold; border-top:1px solid black; margin-left:50px" class="f-family">Sex / Age : <span style="font-weight:none; " >Female / {{testbooking.age}} years</span></td>
+                    {%elif testbooking.gender == 'f' %}
+                    <td style="font-size:13px; font-weight:bold; border-top:1px solid black; margin-left:20px " class="f-family">Name : {{testbooking.firstname}} {{testbooking.lastname}}</td>
+                    <td style="font-size:13px; font-weight:bold; border-top:1px solid black; margin-left:50px" class="f-family">Sex / Age : <span style="font-weight:none; " >Other / {{testbooking.age}} years</span></td>
+                {%endif%}
+                </tr>
+                <tr style="padding-top:5px;">
+                    <td style="font-size:13px; font-weight:bold" class="f-family"> Status : <span style="font-weight:none; " > Completed</span></td>
+                    {%if testbooking.myself == True%}
+                    <td style="font-size:13px; font-weight:bold; margin-left:20px " class="f-family">Referral : SELF</td>
+                    {%elif testbooking.others_choice == 'm' %}
+                    <td style="font-size:13px; font-weight:bold; margin-left:20px " class="f-family">Referral : Mother</td>
+                    {%elif testbooking.others_choice == 'f' %}
+                    <td style="font-size:13px; font-weight:bold; margin-left:20px " class="f-family">Referral : Father</td>
+                    {%elif testbooking.others_choice == 'w' %}
+                    <td style="font-size:13px; font-weight:bold; margin-left:20px " class="f-family">Referral : Wife</td>
+                    {%elif testbooking.others_choice == 's' %}
+                    <td style="font-size:13px; font-weight:bold; margin-left:20px " class="f-family">Referral : Son</td>
+                    {%elif testbooking.others_choice == 'd' %}
+                    <td style="font-size:13px; font-weight:bold; margin-left:20px " class="f-family">Referral : Daughter</td>
+                    {%elif testbooking.others_choice == 'o' %}
+                    <td style="font-size:13px; font-weight:bold; margin-left:20px " class="f-family">Referral : Other</td>
+{%endif%}
+                    <td style="font-size:13px; font-weight:bold; margin-left:50px" class="f-family">Date & Time: <span style="font-weight:none; " >{{testbooking.created}}</span></td>
+                </tr>
+            </table>
+            <table  >
+                <tr style="padding-top:5px;">
+                    <td style="font-size:13px; font-weight:bold; border-top:1px solid black; border-bottom:1px solid black" class="f-family"> SL no.</td>
+                    <td style="font-size:13px; font-weight:bold; border-top:1px solid black; border-bottom:1px solid black" class="f-family">Test Code</td>
+                    <td style="font-size:13px; font-weight:bold; border-top:1px solid black; border-bottom:1px solid black" class="f-family">Test Name</td>
+                    <td style="font-size:13px; font-weight:bold; border-top:1px solid black; border-bottom:1px solid black" class="f-family">Test Price</td>
+                </tr>
+                {%for test in tests%}
+                {%if test.items != None%}
+                <tr style="padding-top:5px;">
+                    <td style="font-size:13px; width:100px  " class="f-family"> {{ forloop.counter }}</td>
+                    <td style="font-size:13px;  width:170px" class="f-family">{{test.testcode}}</td>
+                    <td style="font-size:13px;  width:350px" class="f-family">{{test.items}}.</td>
+                    <td style="font-size:13px; " class="f-family">Rs.{{test.price|floatformat:2}}</td>
+                </tr>
+                {%elif test.labtest != None%}
+                <tr style="padding-top:5px;">
+                    <td style="font-size:12px; width:100px  " class="f-family"> {{ forloop.counter }}</td>
+                    <td style="font-size:12px;  width:170px" class="f-family">{{test.labtest}}</td>
+                    <td style="font-size:12px;  width:350px" class="f-family">{{test.labtest}}</td>
+                    <td style="font-size:12px; " class="f-family">Rs.{{test.price|floatformat:2}}</td>
+                </tr>
+                {%elif test.packages != None%}
+                <tr style="padding-top:5px;">
+                    <td style="font-size:12px; width:100px  " class="f-family"> {{ forloop.counter }}</td>
+                    <td style="font-size:12px;  width:170px" class="f-family">{{test.packages}}</td>
+                    <td style="font-size:12px;  width:350px" class="f-family">{{test.packages}}</td>
+                    <td style="font-size:12px; " class="f-family">Rs.{{test.price|floatformat:2}}</td>
+                </tr>
+                {%elif test.healthsymptoms != None%}
+                <tr style="padding-top:5px;">
+                    <td style="font-size:12px; width:100px  " class="f-family"> {{ forloop.counter }}</td>
+                    <td style="font-size:12px;  width:170px" class="f-family">{{test.healthsymptoms}}</td>
+                    <td style="font-size:12px;  width:350px" class="f-family">{{test.healthsymptoms}}</td>
+                    <td style="font-size:12px; " class="f-family">Rs.{{test.price|floatformat:2}}</td>
+                </tr>
+                {%endif%}
+                {%endfor%}
+            </table>
+            <table  >
+                {%if coupon.order_id %}
+                <tr style="padding-top:5px;">
+                    <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black; width:520px" class="f-family">Payable Amount (in words) :{{couponamount|intword|title}} Rupees Only</td>
+                    <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black" class="f-family">Total:</td>
+                    <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black" class="f-family">Rs.{{coupon.actualamount|floatformat:2}}</td>
+                </tr>
+                {%else%}
+                <tr style="padding-top:5px;">
+                    <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black; width:520px" class="f-family">Payable Amount (in words) :{{amount|intword|title}} Rupees Only</td>
+                    <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black" class="f-family">Total:</td>
+                    <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black" class="f-family">Rs.{{payments.amount|floatformat:2}}</td>
+                </tr>
+                {%endif%}
+            </table>
+            <table  >
+                {%if coupon.order_id %}
+                <tr style="padding-top:5px;">
+                    <td style="font-size:12px;  width:520px" class="f-family"></td>
+                    <td style="font-size:12px;" class="f-family">Discount:</td>
+                    <td style="font-size:12px;" class="f-family">Rs.{{coupon.discountamount|floatformat:2}}</td>
+                </tr>
+                <tr style="padding-top:5px;">
+                    <td style="font-size:12px;  width:520px" class="f-family"></td>
+                    <td style="font-size:12px; font-weight:bold" class="f-family">Payable Amount:</td>
+                    <td style="font-size:12px;" class="f-family">Rs.{{payments.amount|floatformat:2}}</td>
+                </tr>
+                {%else%}
+                <tr style="padding-top:5px;">
+                    <td style="font-size:12px;  width:520px" class="f-family"></td>
+                    <td style="font-size:12px; font-weight:bold" class="f-family">Payable Amount:</td>
+                    <td style="font-size:12px;" class="f-family">Rs.{{payments.amount|floatformat:2}}</td>
+                </tr>
+                {%endif%}
+            </table>
+            
+            <table>
+                {% comment %} <tr style="padding-top:5px;">
+                    <td style="font-size:12px;  width:260px" class="f-family">Payment Mode : CASH</td>
+                    <td style="font-size:12px;  width:260px" class="f-family">Payment Date : 21/06/22, 06:45 p.m.</td>
+                    <td style="font-size:12px; " class="f-family">Paid Amount:</td>
+                    <td style="font-size:12px;" class="f-family">1200.00</td>
+                </tr> {% endcomment %}
+                <tr style="padding-top:5px;">
+                    <td style="font-size:12px;  width:260px" class="f-family">Payment Mode : ONLINE</td>
+                    <td style="font-size:12px;  width:260px" class="f-family">Payment Date : {{payments.date}}</td>
+                    <td style="font-size:12px; " class="f-family">Paid Amount:</td>
+                    <td style="font-size:12px;" class="f-family">Rs.{{payments.amount|floatformat:2}}</td>
+                </tr>
+            </table>
+            <table  >
+                <tr style="padding-top:5px;">
+                    <td style="font-size:12px; border-bottom:1px solid black;  width:520px" class="f-family"></td>
+                    <td style="font-size:12px; border-bottom:1px solid black;" class="f-family">Total Paid:</td>
+                    <td style="font-size:12px; border-bottom:1px solid black;" class="f-family">Rs.{{payments.amount|floatformat:2}}</td>
+                </tr>
+            </table>
+            {%if coupon.order_id %}
+            <table  >
+                
+                <tr style="padding-top:3px">
+                    <td style="font-size:12px;  width:520px;" class="f-family"> <p style="padding:0px">Comments :{{coupon.coupon}} Span Voucher Discount @ {{coupon.discountpercen}}%</p></td>
+                </tr>
+            </table>
+            <table  >
+                <tr style="padding-top:3px">
+                    <td style="font-size:12px;  width:520px;" class="f-family"></td>
+                    <td style="font-size:12px; padding-top:70px" class="f-family">
+                        <p style="border-top:1px solid black; padding-top:5px; padding-left:60px">Cashier's Signature</p>
+                    </td>
+                </tr>
+            </table>
+           {%else%}
+           <table  >
+            <tr style="padding-top:3px">
+                <td style="font-size:12px;  width:520px;" class="f-family"></td>
+                <td style="font-size:12px; padding-top:70px" class="f-family">
+                    <p style="border-top:1px solid black; padding-top:5px; padding-left:60px">Cashier's Signature</p>
+                </td>
+            </tr>
+        </table>
+        {%endif%}
+            <div style="display:flex; align-items:baseline;padding-top:50px">
+                <h4 style="color: #402f64; padding-top: 100px; margin-bottom: 0px; text-align:center; font-size:15px">Diagnostica <span style="color:#7a2020 ;"> SPAN </span> Private Limited</h4>
+                <p style="text-align:center">H.O.: NO. 79, Deccan Central, 40th Main, M.E.I Road, 2nd Stage, Industrial Suburb, Yeshwanthpur, Bengaluru 560022 | Website: www.spandiagno.com
+                    Customer Care No: +91 9769351301 / +91 9888799994 | CIN No: U85300KA2021PTC151331 | Email: enquiry@spanhealth.com</p>
+            </div>
+          
+            
+        </div>
+        
+	</body>
+</html>
+
+
+
+{% comment %} 
+background-color
+border-bottom-color, border-bottom-style, border-bottom-width
+border-left-color, border-left-style, border-left-width
+border-right-color, border-right-style, border-right-width
+border-top-color, border-top-style, border-top-width
+colordisplay
+font-family, font-size, font-style, font-weight
+height
+line-height, list-style-type
+margin-bottom, margin-left, margin-right, margin-top
+padding-bo
+sizettom, padding-left, padding-right, padding-top
+page-break-after, page-break-before
+text-align, text-decoration, text-indent
+vertical-align
+white-space
+width
+zoom {% endcomment %}

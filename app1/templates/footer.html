@@ -1,0 +1,226 @@
+
+{% load static %}
+<body>
+    <a id="button" class="scroll_top"></a>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <a    href= "https://api.whatsapp.com/send/?phone=+919888799994&text=Hello"
+      
+        class="whatsapp_float" target="_blank">
+        <i class="fa fa-whatsapp my-float"></i>
+    </a>
+
+    <section class="section_footer ">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-3 col-lg-6 col-md-12 col-12">
+                    <div class="footer_image_logo py-4 py-lg-5 mt-lg-3">
+                       <a href="{%url "home"%}"> <img src="{%static "images/image_logo.png"%}" alt="" class="img-fluid"></a>
+                    </div>
+                        <div class="footer_address">
+                            <ul class="p-0">
+                                <li> <i class="fa fa-map-marker  " aria-hidden="true"></i>
+                                    Ground floor, No. 79, 40th main<br>
+                                    M.E.I road, 2nd Stage<br>
+                                    Industrial Suburb<br>
+                                    Yeshwanthpur <br>
+                                    Bengaluru - 560022
+                                </li>
+                                <li>
+                                    <i class="fa fa-phone " aria-hidden="true"></i>
+                                    <a href="tel:+919769351301">+91 98887 99994</a>
+                                </li>
+                                <li>
+                                    <i class="fa fa-envelope-o " aria-hidden="true"></i>
+                                    <a href="mailto:enquiry@spandiagno.com">enquiry@spandiagno.com</a>
+                                </li>
+                            </ul>
+                        </div>
+                </div>
+                <div class="col-xl-3 col-lg-3  col-6 pt-xl-5 pt-3 ps-xl-5">
+                    <h3 class="fs-30  footer_branches font-bold m-0 pb-3">Branches</h3>
+                    <ul class="p-0">
+                        {% comment %} {%for city in cityy%}
+                        <li class="text_decoration font-bold pb-2">
+                            <a class="footer_branch_text fs-24 cursor" onclick='myfunction("{{city.cityname}}")'>{{city.cityname}}</a>
+                        </li>
+                        {%endfor%} {% endcomment %}
+                        <li class="text_decoration font-bold pb-2">
+                            <a class="footer_branch_text fs-24 ">Bangalore</a>
+                        </li>
+                         {% comment %} <li class="text_decoration font-bold pb-2">
+                            <a class="footer_branch_text fs-24 ">Bhopal</a>
+                        </li>
+                        <li class="text_decoration font-bold pb-2">
+                            <a class="footer_branch_text fs-24 ">Nanded</a>
+                        </li>
+                        <li class="text_decoration font-bold pb-2">
+                            <a class="footer_branch_text fs-24 ">Pune</a>
+                        </li>
+                        <li class="text_decoration font-bold pb-2">
+                            <a class="footer_branch_text fs-24 ">Barshi</a>
+                        </li>
+                        <li class="text_decoration font-bold pb-2">
+                            <a class="footer_branch_text fs-24 ">Aurangabad</a>
+                        </li> {% endcomment %}
+                    </ul>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-6 pt-xl-5 pt-3 subscription_div">
+                    <h3 class="fs-30 footer_branches font-bold m-0 pb-3">Useful Links</h3>
+                    <ul class="p-0 ">
+                        <li class="text_decoration_usefull font-regular">
+                            <a href="{%url "aboutus"%}" class="">About us </a>
+                        </li>
+                        <li class="text_decoration_usefull font-regular">
+                            <a href="{%url "packages"%}" class="">Packages</a>
+                        </li>
+                        <li class="text_decoration_usefull font-regular">
+                            <a href="{%url "contactus"%}"class="">Contact</a>
+                        </li>
+                        <li class="text_decoration_usefull font-regular">
+                            <a class="">Franchisee Opportunities </a>
+                        </li>
+                        <li class="text_decoration_usefull font-regular">
+                            <a class="">Careers</a>
+                        </li>
+                        <li class="text_decoration_usefull font-regular">
+                            <a href="{%url "faq"%}" class="">FAQs</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-xl-3 col-lg-5 pt-xl-5">
+                    <h3 class="fs-30 footer_branches font-bold m-0 pb-3">Subscribe</h3>
+                    {% comment %} <form action="javascript:void(0)" id="subscribes"> {% endcomment %}
+                        <label class="footer_Subscribe_label" for="email">Enter Email Address</label>
+                        <br>
+                        <input class="footer_Subscribe_input" id="emaill" name="email" type="email" maxlength="250"
+                            required>
+                        <div class="d-flex justify-content-end" id="respp">
+                            <button type="submit" class="footer_sub_button mt-3 py-2 px-4 br-50"
+                                id="newsletter">SUBSCRIBE</button>
+                        </div>
+                        <div>
+                            <h3 class="fs-30 footer_branches font-bold m-0 pt-4 mt-2">Social Media</h3>
+                            <ul class="d-flex p-0 pt-3 ">
+                                <li class="text_dec_media pe-3"><a href=" https://www.facebook.com/DiagnosticaSpan" target="_blank">
+                                        <img src="{%static "images/bg-facebook.png"%}" alt="" class="img-fluid">
+                                    </a></li>
+                                {% comment %} <li class="text_dec_media pe-3"><a href="https://www.linkedin.com/company/diagnosticaspan/">
+                                        <img src="{%static "images/linkdin.png"%}" alt="" class="img-fluid">
+                                    </a></li> {% endcomment %}
+                                <li class="text_dec_media pe-3"><a href="https://instagram.com/diagnostica.span?igshid=YmMyMTA2M2Y= " target="_blank">
+                                        <img src="{%static "images/bg-insta.png"%}" alt="" class="img-fluid">
+                                    </a></li>
+                            </ul>
+                        </div>
+                        {% comment %}
+                    </form> {% endcomment %}
+                </div>
+            </div>
+            <div class="row py-4 mx-sm-0">
+                <a href="{% url "privacy-policy" %}" class="col-6 col-sm-4 col-lg-2 px-lg-0 footer-policy">Privacy Policy</a>
+                <a href="{% url "termsofuse" %}" class="col-6 col-sm-4 col-lg-2 px-lg-0 footer-policy">Terms of use</a>
+                <a href="{% url "payment-refund" %}" class="col-sm-4 col-lg-3 col-xl-2 ps-lg-0 footer-policy pt-2 pt-sm-0">Payment & Refunds</a>
+                <div
+                    class="col-xl-6 col-lg-5 ps-lg-0 footer-policy d-flex justify-content-end align-content-end pt-4 pt-lg-0">
+                    © 2022
+                    Diagnostica
+                    Span Private Limited</div>
+            </div>
+        </div>
+    </section>
+</body>
+<script>
+
+    $.validator.addMethod('filesize', function (value, element, param) {
+        return this.optional(element) || (element.files[0].size <= param)
+    }, 'File size must be less than {0}');
+    $("#emaill").validate({
+        rules: {
+            'email': {
+                required: true,
+                email: true
+            },
+        },
+
+        messages: {
+            'email': {
+                required: "Enter email ID",
+                email: "Enter valid email ID"
+            },
+        },
+    });
+
+    $("#newsletter").on("click", function (e) {
+       
+        var email = $("#emaill").val();
+        var pattern = /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i
+        if (email == "") {
+            swal("","Please Enter Email to Submit","warning")
+                    }
+        else {   
+            if(!pattern.test(email)){
+            swal("","Please Enter Valid Email","warning")
+            } 
+        else{             
+        $.ajax({
+            url: "{% url 'newsletter' %}",
+            type: "POST",
+            dataType: "json",
+            data: {
+                'email': email,
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+            },
+            success: function (resp) {
+                $("#emaill").val('');
+                if (!resp["message"]){
+                    swal("Thank you", "Already Subscribed Thank you!!", "warning");
+                    //alert("Already Subscribed Thank you!!")
+                }
+                else{
+                    swal("Subscribed","Thank you for Subscribing!","success")
+                }
+            }
+        });
+    }   
+                    }
+        return false;
+    });
+
+    var btn = $('#button');
+
+    $(window).scroll(function () {
+        if ($(window).scrollTop() > 300) {
+            btn.addClass('show');
+        } else {
+            btn.removeClass('show');
+        }
+    });
+
+    btn.on('click', function (e) {
+        e.preventDefault();
+        $('html, body').animate({ scrollTop: 0 }, '300');
+    });
+
+
+    function myfunction(city){
+          
+        $.ajax({
+          url: "{% url 'city' %}",
+          type : "POST", 
+          data: {
+           "city":city,
+           csrfmiddlewaretoken: '{{ csrf_token }}',
+          },
+          dataType: "json",
+          success: function(resp){
+           console.log(resp);
+           if(resp["city"]){
+            $('#myModal').modal('hide');
+            window.location.reload();
+           }
+          }
+         });
+       };
+</script>
+

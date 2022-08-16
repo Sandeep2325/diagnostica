@@ -1,0 +1,47 @@
+/* .sidebar {
+    background-color: whitesmoke;
+} */
+
+;
+.brand-link {
+    background-color: rgb(224, 231, 237);
+}
+
+;
+.sidebar,
+a {
+    color: rgb(115, 108, 108);
+    font-style: italic;
+}
+
+;
+.brand-image {
+    float: left;
+    line-height: 6.8;
+    margin-left: 0.8rem;
+    margin-right: 0.5rem;
+    margin-top: 11px;
+    max-height: 10px;
+    width: auto;
+}
+
+span.select2-selection.select2-selection--multiple {
+    width: min-content;
+}
+
+
+/* .select2-selection {
+    width: 600px;
+} */
+
+
+/* .sidebar ,
+    a {
+      color: $sidebar-dark-color;
+     
+      &:hover,
+      &:focus {
+        text-decoration: none;
+      }
+    }
+   */

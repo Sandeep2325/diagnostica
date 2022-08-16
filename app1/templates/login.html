@@ -1,0 +1,162 @@
+{% extends "index.html" %}
+{% load static %}
+
+{%block content%}
+<body>
+   
+    {%include "header.html"%}
+    <section class="sub_header py-xl-4 py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="d-flex ">
+                        <p class="m-0 fs-18 font-regular cl-dark-blue opc-5 pe-1 sub_nav_bar"><a href="{%url "home"%}">Home</a></p>
+                        /
+                        <p class="m-0 fs-18 font-regular cl-dark-blue ps-1 sub_nav_bar">Login</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section_login br-10 pb-5">
+        <div class="container">
+            <form method ="post"  id="loginForm">
+                {%csrf_token%}
+                <div class="row h-100 ">
+                    <div class="col-lg-12">
+                        <div class="bg-light-grey br-15">
+                        <div class="row px-3 h-100">
+                            <div class="col-lg-7  ">
+                                <div class="px-xl-5 py-xl-5 p-3 pt-lg-4 ">
+                                    <div>
+                                        <h1 class="fs-40 font-bold cl-dark-blue pt-lg-0 pt-3 m-0 ">Login</h1>
+                                        <p class="fs-18 font-regular cl-dark-blue m-0 py-xl-5 py-3">Welcome to Diagnostica Span<br>
+                                            Kindly fill the form below to get started.</p>
+
+{% comment %} {%for message in messages%}
+<label >{{message}}</label>
+{%endfor%} {% endcomment %}
+
+                                        <div class="row">
+                                            <div class="col-lg-6 pb-xl-0 pb-3">
+                                                <label class="fs-20 font-bold cl-dark-blue pb-2" for="email">Email
+                                                    Id</label>
+                                                <input class="login_input br-5  ps-5" placeholder="Enter email Id" id="email" name="email" type="email" autocomplete="off" maxlength="250" >
+                                            </div>
+                                            <div class="col-lg-6 login_input_col">
+                                                <label class="fs-20 font-bold cl-dark-blue pb-2" for="password">Password</label>
+                                                <input class="login_input_2 br-5  ps-5 " placeholder="Enter Password " type="password" id="password" name="password" maxlength="250">
+                                                <i class="toggle-password fa fa-fw fa-eye-slash "></i>
+                                            </div>
+                                        </div>
+                                        <div class="row  py-3 ">
+                                            <div class="col-lg-8 col-md-6 col-12 text-start">
+                                                <div class="d-flex align-items-start">
+                                                <input type="checkbox" name="remindme" class="" style="height: 25px; display:none" id="login-check">
+                                                    <label for="login-check" class="ps-2 cl-dark-blue font-regular" style="display:none">
+                                                        <p class="mb-0 fs-16 font-regular">Remind me</p>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <a href="{%url "forgot-password"%}" class="col-lg-4 col-md-6 col-12 text-lg-end text-md-end cl-dark-blue fs-16 font-regular cursor">
+                                                Forgot Password?</a>
+                                        </div>
+                                        {% if request.GET.next%}
+                                        <input type="hidden" name="next" value="{{ request.GET.next }}">
+                                        {% endif %}
+                                        <div class="pt-3">
+                                            <button class="globalsubmitbutton" type="submit" value="submit">Login</button>
+                                        </div>
+
+                                        <div class="d-flex py-2 mt-xl-5  mt-2">
+                                            <p class="m-0  fs-16 font-regular">Create an account?</p>
+                                            <a class="ps-2 fs-16 font-bold" href="{%url "Registration"%}">
+                                                Sign Up
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-5 p-0 ">
+                                <img src="{%static "images/login.png"%}" alt="" class="img-fluid h-100 w-100 br-15">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</body>
+{% if messages %}
+{% for message in messages %}
+{% if message.tags == "error"%}
+<script>
+  $(document).ready(function(){
+   // swal('{{message}}');
+
+    swal({
+	title:'{{message}}',
+	//text: "You clicked the button!",
+	icon:"warning",
+	button:"ok"
+});
+  });
+</script>
+{%else%}
+<script>
+  $(document).ready(function(){
+   // swal('{{message}}');
+
+    swal({
+	title:'{{message}}',
+	//text: "You clicked the button!",
+	icon:"success",
+	button:"ok"
+});
+  });
+</script>
+{% endif %}
+{%endfor%}
+{% endif %}
+<script>
+    $(document).on('click', '.toggle-password', function() {
+
+        $(this).toggleClass("fa-eye fa-eye-slash");
+
+        var input = $("#password");
+        input.attr('type') === 'password' ? input.attr('type', 'text') : input.attr('type', 'password')
+    });
+
+    $.validator.addMethod('filesize', function(value, element, param) {
+        return this.optional(element) || (element.files[0].size <= param)
+    }, 'File size must be less than {0}');
+    $("#loginForm").validate({
+        rules: {
+            'email': {
+                required: true,
+                email: true
+            },
+            'password': {
+                required: true,
+                password_regex: true,
+                minlength: 8
+            },
+        },
+
+        messages: {
+            'email': {
+                required: "This field is required.",
+                email: "Enter valid email ID"
+            },
+            'password': {
+                required: "This field is required."
+            },
+        },
+        submitHandler: function(form) {
+            form.submit();
+        }
+    });
+</script>
+{%endblock%}

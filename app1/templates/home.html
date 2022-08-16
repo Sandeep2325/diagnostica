@@ -1,0 +1,947 @@
+{% extends "index.html" %}
+{% load i18n %}
+{% load static %}
+{% load custom_tags %}
+{%block content%}
+<body>
+  <div class="preload"><img src="http://i.imgur.com/KUJoe.gif">
+  </div>
+  <div  class="content">
+  {%include 'header.html'%}
+  <section class="home_banner pt-3 pb-lg-3">
+    <div class="owl-carousel owl-theme home-banner-slider">
+      <div class="home-banner banner1 pt-4 pb-5 py-sm-5">
+        <div class="container">
+          <div class="row">
+            <div class="offset-xl-1 offset-xxl-1 col-xxl-5 col-xl-6 col-lg-10 ">
+              {%if currentcity == None%}
+              <h1 class="" id="cityName">Hello,</h1>
+              {%else%}
+              <h1 class="" id="cityName">Hello {{currentcity}},</h1>
+              {%endif%}
+              <h2 class="">Protect your health with This simple Checkup.</h2>
+              <p class="fs-24">To become <b> “One Stop Solution” </b> for all your Diagnostic needs</p>
+              <a href="{%url "bookonline"%}"><button>BOOK A TEST ONLINE</button></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="home-banner banner2 pt-4 pb-5 py-sm-5">
+        <div class="container">
+          <div class="row">
+            <div class="offset-xl-1 offset-xxl-1 col-xxl-5 col-xl-6 col-lg-10 ">
+              <h1 class="p-0" style="color:red">#</h1>
+              <h1 class="p-0 m-0" style="color:red; font-weight: bold;">STAY SAFE</h1>
+              <p class="fs-24" style="color:red"><b>HOME SAMPLE COLLECTION NOW AVAILABLE</b></p>
+              <a href="{%url "bookonline"%}"><button>BOOK A TEST ONLINE</button></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="home-banner banner3 pt-4 pb-5 py-sm-5">
+        <div class="container">
+          <div class="row">
+            <div class=" text-end col-lg-7 "> </div>
+            <div class=" text-start col-lg-5 ">
+              <h1 class="p-0 m-0" style="color:red; font-weight: bold;">Check out our Span's curated Health packages </h1>
+             <a href="{% url 'packages' %}"><button class="mt-lg-5 mt-4">Health Packages</button></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section_home_health_check">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 d-flex justify-content-between pt-3">
+          <h1 class="fs-40 font-bold d-flex align-items-center home_health_h1 w-100 m-0 cl-dark-blue">Popular Tests
+          </h1>
+          <a href="{% url 'testselect' %}"><button class="home_pack_viewpack py-2 px-0 fs-16 br-50 " style="min-width: 150px;">VIEW ALL</button></a>
+          
+        </div>
+        <div id="popular_tests" class="owl-carousel owl-theme">
+          {%for checkup in healthcheckup%}
+        
+        <div class=" py-lg-4 py-2 ">
+
+          <div class=" bg-light-grey br-10 h-100 health_check_height">
+            <div class="position-relative ">
+              <!-- <div class="batdge">8% OFF </div> -->
+            </div>
+           
+            <div class="px-xl-4 px-3 py-4 bg-light-grey br-10">
+              <div>
+                <h1 class="cl-dark-blue fs-35 font-bold test_head pt-2">{{checkup.package_title}}</h1>
+                {% comment %} <h2 id="loading">Loading<h3> {% endcomment %}
+              </div>
+              <div class="home_ul_li ul-dot m-0 health_care_ ">
+                <p style="margin-top: 3px;" class="more scroll_cus">{{checkup.description|safe}}
+                </p>
+              </div>
+              <div class="position-relative">
+                <p class="my-2 pt-2 fs-20 font-bold cl-light-blue">Price</p>
+                <div class="d-flex align-items-center">
+                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price" id="price1">₹{{checkup.dBanglore_price}}</h2>
+                  <!-- <strike
+                    class="ps-xl-3 ps-2 text-center fs-20 font-bold cl-light-blue health_price_disc">₹799</strike> -->
+                  <button
+                    class="px-xl-3 px-2 test_now_button fs-16 cl-dark-blue font-bold py-2 px-4 br-20 position-absolute br" onclick='testnow("{{checkup.id}}")' name={{checkup.slug}} id="testnow">Test
+                    Now</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        {%endfor%}
+
+        </div>
+  </section>
+
+
+  <section class="section_synbrome">
+    <div class="container">
+      <div class="row h-100">
+        <div class="col-lg-12 d-flex justify-content-between py-lg-3 py-2">
+          <h1 class="fs-40 font-bold d-flex align-items-center home_health_h1 w-100 m-0 cl-dark-blue">Lifestyle Assessments
+          </h1>
+          <a href="{%url 'lifestyles'%}"><button class="home_pack_viewpack py-2 px-0 fs-16 br-50 " style="min-width: 150px;">VIEW ALL</button></a>
+          
+        </div>
+        <div id="health_symptoms" class="owl-carousel owl-theme">
+          {%for symptoms in healthsymptom%}
+
+        <div class=" py-2 ">
+          <a href={% url 'health_symptoms' symptoms.slug %}>  
+          <div
+            class="symptoms px-3 {% cycle 'bg-light-blue' 'bg-light-orange' 'bg-light-green' 'bg-light-pink' %} text-center py-lg-5 py-3 br-10">
+            <img src="{{ symptoms.photo.url }}" alt="" class="img-fluid pb-3">
+            <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold symp_height">{{symptoms.name}}</p>
+          </div>
+        </a>
+        </div>
+        {%endfor%}
+        
+        </div>
+      </div>
+    </div>
+  </section> 
+
+  <section class="section_health_pack pb-3">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 d-flex justify-content-between pt-lg-3 ">
+          <h1 class="fs-40 font-bold d-flex align-items-center home_health_h1 w-100 m-0 cl-dark-blue">Health Packages
+          </h1>
+          <a href="{%url "packages"%}"><button class="home_pack_viewpack py-2 px-0 fs-16 br-50 " style="min-width: 150px;">VIEW ALL</button></a>
+          
+        </div>
+        {% comment %} {%for package in healthpackage%}
+        <div class="col-xl-3  col-lg-4 col-md-6 pt-3">
+          <div class="py-5 bg-light-grey br-30 health_hover">
+            <p class="fs-35 font-bold cl-dark-blue text-center m-0">{{package.package_name}}</p>
+            <div class="d-flex justify-content-center align-content-center pt-4 mt-lg-3">
+              <div class="home_linear_border  ">
+                <div class="">
+                  <p
+                    class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">
+                    Price</p>
+                  {%if currentcity == envcity.Bangalore%}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.Banglore_price}}</h1>
+                  {%elif currentcity == envcity.Mumbai%}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.Mumbai_price}}</h1>
+                  {%elif currentcity == envcity.Bhophal%}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.bhopal_price}}</h1>
+                  {%elif currentcity == envcity.Nanded%}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.nanded_price}}</h1>
+                  {%elif currentcity == envcity.Pune%}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.pune_price}}</h1>
+                  {%elif currentcity == envcity.Barshi%}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.barshi_price}}</h1>
+                  {%elif currentcity == envcity.Aurangabad%}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.aurangabad_price}}</h1>
+                  {%endif%}
+                  <p
+                    class="d-flex justify-content-center align-content-center align-items-center m-0 fs-18 cl-dark-blue font-bold">
+                    Includes {{package.testcount}}
+                    Tests
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex justify-content-center pt-lg-5 pt-4">
+              <a href="{%url "Health-package" package.slug%}"><button
+                  class="home_pack_viewpack py-3 fs-16 font-bold br-50 ">VIEW PACK</button></a>
+            </div>
+          </div>
+        </div>
+        {%endfor%} {% endcomment %}
+<div id="health_pack_carousel" class="owl-carousel owl-theme">
+        
+        {%for package in healthpackage%}
+        <div class=" pt-3">
+        <div class="py-5 bg-light-grey br-30 health_hover">
+          <p class="fs-35 font-bold cl-dark-blue text-center m-0">{{package.package_name}}</p>
+          <div class="d-flex justify-content-center align-content-center pt-4 mt-lg-3">
+            <div class="home_linear_border  ">
+              <div class="">
+                <p
+                  class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">
+                  Price</p>
+                {%if currentcity == envcity.Bangalore%}
+                <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.Banglore_price}}</h1>
+                {%elif currentcity == envcity.Mumbai%}
+                <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.Mumbai_price}}</h1>
+                {%elif currentcity == envcity.Bhophal%}
+                <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.bhopal_price}}</h1>
+                {%elif currentcity == envcity.Nanded%}
+                <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.nanded_price}}</h1>
+                {%elif currentcity == envcity.Pune%}
+                <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.pune_price}}</h1>
+                {%elif currentcity == envcity.Barshi%}
+                <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.barshi_price}}</h1>
+                {%elif currentcity == envcity.Aurangabad%}
+                <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.aurangabad_price}}</h1>
+                {%endif%}
+                <p
+                  class="d-flex justify-content-center align-content-center align-items-center m-0 fs-18 cl-dark-blue font-bold">
+                  Includes {{package.testcount}}
+                  Tests
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-center pt-lg-5 pt-4">
+            <a href="{%url "Health-package" package.slug%}"><button
+                class="home_pack_viewpack py-3 fs-16 font-bold br-50 ">VIEW PACK</button></a>
+          </div>
+        </div>
+      </div>
+        {%endfor%}
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section_care pb-4">
+    <div class="container">
+      <div class="">
+        <div class="row">
+          <h3 class="fs-40  cl-dark-blue font-bold d-flex align-items-center home_health_symp_header m-0 py-lg-5  py-3" id="healt">Health Care</h3>
+
+          <div id="health-care-slider" class="col-lg-12 health-care-slider owl-carousel owl-theme">
+            {%for blog in healthcareblog%}
+            <div class="col-lg-6 w-100">
+
+              <div class="row">
+                <div class="col-lg-6 h-100">
+                  <div class="pe-lg-4">
+                    <img src="{{blog.image.url}}" alt="" class="img-fluid br-10">
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <h1 class="fs-35 font-bold cl-dark-blue m-0 blog_head_height">{{blog.title}}</h1>
+                  
+                  {% comment %} <p class="m-0 fs-18 cl-dark-blue health_care_p pb-3" >{{blog.description|low|truncatewords:40}}</p> {% endcomment %}
+                  <p class="m-0 fs-18 cl-dark-blue health_care_p pb-3" >{{blog.description|striptags|truncatechars:140|safe}}</p>
+
+                  <a href="{%url "blogsdetail" blog.slug %}"
+                    class="py-2 px-4 bg-dark-orange cl-dark-blue font-bold fs-16 br-30 d-inline-block">READ MORE</a>
+                </div>
+              </div>
+
+            </div>
+            {%endfor%}
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section_about_span bg-light-grey mt-5" id="about">
+    <div class="container">
+      <div class="row  py-3">
+        <div class="col-lg-6 pe-lg-5 py-3">
+          <h1 class="fs-40 font-bold d-flex align-items-center cl-dark-blue pb-lg-3">About Span</h1>
+          <p class="fs-24 font-regular cl-dark-brown m-0">On December 1 2018, SPAN (www.spanhealth.com) took
+            the
+            first
+            step towards
+            making diagnostics a key vertical. The laboratories are located in Mumbai, Pune, Barshi, and Aurangabad.</p>
+          <p class="fs-24 font-regular cl-dark-brown pt-3">The management is committed to ensuring that the quality of our services
+            continues to meet
+            and exceed your requirements while expanding the number of tests performed locally and also improving the
+            TAT significantly. Diagnostica SPAN has plans of expanding its operations pan-India through organic and
+            franchisee models designed to provide a robust and reliable one-stop solution.</p>
+          <div class="row py-4">
+            <div class="col w-100  ">
+              <h1 class="fs-40 cl-light-2-blue font-bold " id="testepeeps">123456</h1>
+              <p class="fs-25 font-bold cl-dark-blue">TESTED PEOPLE</p>
+            </div>
+            <div class="col w-100 ">
+              <h1 class="fs-40 cl-light-2-blue font-bold " id="verified">3456</h1>
+              <p class="fs-25 font-bold cl-dark-blue">VERIFIED CENTER</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col w-100 ">
+              <h1 class="fs-40 cl-light-2-blue font-bold " id="cities">7</h1>
+              <p class="fs-25 font-bold cl-dark-blue">CITIES</p>
+            </div>
+            <div class="col w-100 ">
+              <h1 class="fs-40 cl-light-2-blue font-bold " id="visits">72812</h1>
+              <p class="fs-25 font-bold cl-dark-blue">DAILY VISITS</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 ps-lg-5">
+          <img src="{%static "images/about-us-img.png"%}" alt="" class="img-fluid">
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section_critical">
+    <div class="container">
+      <div class="row">
+        <h1 class="fs-40 font-bold d-flex align-items-center cl-dark-blue py-lg-5 py-3 m-0">Our CRITICAL services</h1>
+        <div class="col-lg-12 pb-lg-5">
+          <img src="{%static "images/bg-critical.png"%}" alt="" class="img-fluid">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section_testimonial" id="testicount">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <h1 class="fs-40 font-bold d-flex align-items-center cl-dark-blue py-4 m-0" id="testicountt">Testimonials</h1>
+          <div id="testimonial_slider" class="owl-carousel owl-theme">
+            {%for test in testimonial%}
+            <div class=" bg-light-brown w-100 br-15 position-relative">
+              <div class="px-lg-4 fs-40 mx-3 text-center ">
+                <i class="fa fa-quote-left testimonial_quote text-center py-4" aria-hidden="true"></i>
+                <p class="fs-18 font-regular">{{test.description}}</p>
+                <div>
+                  <img src="{{test.photo.url}}" alt="" class="img-fluid test_img br-50">
+                </div>
+                <p class="fs-18 font-bold py-4">{{test.username}}</p>
+              </div>
+            </div>
+            {%endfor%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="helping_book_test pt-3 mt-lg-5">
+    <div class="helping-book-banner py-lg-5 py-3">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 col-md-12 py-4 ">
+            <h1 class="fs-40 font-bold cl-dark-white pe-xxl-5 me-xxl-5">Helping Patients for around The Globe !!!</h1>
+            <div class="row">
+              <div class="col-12 col-md-6 pe-lg-4 helper_header_col">
+                <div class="d-flex align-items-center">
+                  <i class="fa fa-comments-o help-book-icon" aria-hidden="true"></i>
+                  <h4 class="healper_sub_header">Whats app</h4>
+                </div>
+                <p class="helping_contact">+91 98887 99994</p>
+              </div>
+              <div class="col-12 col-md-6 pe-lg-4 helper_header_col">
+                <div class="d-flex align-items-center">
+                  <i class="fa fa-envelope-o help-book-icon" aria-hidden="true"></i>
+                  <h4 class="healper_sub_header">Email Enquiry</p>
+                </div>
+                <div class="helping_contact">enquiry@spandiagno.com</div>
+              </div>
+              <div class="col-12 col-md-6 pe-lg-4 helper_header_col">
+                <div class="d-flex align-items-center">
+                  <i class="fa fa-clock-o help-book-icon" aria-hidden="true"></i>
+                  <h4 class="healper_sub_header">Opening Hours</h4>
+                </div>
+                <p class="helping_contact">Monday – Sunday 06:00 AM – 10:00 PM.</p>
+              </div>
+              <div class="col-12 col-md-6 pe-lg-4 helper_header_col">
+                <div class="d-flex align-items-center">
+                  <i class="fa fa-address-card-o  help-book-icon" aria-hidden="true"></i>
+                  <h4 class="healper_sub_header">Contact Us</h4>
+                </div>
+                <p class="helping_contact">Ground floor, No. 79, 40th main
+                  M.E.I road, 2nd Stage
+                  Industrial Suburb
+                  Yeshwanthpur
+                  Bengaluru - 560022</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6 py-4">
+            <form method="post" id="homeForm">
+              {%csrf_token%}
+              <div class="bg-dark-white px-lg-4 px-3 py-4 br-15">
+                <h1 class="fs-40 font-bold cl-dark-blue pt-2 pb-lg-4">Request a Call Back</h1>
+                <div class="row">
+                  <div class="col-12 col-md-12 col-lg-6 pt-4">
+                    <label class="fs-20 font-regular cl-dark-blue">First name<span
+                      class="cl-red ps-1">*</span></label>
+                    <input class="w-100  form_input mt-2" type="text" name="firstname" id="name" maxlength="250" />
+                  </div>
+                  <div class="col-12 col-md-12 col-lg-6 pt-4">
+                    <label class="fs-20 font-regular cl-dark-blue">Last name<span
+                      class="cl-red ps-1">*</span></label>
+                    <input class="w-100 form_input mt-2" type="text" name="lastname" id="surname" maxlength="250" />
+                  </div>
+                  <div class="col-12 col-md-12 col-lg-6 pt-4">
+                    <label class="fs-20 font-regular cl-dark-blue">Phone Number<span
+                        class="cl-red ps-1">*</span></label>
+                    <input class="w-100 form_input mt-2" type="number" name="phone" id="phone" maxlength="250" />
+                  </div>
+                  <div class="col-12 col-md-12 col-lg-6 pt-4">
+                    <label class="fs-20 font-regular cl-dark-blue">Email Address<span
+                        class="cl-red ps-1">*</span></label>
+                    <input class="w-100 form_input mt-2" type="email" name="email" id="email" maxlength="250" />
+                  </div>
+                  <div class="col-12 pt-4">
+                    <label class="fs-20 font-regular cl-dark-blue">Select Test Name<span
+                      class="cl-red ps-1">*</span></label>
+                    <select class="w-100 mt-2  form-select" type="select"
+                      name="selectbookhelp">
+                      <option selected="selected" class="opc-5" disabled>Select
+                        Test<span
+                        class="cl-red ps-1">*</span></option>
+                      {%for test in tests%}
+                      <option  value={{test.id}}>{{test.testt}}</option>
+                      {%endfor%}
+                    </select>
+                  </div>
+                  <div class="col-12 py-3 mt-4"><button
+                      class="globalsubmitbutton" type="submit">Submit</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+  {% comment %} <section>
+    <div id="myModal" class="modal fade">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-body px-2 px-sm-4 pb-3">
+            <h4 class="fs-24 font-bold cl-dark-blue text-center py-3">Select City's</h4>
+            <div class="home_modal_city_icon ">
+              <div class="container">
+                <div class="row justify-content-center gx-2 gx-sm-3">
+                  {%for i in city%}
+                  <div class="col-4 col-sm-3 py-2 py-sm-3">
+                    <button class="cursor h-100 w-100 br" id="city" name="{{i.cityname}}"
+                      onclick='myfunction("{{i.cityname}}")'>
+                      {% if i.city_icon %}
+                      <img src="{{i.city_icon.url}}" alt="" class="img-fluid">
+                      {% else %}
+                      <img src="{%static "images/city.png"%}" alt="" class="img-fluid">
+                      {% endif %}
+                      
+                      <h6 class="text-break text-center">{{i.cityname}}</h6>
+                    </button>
+                  </div>
+                  {%endfor%}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> {% endcomment %}
+  {%include "footer.html"%}
+</div>
+</body>
+
+{% if messages %}
+{% for message in messages %}
+{% if message.tags == "error"%}
+<script>
+  $(document).ready(function(){
+  
+    swal({
+	title:'{{message}}',
+	//text: "You clicked the button!",
+	icon:"warning",
+	button:"ok"
+});
+  });
+</script>
+{%else%}
+<script>
+  $(document).ready(function(){
+   // swal('{{message}}');
+
+    swal({
+	title:'{{message}}',
+	//text: "You clicked the button!",
+	icon:"success",
+	button:"ok"
+});
+  });
+</script>
+{% endif %}
+{%endfor%}
+{% endif %}
+<script src="https://checkout.razorpay.com/v1/checkout.js">
+</script>
+  <script>
+   //$(window).on('load', function() {
+   // $("#loaderr").hide();
+   // })
+    $(window).on("load",function(){
+      $(".loader-wrapper").fadeOut("slow");
+    });
+$(document).ready(function(){
+   $("#myModal").modal({
+    backdrop: 'static',
+   keyboard: false
+});
+  
+  if("{{currentcity}}" != "None"){
+    
+    $('#myModal').modal('hide');
+ 
+   }
+   else{
+    $('#myModal').modal('show');
+   }
+
+   var count =parseInt("{{blogcount}}");
+   if(count!=0){
+     $("#healt").show();
+   }
+   else{
+       $("#healt").hide();  
+   }
+   var testimonialcount=parseInt("{{testimonialcount}}");
+   
+   if(testimonialcount!=0){
+    $("#testicount").show();
+  }
+  else{
+      $("#testicount").hide();
+      
+  }
+});
+
+  $("#health-care-slider").owlCarousel({
+    //loop: true,
+    margin: 30,
+    items: 2,
+    responsiveClass: true,
+    autoHeight: false,
+    autoplayHoverPause:true,
+    autoplayTimeout: 4000,
+    smartSpeed: 800,
+    dots: false,
+    nav: false,
+    autoplay: true,
+    stopOnHover:true,
+    responsive: {
+      0: {
+        items: 1,
+      },
+
+      576: {
+        items: 1,
+      },
+      768: {
+        items: 2,
+      },
+
+      992: {
+        items: 2,
+      },
+
+      1199: {
+        items: 2,
+      },
+    },
+  });
+  $("#testimonial_slider").owlCarousel({
+    //loop: true,
+    margin: 30,
+    items: 2.7,
+    responsiveClass: true,
+    autoplayHoverPause:true,
+    autoHeight: false,
+    autoplayTimeout: 4000,
+    smartSpeed: 800,
+    dots: false,
+    nav: false,
+    autoplay: true,
+    stopOnHover:true,
+    responsive: {
+      0: {
+        items: 1,
+      },
+
+      576: {
+        items: 1,
+      },
+      768: {
+        items: 2,
+      },
+
+      992: {
+        items: 2.5,
+      },
+
+      1199: {
+        items: 2.7,
+      },
+    },
+  });
+
+  $('.home-banner-slider').owlCarousel({
+    loop: true,
+    autoplay:true,
+   autoplayTimeout: 5000,
+    autoplayHoverPause:true,
+    margin: 20,
+    nav: false,
+    items: 1.2,
+    center: true,
+    nav: false,
+    dots: true,
+    stopOnHover:true,
+    responsive: {
+      0: {
+        margin: 8,
+      },
+
+      576: {
+        margin: 20,
+      },
+    },
+  });
+
+  jQuery.validator.addMethod("name_regex", function (value, element) {
+    return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);
+  }, "Enter valid name");
+  jQuery.validator.addMethod("phone_regex", function (value, element) {
+    return this.optional(element) || /^[0-9\.\-_]{10,30}$/i.test(value);
+  }, "Enter valid phone number");
+  $.validator.addMethod('filesize', function (value, element, param) {
+    return this.optional(element) || (element.files[0].size <= param)
+  }, 'File size must be less than {0}');
+  $("#homeForm").validate({
+    rules: {
+
+      'firstname': {
+        required: true,
+        minlength: 1,
+        name_regex: true,
+      },
+      'lastname': {
+        required: true,
+        minlength: 1,
+        name_regex: true,
+      },
+      'email': {
+        required: true,
+        email: true
+      },
+      'phone': {
+        required: true,
+        phone_regex: true,
+        minlength: 10,
+        maxlength: 10
+      },
+      'selectbookhelp': {
+        required: true,
+      },
+
+    },
+
+    messages: {
+
+      'firstname': {
+        required: "This field is required."
+      },
+      'lastname': {
+        required: "This field is required."
+      },
+      'email': {
+        required: "This field is required.",
+        email: "Enter valid email"
+      },
+      'phone': {
+        required: "This field is required."
+      },
+      'selectbookhelp': {
+        required: "This field is required."
+      },
+    },
+    submitHandler: function (form) {
+      form.submit();
+    }
+  });
+
+        function myfunction(city){
+          
+          $.ajax({
+            url: "{% url 'city' %}",
+            type : "POST", 
+            data: {
+             "city":city,
+             csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            dataType: "json",
+            success: function(resp){
+             if(resp["city"]){
+              $('#myModal').modal('hide');
+              window.location.reload();
+             }
+            }
+           });
+         };
+
+   function testnow(e){
+    //localStorage.setItem("healthcheckup",[e]);
+    $.ajax({
+      url: "{% url 'healthcheckupadd' %}",
+      type: "POST",
+      dataType: "json",
+      data: {
+        'action':"healthcheckup",
+          'ids':e,
+          'csrfmiddlewaretoken':'{{ csrf_token }}',
+      },
+      success: function(resp){
+          
+          if(!resp['message']){
+              swal('',"Already Added",'info');
+          }else{
+            a=resp['test']
+              swal(a,"Added to Cart","success");
+              window.setTimeout(function(){location.reload()},1500)
+              //window.location.reload();
+          }
+          
+      },
+  });
+   }
+   function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+  }
+
+    function uuidv4() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    let device = getCookie('device');
+
+    if (device == null || device == undefined){
+        device = uuidv4()
+    }
+
+    document.cookie ='device=' + device + ";domain=;path=/";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      function counter(id, start, end, duration) {
+       let obj = document.getElementById(id),
+        current = start,
+        range = end - start,
+        increment = end > start ? 1 : -1,
+        step = Math.abs(Math.floor(duration / range)),
+        timer = setInterval(() => {
+         current += increment;
+         obj.textContent = current;
+         if (current == end) {
+          clearInterval(timer);
+         }
+        }, step);
+      }
+
+      counter("testepeeps", 100000, 123456, 100);
+      counter("verified", 100, 3456, 2500);
+      counter("cities", 0, 7, 3000);
+      counter("visits", 0, 72812, 3000);
+     });
+    
+
+$("#popular_tests").owlCarousel({
+        loop: false,
+        rewind: true,
+        margin: 20,
+        items: 3,
+        responsiveClass: true,
+        autoHeight: false,
+        autoplay:true,
+        autoplayHoverPause:true,
+        autoplayTimeout: 5000,
+        smartSpeed: 800,
+        dots: false,
+        nav: false,
+        responsive: {
+            0: {
+                items: 1,
+            },
+
+            576: {
+                items: 1,
+            },
+            768: {
+                items: 2,
+            },
+
+            992: {
+                items: 2,
+            },
+
+            1199: {
+                items: 3,
+            },
+        },
+    });
+    
+$("#health_pack_carousel").owlCarousel({
+  loop: true,
+  margin: 20,
+  items: 4,
+  responsiveClass: true,
+  autoHeight: false,
+  autoplay:true,
+  autoplayHoverPause:true,
+  autoplayTimeout: 5000,
+  smartSpeed: 800,
+  dots: false,
+  nav: false,
+  responsive:  {
+      0: {
+          items: 1,
+      },
+
+      576: {
+          items: 1,
+      },
+      768: {
+          items: 2,
+      },
+
+      992: {
+          items: 3,
+      },
+
+      1199: {
+          items: 4,
+      },
+  },
+});
+    $("#health_symptoms").owlCarousel({
+       // loop: true,
+        margin: 20,
+        items: 5,
+        responsiveClass: true,
+        autoHeight: false,
+        autoplay:true,
+        autoplayHoverPause:true,
+        autoplayTimeout: 5000,
+        smartSpeed: 800,
+        dots: false,
+        nav: false,
+        responsive: {
+            0: {
+                items: 1,
+            },
+
+            576: {
+                items: 1,
+            },
+            768: {
+                items: 3,
+            },
+
+            992: {
+                items: 3,
+            },
+
+            1199: {
+                items: 5,
+            },
+        },
+    });
+
+
+
+    $(document).ready(function() {
+      //$(window).load(function() {
+      //  $('#loading').hide();
+     // });
+    // Configure/customize these variables.
+    var showChar = 200;  // How many characters are shown by default
+    var ellipsestext = "";
+    var moretext = "Read More...";
+    var lesstext = "Read Less";
+    
+
+    $('.more').each(function() {
+        var content = $(this).html();
+ 
+        if(content.length > showChar) {
+ 
+            var c = content.substr(0, showChar);
+            var h = content.substr(showChar, content.length - showChar);
+ 
+            var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
+ 
+            $(this).html(html);
+        }
+ 
+    });
+ 
+    $(".morelink").click(function(){
+        if($(this).hasClass("less")) {
+            $(this).removeClass("less");
+            $(this).html(moretext);
+        } else {
+            $(this).addClass("less");
+            $(this).html(lesstext);
+        }
+        $(this).parent().prev().toggle();
+        $(this).prev().toggle();
+        return false;
+    });
+});
+
+$(function() {
+  $(".preload").fadeOut(2000, function() {
+      $(".content").fadeIn(2000);        
+  });
+});
+
+</script>
+
+
+{% endblock %}

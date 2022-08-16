@@ -1,0 +1,44 @@
+{% extends "index.html" %}
+{% load static %}
+
+{%block content%}
+
+<body>
+    {%include "header.html"%}
+    <section class="sub_header py-xl-4 py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="d-flex ">
+                        <p class="m-0 fs-18 font-regular cl-dark-blue opc-5 pe-1 sub_nav_bar"><a
+                                href="{%url "home"%}">Home</a></p>
+                        /
+                        <p class="m-0 fs-18 font-regular cl-dark-blue ps-1 sub_nav_bar">Lifestyle Assessments</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section_health_pack py-lg-3 pb-lg-5 pb-4">
+        <div class="container">
+            <div class="row">
+              {%for lifestyle in healthsymptom%}
+                <div class="col-lg-3 col-md-4 ">
+                    <div class="py-2 ">
+                        <a class="cursor" href={% url 'health_symptoms' lifestyle.slug %}>  
+                        <div
+                          class="symptoms px-3 {% cycle 'bg-light-blue' 'bg-light-orange' 'bg-light-green' 'bg-light-pink' %} text-center py-lg-5 py-3 br-10">
+                          <img src="{{lifestyle.photo.url}}" alt="" class="pb-3">
+                          <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold">{{lifestyle.name}}</p>
+                        </div>
+                      </a>
+                      </div>
+                </div>
+                {%endfor%}
+
+            </div>
+        </div>
+    </section>
+    {%include "footer.html"%}
+</body>
+{%endblock%}

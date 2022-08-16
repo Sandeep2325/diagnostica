@@ -1,0 +1,41 @@
+<h1>dummy</h1>
+
+{% for i in data%}
+{% comment %} <button class="link-delete text-danger">delete</button> {% endcomment %}
+<a href="{% url "destroy" i.slug%}" class="link-delete text-danger">Delete</a>
+{{i.package_title}}
+{% for j in i.test_name.all%}
+{{j.testt}}<br>
+{%if city == "Banglore" %}
+{{j.pricel1}}
+{%elif city == "Chennai"%}
+{{j.pricel2}}
+{%elif city == "Mumbai"%}
+{{j.pricel3}}
+{%elif city == "Hyderabad"%}
+hyderabad
+{{j.pricel4}}
+{%elif city == "Delhi"%}
+{{j.pricel5}}
+{%elif city == "Kolkata"%}
+{{j.pricel6}}
+{%endif%}
+{%endfor%}
+{%endfor%}
+ <script type = "text/javascript">
+    $(".link-delete").on("click", function(e){
+        e.preventDefault();
+        var $this = $(this);
+        if(confirm("Sure to delete?")){
+            $.ajax({
+                url: $this.attr("href"),
+                type: "GET",
+                dataType: "json",
+                success: function(resp){
+                   alert("Deleted")
+                }
+            });
+        }
+        return false;
+    });
+    </script> 

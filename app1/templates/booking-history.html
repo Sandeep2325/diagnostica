@@ -1,0 +1,510 @@
+{% extends "index.html" %}
+{% load static %}
+{%block content%}
+<body>
+    {% include "header.html"%}
+    <section class="sub_header py-xl-4 py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="d-flex ">
+                        <p class="m-0 fs-18 font-regular cl-dark-blue opc-5 pe-1 sub_nav_bar"><a
+                                href="{%url "home"%}">Home</a></p>
+                        /
+                        <p class="m-0 fs-18 font-regular cl-dark-blue ps-1 sub_nav_bar">Booking History</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section_booking_history pb-5 mb-5" >
+        <div class="container">
+            {% comment %} {% if messages %}
+            
+            {% for msg in  messages %}
+            <center>{{msg}}</center>
+            {% endfor %}
+
+            {% endif %} {% endcomment %}
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class=" bg-light-grey py-4 py-lg-0 br-15">
+                        <div class="row ">
+                            <div class="col-xxl-10 col-lg-12 mx-auto justify-content-between ">
+                                <ul class="nav nav-pills mb-lg-3 mb-3 justify-content-evenly" id=" pills-tab"
+                                    role="tablist">
+                                    <li class="nav-item py-xxl-5 py-xl-5 py-lg-4 br" role="presentation">
+                                        <button class=" nav-links br fs-25 font-bold tad_button bg-light-grey active"
+                                            id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
+                                            type="button" role="tab" aria-controls="pills-home"
+                                            aria-selected="true">Booking history </button>
+                                    </li>
+                                    <li class="nav-item py-xxl-5 py-xl-5 py-lg-4  br" role="presentation">
+                                        <button class="nav-links br fs-25 font-bold tad_button bg-light-grey"
+                                            id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile"
+                                            type="button" role="tab" aria-controls="pills-profile"
+                                            aria-selected="false">Payment History</button>
+                                    </li>
+                                    <li class="nav-item py-xxl-5 py-xl-5 py-lg-4  br" role="presentation">
+                                        <button class="nav-links br fs-25 font-bold tad_button bg-light-grey"
+                                            id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact"
+                                            type="button" role="tab" aria-controls="pills-contact"
+                                            aria-selected="false">Medications</button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 px-lg-5 px-3">
+                                <div class="tab-content" id="pills-tabContent">
+                                    
+                                    <div class="pb-lg-5 pb-3 tab-pane fade show active " id="pills-home" role="tabpanel"
+                                        aria-labelledby="pills-home-tab" tabindex="0">
+                                        <h1 class="text-center fs-30 font-bold cl-dark-blue mb-4" id="nodataa">No Record Found...</h1>
+                                        <table class="bookingh" id ="bookinghistorytable">
+                                            <thead>
+                                                <tr>
+                                                    <td class="t_head" scope="col">ID</td>
+                                                    <td class="t_head" scope="col">Date</td>
+                                                    <td class="t_head" scope="col">Patient Info</td>
+                                                    <td class="t_head" scope="col">Booking Type</td>
+                                                    {% comment %} <td class="t_head" scope="col">Prescription</td> {% endcomment %}
+                                                    <td class="t_head" scope="col">Booking Details</td>
+                                                    <td class="t_head" scope="col">Amount</td>
+                                                    <td class="t_head" scope="col">Payment Status</td>
+                                                    {% comment %} <td class="t_head" scope="col">Status</td> {% endcomment %}
+                                                    <td class="t_head" scope="col">Report</td>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for bookhistory in bookhistories %}
+                                           
+                                                <tr>
+                                                    {% if bookhistory.bookingid == None %}
+                                                    <td data-label="ID">-
+
+                                                       
+                                                    </td>
+                                                     {%else%}
+                                                     <td data-label="ID">{{bookhistory.bookingid}}
+                                                    </td>
+                                                    {%endif%}
+                                                    <td data-label="Date">{{bookhistory.created}}</td>
+                                                   
+                                                    {%if bookhistory.patient_info == "others" %}
+                                                    <td data-label="Patient Info"><a id="otherspop1" data-bs-toggle="modal" data-bs-target="#otherspop" class="br bg-dark-white cursor" onclick='othersfunc("{{bookhistory.uni}}")';>{{bookhistory.patient_info}}</a></td>
+                                                    {%else%}
+                                                    <td data-label="Patient Info">{{bookhistory.patient_info}}</td>
+                                                    {%endif%}
+                                                    <td data-label="Booking Type">{{bookhistory.booking_type}}</td>
+                                                    
+                                                    {% if bookhistory.prescription %}
+                                                    <td data-label="Booking Details"><a  target="blank" href="{{ bookhistory.prescription.url}}">{{bookhistory.bookingdetails|truncatechars:10}}</a></td>
+                                                    {% else %}
+                                                    <td data-label="Booking Details"><a id="testdetails" name="{{bookhistory.id}}" data-bs-toggle="modal" data-bs-target="#testdetaill" class="br bg-dark-white cursor" onclick='testfunc({{bookhistory.id}})';>{{bookhistory.bookingdetails|truncatechars:10}}</a></td>
+                                                    {% endif %}
+                                                    
+
+                                                    {%if bookhistory.amount == None%}
+                                                        <td data-label="Amount">-</td>
+                                                    {%elif bookhistory.prescription%}
+                                                        <td data-label="Amount">₹ {{bookhistory.amount}}<i  id ="prescriptiontest" data-bs-toggle="modal" data-bs-target="#prescriptionbreaks" class="fa fa-info br-5 cursor" aria-hidden="true" style="text-align:center;background:#d5e6f7; padding:5px 9px;margin-left:5px " onclick='prescrbreak("{{bookhistory.uni}}")'></i></td>
+                                                    {%else%}
+                                                    <td data-label="Amount">₹ {{bookhistory.amount}}</td>
+                                                    {%endif%}
+
+                                                    {%if not bookhistory.payment_status%}
+                                                        <td data-label="Payment Status">Not paid</td>
+                                                    {%else%}
+                                                        <td data-label="Payment Status">Paid</td>
+                                                    {%endif%}
+                                                    {% comment %} <td data-label="Status">On Process</td> {% endcomment %}
+                                                    {%if  bookhistory.payment_status == False%}
+                                                    <td data-label="Report"><button
+                                                            class="br br-5 fs-16 font-bold bg-dark-green cl-dark-white download text-center paynow-btn" 
+                                                            {% if bookhistory.amount == None %}
+                                                            onclick='paymentFunction("{{bookhistory.uni}}", "false")';
+                                                            {% else %}onclick='paymentFunction("{{bookhistory.uni}}", "true")';{% endif %}id="testbooking{{bookhistory.testbooking_id}}">Pay Now</button>
+                                                    </td>
+                                                    {%else%}
+                                                    {%if bookhistory.report %}
+                                                    <td data-label="Report">
+                                                        <a href="{{bookhistory.report.url}}"
+                                                        class="" download><button class="download br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue">Download
+                                                        Now</button></a>
+                                                </td>
+                                                    {% else %}
+                                                    <td data-label="Report">
+                                                        <a href="#"
+                                                        class=""><button class="download br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue">No File</button></a>
+                                                    {% endif %}
+                                                    {%endif%}
+                                                </tr>
+                                                {%endfor%}
+                                            </tbody>
+                                        </table>
+
+                                       
+                                    </div>
+                                    {% comment %} table end {% endcomment %}
+                                    
+                                    <div class="tab-pane fade pb-5 " id="pills-profile" role="tabpanel"
+                                        aria-labelledby="pills-profile-tab" tabindex="0">
+                                        <h1 class="text-center fs-30 font-bold cl-dark-blue mb-4" id="nodata">No Record Found...</h1>
+                                        <table class="paymentc">
+                                            <thead>
+                                                <tr>
+                                                    <td class="t_head" scope="col">Payment ID</td>
+                                                    <td class="t_head" scope="col">Booking ID</td>
+                                                    <td class="t_head" scope="col">Date</td>
+                                                    {% comment %} <td class="t_head" scope="col">Payment</td> {% endcomment %}
+                                                    <td class="t_head" scope="col">Amount</td>
+                                                    <td class="t_head" scope="col">Invoice</td>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                {%for payment in payments%}
+                                                <tr>
+                                                    <td data-label="Payment ID">{{payment.paymentid}}</td>
+                                                    <td data-label="Booking ID">{{payment.booking_id}}</td>
+                                                    <td data-label="Date">{{payment.date}}</td>
+                                                    {% comment %} <td data-label="Payment">My Self</td> {% endcomment %}
+                                                    <td data-label="Amount">₹ {{payment.amount|floatformat:2}}</td>
+                                                    <td data-label="Invoice"><a href="{% url "invoice" payment.transid %} " target="_blank"
+                                                            class=""><button class="br br-5 fs-16 font-bold bg-dark-green cl-dark-white download text-center">Invoice</button></a>
+                                                    </td>
+                                                </tr>
+                                                {%endfor%}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="tab-pane fade" id="pills-contact" role="tabpanel"
+                                        aria-labelledby="pills-contact-tab" tabindex="0">
+                                        <h1 class="text-center fs-30 font-bold cl-dark-blue mb-4">No Record Found...</h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="otherspop" id ="otherspop1">
+        <div class="modal fade" id="otherspop" tabindex="-1" aria-labelledby="otherspopLabel"
+            aria-hidden="true">
+            <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content p-sm-4">
+                    <div class="modal-body">
+                        <button type="button" class="btn-close  close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                            <h2 class="cl-dark-blue text-center fs-40  font-bold mb-3 pb-2">Patient Info</h2>
+                            <div id="othersspop" >      
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testdetail" id ="testdetails">
+        <div class="modal fade" id="testdetaill" tabindex="-1" aria-labelledby="otherspopLabel"
+            aria-hidden="true">
+            <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content p-sm-4">
+                    <div class="modal-body">
+                        <button type="button" class="btn-close  close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                        
+                            <div id="testdetaills" >
+                                
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="prescriptionbreak" id ="prescriptionbreak">
+        <div class="modal fade" id="prescriptionbreaks" tabindex="-1" aria-labelledby="otherspopLabel"
+            aria-hidden="true">
+            <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content p-sm-4">
+                    <div class="modal-body">
+                        <button type="button" class="btn-close  close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                            <div id="prescr" >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {%include "footer.html"%}
+</body>
+{% if messages %}
+{% for message in messages %}
+{% if message.tags == "error"%}
+<script>
+  $(document).ready(function(){
+   // swal('{{message}}');
+
+    swal({
+	title:'{{message}}',
+	//text: "You clicked the button!",
+	icon:"warning",
+	button:"ok"
+});
+  });
+</script>
+{%else%}
+<script>
+  $(document).ready(function(){
+   // swal('{{message}}');
+
+    swal({
+	title:'{{message}}',
+	//text: "You clicked the button!",
+	icon:"success",
+	button:"ok"
+});
+  });
+</script>
+{% endif %}
+{%endfor%}
+{% endif %}
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    $(document).ready(function(){
+        
+        var historycount =parseInt("{{bookinghistorylength}}");
+        var paymentcount =parseInt("{{paymentcount}}");
+        if(historycount!=0){
+          $(".bookingh").show();  
+          $("#nodataa").hide();
+        }
+        else{
+            $(".bookingh").hide();
+            $("#nodataa").show();
+           // $(".bookingh").append(`<h4>No Records Found</h4>`);
+        }
+        if(paymentcount!=0){
+            $(".paymentc").show();  
+            $("#nodata").hide();
+          }
+          else{
+              $(".paymentc").hide();
+              $("#nodata").show();
+             // $(".paymentc").append(`<h4>No Records Found</h4>`);
+          }
+    })
+    function paymentFunction(ids, status){
+        if (status=="false"){
+            swal('Hello','You booking under review progress by our experts. Please try after sometime.If you have any queries related to booking please contact our support team +91 9769 351 301','info')
+            //alert("Please wait till your prescription is viewed by our doctors.");
+            
+        }else{
+            $.ajax({
+                type:"POST",
+                data: {
+                    action:"retreive_data",
+                    id : ids,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                   },
+                   dataType: "json",
+                   success: function(resp){
+                    
+                    if(resp['valid']){
+                    }
+                    var amount = parseInt(resp['amount']);
+                    var options = {
+                            key: resp['razorKey'],
+                            amount: amount, 
+                            currency: "INR",
+                            description: "Diagnostica Span",
+                            //image: "{% static 'img/invoice_logo.png' %}",
+                            order_id: resp["order_id"],
+                            callback_url: resp['callbackUrl'],
+                            redirect: true,
+                            theme: {
+                                "color": "#005aeb"
+                            },
+                            modal: { 
+                                escape: false,
+                                ondismiss: function()
+                                { 
+                                    $.ajax({
+                                    type: 'post',
+                                    headers: {
+                                        'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
+                                    },
+                                    data: {
+                                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                                    action:"payment_canceled",
+                                    obj_id:ids,
+                                    order_id:resp["order_id"],
+                                    },
+                                    dataType: 'json',
+                                    success: function (response) {
+                                    }
+                                    });
+                                }
+                            },
+                        };
+                        var rzp1 = new Razorpay(options);
+                        rzp1.open();
+                   }
+            });
+        }
+        
+        
+
+    };
+
+        function othersfunc(e){
+      
+        $.ajax({
+            url: "{% url 'othersdetail' %}",
+            type: "POST",
+            dataType: "json",
+            data: {
+                'testid':e,
+                'csrfmiddlewaretoken':'{{ csrf_token }}',
+            },
+            success: function(resp){
+                
+               
+              //  $("#choice").text(resp['otherschoice']);
+              // $("#firstname").text(resp['firstname']);
+              //$("#lastname").text(resp['lastname']);
+              //  $("#gender").text(resp['gender']);
+              //  $("#gender").text(resp['age']);
+             //   $("#gender").text(resp['phone']);
+             $("#othersspop").empty();
+             
+               var detail=` <h3 class="fs-20 font-bold cl-dark-blue text-center" id="choice">To Whom : ${resp['otherschoice']}</h3>
+               <h3 class="fs-20 font-bold cl-dark-blue text-center" id="fistname">First Name : ${resp['firstname']}</h3>
+               <h3 class="fs-20 font-bold cl-dark-blue text-center" id="lastname">Last Name : ${resp['lastname']}</h3>
+               <h3 class="fs-20 font-bold cl-dark-blue text-center" id="gender">Gender : ${resp['gender']}</h3>
+
+               <h3 class="fs-20 font-bold cl-dark-blue text-center" id="age">Age : ${resp['age']}</h3>
+               <h3 class="fs-20 font-bold cl-dark-blue text-center" id="phone">Mobile No : ${resp['phone']}</h3>`
+               $("#othersspop").append(detail);
+               
+            }
+        });
+    
+
+}
+    function testfunc(e){
+    $.ajax({
+        url: "{% url 'testdetails' %}",
+        type: "POST",
+        dataType: "json",
+        data: {
+            'id':e,
+            'csrfmiddlewaretoken':'{{ csrf_token }}',
+        },
+        success: function(resp){
+            console.log(resp['message'])
+        var msg = resp['message'];
+        var splitted_str = msg.split("/");
+         $("#testdetaills").empty();
+        for (let i = 0; i < splitted_str.length; i++) {
+           var a= `<p>${splitted_str[i]}</p>`
+           $("#testdetaills").append(a)
+          }
+        }
+    });
+}
+
+function prescrbreak(e){
+   
+    $.ajax({
+        url: "{% url 'prescriptionbreak' %}",
+        type: "POST",
+        dataType: "json",
+        data: {
+            'id':e,
+            'csrfmiddlewaretoken':'{{ csrf_token }}',
+        },
+        success: function(resp){
+            console.log(resp['message'])
+            
+        var msg = resp['message'];
+        
+        console.log(msg.length)
+         $("#prescr").empty();
+        for (let i = 0; i < msg.length; i++) {
+           var a= `<p>${msg[i].test}-₹ ${msg[i].pricel1}</p>  `
+           console.log(a)
+           $("#prescr").append(a)
+          }
+        }
+    });
+}
+
+
+$("#medication").on("click", function (e) {
+    var medico = $("#medico").val();
+    var morning = $("#morning").val();
+    var afternoon = $("#afternoon").val();
+    var evening = $("#evening").val();
+    var night=$("#night").val();
+    if (medico=='' || morning=='' || afternoon=='' || evening=='' || night=''){
+      swal("", "Please update every field", "warning");
+    }    
+    else{ 
+    $.ajax({
+        url: "{% url 'medicationpost' %}",
+        type: "POST",
+        dataType: "json",
+        data: {
+            'medico': medico,
+            'morning':morning,
+            'afternoon':afternoon,
+            'evening':evening,
+            'night':night,
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+        },
+        success: function (resp) {
+            $("#medico").val('');
+            if (!resp["message"]){
+                swal("Something Went Wrong", "Try Again", "warning");
+                //alert("Already Subscribed Thank you!!")
+            }
+            else{
+                window.location.reload()
+            }
+        }
+    });
+  }            
+})
+
+function deletefunc(e){
+    //  $("#delete").on("click", function(e){ 
+            
+            var idd = $(this).attr('name');
+           a=$("#delete").attr("name");
+                $.ajax({
+                    url: "{% url 'medicationdelete' %}",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'action':'forsession',
+                        'pk':e,
+                        'csrfmiddlewaretoken':'{{ csrf_token }}',
+                    },
+                    success: function(resp){
+                       window.location.reload();
+                    }
+                });
+    
+            return false;
+     
+    }
+</script>
+{%endblock%}
