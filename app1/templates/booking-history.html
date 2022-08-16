@@ -1,6 +1,7 @@
 {% extends "index.html" %}
 {% load static %}
 {%block content%}
+{% load social_share %}
 <body>
     {% include "header.html"%}
     <section class="sub_header py-xl-4 py-3">
@@ -129,10 +130,11 @@
                                                     </td>
                                                     {%else%}
                                                     {%if bookhistory.report %}
-                                                    <td data-label="Report">
+                                                    <td data-label="Report" class="d-flex justify-content-between">
                                                         <a href="{{bookhistory.report.url}}"
-                                                        class="" download><button class="download br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue">Download
-                                                        Now</button></a>
+                                                        class="" download><button style="padding-left:20px; padding-right:20px" class="py-2 br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue"><i class="fa fa-download" aria-hidden="true"></i></button></a>
+                                                        <a data-bs-toggle="modal" data-bs-target="#social_report_share"
+                                                        class="" download><button style="padding-left:20px; padding-right:20px" class="py-2 br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue"><i class="fa fa-share-square-o" aria-hidden="true"></i></button></a>
                                                 </td>
                                                     {% else %}
                                                     <td data-label="Report">
@@ -180,9 +182,35 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="tab-pane fade" id="pills-contact" role="tabpanel"
+                                    <div class="tab-pane fade pb-5" id="pills-contact" role="tabpanel"
                                         aria-labelledby="pills-contact-tab" tabindex="0">
-                                        <h1 class="text-center fs-30 font-bold cl-dark-blue mb-4">No Record Found...</h1>
+                                        {% comment %} <h1 class="text-center fs-30 font-bold cl-dark-blue mb-4">No Record Found...</h1> {% endcomment %}
+                                        <button data-bs-toggle="modal" data-bs-target="#mediation_modal" class="px-5 py-2 bg-sky-blue br-5 fs-18 mb-2 cl-dark-white br" type="submit" value="submit">Add Medication</button>
+                                        <table class="paymentc">
+                                            <thead>
+                                                <tr class="text-center">
+                                                    <td class="t_head text-center" scope="col">Tablet Name</td>
+                                                    <td class="t_head text-center" scope="col">Morning</td>
+                                                    <td class="t_head text-center" scope="col">Afternoon</td>
+                                                    <td class="t_head text-center" scope="col">Evening</td>
+                                                    <td class="t_head text-center" scope="col">Night</td>
+                                                    <td class="t_head text-center" scope="col">Date</td>
+                                                    <td class="t_head text-center" scope="col">Delete</td>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-center" data-label="Tablet Name">Test</td>
+                                                    <td class="text-center" data-label="Morning"><input class="" type="checkbox" disabled/></td>
+                                                    <td class="text-center" data-label="Afternoon"><input class="" type="checkbox" disabled/></td>
+                                                    <td class="text-center" data-label="Evening"><input class="" type="checkbox" disabled/></td>
+                                                    <td class="text-center" data-label="Night"><input class="" type="checkbox" disabled/></td>
+                                                    <td class="text-center" data-label="Date">16/11/2022</td>
+                                                    <td class="text-center" style="font-size:21px; color:red" data-label="Delete"><i class="fa fa-trash-o cursor" aria-hidden="true"></i></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -192,6 +220,81 @@
             </div>
         </div>
     </section>
+
+    <section class="social_report_share">
+        <div class="modal fade" id="social_report_share" tabindex="-1" aria-labelledby="social_report_shareLabel"
+        aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content p-sm-2">
+                <div class="modal-body">
+                    <button type="button" class="btn-close  close" data-bs-dismiss="modal"
+                    aria-label="Close">
+                </button>
+                        <h2 class="cl-dark-blue text-center fs-40  font-bold">Share</h2>
+                        {% comment %} <div id="testimonial_slider" class="owl-carousel owl-theme"> {% endcomment %}
+                        <div class="icon-box">
+                            <div class="box">
+                                <i class="fa fa-facebook" aria-hidden="true"></i>
+                            </div>
+                            <div class="box">
+                                <i class="fa fa-twitter" aria-hidden="true"></i>
+                            </div>
+                           
+                            <div class="box">
+                                <i class="fa fa-whatsapp" aria-hidden="true"></i>
+                            </div>
+                            <div class="box">
+                                <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                            </div>
+                            <div class="box">
+                                <i class="fa fa-clone" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    {% comment %} </div> {% endcomment %}
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>
+
+    <section class="section_mediation_modal">
+        <div class="modal fade" id="mediation_modal" tabindex="-1" aria-labelledby="mediation_modal-Label"
+        aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content p-sm-2">
+                <div class="modal-body">
+                    <button type="button" class="btn-close  close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                    </button>
+                    <h2 class="cl-dark-blue text-center fs-40  font-bold ">Medication</h2>
+                    <div>
+                        <label>Medicine Name</label>
+                        <input class="w-100  form_input" placeholder="Tablet Name" name="" id="" type="text" maxlength="250" >
+                    </div>
+                    <div  class="pt-2">
+                        <input class="cursor me-2" type="checkbox" id="tab_morning"/>
+                        <label class="cursor" for="tab_morning">Morning</label>
+                    </div>
+                    <div  class="pt-2">
+                        <input class="cursor me-2" type="checkbox" id="tab_afternoon"/>
+                        <label class="cursor" for="tab_afternoon">Afternoon</label>
+                    </div>
+                    <div  class="pt-2">
+                        <input class="cursor me-2" type="checkbox" id="tab_evening"/>
+                        <label class="cursor" for="tab_evening">Evening</label>
+                    </div>
+                    <div  class="pt-2">
+                        <input class="cursor me-2" type="checkbox" id="tab_night"/>
+                        <label class="cursor" for="tab_night">Night</label>
+                    </div>
+                    <button class="px-5 py-2 bg-sky-blue br-5  fs-18  cl-dark-white br mt-2" type="submit"
+                    value="submit">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>
+
     <section class="otherspop" id ="otherspop1">
         <div class="modal fade" id="otherspop" tabindex="-1" aria-labelledby="otherspopLabel"
             aria-hidden="true">
@@ -446,6 +549,42 @@ function prescrbreak(e){
         }
     });
 }
+
+
+$("#testimonial_slider").owlCarousel({
+    //loop: true,
+    margin: 30,
+    items: 2.7,
+    responsiveClass: true,
+    autoplayHoverPause:true,
+    autoHeight: false,
+    autoplayTimeout: 4000,
+    smartSpeed: 800,
+    dots: false,
+    nav: false,
+    autoplay: true,
+    stopOnHover:true,
+    responsive: {
+      0: {
+        items: 1,
+      },
+
+      576: {
+        items: 1,
+      },
+      768: {
+        items: 3,
+      },
+
+      992: {
+        items: 3,
+      },
+
+      1199: {
+        items: 3,
+      },
+    },
+  });
 
 </script>
 {%endblock%}
