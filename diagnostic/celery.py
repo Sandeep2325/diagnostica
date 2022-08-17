@@ -5,23 +5,22 @@ from django.conf import settings
 from celery.schedules import crontab
 # from app1.tasks import send_mail_func
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'diagnostic.settings')
-app = Celery('diagnostic',broker_url='redis://127.0.0.1:6379/0')
+app = Celery('app1',backend=settings.CELERY_RESULT_BACKEND,broker=settings.CELERY_BROKER_URL)
 app.conf.enable_utc = False
 app.conf.update(timezone = 'Asia/Kolkata')
 app.config_from_object(settings, namespace='CELERY')
 
 # Celery Beat Settings
-app.conf.beat_schedule = {
-    'send-mail': {
-        'task': 'app1.tasks.send_mail_func',
-        # 'schedule': crontab(hour=0, minute=46, day_of_month=19, month_of_year = 6),
-        'schedule': crontab(minute='*/1'),
-        #'args': (2,)
-    }
-}
+# app.conf.beat_schedule = {
+#     'send-mail': {
+#         'task': 'app1.task.send_mail_func',
+       
+#         'schedule': crontab(minute='*/1'),
+#     }
+# }
 # app.conf.beat_schedule = {  
 #     'send-every-friday': {  
-#         'task': 'app1.tasks.send_mail_func',  
+#         'task': 'app1.task.send_mail_func',  
 #         'schedule': crontab(hour=7, minute=30, day_of_week=5),  
 #         'args': ('Its Friday!',)  
 #     },  

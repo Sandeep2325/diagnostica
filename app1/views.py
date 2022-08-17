@@ -35,6 +35,7 @@ import environ
 import shortuuid
 from num2words import num2words
 import re
+from .task import send_mail_func
 env = environ.Env()
 global OBJ_COUNT
 OBJ_COUNT = 0
@@ -638,6 +639,7 @@ def home(request):
     deviceCookie = request.COOKIES.get('device')
     c=request.session.get("city")
     envcity={"Bangalore":Bangalore,"Mumbai":Mumbai,"Bhophal":Bhophal,"Nanded":Nanded,"Pune":Pune,"Barshi":Barshi,"Aurangabad":Aurangabad}
+    send_mail_func.apply_async()
     if request.method =="GET":
         cit=city.objects.filter(active=True)
         tests=test.objects.all()
@@ -2133,7 +2135,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 class BookingHistoryPay(LoginRequiredMixin,View):
     login_url = '/login/'
     def get(self, request,*args, **kwargs):
-        medics=medications.objects.filter(user=request.user)
+        medics=medications.objects.filter(user=request.user).order_by("-created")
         his = []
         bookhistories=book_history.objects.filter(user=request.user).order_by('-created')
         testbooking=prescription_book.objects.filter(user=request.user)
@@ -2186,6 +2188,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 his.append(hi)
 
         context={
+            "medicscount":medics.count(),
             "medics":medics,
             "bookhistories":his,
             "bookinghistorylength":len(his),
@@ -2544,10 +2547,31 @@ def medicupdate(request):
         # id=request.POST["pk"]
         # medications.objects.filter(pk=some_value).update(field1='some value') 
 def franchise(request):
+    if request.method=="POST":
+        fullname=request.POST["name"]
+        phoneno=request.POST["phone"]
+        email=request.POST["email"]
+        taluka=request.POST["taluka"]
+        district=request.POST["district"]
+        state=request.POST["state"]
+        address=request.POST["address"]
+        message=request.POST["message"]
+        franchisee.objects.create(fullname=fullname,phoneno=phoneno,email=email,taluka=taluka,district=district,state=state,address=address,message=message).save()
+        messages.success(request,"Submitted Successfully")
+        return render (request,"franchisee.html")
     return render (request,"franchisee.html")
 def ourcenters(request):
     return render (request,"ourcenters.html")
 def career(request):
+    if request.method=="POST":
+        fullname=request.POST["name"]
+        phoneno=request.POST["phone"]
+        email=request.POST["email"]
+        cv=request.FILES.get("email")
+        message=request.POST["message"]
+        careers.objects.create(fullname=fullname,phoneno=phoneno,email=email,cv=cv,message=message).save()
+        messages.success(request,"Submitted Successfully")
+        return render (request,"career.html")
     return render (request,"career.html")
 import os
 def readfile(request):

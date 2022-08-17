@@ -1,6 +1,16 @@
 {% extends "index.html" %}
 {% load static %}
 {%block content%}
+<style>
+    #custom-tooltip {
+        display: none;
+        margin-left: 40px;
+        padding: 5px 12px;
+        background-color: #000000df;
+        border-radius: 4px;
+        color: #fff;
+    }
+</style>
 <body>
     {% include "header.html"%}
     <section class="sub_header py-xl-4 py-3">
@@ -133,7 +143,7 @@
                                                         <a href="{{bookhistory.report.url}}"
                                                         class="" download><button style="padding-left:20px; padding-right:20px;" class="py-2 br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue"><i class="fa fa-download" aria-hidden="true"></i></button></a>
                                                         <a data-bs-toggle="modal" data-bs-target="#social_report_share"
-                                                        class="" download><button onclick="reportsharee('{{bookhistory.report.url}}')"style="padding-left:20px; padding-right:20px" class="py-2 br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue"><i class="fa fa-share-square-o" aria-hidden="true"></i></button></a>
+                                                        class="" download><button onclick="reportsharee('{{bookhistory.report.url}}','{{bookhistory.bookingid}}')"style="padding-left:20px; padding-right:20px" class="py-2 br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue"><i class="fa fa-share-square-o" aria-hidden="true"></i></button></a>
                                                 </td>
                                                     {% else %}
                                                     <td data-label="Report">
@@ -183,7 +193,7 @@
                                         aria-labelledby="pills-contact-tab" tabindex="0">
                                         {% comment %} <h1 class="text-center fs-30 font-bold cl-dark-blue mb-4">No Record Found...</h1> {% endcomment %}
                                         <button data-bs-toggle="modal" data-bs-target="#mediation_modal" class="px-5 py-2 bg-sky-blue br-5 fs-18 mb-2 cl-dark-white br" type="submit" value="submit">Add Medication</button>
-                                
+                                {%if medicscount != 0 %}
                                         <table class="medicationss" >
                                             <thead>
                                                 <tr class="text-center">
@@ -242,6 +252,9 @@
                                                 {%endfor%}
                                             </tbody>
                                         </table>
+                                        {%else%}
+                                        <h1 class="text-center fs-30 font-bold cl-dark-blue mb-4" id="nodataa">No Record Found...</h1>
+                                        {%endif%}
                                     </div>
                                 </div>
                             </div>
@@ -283,6 +296,7 @@
                         <div class="pt-3">
                             <input class="w-100  form_input" placeholder="Copy Link" name="" id="copyshare" type="text" maxlength="250" >
                         </div>
+                        <span id="custom-tooltip">copied!</span>
                   
                 </div>
             </div>
@@ -649,34 +663,34 @@ function prescrbreak(e){
         }
     });       
 })*/
-function reportsharee(e){
-    console.log(e)
-    link=window.location.origin+e
-    whatsapplink="https://web.whatsapp.com/send?text="+link
-    gmaillink=`https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=&su=Diagnostica+Span+Report&body=+${link}+&ui=2&tf=1&pli=1`
-    //sms=`sms:${link}`
-    sms= `sms:8105486993?body=${link}`
-    //gmaillink="https://gmail.com/send?body="+link
-    console.log(gmaillink)
+function reportsharee(e,bookingid){
     
+    link=window.location.origin+e
+    whatsapplink=`https://web.whatsapp.com/send?text=Hello there,%0APlease click to View Report of Booking ID:${bookingid}%0A${link}`
+    gmaillink=`https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=&su=Diagnostica+Span+Report&body=+Hello there,%0APlease click to View Report of Booking ID:${bookingid}%0A${link}+&ui=2&tf=1&pli=1`
+    //sms=`sms:${link}`
+    sms=`sms:&body=Hello there Please click to View Report of Booking ID:${bookingid}%0A${link}`
+    //sms= `sms:8105486993?body=${link}`
+    //gmaillink="https://gmail.com/send?body="+link
     $("#copyshare").val(link)
     $("#whatsappshare").attr("href",whatsapplink)
     $("#gmailshare").attr("href",gmaillink)
     $("#smsshare").attr("href",sms)
-
-
     }
     function myFunction() {
         /* Get the text field */
         var copyText = document.getElementById("copyshare");
-        
         /* Select the text field */
         copyText.select();
         copyText.setSelectionRange(0, 99999); /* For mobile devices */
       
          /* Copy the text inside the text field */
         navigator.clipboard.writeText(copyText.value);
-      
+        document.getElementById("custom-tooltip").style.display = "inline";
+        document.execCommand("copy");
+        setTimeout( function() {
+            document.getElementById("custom-tooltip").style.display = "none";
+        }, 2000);
         /* Alert the copied text */
         //alert("Copied the text: " + copyText.value);
       }
