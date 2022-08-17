@@ -1288,7 +1288,7 @@ input::-webkit-inner-spin-button {
     transition: 0.5s ease-in-out;
 }
 
-.contact ul li {
+.contact ul li , .section_ourcenters ul li {
     list-style: none;
     font-size: 16px;
     color: #2B3147;
@@ -1297,16 +1297,16 @@ input::-webkit-inner-spin-button {
     padding-left: 35px;
 }
 
-.contact ul li a {
+.contact ul li a, .section_ourcenters ul li a {
     color: #2B3147;
 }
 
-.contact ul li a:hover {
+.contact ul li a:hover, .section_ourcenters ul li a:hover {
     font-size: 17px;
     transition: 0.5s ease-in-out;
 }
 
-.contact ul li i {
+.contact ul li i, .section_ourcenters ul li i  {
     list-style: none;
     left: 0px;
     position: absolute;
@@ -1767,6 +1767,12 @@ textarea {
     .health_symptoms_table_td {
         min-width: 400px;
     }
+    .our_center_location{
+        display: none;
+    }
+    .our_centermap{
+        height:250px!important
+    }
 }
 
 @media (min-width: 992px) and (max-width: 1199.98px) {
@@ -2030,28 +2036,6 @@ textarea {
 .icon-box .box:nth-child(4) {
     background: #2c3046;
 }
-
-.section_ourcenters .nav-tabs {
-    border-bottom: none;
-  }
- 
- .section_ourcenters .nav-tabs > li > a {
-    border: none;
-    border-radius: 0;
-    background-color: #eee;
-    width: 100px!important;
-  }
- .section_ourcenters .nav-tabs > div > li > a:hover {
-    background-color: #8845a6;
-    color: #fff;
-  }
- .section_ourcenters .nav-tabs > div > li.active > a {
-    border: none;
-    background-color: #8845a6;
-    color: #fff;
-  }
- .section_ourcenters .nav-tabs > div > li.active > a:hover, .nav-tabs > li.active > a:focus {
-    border: none;
-    background-color: #8845a6;
-    color: #fff;
-  }
+.section_ourcenters .gmnoprint.gm-style-cc, .section_ourcenters .gm-style-cc  {
+    height: unset!important;
+}
