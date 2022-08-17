@@ -78,7 +78,9 @@ urlpatterns = [
     path('medicationdelete',views.medicationdelete,name="medicationdelete"),
     path('medicationinfo',views.medicationinfo,name="medicationinfo"),
     path('medicupdate',views.medicupdate,name="medicupdate"),
-   
+    path("franchise-opportunities",views.franchise,name="franchise"),
+    path("our-centers",views.ourcenters,name="ourcenters"),
+     path("career",views.career,name="career"),
     # path('sms',views.smstest,name="sms")
     # url('download/<path>', serve, {'document root': settings.MEDIA_ROOT}),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

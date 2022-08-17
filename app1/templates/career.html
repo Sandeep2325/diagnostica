@@ -1,0 +1,147 @@
+{% extends "index.html" %}
+{% load static %}
+{%block content%}
+<body>
+    {% include "header.html"%}
+    <section class="sub_header py-xl-4 py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="d-flex ">
+                        <p class="m-0 fs-18 font-regular cl-dark-blue opc-5 pe-1 sub_nav_bar"><a
+                                href="{%url "home"%}">Home</a></p>
+                        /
+                        <p class="m-0 fs-18 font-regular cl-dark-blue ps-1 sub_nav_bar">Career</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact pb-lg-5 pb-3">
+        <div class="container">
+            <div class="row ">
+                <div class="col-12">
+                    <div class="bg-light-grey pb-lg-5  px-lg-5 py-3 px-3 br-15">
+                        <h1 class="fs-40 font-bold cl-dark-blue pb-lg-4">Submit your CV</h1>
+                        <div class="row">
+                            <div class="col-lg-6">
+                               <p>Thank you for your interest in a career with Diagnostica SPAN. We believe that each employee contributes directly to growth and success of the organisation. We greatly appreciate and value the talents, abilities, and dedication of our employees; and we take pride in providing our employees with an enjoyable and supportive work environment.</p>
+                               <p>We are always looking for motivated, young professionals for the following designations:</p>
+                               <ul class="p-0">
+                                <li class="p-0 m-0">1.Area Sales Manager</li>
+                                <li class="p-0 m-0">2.Territory Head</li>
+                                <li class="p-0 m-0">3.Laboratory Manager</li>
+                                <li class="p-0 m-0">4.Laboratory Supervisor</li>
+                                <li class="p-0 m-0">5.Â Business Development Executive</li>
+                                <li class="p-0 m-0">6.Field Executive</li>
+                                <li class="p-0 m-0">7.Scientific Officer</li>
+                                <li class="p-0 m-0">8.Senior Scientific Officer</li>
+                                <li class="p-0 m-0">9.Junior Scientific Officer</li>
+                                <li class="p-0 m-0">10.Â Customer Care Executive</li>
+                                <li class="p-0 m-0">11.Accountant</li>
+                                <li class="p-0 m-0">12.Tele-caller</li>
+                               </ul>
+                            </div>
+                            <div class="col-lg-6">
+                                <form method= "post"  id="careerForm">
+                                    <div class="row">
+                                        <div class="col-lg-12 pt-4  px-lg-2 px-0">
+                                            <input class="w-100 form_input" placeholder="Full Name"
+                                                name="name" maxlength="250" />
+                                        </div>
+                                        <div class="col-lg-12 pt-4 px-lg-2 px-0">
+                                            <input class="w-100 form_input"
+                                                placeholder="Phone Number" type="number" name="phone" maxlength="250" />
+                                        </div>
+                                        <div class="col-lg-12 pt-4 px-lg-2 px-0">
+                                            <input class="w-100 form_input" placeholder="Email"
+                                                name="email" maxlength="250" />
+                                        </div>
+                                        <div class="col-lg-12 pt-4 px-lg-2 px-0">
+                                            <label>Upload CV</label>
+                                            <input class="w-100 form_input" placeholder=""
+                                                name="cv" maxlength="250" type="file"  accept="image/jpeg,application/pdf" />
+                                        </div>
+                                        <div class="col-lg-12 pt-4 px-lg-2 px-0">
+                                            <textarea class="w-100 form_input" rows="4" cols="50"
+                                                placeholder="Message" name="message" maxlength="250"></textarea>
+                                        </div>
+                                        <div class="col-12 pt-4 ">
+                                            <button class="contact_button br br-5 cl-dark-white fs-18 font-bold" type="submit">Submit</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {%include "footer.html"%}
+</body>
+
+<script>
+
+    jQuery.validator.addMethod("name_regex", function (value, element) {
+        return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);
+    }, "Enter valid name");
+    jQuery.validator.addMethod("phone_regex", function (value, element) {
+        return this.optional(element) || /^[0-9\.\-_]{10,30}$/i.test(value);
+    }, "Enter valid phone number");
+    $.validator.addMethod('filesize', function (value, element, param) {
+        return this.optional(element) || (element.files[0].size <= param)
+    }, 'File size must be less than {0}');
+    $("#careerForm").validate({
+        rules: {
+
+            'name': {
+                required: true,
+                minlength: 1,
+            },
+            'message': {
+                required: true,
+                minlength: 1,
+            },
+            'email': {
+                required: true,
+                email: true
+            },
+            'phone': {
+                required: true,
+                phone_regex: true,
+                minlength: 10,
+                maxlength: 10
+            },
+            'cv':{
+                required: true,
+            }
+        },
+
+        messages: {
+
+            'name': {
+                required: "This field is required."
+            },
+            'email': {
+                required: "This field is required.",
+                email: "Enter valid email"
+            },
+            'phone': {
+                required: "This field is required."
+            },
+
+            'message': {
+                required: "This field is required."
+            },
+            'cv' : {
+                required: "This field is required."
+            }
+        },
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+</script>
+{%endblock%}

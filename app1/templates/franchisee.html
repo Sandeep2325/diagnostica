@@ -1,0 +1,167 @@
+{% extends "index.html" %}
+{% load static %}
+{%block content%}
+<body>
+    {% include "header.html"%}
+    <section class="sub_header py-xl-4 py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="d-flex ">
+                        <p class="m-0 fs-18 font-regular cl-dark-blue opc-5 pe-1 sub_nav_bar"><a
+                                href="{%url "home"%}">Home</a></p>
+                        /
+                        <p class="m-0 fs-18 font-regular cl-dark-blue ps-1 sub_nav_bar">Franchisee</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact pb-lg-5 pb-3">
+        <div class="container">
+            <div class="row ">
+                <div class="col-12">
+                    <div class="bg-light-grey pb-lg-5  px-lg-5 py-3 px-3 br-15">
+                        
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <h1 class="fs-40 font-bold cl-dark-blue pb-lg-4 m-0">We Provide the right Franchisee  Opportunities</h1>
+                                <p class="m-0">Come be a part of one of india's trusted and growing diagnostic chain</p>
+                                <form method= "post"  id="franchiseeForm">
+                                    <div class="row">
+                                        <div class="col-lg-6 pt-4  px-lg-2 px-0">
+                                            <input class="w-100 form_input" placeholder="Full Name"
+                                                name="name" maxlength="250" />
+                                        </div>
+                                        <div class="col-lg-6 pt-4 px-lg-2 px-0">
+                                            <input class="w-100 form_input"
+                                                placeholder="Phone Number" type="number" name="phone" maxlength="250" />
+                                        </div>
+                                        <div class="col-lg-6 pt-4 px-lg-2 px-0">
+                                            <input class="w-100 form_input" placeholder="Email"
+                                                name="email" maxlength="250" />
+                                        </div>
+                                        <div class="col-lg-6 pt-4 px-lg-2 px-0">
+                                            <input class="w-100 form_input" placeholder="Taluka"
+                                                name="taluka" maxlength="250" />
+                                        </div>
+                                        <div class="col-lg-6 pt-4 px-lg-2 px-0">
+                                            <input class="w-100 form_input" placeholder="District"
+                                                name="district" maxlength="250" />
+                                        </div>
+                                        <div class="col-lg-6 pt-4 px-lg-2 px-0">
+                                            <input class="w-100 form_input" placeholder="State"
+                                                name="state" maxlength="250" />
+                                        </div>
+                                        <div class="col-lg-12 pt-4 px-lg-2 px-0">
+                                            <textarea class="w-100 form_input" rows="1" cols="50"
+                                                placeholder="Address" name="address" maxlength="250"></textarea>
+                                        </div>
+                                        <div class="col-lg-12 pt-4 px-lg-2 px-0">
+                                            <textarea class="w-100 form_input" rows="2" cols="50"
+                                                placeholder="Message" name="message" maxlength="250"></textarea>
+                                        </div>
+                                        <div class="col-12 pt-lg-4 pb-lg-0 py-3 ">
+                                            <button class="contact_button br br-5 cl-dark-white fs-18 font-bold" type="submit">Submit</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-lg-6">
+                                <div style="margin:0px"><img src="static/images/franchisee.jpg" class="img-fluid br-10 w-100 h-100"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {%include "footer.html"%}
+</body>
+
+<script>
+
+    jQuery.validator.addMethod("name_regex", function (value, element) {
+        return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);
+    }, "Enter valid name");
+    jQuery.validator.addMethod("phone_regex", function (value, element) {
+        return this.optional(element) || /^[0-9\.\-_]{10,30}$/i.test(value);
+    }, "Enter valid phone number");
+    $.validator.addMethod('filesize', function (value, element, param) {
+        return this.optional(element) || (element.files[0].size <= param)
+    }, 'File size must be less than {0}');
+    $("#franchiseeForm").validate({
+        rules: {
+
+            'name': {
+                required: true,
+                minlength: 1,
+            },
+            'taluka': {
+                required: true,
+                minlength: 1,
+            },
+            'district': {
+                required: true,
+                minlength: 1,
+            },
+            'state': {
+                required: true,
+                minlength: 1,
+            },
+            'address': {
+                required: true,
+                minlength: 1,
+            },
+            'message': {
+                required: true,
+                minlength: 1,
+            },
+            'email': {
+                required: true,
+                email: true
+            },
+            'phone': {
+                required: true,
+                phone_regex: true,
+                minlength: 10,
+                maxlength: 10
+            },
+        },
+
+        messages: {
+
+            'name': {
+                required: "This field is required."
+            },
+            'email': {
+                required: "This field is required.",
+                email: "Enter valid email"
+            },
+            'phone': {
+                required: "This field is required."
+            },
+
+            'message': {
+                required: "This field is required."
+            },
+            'taluka' : {
+                required: "This field is required."
+            },
+            'district' : {
+                required: "This field is required."
+            },
+            'state' : {
+                required: "This field is required."
+            },
+            'address' : {
+                required: "This field is required."
+            }
+        },
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+</script>
+{%endblock%}
