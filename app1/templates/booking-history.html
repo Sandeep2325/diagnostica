@@ -132,7 +132,7 @@
                                                     {%if bookhistory.report %}
                                                     <td data-label="Report" class="d-flex justify-content-between">
                                                         <a href="{{bookhistory.report.url}}"
-                                                        class="" download><button style="padding-left:20px; padding-right:20px" class="py-2 br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue"><i class="fa fa-download" aria-hidden="true"></i></button></a>
+                                                        class="" download><button style="padding-left:20px; padding-right:20px;" class="py-2 br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue"><i class="fa fa-download" aria-hidden="true"></i></button></a>
                                                         <a data-bs-toggle="modal" data-bs-target="#social_report_share"
                                                         class="" download><button style="padding-left:20px; padding-right:20px" class="py-2 br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue"><i class="fa fa-share-square-o" aria-hidden="true"></i></button></a>
                                                 </td>
@@ -191,49 +191,56 @@
                                             <thead>
                                                 <tr class="text-center">
                                                     <td class="t_head text-center" scope="col">Sl No</td>
-                                                    <td class="t_head text-center" scope="col">Tablet Name</td>
-                                                    <td class="t_head text-center" scope="col">Morning</td>
-                                                    <td class="t_head text-center" scope="col">Afternoon</td>
-                                                    <td class="t_head text-center" scope="col">Evening</td>
-                                                    <td class="t_head text-center" scope="col">Night</td>
-                                                    {% comment %} <td class="t_head text-center" scope="col">Date</td> {% endcomment %}
-                                                    <td class="t_head text-center" scope="col">Delete</td>
+                                                    <td class="t_head text-lg-center" scope="col">Medicine Name</td>
+                                                    <td class="t_head text-lg-center" scope="col">Morning</td>
+                                                    <td class="t_head text-lg-center" scope="col">Afternoon</td>
+                                                    <td class="t_head text-lg-center" scope="col">Evening</td>
+                                                    <td class="t_head text-lg-center" scope="col">Night</td>
+                                                    {% comment %} <td class="t_head text-lg-center" scope="col">Date</td> {% endcomment %}
+                                                    <td class="t_head text-lg-center" scope="col">Action</td>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {%for medic in medics%}
                                                 <tr>
-                                                    <td class="text-center" data-label="Tablet Name">{{forloop.counter}}</td>
-                                                    <td class="text-center" data-label="Tablet Name">{{medic.medic}}</td>
+                                                    <td class="text-lg-center" data-label="Tablet Name">{{forloop.counter}}</td>
+                                                    <td class="text-lg-center" data-label="Tablet Name">{{medic.medic}}</td>
                                                      {%if medic.morning == True %} 
-                                                     <td class="text-center" data-label="Morning"><i class="fa fa-check" aria-hidden="true"></i></td>
+                                                     <td class="text-lg-center" data-label="Morning"><i class="fa fa-check" aria-hidden="true"></i></td>
                                                      {%else%}
-                                                    <td class="text-center" data-label="Morning">-</td>
+                                                    <td class="text-lg-center" data-label="Morning">-</td>
                                                     {%endif%} 
 
                                                     {%if medic.afternoon == True %} 
-                                                     <td class="text-center" data-label="Afternoon"><i class="fa fa-check" aria-hidden="true"></i></td>
+                                                     <td class="text-lg-center" data-label="Afternoon"><i class="fa fa-check" aria-hidden="true"></i></td>
                                                      {%else%}
-                                                    <td class="text-center" data-label="Afternoon">-</td>
+                                                    <td class="text-lg-center" data-label="Afternoon">-</td>
                                                     {%endif%} 
 
 
                                                     {%if medic.evening == True %}
-                                                     <td class="text-center" data-label="Evening"><i class="fa fa-check" aria-hidden="true"></i></td>
+                                                     <td class="text-lg-center" data-label="Evening"><i class="fa fa-check" aria-hidden="true"></i></td>
                                                      {%else%}
-                                                    <td class="text-center" data-label="Evening">-</td>
+                                                    <td class="text-lg-center" data-label="Evening">-</td>
                                                     {%endif%} 
                                                     {%if medic.night == True %}
-                                                     <td class="text-center" data-label="Night"><i class="fa fa-check" aria-hidden="true"></i></td>
+                                                     <td class="text-lg-center" data-label="Night"><i class="fa fa-check" aria-hidden="true"></i></td>
                                                      {%else%}
-                                                    <td class="text-center" data-label="Night">-</td>
+                                                    <td class="text-lg-center" data-label="Night">-</td>
                                                     {%endif%} 
-                                                    {% comment %} <td class="text-center" data-label="morning"><input class="" type="checkbox"  disabled/></td>
-                                                    <td class="text-center" data-label="Afternoon"><input class="" type="checkbox"  disabled/></td>
-                                                    <td class="text-center" data-label="Evening"><input class="" type="checkbox" disabled/></td>
-                                                    <td class="text-center" data-label="Night"><input class="" type="checkbox"  disabled/></td> {% endcomment %}
-                                                    {% comment %} <td class="text-center" data-label="Date">16/11/2022</td> {% endcomment %}
-                                                    <td class="text-center" data-label="Delete"><button class="br" onclick="deletefunc('{{medic.id}}')"><i class="fa fa-trash-o cursor "  style="font-size:21px; color:red" aria-hidden="true"></i></button></td>
+                                                    {% comment %} <td class="text-lg-center" data-label="morning"><input class="" type="checkbox"  disabled/></td>
+                                                    <td class="text-lg-center" data-label="Afternoon"><input class="" type="checkbox"  disabled/></td>
+                                                    <td class="text-lg-center" data-label="Evening"><input class="" type="checkbox" disabled/></td>
+                                                    <td class="text-lg-center" data-label="Night"><input class="" type="checkbox"  disabled/></td> {% endcomment %}
+                                                    {% comment %} <td class="text-lg-center" data-label="Date">16/11/2022</td> {% endcomment %}
+                                                    {% comment %} <td class="text-lg-center" data-label="Delete"><button class="br" onclick="deletefunc('{{medic.id}}')"><i class="fa fa-trash-o cursor "  style="font-size:21px; color:red" aria-hidden="true"></i></button></td> {% endcomment %}
+
+                                                    <td  data-label="Delete">
+                                                        <div class="text-lg-center d-flex justify-content-lg-center justify-content-end">
+                                                            <button class="br" style="background:none"><i style="font-size:21px; color:#5c62ce" data-bs-toggle="modal" data-bs-target="#mediation_update_modal" class="fa fa-pencil cursor px-2" aria-hidden="true"></i></button>
+                                                            <button class="br"  style="background:none" onclick="deletefunc('{{medic.id}}')">  <i style="font-size:21px; color:red" class="fa fa-trash-o cursor px-2" aria-hidden="true"></i></button>
+                                                        <div>
+                                                    </td>
                                                 </tr>
                                                 {%endfor%}
                                             </tbody>
@@ -247,25 +254,18 @@
             </div>
         </div>
     </section>
+   
     <section class="social_report_share">
         <div class="modal fade" id="social_report_share" tabindex="-1" aria-labelledby="social_report_shareLabel"
         aria-hidden="true">
         <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content p-sm-2">
+            <div class="modal-content p-2">
                 <div class="modal-body">
                     <button type="button" class="btn-close  close" data-bs-dismiss="modal"
                     aria-label="Close">
                 </button>
                         <h2 class="cl-dark-blue text-center fs-40  font-bold">Share</h2>
-                        {% comment %} <div id="testimonial_slider" class="owl-carousel owl-theme"> {% endcomment %}
                         <div class="icon-box">
-                            <div class="box">
-                                <i class="fa fa-facebook" aria-hidden="true"></i>
-                            </div>
-                            <div class="box">
-                                <i class="fa fa-twitter" aria-hidden="true"></i>
-                            </div>
-                           
                             <div class="box">
                                 <i class="fa fa-whatsapp" aria-hidden="true"></i>
                             </div>
@@ -273,10 +273,16 @@
                                 <i class="fa fa-envelope-o" aria-hidden="true"></i>
                             </div>
                             <div class="box">
+                                <i class="fa fa-comments-o" aria-hidden="true"></i>
+                            </div>
+                            <div class="box">
                                 <i class="fa fa-clone" aria-hidden="true"></i>
                             </div>
                         </div>
-                    {% comment %} </div> {% endcomment %}
+                        <div class="pt-3">
+                            <input class="w-100  form_input" placeholder="Copy Link" name="" id="" type="text" maxlength="250" >
+                        </div>
+                  
                 </div>
             </div>
         </div>
@@ -296,26 +302,75 @@
                     <h2 class="cl-dark-blue text-center fs-40  font-bold ">Medication</h2>
                     <div>
                         <label>Medicine Name</label>
-                        <input class="w-100  form_input" placeholder="Tablet Name" name="medico" id="medico" type="text" maxlength="250" >
+                        <input class="w-100  form_input" placeholder="Medicine Name" name="medico" id="medico" type="text" maxlength="250" >
                     </div>
                     <div  class="pt-2">
-                        <input class="cursor me-2" type="checkbox" name="tab_morning" id="tab_morning"/>
-                        <label class="cursor" for="tab_morning">Morning</label>
+                        <input class="cursor me-2" type="checkbox" name="tab_morning" id="tabmorning"/>
+                        <label class="cursor" for="tabmorning">Morning</label>
                     </div>
                     <div  class="pt-2">
-                        <input class="cursor me-2" type="checkbox" name="tab_afternoon" id="tab_afternoon"/>
-                        <label class="cursor" for="tab_afternoon">Afternoon</label>
+                        <input class="cursor me-2" type="checkbox" name="tab_afternoon" id="tabafternoon"/>
+                        <label class="cursor" for="tabafternoon">Afternoon</label>
                     </div>
                     <div  class="pt-2">
-                        <input class="cursor me-2" type="checkbox" name="tab_evening" id="tab_evening"/>
-                        <label class="cursor" for="tab_evening">Evening</label>
+                        <input class="cursor me-2" type="checkbox" name="tab_evening" id="tabevening"/>
+                        <label class="cursor" for="tabevening">Evening</label>
                     </div>
                     <div  class="pt-2">
-                        <input class="cursor me-2" type="checkbox" name="tab_night" id="tab_night"/>
-                        <label class="cursor" for="tab_night">Night</label>
+                        <input class="cursor me-2" type="checkbox" name="tab_night" id="tabnight"/>
+                        <label class="cursor" for="tabnight">Night</label>
                     </div>
+                    <p class="myCheckBox" id="myCheckBox" style="color:red"></p>
+                    <div class="text-center">
                     <button class="px-5 py-2 bg-sky-blue br-5  fs-18  cl-dark-white br mt-2" type="submit" id="medication"
                     value="submit">Submit</button>
+                    </div>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>
+
+
+    
+    <section class="section_update_mediation_modal">
+        <div class="modal fade" id="mediation_update_modal" tabindex="-1" aria-labelledby="mediation_update_modal-Label"
+        aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content p-sm-2">
+                <div class="modal-body">
+                    <form id="update_med_Form">
+                    <button type="button" class="btn-close  close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                    </button>
+                    <h2 class="cl-dark-blue text-center fs-40  font-bold ">Update Medication</h2>
+                    
+                    <div>
+                        <label >Medicine Name</label>
+                        <input class="w-100  form_input" placeholder="Medicine Name" name="update_name" id="" type="text" maxlength="250" >
+                    </div>
+                    <div  class="pt-2">
+                        <input class="cursor me-2" type="checkbox" id="tabmorningupdate"/>
+                        <label class="cursor" for="tabmorningupdate">Morning</label>
+                    </div>
+                    <div  class="pt-2">
+                        <input class="cursor me-2" type="checkbox" id="tabafternoonupdate"/>
+                        <label class="cursor" for="tabafternoonupdate">Afternoon</label>
+                    </div>
+                    <div  class="pt-2">
+                        <input class="cursor me-2" type="checkbox" id="tabeveningupdate"/>
+                        <label class="cursor" for="tabeveningupdate">Evening</label>
+                    </div>
+                    <div  class="pt-2">
+                        <input class="cursor me-2" type="checkbox" id="tabnightupdate"/>
+                        <label class="cursor" for="tabnightupdate">Night</label>
+                    </div>
+                    <p class="myCheckBoxUpdate" id="myCheckBoxUpdate" style="color:red"></p>
+                    <div class="text-center">
+                        <button class="px-5 py-2 bg-sky-blue br-5  fs-18  cl-dark-white br mt-2" type="submit"
+                    value="submit" id="checkBtnUpdate">Update</button>
+                    </div>
                 </form>
                 </div>
             </div>
@@ -578,11 +633,9 @@ function prescrbreak(e){
     });
 }
 
-$("#medicofrom").on("submit", function (e) {
-    var datafrom = $('#medicofrom').serialize();
-   
-   
+/*$("#medicofrom").on("submit", function (e) {
 
+    var datafrom = $('#medicofrom').serialize();
     $.ajax({
         url: "{% url 'medicationpost' %}",
         type: "POST",
@@ -598,9 +651,8 @@ $("#medicofrom").on("submit", function (e) {
                 window.location.reload()
             }
         }
-    });
-             
-})
+    });       
+})*/
 
 function deletefunc(e){
     //  $("#delete").on("click", function(e){ 
@@ -624,5 +676,133 @@ function deletefunc(e){
             return false;
      
     }
+jQuery.validator.addMethod("name_regex", function (value, element) {
+    return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);
+}, "Enter valid name");
+$.validator.addMethod('filesize', function (value, element, param) {
+    return this.optional(element) || (element.files[0].size <= param)
+}, 'File size must be less than {0}');
+$("#medicofrom").validate({
+    rules: {
+
+        'medico': {
+            required: true,
+            minlength: 1,
+        },
+    },
+
+    messages: {
+
+        'medico': {
+            required: "This field is required."
+        },
+    },
+    submitHandler: function (form) {
+        //form.submit();
+        var datafrom = $('#medicofrom').serialize();
+        $.ajax({
+            url: "{% url 'medicationpost' %}",
+            type: "POST",
+            dataType: "json",
+            data: datafrom,
+            success: function (resp) {
+                $("#medico").val('');
+                if (!resp["message"]){
+                    swal("Something Went Wrong", "Try Again", "warning");
+                    //alert("Already Subscribed Thank you!!")
+                }
+                else{
+                    window.location.reload()
+                }
+            }
+        }); 
+    }
+});
+
+$("#tabmorning").change(function() {
+    $("#myCheckBox").text("");
+});
+$("#tabafternoon").change(function() {
+    $("#myCheckBox").text("");
+});
+$("#tabevening").change(function() {
+    $("#myCheckBox").text("");
+});
+$("#tabnight").change(function() {
+    $("#myCheckBox").text("");
+});
+
+$(document).ready(function () {
+    $('#medication').click(function() {
+      checked = $("input[type=checkbox]:checked").length;
+      if(!checked) {
+        $("#myCheckBox").text("You must check at least one checkbox.");
+        return false;
+      }else{
+        $("#myCheckBox").text("");
+      }
+
+    });
+});
+
+
+
+
+jQuery.validator.addMethod("name_regex", function (value, element) {
+    return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);
+}, "Enter valid name");
+$.validator.addMethod('filesize', function (value, element, param) {
+    return this.optional(element) || (element.files[0].size <= param)
+}, 'File size must be less than {0}');
+$("#update_med_Form").validate({
+    rules: {
+
+        'update_name': {
+            required: true,
+            minlength: 1,
+        },
+    },
+
+    messages: {
+
+        'update_name': {
+            required: "This field is required."
+        },
+    },
+    submitHandler: function (form) {
+        form.submit();
+
+    }
+});
+
+$("#tabmorningupdate").change(function() {
+    $("#myCheckBoxUpdate").text("");
+});
+$("#tabafternoonupdate").change(function() {
+    $("#myCheckBoxUpdate").text("");
+});
+$("#tabeveningupdate").change(function() {
+    $("#myCheckBoxUpdate").text("");
+});
+$("#tabnightupdate").change(function() {
+    $("#myCheckBoxUpdate").text("");
+});
+
+$(document).ready(function () {
+    $('#checkBtnUpdate').click(function() {
+      checked = $("input[type=checkbox]:checked").length;
+
+      if(!checked) {
+        $("#myCheckBoxUpdate").text("You must check at least one checkbox.");
+        return false;
+      }else{
+        $("#myCheckBoxUpdate").text("");
+      }
+
+    });
+   
+   
+});
+
 </script>
 {%endblock%}

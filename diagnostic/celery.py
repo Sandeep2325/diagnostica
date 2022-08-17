@@ -5,7 +5,6 @@ from django.conf import settings
 from celery.schedules import crontab
 # from app1.tasks import send_mail_func
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'diagnostic.settings')
-
 app = Celery('diagnostic',broker_url='redis://127.0.0.1:6379/0')
 app.conf.enable_utc = False
 app.conf.update(timezone = 'Asia/Kolkata')

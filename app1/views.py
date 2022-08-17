@@ -960,7 +960,6 @@ def prescriptionbookview(request):
                     booking_type="Prescription",
                     bookingdetails="upload prescription",
                     payment_status=False).save()
-        
         messages.success(
             request, "Thankyou for your booking!, Our admin team will get back to you shortly.")
         link=request.build_absolute_uri('/bookinghistory/')
@@ -976,7 +975,7 @@ def prescriptionbookview(request):
                 recipient_list,
                 fail_silently=False,
         )
-        msg="Hi\nThere is an Prescription Upload order booked with below details\nBookingID:{bookingid}\nFullname:{firstname}{lastname}\nLocation={c}\nPhone Number:{contact}"
+        msg=f"Hi\nThere is an Prescription Upload order booked with below details\nBookingID:{bookingid}\nFullname:{firstname}{lastname}\nLocation={c}\nPhone Number:{contact}"
         number=8105486993
         sms(msg,number)
         return HttpResponseRedirect(reverse("booking-history"))
