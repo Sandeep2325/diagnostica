@@ -652,4 +652,15 @@ class franchisee(models.Model):
         return self.fullname
     class Meta:
         verbose_name_plural="Franchise"
+class careers(models.Model):
+    fullname=models.CharField(max_length=100,null=True,blank=True,verbose_name="Full Name")
+    phoneno=models.CharField(max_length=15,null=True,blank=True,verbose_name="Phone No")
+    email=models.EmailField(max_length=255,null=True,blank=True,verbose_name="Email")
+    cv=models.FileField(upload_to="careerCV",null=True,blank=True)
+    message=models.TextField(null=True,blank=True,verbose_name="Message")
+    
+    def __str__(self):
+        return self.fullname
+    class Meta:
+        verbose_name_plural="Careers"
     
