@@ -185,7 +185,7 @@ class testbookadmin(admin.ModelAdmin):
     list_display=["users","tests","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address","report","created","updated","action_btn"]        
     readonly_fields=["user","myself","payment_status","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location",'bookingid']
     exclude = ('unique',)
-    list_filter = ("user","myself","others","gender")
+    list_filter = ("myself","others","gender")
     # search_fields = ('testt', 'categoryy__categoryy')
     # list_editable=[""]
     fieldsets = (

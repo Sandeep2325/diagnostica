@@ -11,7 +11,7 @@
                         <p class="m-0 fs-18 font-regular cl-dark-blue opc-5 pe-1 sub_nav_bar"><a
                                 href="{%url "home"%}">Home</a></p>
                         /
-                        <p class="m-0 fs-18 font-regular cl-dark-blue ps-1 sub_nav_bar">Franchisee</p>
+                        <p class="m-0 fs-18 font-regular cl-dark-blue ps-1 sub_nav_bar">Franchisee Opportunities</p>
                     </div>
                 </div>
             </div>
@@ -29,6 +29,7 @@
                                 <h1 class="fs-40 font-bold cl-dark-blue pb-lg-4 m-0">We Provide the right Franchisee  Opportunities</h1>
                                 <p class="m-0">Come be a part of one of india's trusted and growing diagnostic chain</p>
                                 <form method= "post"  id="franchiseeForm">
+                                    {%csrf_token%}
                                     <div class="row">
                                         <div class="col-lg-6 pt-4  px-lg-2 px-0">
                                             <input class="w-100 form_input" placeholder="Full Name"
@@ -79,7 +80,37 @@
     </section>
     {%include "footer.html"%}
 </body>
+{% if messages %}
+{% for message in messages %}
+{% if message.tags == "error"%}
+<script>
+  $(document).ready(function(){
+   // swal('{{message}}');
 
+    swal({
+	title:'{{message}}',
+	//text: "You clicked the button!",
+	icon:"warning",
+	button:"ok"
+});
+  });
+</script>
+{%else%}
+<script>
+  $(document).ready(function(){
+   // swal('{{message}}');
+
+    swal({
+	title:'{{message}}',
+	//text: "You clicked the button!",
+	icon:"success",
+	button:"ok"
+});
+  });
+</script>
+{% endif %}
+{%endfor%}
+{% endif %}
 <script>
 
     jQuery.validator.addMethod("name_regex", function (value, element) {
