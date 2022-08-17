@@ -2030,3 +2030,28 @@ textarea {
 .icon-box .box:nth-child(4) {
     background: #2c3046;
 }
+
+.section_ourcenters .nav-tabs {
+    border-bottom: none;
+  }
+ 
+ .section_ourcenters .nav-tabs > li > a {
+    border: none;
+    border-radius: 0;
+    background-color: #eee;
+    width: 100px!important;
+  }
+ .section_ourcenters .nav-tabs > div > li > a:hover {
+    background-color: #8845a6;
+    color: #fff;
+  }
+ .section_ourcenters .nav-tabs > div > li.active > a {
+    border: none;
+    background-color: #8845a6;
+    color: #fff;
+  }
+ .section_ourcenters .nav-tabs > div > li.active > a:hover, .nav-tabs > li.active > a:focus {
+    border: none;
+    background-color: #8845a6;
+    color: #fff;
+  }

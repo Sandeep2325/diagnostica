@@ -2543,7 +2543,12 @@ def medicupdate(request):
         return JsonResponse({"message":True}) 
         # id=request.POST["pk"]
         # medications.objects.filter(pk=some_value).update(field1='some value') 
-
+def franchise(request):
+    return render (request,"franchisee.html")
+def ourcenters(request):
+    return render (request,"ourcenters.html")
+def career(request):
+    return render (request,"career.html")
 import os
 def readfile(request):
     a=test.objects.filter(Banglore_price__isnull=True)
