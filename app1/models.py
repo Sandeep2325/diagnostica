@@ -625,15 +625,31 @@ class requestcall(models.Model):
         verbose_name_plural="Call Back Requests"
 class medications(models.Model):
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.PROTECT)
-    medic=models.TextField(null=True,blank=True)
+    medic=models.TextField(null=True,blank=True,verbose_name="Medicine Name")
     morning=models.BooleanField(default=True)
     afternoon=models.BooleanField(default=True)
     evening=models.BooleanField(default=True)
     night=models.BooleanField(default=True)
-    # created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
+    updated = models.DateTimeField(auto_now=True,null=True, blank=True)
     def __str__(self):
         return self.medic
     class Meta:
         verbose_name_plural="User Medications"
-
+class franchisee(models.Model):
+    fullname=models.CharField(max_length=100,null=True,blank=True,verbose_name="Full Name")
+    phoneno=models.CharField(max_length=15,null=True,blank=True,verbose_name="Phone No")
+    email=models.EmailField(max_length=255,null=True,blank=True,verbose_name="Email")
+    taluka=models.CharField(max_length=100,null=True,blank=True,verbose_name="Taluka")
+    district=models.CharField(max_length=100,null=True,blank=True,verbose_name="District")
+    state=models.CharField(max_length=100,null=True,blank=True,verbose_name="State")
+    address=models.TextField(null=True,blank=True,verbose_name="Address")
+    message=models.TextField(null=True,blank=True,verbose_name="Message")
+    created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
+    updated = models.DateTimeField(auto_now=True,null=True, blank=True)
+    
+    def __str__(self):
+        return self.fullname
+    class Meta:
+        verbose_name_plural="Franchise"
     

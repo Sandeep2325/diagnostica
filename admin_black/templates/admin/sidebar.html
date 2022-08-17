@@ -559,6 +559,34 @@
                                             {% else %}
                                                 <li>{{ model.label }}</li>
                                             {% endif %}
+                                            
+                                            {%elif model.label == "Franchise"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    {% comment %} <i class="fa fa-question-circle" aria-hidden="true"></i> {% endcomment %}
+                                                    <a href="{{ model.url }}">
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                        <span>{{ model.label }}</span>
+                                                        
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
+
+                                            {%elif model.label == "User Medications"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    {% comment %} <i class="fa fa-question-circle" aria-hidden="true"></i> {% endcomment %}
+                                                    <a href="{{ model.url }}">
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                        <span>{{ model.label }}</span>
+                                                        
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
 
                                             {%elif model.label == "Testimonials"%}
                                             {% if model.url %}

@@ -1,7 +1,6 @@
 {% extends "index.html" %}
 {% load static %}
 {%block content%}
-{% load social_share %}
 <body>
     {% include "header.html"%}
     <section class="sub_header py-xl-4 py-3">
@@ -134,7 +133,7 @@
                                                         <a href="{{bookhistory.report.url}}"
                                                         class="" download><button style="padding-left:20px; padding-right:20px;" class="py-2 br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue"><i class="fa fa-download" aria-hidden="true"></i></button></a>
                                                         <a data-bs-toggle="modal" data-bs-target="#social_report_share"
-                                                        class="" download><button style="padding-left:20px; padding-right:20px" class="py-2 br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue"><i class="fa fa-share-square-o" aria-hidden="true"></i></button></a>
+                                                        class="" download><button onclick="reportsharee('{{bookhistory.report.url}}')"style="padding-left:20px; padding-right:20px" class="py-2 br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue"><i class="fa fa-share-square-o" aria-hidden="true"></i></button></a>
                                                 </td>
                                                     {% else %}
                                                     <td data-label="Report">
@@ -146,8 +145,6 @@
                                                 {%endfor%}
                                             </tbody>
                                         </table>
-
-                                       
                                     </div>
                                     {% comment %} table end {% endcomment %}
                                     
@@ -237,7 +234,7 @@
 
                                                     <td  data-label="Delete">
                                                         <div class="text-lg-center d-flex justify-content-lg-center justify-content-end">
-                                                            <button class="br" style="background:none"><i style="font-size:21px; color:#5c62ce" data-bs-toggle="modal" data-bs-target="#mediation_update_modal" class="fa fa-pencil cursor px-2" aria-hidden="true"></i></button>
+                                                            <button class="br" style="background:none" onclick="medicoinfo('{{medic.id}}')"><i style="font-size:21px; color:#5c62ce" data-bs-toggle="modal" data-bs-target="#mediation_update_modal" class="fa fa-pencil cursor px-2" aria-hidden="true"></i></button>
                                                             <button class="br"  style="background:none" onclick="deletefunc('{{medic.id}}')">  <i style="font-size:21px; color:red" class="fa fa-trash-o cursor px-2" aria-hidden="true"></i></button>
                                                         <div>
                                                     </td>
@@ -267,20 +264,24 @@
                         <h2 class="cl-dark-blue text-center fs-40  font-bold">Share</h2>
                         <div class="icon-box">
                             <div class="box">
-                                <i class="fa fa-whatsapp" aria-hidden="true"></i>
+                                <a id="whatsappshare" href="" target="_blank"><i class="fa fa-whatsapp" aria-hidden="true"></i></a>
+                                {% comment %} <i class="fa fa-whatsapp" aria-hidden="true"></i> {% endcomment %}
                             </div>
                             <div class="box">
-                                <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                <a id="gmailshare" href="" target="_blank"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+                                {% comment %} <i class="fa fa-envelope-o" aria-hidden="true"></i> {% endcomment %}
                             </div>
                             <div class="box">
-                                <i class="fa fa-comments-o" aria-hidden="true"></i>
+                                <a id="smsshare" href="https://web.whatsapp.com/send?text=hello" target="_blank"><i class="fa fa-comments-o" aria-hidden="true"></i></a>
+                                {% comment %} <i class="fa fa-comments-o" aria-hidden="true"></i> {% endcomment %}
                             </div>
                             <div class="box">
-                                <i class="fa fa-clone" aria-hidden="true"></i>
+                                <a id="copy" onclick="myFunction()" ><i class="fa fa-clone" aria-hidden="true"></i></a>
+                                {% comment %} <i class="fa fa-clone" aria-hidden="true"></i> {% endcomment %}
                             </div>
                         </div>
                         <div class="pt-3">
-                            <input class="w-100  form_input" placeholder="Copy Link" name="" id="" type="text" maxlength="250" >
+                            <input class="w-100  form_input" placeholder="Copy Link" name="" id="copyshare" type="text" maxlength="250" >
                         </div>
                   
                 </div>
@@ -299,10 +300,12 @@
                     </button>
                     <form action="javascript:void(0)" method='post' id="medicofrom">
                         {%csrf_token%}
+                      
+                       
                     <h2 class="cl-dark-blue text-center fs-40  font-bold ">Medication</h2>
                     <div>
                         <label>Medicine Name</label>
-                        <input class="w-100  form_input" placeholder="Medicine Name" name="medico" id="medico" type="text" maxlength="250" >
+                        <input class="w-100  form_input" placeholder="Medicine Name" name="medico" id="medico" type="text" maxlength="250"  >
                     </div>
                     <div  class="pt-2">
                         <input class="cursor me-2" type="checkbox" name="tab_morning" id="tabmorning"/>
@@ -320,6 +323,7 @@
                         <input class="cursor me-2" type="checkbox" name="tab_night" id="tabnight"/>
                         <label class="cursor" for="tabnight">Night</label>
                     </div>
+                   
                     <p class="myCheckBox" id="myCheckBox" style="color:red"></p>
                     <div class="text-center">
                     <button class="px-5 py-2 bg-sky-blue br-5  fs-18  cl-dark-white br mt-2" type="submit" id="medication"
@@ -341,29 +345,31 @@
             <div class="modal-content p-sm-2">
                 <div class="modal-body">
                     <form id="update_med_Form">
+                        {%csrf_token%}
                     <button type="button" class="btn-close  close" data-bs-dismiss="modal"
                         aria-label="Close">
                     </button>
                     <h2 class="cl-dark-blue text-center fs-40  font-bold ">Update Medication</h2>
-                    
+                    {% comment %} {%for medic in medics%} {% endcomment %}
+                    <input class="w-100  form_input" placeholder="" name="medicid" type="hidden" maxlength="250" id="medicid"  />
                     <div>
                         <label >Medicine Name</label>
-                        <input class="w-100  form_input" placeholder="Medicine Name" name="update_name" id="" type="text" maxlength="250" >
+                        <input class="w-100  form_input" placeholder="Medicine Name" name="update_name" type="text" maxlength="250" id="medicoupdate" />
                     </div>
                     <div  class="pt-2">
-                        <input class="cursor me-2" type="checkbox" id="tabmorningupdate"/>
+                        <input class="cursor me-2" type="checkbox" name="tabmorningupdate" id="tabmorningupdate"/>
                         <label class="cursor" for="tabmorningupdate">Morning</label>
                     </div>
                     <div  class="pt-2">
-                        <input class="cursor me-2" type="checkbox" id="tabafternoonupdate"/>
+                        <input class="cursor me-2" type="checkbox" name="tabafternoonupdate"id="tabafternoonupdate"/>
                         <label class="cursor" for="tabafternoonupdate">Afternoon</label>
                     </div>
                     <div  class="pt-2">
-                        <input class="cursor me-2" type="checkbox" id="tabeveningupdate"/>
+                        <input class="cursor me-2" type="checkbox" name="tabeveningupdate" id="tabeveningupdate"/>
                         <label class="cursor" for="tabeveningupdate">Evening</label>
                     </div>
                     <div  class="pt-2">
-                        <input class="cursor me-2" type="checkbox" id="tabnightupdate"/>
+                        <input class="cursor me-2" type="checkbox" name="tabnightupdate" id="tabnightupdate"/>
                         <label class="cursor" for="tabnightupdate">Night</label>
                     </div>
                     <p class="myCheckBoxUpdate" id="myCheckBoxUpdate" style="color:red"></p>
@@ -561,14 +567,6 @@
                 'csrfmiddlewaretoken':'{{ csrf_token }}',
             },
             success: function(resp){
-                
-               
-              //  $("#choice").text(resp['otherschoice']);
-              // $("#firstname").text(resp['firstname']);
-              //$("#lastname").text(resp['lastname']);
-              //  $("#gender").text(resp['gender']);
-              //  $("#gender").text(resp['age']);
-             //   $("#gender").text(resp['phone']);
              $("#othersspop").empty();
              
                var detail=` <h3 class="fs-20 font-bold cl-dark-blue text-center" id="choice">To Whom : ${resp['otherschoice']}</h3>
@@ -582,8 +580,6 @@
                
             }
         });
-    
-
 }
     function testfunc(e){
     $.ajax({
@@ -653,12 +649,53 @@ function prescrbreak(e){
         }
     });       
 })*/
+function reportsharee(e){
+    console.log(e)
+    link=window.location.origin+e
+    whatsapplink="https://web.whatsapp.com/send?text="+link
+    gmaillink=`https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=&su=Diagnostica+Span+Report&body=+${link}+&ui=2&tf=1&pli=1`
+    //sms=`sms:${link}`
+    sms= `sms:8105486993?body=${link}`
+    //gmaillink="https://gmail.com/send?body="+link
+    console.log(gmaillink)
+    
+    $("#copyshare").val(link)
+    $("#whatsappshare").attr("href",whatsapplink)
+    $("#gmailshare").attr("href",gmaillink)
+    $("#smsshare").attr("href",sms)
 
+    //  $("#delete").on("click", function(e){ 
+                /*$.ajax({
+                    url: "{% url 'reportshare' %}",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'action':'forsession',
+                        'pk':e,
+                        'csrfmiddlewaretoken':'{{ csrf_token }}',
+                    },
+                    success: function(resp){
+                       window.location.reload();
+                    }
+                });
+            return false;*/
+    }
+    function myFunction() {
+        /* Get the text field */
+        var copyText = document.getElementById("copyshare");
+        
+        /* Select the text field */
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); /* For mobile devices */
+      
+         /* Copy the text inside the text field */
+        navigator.clipboard.writeText(copyText.value);
+      
+        /* Alert the copied text */
+        //alert("Copied the text: " + copyText.value);
+      }
 function deletefunc(e){
     //  $("#delete").on("click", function(e){ 
-            
-            var idd = $(this).attr('name');
-           a=$("#delete").attr("name");
                 $.ajax({
                     url: "{% url 'medicationdelete' %}",
                     type: "POST",
@@ -672,10 +709,49 @@ function deletefunc(e){
                        window.location.reload();
                     }
                 });
-    
             return false;
      
     }
+
+function medicoinfo(e){
+   
+            $.ajax({
+                url: "{% url 'medicationinfo' %}",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    'action':'forsession',
+                    'pk':e,
+                    'csrfmiddlewaretoken':'{{ csrf_token }}',
+                },
+                success: function(resp){
+                    //alert(resp[medic])
+                    console.log(resp)
+                    console.log(resp['medic'])
+                    $("#tabmorningupdate").prop("checked", false)
+                    $("#tabafternoonupdate").prop("checked", false)
+                    $("#tabeveningupdate").prop("checked", false)
+                    $("#tabnightupdate").prop("checked", false)
+
+                  $("#medicoupdate").val(resp['medic']); 
+                  $("#medicid").val(resp['id']);
+                    if (resp['morning']){
+                        $("#tabmorningupdate").prop("checked", true)
+                    }
+                    if (resp['afternoon']){
+                        $("#tabafternoonupdate").prop("checked", true)
+                    }
+                    if (resp['evening']){
+                        $("#tabeveningupdate").prop("checked", true)
+                    }
+                    if (resp['night']){
+                        $("#tabnightupdate").prop("checked", true)
+                    }
+                }
+            });
+        
+        return false;
+        }
 jQuery.validator.addMethod("name_regex", function (value, element) {
     return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);
 }, "Enter valid name");
@@ -746,8 +822,6 @@ $(document).ready(function () {
 });
 
 
-
-
 jQuery.validator.addMethod("name_regex", function (value, element) {
     return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);
 }, "Enter valid name");
@@ -770,7 +844,23 @@ $("#update_med_Form").validate({
         },
     },
     submitHandler: function (form) {
-        form.submit();
+        var datafrom = $('#update_med_Form').serialize();
+        $.ajax({
+            url: "{% url 'medicupdate' %}",
+            type: "POST",
+            dataType: "json",
+            data: datafrom,
+            success: function (resp) {
+                $("#medico").val('');
+                if (!resp["message"]){
+                    swal("Something Went Wrong", "Try Again", "warning");
+                    //alert("Already Subscribed Thank you!!")
+                }
+                else{
+                    window.location.reload()
+                }
+            }
+        });
 
     }
 });
@@ -800,7 +890,6 @@ $(document).ready(function () {
       }
 
     });
-   
    
 });
 

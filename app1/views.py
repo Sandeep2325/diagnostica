@@ -2505,12 +2505,45 @@ def medicationsview(request):
             night="off"
         medications.objects.create(user=request.user,medic=medic,morning=True if morning == 'on' else False,afternoon=True if afternoon == 'on' else False,evening=True if evening == 'on' else False,night=True if night == 'on' else False).save()
         return JsonResponse({"message":True})    
-    
+def medicationinfo(request):
+    if request.method=="POST":
+      id=request.POST["pk"]
+      medication=medications.objects.get(id=id)
+      return JsonResponse({"message":True,"id":medication.id,"medic":medication.medic,"morning":medication.morning,"afternoon":medication.afternoon,"evening":medication.evening,"night":medication.night})  
 def medicationdelete(request):
     if request.method=="POST":
         id=request.POST["pk"]
         medications.objects.get(id=id).delete()
-        return JsonResponse({"message":True})         
+        return JsonResponse({"message":True})  
+def medicupdate(request):
+    if request.method=="POST":
+        print(request.POST)
+        id=request.POST["medicid"]
+        try:
+            medic=request.POST["update_name"]
+        except:
+            medic="off"
+        try:
+            morning=request.POST["tabmorningupdate"]
+        except:
+            morning="off"
+        try:
+            afternoon=request.POST["tabafternoonupdate"]
+        except:
+            afternoon="off"
+        try:
+            evening=request.POST["tabeveningupdate"]
+        except:
+            evening="off"
+        try:
+            night=request.POST["tabnightupdate"]
+        except:
+            night="off"
+        medications.objects.filter(id=id).update(user=request.user,medic=medic,morning=True if morning == 'on' else False,afternoon=True if afternoon == 'on' else False,evening=True if evening == 'on' else False,night=True if night == 'on' else False)
+        return JsonResponse({"message":True}) 
+        # id=request.POST["pk"]
+        # medications.objects.filter(pk=some_value).update(field1='some value') 
+
 import os
 def readfile(request):
     a=test.objects.filter(Banglore_price__isnull=True)

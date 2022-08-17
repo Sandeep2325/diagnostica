@@ -562,7 +562,16 @@ class couponredeemadmin(admin.ModelAdmin):
     list_display=['order_id',"coupon","discountpercen","discountamount","created",]
 class requestadmin(admin.ModelAdmin):
     list_display=['firstname','lastname','phone','email','tests','created','updated']
-    
+class medicationsadmin(admin.ModelAdmin):
+    list_display=['users','medic','morning','afternoon','evening','night','created','updated']
+    def users(self,obj):
+        try:
+            html="<div><a  href='/admin/app1/user/"+ str(obj.user.id)+"/change/'>{}</a></div>".format(str(obj.user))
+            return format_html(html)
+        except:
+            pass
+class franchiseadmin(admin.ModelAdmin):
+    list_display=['fullname','phoneno','email','taluka','district','state','address','message','created','updated']
 admin.site.register(faq,faqadmin)
 admin.site.register(contactus,contactusadmin)
 admin.site.register(payment,paymentadmin)
@@ -586,6 +595,8 @@ admin.site.register(subscription,subscriptionadmin)
 # admin.site.register(socialmedialinks,socialmediaadmin)
 admin.site.register(coupons,couponadmin)
 admin.site.register(couponredeem,couponredeemadmin)
+admin.site.register(medications,medicationsadmin)
+admin.site.register(franchisee,franchiseadmin)
 # admin.site.register(invoicee,invoiceadmin)
 admin.site.unregister(Group)
 admin.site.register(requestcall,requestadmin)
