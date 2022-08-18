@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "app1",
+    "django_celery_beat",
     "django.contrib.humanize",
     # 'baton.autodiscover',
     
@@ -107,8 +108,7 @@ DATABASES = {
 } 
 # DATABASES = {  
 #     'default': {  
-#         'ENGINE': 'django.db.backends.mysql',  
-
+#         'ENGINE': 'django.db.backends.mysql', 
 #         'NAME': 'diagnospan1',  
 #         'USER': 'root',  
 #         'PASSWORD': 'Sandeep@8105',  
@@ -191,8 +191,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
-RAZOR_KEY_ID = "rzp_test_JiD8eNtJ2aNwZr"
-RAZOR_KEY_SECRET = "gtukARkLZ5U4Bjo9EfCSWkMf"
+RAZOR_KEY_ID = "rzp_live_ZSkJErOIklssAc"
+RAZOR_KEY_SECRET = "Er7q5aHnDix03E1y66x0bMIA"
 
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_HOST = 'smtp.gmail.com'
@@ -236,7 +236,15 @@ JAZZMIN_SETTINGS = {
     "default_icon_parents": "",
     "default_icon_children": "",
     }
-# from app1.views import TIME
+# CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Kolkata'
+CELERY_RESULT_BACKEND = 'django-db'
+#CELERY BEAT
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
 SESSION_COOKIE_AGE = 1209600
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SESSION_COOKIE_SECURE = True

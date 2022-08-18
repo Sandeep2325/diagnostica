@@ -623,5 +623,6 @@ class requestcall(models.Model):
         return self.firstname
     class Meta:
         verbose_name_plural="Call Back Requests"
+    
 
     

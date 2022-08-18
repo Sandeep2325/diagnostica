@@ -976,6 +976,9 @@ def prescriptionbookview(request):
                 recipient_list,
                 fail_silently=False,
         )
+        msg="Hi\nThere is an Prescription Upload order booked with below details\nBookingID:{bookingid}\nFirstname:{firstname}\nLastname:{lastname}\n"
+        number=8105486993
+        sms(msg,number)
         return HttpResponseRedirect(reverse("booking-history"))
         # return render(request,"uploadprescriptions.html",{"fm":fm})
     else:
@@ -1204,7 +1207,9 @@ def cartt(request):
                          amount="{0:1.2f}".format(float(amount)),
                          payment_id=razorpay_order_id,
                          payment_status=False).save()
-        
+        msg="Hi\nThere is an Prescription Upload order booked with below details\nBookingID:{bookingid}\nFirstname:{firstname}\nLastname:{lastname}\n"
+        number=8105486993
+        sms(msg,number)
         # for i in data1:
         #     print(i.items)
         #     print(i.labtest)
@@ -2129,6 +2134,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 class BookingHistoryPay(LoginRequiredMixin,View):
     login_url = '/login/'
     def get(self, request,*args, **kwargs):
+        medics=medications.objects.filter(user=request.user)
         his = []
         bookhistories=book_history.objects.filter(user=request.user).order_by('-created')
         testbooking=prescription_book.objects.filter(user=request.user)
@@ -2180,6 +2186,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 his.append(hi)
 
         context={
+            "medics":medics,
             "bookhistories":his,
             "bookinghistorylength":len(his),
             "paymentcount":payments.count(),
@@ -2471,7 +2478,7 @@ def lifestyletests(request):
             if str(carrt.items.id) in id:
                 test1.append(str(carrt.items.id))
         return JsonResponse({"message":test1})
-           
+
 import os
 def readfile(request):
     a=test.objects.filter(Banglore_price__isnull=True)

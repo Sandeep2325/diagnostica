@@ -213,8 +213,9 @@ class testbookadmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
     def sendreportemail(self, request, queryset):
+        # urll=request.build_absolute_uri('')
         for i in queryset:
-            print("--------",bool(i.report))
+            print("--------",bool(i.report.url))
             if (i.payment_status== True) and (bool(i.report) == True):
                 send_mail(str("Tests Report | Dignostica Span"),
                 (f"Hi {i.user.first_name},\n Thank for using our Services.\nThis mail is regarding the booking id: {i.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please visit to review and download it..\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"),
@@ -228,6 +229,7 @@ class testbookadmin(admin.ModelAdmin):
                 return messages.warning(request, 'Please Upload Report')
             elif(i.payment_status== False) and (bool(i.report) == False):
                 return messages.warning(request, 'Please Check Payment and Report')
+            
     sendreportemail.short_description = "Report Email"
     def sendreportsms(self, request, queryset):
         for i in queryset:
