@@ -192,7 +192,9 @@
                                     <div class="tab-pane fade pb-5" id="pills-contact" role="tabpanel"
                                         aria-labelledby="pills-contact-tab" tabindex="0">
                                         {% comment %} <h1 class="text-center fs-30 font-bold cl-dark-blue mb-4">No Record Found...</h1> {% endcomment %}
-                                        <button data-bs-toggle="modal" data-bs-target="#mediation_modal" class="px-5 py-2 bg-sky-blue br-5 fs-18 mb-2 cl-dark-white br" type="submit" value="submit">Add Medication</button>
+                                        <div class="text-center">
+                                            <button data-bs-toggle="modal" data-bs-target="#mediation_modal" class="px-5 py-2 bg-sky-blue br-5 fs-18 mb-2 cl-dark-white br" type="submit" value="submit">Add Medications</button>
+                                        </div>
                                 {%if medicscount != 0 %}
                                         <table class="medicationss" >
                                             <thead>
@@ -209,7 +211,7 @@
                                             </thead>
                                             <tbody>
                                                 {%for medic in medics%}
-                                                <tr>
+                                                <tr id="{{medic.id}}">
                                                     <td class="text-lg-center" data-label="Tablet Name">{{forloop.counter}}</td>
                                                     <td class="text-lg-center" data-label="Tablet Name">{{medic.medic}}</td>
                                                      {%if medic.morning == True %} 
@@ -485,7 +487,6 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
     $(document).ready(function(){
-        
         var historycount =parseInt("{{bookinghistorylength}}");
         var paymentcount =parseInt("{{paymentcount}}");
         if(historycount!=0){
@@ -510,7 +511,6 @@
     function paymentFunction(ids, status){
         if (status=="false"){
             swal('Hello','You booking under review progress by our experts. Please try after sometime.If you have any queries related to booking please contact our support team +91 9769 351 301','info')
-            //alert("Please wait till your prescription is viewed by our doctors.");
             
         }else{
             $.ajax({
@@ -703,12 +703,11 @@ function deletefunc(e){
                         'csrfmiddlewaretoken':'{{ csrf_token }}',
                     },
                     success: function(resp){
-                       window.location.reload();
+                        $(`#${e}`).hide();
                     }
                 });
             return false;
     }
-
 function medicoinfo(e){
             $.ajax({
                 url: "{% url 'medicationinfo' %}",
@@ -727,7 +726,6 @@ function medicoinfo(e){
                     $("#tabafternoonupdate").prop("checked", false)
                     $("#tabeveningupdate").prop("checked", false)
                     $("#tabnightupdate").prop("checked", false)
-
                   $("#medicoupdate").val(resp['medic']); 
                   $("#medicid").val(resp['id']);
                     if (resp['morning']){

@@ -157,7 +157,6 @@ def get_admin_site(context):
 def get_admin_site_name(context):
     return get_admin_site(context).name
 
-
 class SuccessMessageMixin(object):
     """
     Adds a success message on successful form submission.

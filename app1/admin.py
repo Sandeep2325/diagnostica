@@ -140,14 +140,14 @@ class prescriptionbookadmin(admin.ModelAdmin):
     
     def sendreportemail(self, request, queryset):
         for i in queryset:
-            print("--------",bool(i.report))
+            link=request.build_absolute_uri('/send-report/{}/{}'.format(i.user.phone_no,i.bookingid))
             if (i.payment_status== True) and (bool(i.report) == True):
                 send_mail(str("Tests Report | Dignostica Span"),
-                (f"Hi {i.user.first_name},\n Thank for using our Services.\nThis mail is regarding the booking id: {i.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please visit to review and download it..\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"),
+                (f"Hi {i.user.first_name} {i.user.last_name},\nThank for using our Services.\nThis mail is regarding the booking id: {i.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please click {link} to view your report\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"),
                   settings.EMAIL_HOST_USER,
                   [i.user.email],
                   fail_silently=False)
-                return messages.Success(request, 'Report Sent Successfully')
+                return messages.success(request, 'Report Sent Successfully')
             elif(i.payment_status== False) and (bool(i.report) == True):
                 return messages.warning(request, 'Payment Is Pending')
             elif(i.payment_status== True) and (bool(i.report) == False):
@@ -158,10 +158,11 @@ class prescriptionbookadmin(admin.ModelAdmin):
     
     def sendreportsms(self, request, queryset):
         for i in queryset:
+            link=request.build_absolute_uri('/send-report/{}/{}'.format(i.user.phone_no,i.bookingid))
             if (i.payment_status== True) and (bool(i.report) == True):
-                message=f"Hi {i.user.first_name},\n Thank for using our Services.\nThis mail is regarding the booking id: {i.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please visit to review and download it..\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"
+                message=f"Hi {i.user.first_name} {i.user.last_name},\nThank for using our Services.\nThis mail is regarding the booking id: {i.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please click {link} to view your report\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"
                 sms(message,i.user.phone_no)
-                return messages.Success(request, 'Report Sent Successfully')
+                return messages.success(request, 'Report Sent Successfully')
             elif(i.payment_status== False) and (bool(i.report) == True):
                 return messages.warning(request, 'Payment Is Pending')
             elif(i.payment_status== True) and (bool(i.report) == False):
@@ -214,14 +215,14 @@ class testbookadmin(admin.ModelAdmin):
         return False
     def sendreportemail(self, request, queryset):
         for i in queryset:
-            print("--------",bool(i.report))
+            link=request.build_absolute_uri('/send-report/{}/{}'.format(i.user.phone_no,i.bookingid))
             if (i.payment_status== True) and (bool(i.report) == True):
                 send_mail(str("Tests Report | Dignostica Span"),
-                (f"Hi {i.user.first_name},\n Thank for using our Services.\nThis mail is regarding the booking id: {i.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please visit to review and download it..\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"),
+                (f"Hi {i.user.first_name} {i.user.last_name},\nThank for using our Services.\nThis mail is regarding the booking id: {i.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please click {link} to view your report\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"),
                   settings.EMAIL_HOST_USER,
                   [i.user.email],
                   fail_silently=False)
-                return messages.Success(request, 'Report Sent Successfully')
+                return messages.success(request, 'Report Sent Successfully')
             elif(i.payment_status== False) and (bool(i.report) == True):
                 return messages.warning(request, 'Payment Is Pending')
             elif(i.payment_status== True) and (bool(i.report) == False):
@@ -231,10 +232,11 @@ class testbookadmin(admin.ModelAdmin):
     sendreportemail.short_description = "Report Email"
     def sendreportsms(self, request, queryset):
         for i in queryset:
+            link=request.build_absolute_uri('/send-report/{}/{}'.format(i.user.phone_no,i.bookingid))
             if (i.payment_status== True) and (bool(i.report) == True):
-                message=f"Hi {i.user.first_name},\n Thank for using our Services.\nThis mail is regarding the booking id: {i.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please visit to review and download it..\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"
+                message=f"Hi {i.user.first_name} {i.user.last_name},\nThank for using our Services.\nThis mail is regarding the booking id: {i.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please click {link} to view your report\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"
                 sms(message,i.user.phone_no)
-                return messages.Success(request, 'Report Sent Successfully')
+                return messages.success(request, 'Report Sent Successfully')
             elif(i.payment_status== False) and (bool(i.report) == True):
                 return messages.warning(request, 'Payment Is Pending')
             elif(i.payment_status== True) and (bool(i.report) == False):
@@ -572,6 +574,11 @@ class medicationsadmin(admin.ModelAdmin):
             pass
 class franchiseadmin(admin.ModelAdmin):
     list_display=['fullname','phoneno','email','taluka','district','state','address','message','created','updated']
+
+class careersadmin(admin.ModelAdmin):
+    list_display=['fullname','phoneno','email','cv','message','created','updated']
+class careersopeningsadmin(admin.ModelAdmin):
+    list_display=['designations','created','updated']
 admin.site.register(faq,faqadmin)
 admin.site.register(contactus,contactusadmin)
 admin.site.register(payment,paymentadmin)
@@ -597,6 +604,8 @@ admin.site.register(coupons,couponadmin)
 admin.site.register(couponredeem,couponredeemadmin)
 admin.site.register(medications,medicationsadmin)
 admin.site.register(franchisee,franchiseadmin)
+admin.site.register(careersopenings,careersopeningsadmin)
+admin.site.register(careers,careersadmin)
 # admin.site.register(invoicee,invoiceadmin)
 admin.site.unregister(Group)
 admin.site.register(requestcall,requestadmin)

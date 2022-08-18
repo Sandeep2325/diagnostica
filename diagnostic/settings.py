@@ -28,11 +28,7 @@ ALLOWED_HOSTS = [
      ]
 env = environ.Env()
 
-
-# Application definition
-
 INSTALLED_APPS = [
-    
     'admin_black.apps.AdminBlackConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -43,9 +39,7 @@ INSTALLED_APPS = [
     "app1",
     "django_celery_beat",
     "django_celery_results",
-    "django.contrib.humanize",
     # 'baton.autodiscover',
-    
 ]
 INSTALLED_APPS += ('django_summernote', ) 
 INSTALLED_APPS += ['django_social_share']
@@ -57,7 +51,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
 ]
 
 ROOT_URLCONF = 'diagnostic.urls'
@@ -196,13 +189,13 @@ STATIC_URL = '/static/'
 RAZOR_KEY_ID = "rzp_test_JiD8eNtJ2aNwZr"
 RAZOR_KEY_SECRET = "gtukARkLZ5U4Bjo9EfCSWkMf"
 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_USE_TLS = True
-# # EMAIL_USE_SSL=FALSE
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = "gowdasandeep8105@gmail.com"
-# EMAIL_HOST_PASSWORD = 'atkzlpfgzcvpdhai'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+# EMAIL_USE_SSL=FALSE
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "gowdasandeep8105@gmail.com"
+EMAIL_HOST_PASSWORD = 'atkzlpfgzcvpdhai'
 
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_HOST = 'mail.spandiagno.com'
@@ -211,13 +204,13 @@ RAZOR_KEY_SECRET = "gtukARkLZ5U4Bjo9EfCSWkMf"
 # EMAIL_HOST_USER = "donotreplay@spandiagno.com"
 # EMAIL_HOST_PASSWORD = 'Fullmoon22@'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp-mail.outlook.com'
-EMAIL_USE_TLS = True
-# EMAIL_USE_SSL=FALSE
-EMAIL_PORT = 587
-EMAIL_HOST_USER = "enquiry@spanhealth.com"
-EMAIL_HOST_PASSWORD = 'Ravi@123'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp-mail.outlook.com'
+# EMAIL_USE_TLS = True
+# # EMAIL_USE_SSL=FALSE
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = "enquiry@spanhealth.com"
+# EMAIL_HOST_PASSWORD = 'Ravi@123'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # SESSION_SAVE_EVERY_REQUEST =True
@@ -240,22 +233,23 @@ JAZZMIN_SETTINGS = {
     }
 
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
-CELERY_RESULT_BACKEND='redis://127.0.0.1:6379'
+# CELERY_RESULT_BACKEND='redis://127.0.0.1:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Kolkata'
 CELERY_ALWAYS_EAGER=True
-CELERY_BEAT_SCHEDULE={
-    'send-mail': {
-        'task': 'app1.task.send_mail_func',
-        # 'schedule': crontab(hour=0, minute=46, day_of_month=19, month_of_year = 6),
-        'schedule': crontab(minute='*/1'),
-        #'args': (2,)
-    }
-}
+CELERY_RESULT_BACKEND = 'django-db'
+# CELERY_BEAT_SCHEDULE={
+#     'send-mail': {
+#         'task': 'app1.task.send_mail_func',
+#         # 'schedule': crontab(hour=0, minute=46, day_of_month=19, month_of_year = 6),
+#         'schedule': crontab(minute='*/1'),
+#         #'args': (2,)
+#     }
+# }
 
-# CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 # from app1.views import TIME
 SESSION_COOKIE_AGE = 1209600
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

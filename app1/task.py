@@ -9,8 +9,13 @@ from django.conf import settings
 from time import sleep
 @shared_task(bind=True)
 def send_mail_func(self):
-    sleep(20)
     print("----------------")
+    send_mail(str("Payment Remainder | Dignostica Span" ),
+              "Celery Testing",
+              settings.EMAIL_HOST_USER,
+              ["sandeep.nexevo@gmail.com"],
+              fail_silently=False
+              )
     # bookings=Prescriptionbook1.objects.filter(payment_status=False)
     # for booking in bookings:
     #     if (booking.test_name.first()!=True) and (bool(booking.prescription_file)==True and bool(booking.report) == False) and booking.payment_status==False: 
@@ -22,3 +27,5 @@ def send_mail_func(self):
     #                     [booking.user.email],
     #                     fail_silently=False)
     return "Done"
+
+

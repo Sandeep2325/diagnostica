@@ -658,9 +658,18 @@ class careers(models.Model):
     email=models.EmailField(max_length=255,null=True,blank=True,verbose_name="Email")
     cv=models.FileField(upload_to="careerCV",null=True,blank=True)
     message=models.TextField(null=True,blank=True,verbose_name="Message")
-    
+    created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
+    updated = models.DateTimeField(auto_now=True,null=True, blank=True)
     def __str__(self):
         return self.fullname
     class Meta:
-        verbose_name_plural="Careers"
+        verbose_name_plural="Careers Form"
+class careersopenings(models.Model):
+    designations=models.CharField(max_length=100,null=True,blank=True,verbose_name="Designations")
+    created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
+    updated = models.DateTimeField(auto_now=True,null=True, blank=True)
+    def __str__(self):
+        return self.designations
+    class Meta:
+        verbose_name_plural="Career Designations"
     

@@ -639,7 +639,8 @@ def home(request):
     deviceCookie = request.COOKIES.get('device')
     c=request.session.get("city")
     envcity={"Bangalore":Bangalore,"Mumbai":Mumbai,"Bhophal":Bhophal,"Nanded":Nanded,"Pune":Pune,"Barshi":Barshi,"Aurangabad":Aurangabad}
-    send_mail_func.apply_async()
+    # send_mail_func.apply_async()
+    # send_mail_func.delay()
     if request.method =="GET":
         cit=city.objects.filter(active=True)
         tests=test.objects.all()
@@ -2563,16 +2564,58 @@ def franchise(request):
 def ourcenters(request):
     return render (request,"ourcenters.html")
 def career(request):
+    designations=careersopenings.objects.all()
     if request.method=="POST":
         fullname=request.POST["name"]
         phoneno=request.POST["phone"]
         email=request.POST["email"]
-        cv=request.FILES.get("email")
+        cv=request.FILES.get("cv")
         message=request.POST["message"]
         careers.objects.create(fullname=fullname,phoneno=phoneno,email=email,cv=cv,message=message).save()
         messages.success(request,"Submitted Successfully")
-        return render (request,"career.html")
-    return render (request,"career.html")
+        return render (request,"career.html",{"designations":designations})
+    return render (request,"career.html",{"designations":designations})
+def sendreport(request,phone,bookingid):
+    otp = random.randint(1000,9999)
+    request.session['otp'] = otp
+    request.session['reportbooking']=bookingid
+    email=User.objects.get(phone_no=phone)
+    message=f"{otp}- is your one time password for Spandiagno Report. Please do not share this OTP with anyone. Spandiagno."
+    email_from = settings.EMAIL_HOST_USER
+    subject = "DIGNOSTICA SPAN" 
+    recipient_list = [email.email]
+    send_mail(
+            subject,
+            message,
+            email_from,
+            recipient_list,
+            fail_silently=False,
+                )
+    messages.success(request,"OTP is sent to your Registerd email Please check.")
+    return redirect('reportotp')
+
+def reportotp(request):
+    if request.method == "POST":
+        u_otp1 = request.POST['digit-1']
+        u_otp2 = request.POST['digit-2']
+        u_otp3 = request.POST['digit-3']
+        u_otp4 = request.POST['digit-4']
+        otp = request.session.get('otp')
+        a=str(u_otp1)+str(u_otp2)+str(u_otp3)+str(u_otp4)
+        try:
+            if int(a) == otp:
+                bookingid=request.session.get('reportbooking')
+                try:
+                    report=Prescriptionbook1.objects.get(bookingid=bookingid)
+                except:
+                    report=testbook.objects.get(bookingid=bookingid)
+                return FileResponse(report.report,content_type='application/pdf')
+            else:
+                messages.error(request,'Wrong OTP')
+        except Exception as e:
+            messages.error(request,"Please Fill all Required Fields")
+    return render(request,"reportotp.html")
+
 import os
 def readfile(request):
     a=test.objects.filter(Banglore_price__isnull=True)

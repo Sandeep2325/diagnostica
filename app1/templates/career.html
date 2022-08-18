@@ -22,53 +22,45 @@
         <div class="container">
             <div class="row ">
                 <div class="col-12">
-                    <div class="bg-light-grey pb-lg-5  px-lg-5 py-3 px-3 br-15">
-                        <h1 class="fs-40 font-bold cl-dark-blue pb-lg-4">Submit your CV</h1>
+                    <div class="bg-light-grey py-lg-4  px-lg-5 py-3 px-3 br-15">
+                        <h1 class="fs-40 font-bold cl-dark-blue pb-lg-4 m-0">Submit your CV</h1>
                         <div class="row">
                             <div class="col-lg-6">
                                <p>Thank you for your interest in a career with Diagnostica SPAN. We believe that each employee contributes directly to growth and success of the organisation. We greatly appreciate and value the talents, abilities, and dedication of our employees; and we take pride in providing our employees with an enjoyable and supportive work environment.</p>
                                <p>We are always looking for motivated, young professionals for the following designations:</p>
                                <ul class="p-0">
-                                <li class="p-0 m-0">1.Area Sales Manager</li>
-                                <li class="p-0 m-0">2.Territory Head</li>
-                                <li class="p-0 m-0">3.Laboratory Manager</li>
-                                <li class="p-0 m-0">4.Laboratory Supervisor</li>
-                                <li class="p-0 m-0">5.Â Business Development Executive</li>
-                                <li class="p-0 m-0">6.Field Executive</li>
-                                <li class="p-0 m-0">7.Scientific Officer</li>
-                                <li class="p-0 m-0">8.Senior Scientific Officer</li>
-                                <li class="p-0 m-0">9.Junior Scientific Officer</li>
-                                <li class="p-0 m-0">10.Â Customer Care Executive</li>
-                                <li class="p-0 m-0">11.Accountant</li>
-                                <li class="p-0 m-0">12.Tele-caller</li>
+                                {%for designation in designations%}
+                                <li class="p-0 m-0">{{forloop.counter}}.{{designation.designations}}</li>
+                                {%endfor%}
                                </ul>
                             </div>
                             <div class="col-lg-6">
                                 <form method= "post"  id="careerForm" enctype="multipart/form-data"> 
                                     {%csrf_token%}
                                     <div class="row">
-                                        <div class="col-lg-12 pt-3  px-lg-2 px-0">
-                                            <label>Full Name</label>
+                                        <div class="col-lg-12   px-lg-2 px-0">
+                                            <label>Full Name*</label>
                                             <input class="w-100 form_input" placeholder="Full Name"
                                                 name="name" maxlength="250" />
                                         </div>
                                         <div class="col-lg-12 pt-3 px-lg-2 px-0">
-                                            <label>Phone Number</label>
+                                            <label>Phone Number*</label>
                                             <input class="w-100 form_input"
                                                 placeholder="Phone Number" type="number" name="phone" maxlength="250" />
                                         </div>
                                         <div class="col-lg-12 pt-3 px-lg-2 px-0">
-                                            <label>Email</label>
+                                            <label>Email*</label>
                                             <input class="w-100 form_input" placeholder="Email"
                                                 name="email" maxlength="250" />
                                         </div>
                                         <div class="col-lg-12 pt-3 px-lg-2 px-0">
-                                            <label>Upload CV</label>
+                                            <label>Upload CV*</label>
                                             <input class="w-100 form_input" placeholder=""
                                                 name="cv" maxlength="250" type="file"  accept="image/jpeg,application/pdf" />
+                                                <span style="font-size: 12px;float: right;color: #585858;">Only pdf/images (jpeg)</span>
                                         </div>
                                         <div class="col-lg-12 pt-3 px-lg-2 px-0">
-                                            <label>Message</label>
+                                            <label>Message*</label>
                                             <textarea class="w-100 form_input" rows="4" cols="50"
                                                 placeholder="Message" name="message" maxlength="250"></textarea>
                                         </div>
@@ -92,7 +84,6 @@
 <script>
   $(document).ready(function(){
    // swal('{{message}}');
-
     swal({
 	title:'{{message}}',
 	//text: "You clicked the button!",
@@ -130,7 +121,6 @@
     }, 'File size must be less than {0}');
     $("#careerForm").validate({
         rules: {
-
             'name': {
                 required: true,
                 minlength: 1,

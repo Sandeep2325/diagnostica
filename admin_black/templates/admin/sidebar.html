@@ -18,6 +18,7 @@
                 {% admin_black_get_menu as app_list %}
                 {% if app_list %}
                     {% for app in app_list %}
+                    {%if app.app_label == "app1"%}
                         {% if app.has_perms and not app.pinned %}
                             <li>
                                 <a{% if not app.models and app.url %} href="{{ app.url }}"{% endif %}
@@ -125,15 +126,12 @@
                                 {% endif %}
                             </li>
                         {% endif %}
+                        {% endif %}
                     {% endfor %}
                 {% endif %}
-
-
-
-
-
                 {% if app_list %}
                     {% for app in app_list %}
+                    {%if app.app_label == "app1"%}
                         {% if app.has_perms and not app.pinned %}
                             <li>
                                 <a{% if not app.models and app.url %} href="{{ app.url }}"{% endif %}
@@ -201,6 +199,7 @@
                                 {% endif %}
                             </li>
                         {% endif %}
+                        {% endif %}
                     {% endfor %}
                 {% endif %}
                 {% if app_list %}
@@ -220,14 +219,15 @@
                             <i class="fa fa-users stroke-transparent" aria-hidden="true"></i>{% trans 'Registered Users' %}</p>
                     </a>
                 </li>
-{%endif%}
-{%endfor%}
-{%endif%}
-{%endif%}
-{%endfor%}
-{%endif%}
+                {%endif%}
+                {%endfor%}
+                {%endif%}
+                {%endif%}
+                {%endfor%}
+                {%endif%}
                 {% if app_list %}
                     {% for app in app_list %}
+                    {%if app.app_label == "app1"%}
                         {% if app.has_perms and not app.pinned %}
                             <li>
                                 <a{% if not app.models and app.url %} href="{{ app.url }}"{% endif %}
@@ -279,6 +279,7 @@
                                 {% endif %}
                             </li>
                         {% endif %}
+                        {% endif %}
                     {% endfor %}
                 {% endif %}
 
@@ -303,6 +304,7 @@
 {%endif%}
                 {% if app_list %}
                     {% for app in app_list %}
+                    {%if app.app_label == "app1"%}
                         {% if app.has_perms and not app.pinned %}
                             <li>
                                 <a{% if not app.models and app.url %} href="{{ app.url }}"{% endif %}
@@ -354,10 +356,14 @@
                                 {% endif %}
                             </li>
                         {% endif %}
+                        {% endif %}
                     {% endfor %}
                 {% endif %}
+
+
                 {% if app_list %}
                     {% for app in app_list %}
+                    {%if app.app_label == "app1"%}
                         {% if app.has_perms and not app.pinned %}
                             <li>
                                 <a{% if not app.models and app.url %} href="{{ app.url }}"{% endif %}
@@ -474,6 +480,32 @@
                                                 <li>{{ model.label }}</li>
                                             {% endif %}
 
+                                            {%elif model.label == "Careers Form"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    {% comment %} <i class="fa fa-question-circle" aria-hidden="true"></i> {% endcomment %}
+                                                    <a href="{{ model.url }}">
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                        <span>{{ model.label }}</span>
+                                                        
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
+                                            {%elif model.label == "Career Designations"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    {% comment %} <i class="fa fa-question-circle" aria-hidden="true"></i> {% endcomment %}
+                                                    <a href="{{ model.url }}">
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                        <span>{{ model.label }}</span>
+                                                        
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
                                             {%elif model.label == "Testimonials"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
@@ -494,6 +526,51 @@
                                     </ul>
                                 {% endif %}
                             </li>
+                        {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                {% if app_list %}
+                    {% for app in app_list %}
+                    {%if app.app_label == "django_celery_beat"%}
+                        {% if app.has_perms and not app.pinned %}
+                            <li>
+                                <a{% if not app.models and app.url %} href="{{ app.url }}"{% endif %}
+                                                                      class="navbar-btn sidebar-link popup-section-link app-item"
+                                                                      data-app-label="{{ app.app_label }}"
+                                                                      data-popup-section-class="sidebar-popup-section-{{ app.app_label }}"
+                                                                      data-order="{{ forloop.counter }}"
+                                        {% if app.url_blank %} target="_blank"{% endif %}>
+                                    <i class="{{ app.icon }}"></i>
+                                    <p><i class="tim-icons icon-gift-2"></i> 
+                                        Celery Beat
+                                        {% if app.models %}
+                                            <span class="tim-icons icon-minimal-down m-2"></span>
+                                        {% endif %}
+                                    </p>
+                                </a>
+
+                                {% if app.models %}
+                                    <ul class="navbar-dropdown">
+                                        {% for model in app.models %}
+                                        
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    {% comment %} <i class="tim-icons icon-gift-2"></i>  {% endcomment %}
+                                                    <a href="{{ model.url }}">
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                        <span>{{ model.label }}</span>
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </li>
+                        {% endif %}
                         {% endif %}
                     {% endfor %}
                 {% endif %}
