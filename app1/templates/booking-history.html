@@ -666,12 +666,10 @@ function prescrbreak(e){
 function reportsharee(e,bookingid){
     
     link=window.location.origin+e
-    whatsapplink=`https://web.whatsapp.com/send?text=Hello there,%0APlease click to View Report of Booking ID:${bookingid}%0A${link}`
-    gmaillink=`https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=&su=Diagnostica+Span+Report&body=+Hello there,%0APlease click to View Report of Booking ID:${bookingid}%0A${link}+&ui=2&tf=1&pli=1`
+    whatsapplink=`https://web.whatsapp.com/send?text=Hello there,%0APlease click below link to View Report of Booking ID:${bookingid}%0A${link}`
+    gmaillink=`https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=&su=Diagnostica+Span+Report&body=+Hello there,%0APlease below link click to View Report of Booking ID:${bookingid}%0A${link}+&ui=2&tf=1&pli=1`
     //sms=`sms:${link}`
-    sms=`sms:&body=Hello there Please click to View Report of Booking ID:${bookingid}%0A${link}`
-    //sms= `sms:8105486993?body=${link}`
-    //gmaillink="https://gmail.com/send?body="+link
+    sms=`sms:&body=Hello there Please click below link to View Report of Booking ID:${bookingid}%0A${link}`
     $("#copyshare").val(link)
     $("#whatsappshare").attr("href",whatsapplink)
     $("#gmailshare").attr("href",gmaillink)
@@ -683,7 +681,6 @@ function reportsharee(e,bookingid){
         /* Select the text field */
         copyText.select();
         copyText.setSelectionRange(0, 99999); /* For mobile devices */
-      
          /* Copy the text inside the text field */
         navigator.clipboard.writeText(copyText.value);
         document.getElementById("custom-tooltip").style.display = "inline";
@@ -710,11 +707,9 @@ function deletefunc(e){
                     }
                 });
             return false;
-     
     }
 
 function medicoinfo(e){
-   
             $.ajax({
                 url: "{% url 'medicationinfo' %}",
                 type: "POST",
@@ -749,7 +744,6 @@ function medicoinfo(e){
                     }
                 }
             });
-        
         return false;
         }
 jQuery.validator.addMethod("name_regex", function (value, element) {
@@ -766,7 +760,6 @@ $("#medicofrom").validate({
             minlength: 1,
         },
     },
-
     messages: {
 
         'medico': {
@@ -820,8 +813,6 @@ $(document).ready(function () {
 
     });
 });
-
-
 jQuery.validator.addMethod("name_regex", function (value, element) {
     return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);
 }, "Enter valid name");
