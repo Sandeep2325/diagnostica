@@ -2134,7 +2134,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 class BookingHistoryPay(LoginRequiredMixin,View):
     login_url = '/login/'
     def get(self, request,*args, **kwargs):
-        medics=medications.objects.filter(user=request.user)
+        # medics=medications.objects.filter(user=request.user)
         his = []
         bookhistories=book_history.objects.filter(user=request.user).order_by('-created')
         testbooking=prescription_book.objects.filter(user=request.user)
@@ -2186,7 +2186,6 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 his.append(hi)
 
         context={
-            "medics":medics,
             "bookhistories":his,
             "bookinghistorylength":len(his),
             "paymentcount":payments.count(),
