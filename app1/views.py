@@ -950,7 +950,6 @@ def prescriptionbookview(request):
         if myself=="on":
             User.objects.filter(email=request.user.email).update(first_name=firstname,last_name=lastname,phone_no=contact,age=age,address=address,gender=gender)
         data=prescription_book.objects.get(unique=unique)
-        print("---",data2.unique)
         book_history(
             user=request.user,
             testbooking_id=data.id,
@@ -976,9 +975,9 @@ def prescriptionbookview(request):
                 recipient_list,
                 fail_silently=False,
         )
-        msg="Hi\nThere is an Prescription Upload order booked with below details\nBookingID:{bookingid}\nFirstname:{firstname}\nLastname:{lastname}\n"
-        number=8105486993
-        sms(msg,number)
+        # msg=f"Hi\nThere is an Prescription Upload order booked with below details\nBookingID:{bookingid}\nFirstname:{firstname}\nLastname:{lastname}\n"
+        # number=####
+        # sms(msg,number)
         return HttpResponseRedirect(reverse("booking-history"))
         # return render(request,"uploadprescriptions.html",{"fm":fm})
     else:
@@ -1207,9 +1206,9 @@ def cartt(request):
                          amount="{0:1.2f}".format(float(amount)),
                          payment_id=razorpay_order_id,
                          payment_status=False).save()
-        msg="Hi\nThere is an Prescription Upload order booked with below details\nBookingID:{bookingid}\nFirstname:{firstname}\nLastname:{lastname}\n"
-        number=8105486993
-        sms(msg,number)
+        # msg=f"Hi\nThere is an Prescription Upload order booked with below details\nBookingID:{bookingid}\nFirstname:{firstname}\nLastname:{lastname}\n"
+        # number=###
+        # sms(msg,number)
         # for i in data1:
         #     print(i.items)
         #     print(i.labtest)
