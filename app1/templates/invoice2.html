@@ -107,13 +107,13 @@
             <table  >
                 {%if coupon.order_id %}
                 <tr style="padding-top:5px;">
-                    <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black; width:520px" class="f-family">Payable Amount (in words) :{{couponamount|intword|title}} Rupees Only</td>
+                    <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black; width:520px" class="f-family">Payable Amount (in words) :{{couponamount|title}} Rupees Only</td>
                     <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black" class="f-family">Total:</td>
                     <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black" class="f-family">Rs.{{coupon.actualamount|floatformat:2}}</td>
                 </tr>
                 {%else%}
                 <tr style="padding-top:5px;">
-                    <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black; width:520px" class="f-family">Payable Amount (in words) :{{amount|intword|title}} Rupees Only</td>
+                    <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black; width:520px" class="f-family">Payable Amount (in words) :{{amount|title}} Rupees Only</td>
                     <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black" class="f-family">Total:</td>
                     <td style="font-size:12px;  border-top:1px solid black; border-bottom:1px solid black" class="f-family">Rs.{{payments.amount|floatformat:2}}</td>
                 </tr>
