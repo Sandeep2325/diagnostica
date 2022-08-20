@@ -962,7 +962,7 @@ def prescriptionbookview(request):
         
         messages.success(
             request, "Thankyou for your booking!, Our admin team will get back to you shortly.")
-        link=request.build_absolute_uri('/booking-history/')
+        link=request.build_absolute_uri('/booking-history')
         message=f'Hello {request.user.first_name},\n You have successfully uploaded your prescription on our website, our internal team will review it and get back to you shortly for further steps.\nYou can always track your bookings/uploads (link: {link})\n\nWe appreciate your patience\nThank You,\nDignostica Span'
             # message = f'Welcome your otp is {otp} '
         email_from = settings.EMAIL_HOST_USER
@@ -1562,7 +1562,7 @@ def paymenthandler(request,str,amount):
                     #     del request.session['signatureid']
                     # print("=====",signatureid)
                     request.session.delete("amount")
-                    link=request.build_absolute_uri('/booking-history/')
+                    link=request.build_absolute_uri('/booking-history')
                     # message1 = f"Hi there,\nWe have successfully received your payment for booking id: {history.bookingid}.\nOur Medical team will get in touch with you for your mentioned tests.\nClick (link: {link}) to track your bookings.\nThank you\nDignostica Span"
                     email_from = settings.EMAIL_HOST_USER
                     message1=f"""Hi there,We have successfully received your payment for booking id: {history.bookingid}..\nClick ({link}) to track your bookings.\n 
@@ -1588,7 +1588,7 @@ def paymenthandler(request,str,amount):
             else:
                 transid=request.POST["razorpay_order_id"]
                 history=book_history.objects.get(payment_id=transid)
-                link=request.build_absolute_uri('/booking-history/')
+                link=request.build_absolute_uri('/booking-history')
                 email_from = settings.EMAIL_HOST_USER
                 recipient_list = [history.user.email]
                 # subject=f"Subject: Payment Failed| Dignostica Span | Booking Id:{history.bookingid}"
