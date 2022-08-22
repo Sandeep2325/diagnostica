@@ -211,11 +211,8 @@
                   
                 }
             });
-        
-
     });
-
-
+    
     $("#searched").keyup(function(e){
         var searched = $(this).val();
         var cat = $("#category").val();
@@ -273,7 +270,6 @@
                     'csrfmiddlewaretoken':'{{ csrf_token }}',
                 },
                 success: function(resp){
-                  console.log(resp);
                 }
             });
     });
@@ -288,7 +284,6 @@
             'csrfmiddlewaretoken':'{{ csrf_token }}',
         },
         success: function(resp){
-           console.log(resp['message'])
             if(!resp['message']){
                 swal('',"Test Already Added","info");
             }
@@ -304,7 +299,6 @@
    arr={{cartlist}};
    for (let i = 0; i < arr.length; i++) {
    a=arr[i]
-   console.log(a)
    b=$('.'+a).attr("name");
    if(b==a){
     $('.'+a).html('Added');

@@ -526,8 +526,52 @@ class bookhistoryadmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
 class couponadmin(admin.ModelAdmin):
-    list_display=["couponcode","discount","status"]
+    list_display=["couponcode","discount","cityy","status","action_btn"]
     # readonly_fields=["created","updated"]
+    def action_btn(self, obj):
+        html = "<div class='field-action_btn d-flex m-8'> <a class='fa fa-edit ml-2' href='/admin/app1/coupons/" + \
+            str(obj.id)+"/change/'></a><br></br>"
+        # html += "<a class='text-success fa fa-eye ml-2' href='/admin/app1/test/" + \
+        #     str(obj.id)+"/change/'></a><br></br>"
+        html += "<a class='text-danger fa fa-trash ml-2' href='/admin/app1/coupons/"+str(obj.id)+"/delete/'></a></div>"
+        return format_html(html)
+    def get_urls(self):
+        urls = super().get_urls()
+        new_urls = [path('upload-csv/', self.upload_csv), ]
+        return new_urls + urls
+    def upload_csv(self, request):
+            if request.method == "POST":
+                csv_file = request.FILES["csv_upload"]
+                if not csv_file.name.endswith('.csv'):
+                    messages.warning(
+                        request, 'The wrong file type was uploaded')
+                    return HttpResponseRedirect(request.path_info)
+                def decode_utf8(input_iterator):
+                    for l in input_iterator:
+                        yield l.decode('cp1252')
+                reader = csv.DictReader(decode_utf8(request.FILES['csv_upload']))
+                for row in reader:
+                    print(row)
+                    try:
+                        cityy=city.objects.get(pk=row.get("city_id"))
+                        obj, created = coupons.objects.get_or_create(
+                                couponcode=row["ï»¿Coupon_Code"],
+                                discount=row["Discount"],
+                                cityy=cityy,)
+                    except IndexError:
+                        pass
+                    except (IntegrityError):
+                        form = CsvImportForm()
+                        data = {"form": form}
+                        message = messages.warning(
+                            request, 'Something went wrong! check your file again \n 1.Upload correct file \n 2.Check you data once')
+                        return render(request, "admin/app1/csv_upload.html", data)
+                url = reverse('admin:index')
+                return HttpResponseRedirect(url)
+            form = CsvImportForm()
+            data = {"form": form}
+            return render(request, "admin/app1/csv_upload.html", data)  
+          
 class cartadmin(admin.ModelAdmin):
     list_display=["user","items","categoryy","price","created","updated"]
 class blogcategoryadmin(admin.ModelAdmin):
@@ -561,9 +605,9 @@ class faqadmin(admin.ModelAdmin):
 class invoiceadmin(admin.ModelAdmin):
     list_display=['order_id',"items","labtest","packages","healthsymptoms","price"]
 class couponredeemadmin(admin.ModelAdmin):
-    list_display=['order_id',"coupon","discountpercen","discountamount","created",]
+    list_display=["user",'order_id',"coupon","discountpercen","discountamount","created",]
 class requestadmin(admin.ModelAdmin):
-    list_display=['firstname','lastname','phone','email','tests','created','updated']
+    list_display=['firstname','lastname','phone','email','message','created','updated']
 class medicationsadmin(admin.ModelAdmin):
     list_display=['users','medic','morning','afternoon','evening','night','created','updated']
     def users(self,obj):

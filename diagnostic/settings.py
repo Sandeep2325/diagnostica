@@ -2,7 +2,6 @@
 from pathlib import Path
 import environ
 import os
-from celery.schedules import crontab
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
@@ -39,10 +38,8 @@ INSTALLED_APPS = [
     "app1",
     "django_celery_beat",
     "django_celery_results",
-    # 'baton.autodiscover',
 ]
 INSTALLED_APPS += ('django_summernote', ) 
-INSTALLED_APPS += ['django_social_share']
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

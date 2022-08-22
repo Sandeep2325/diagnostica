@@ -9,8 +9,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="d-flex ">
-                        <p class="m-0 fs-18 font-regular cl-dark-blue opc-5 pe-1 sub_nav_bar"><a href="{%url "
-                                home"%}">Home</a></p>
+                        <p class="m-0 fs-18 font-regular cl-dark-blue opc-5 pe-1 sub_nav_bar"><a href="{%url "home"%}">Home</a></p>
                         /
                         <p class="m-0 fs-18 font-regular cl-dark-blue ps-1 sub_nav_bar">Report OTP</p>
                     </div>
@@ -69,7 +68,6 @@
 
 <script>
     let digitValidate = function (ele) {
-        console.log(ele.value);
         ele.value = ele.value.replace(/[^0-9]/g, '');
 
     }

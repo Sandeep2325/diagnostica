@@ -2055,3 +2055,41 @@ textarea {
     color: #000!important;
     background-color: #ffffff;
 }
+
+#custom-tooltip {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: none;
+    margin-right: 25px;
+    padding: 5px 12px;
+    background-color: #000000df;
+    border-radius: 4px;
+    color: #fff;
+}
+
+.evaporate {
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+    animation-name: evaporate;
+}
+
+@keyframes evaporate {
+    0% {
+        opacity: 1;
+        transform: translateY(0%);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-200%);
+    }
+}
+
+.droplet-group:hover .pill {
+    animation-play-state: paused;
+}
+
+.drop.first {
+    height: 35px;
+    margin-bottom: -20px;
+}

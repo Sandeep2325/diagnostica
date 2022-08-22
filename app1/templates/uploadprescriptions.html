@@ -271,7 +271,6 @@
     });
 
   /*$("#myself").change(function(e){
-        console.log("{{data}}" )
         var opt = $(this).val();
        // $('#myCheckbox').prop('checked', true);
         $("#others").prop("checked",false);
@@ -286,7 +285,6 @@
         $("#option").hide();
     });
     $("#others").change(function(e){
-        console.log("{{data}}" )
         var opt = $(this).val();
         $("#myself").prop("checked",false);
             $("#firstname").show();
@@ -304,9 +302,6 @@
     $("#myself").change(function(e){
         $("#others").prop("checked",false);
     var opt = $(this).val();
-    console.log("{{data}}" )
-    //$("#option").prop('disabled', true);
-   // $("#option").attr(disabled,true)
         $("#option").hide();
     $.ajax({
         url:"{% url 'userinfo' %}",
@@ -316,16 +311,13 @@
         },
         dataType: "json",
         success: function(resp){
-        //console.log(resp)  
         a=resp['gender'];
-        //console.log(a)
         $("#firstname").val(resp['firstname']);
         $("#lastname").val(resp['lastname']);
         $("#age").val(resp['age']);
         $("#phone").val(resp['contact']);
         $("#address").val(resp['address']);
         if (resp['gender']!=''){
-            console.log(resp['gender'])
             $("#gender").val(resp['gender']);
         };
         }
@@ -335,8 +327,6 @@
 
       $("#others").change(function(e){
         $("#myself").prop("checked",false)
-        console.log("{{data}}" )
-        //$("#option").prop('disabled', false);
         $("#option").show();
         var opt = $(this).val();
         $("#myself").prop("checked",false);

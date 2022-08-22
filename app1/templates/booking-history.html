@@ -1,16 +1,6 @@
 {% extends "index.html" %}
 {% load static %}
 {%block content%}
-<style>
-    #custom-tooltip {
-        display: none;
-        margin-left: 40px;
-        padding: 5px 12px;
-        background-color: #000000df;
-        border-radius: 4px;
-        color: #fff;
-    }
-</style>
 <body>
     {% include "header.html"%}
     <section class="sub_header py-xl-4 py-3">
@@ -114,8 +104,6 @@
                                                     {% else %}
                                                     <td data-label="Booking Details"><a id="testdetails" name="{{bookhistory.id}}" data-bs-toggle="modal" data-bs-target="#testdetaill" class="br bg-dark-white cursor" onclick='testfunc({{bookhistory.id}})';>{{bookhistory.bookingdetails|truncatechars:10}}</a></td>
                                                     {% endif %}
-                                                    
-
                                                     {%if bookhistory.amount == None%}
                                                         <td data-label="Amount">-</td>
                                                     {%elif bookhistory.prescription%}
@@ -279,28 +267,27 @@
                         <h2 class="cl-dark-blue text-center fs-40  font-bold">Share</h2>
                         <div class="icon-box">
                             <div class="box">
-                                <a id="whatsappshare" href="" target="_blank"><i class="fa fa-whatsapp" aria-hidden="true"></i></a>
+                                <a style="padding: 14px 18px;" id="whatsappshare" href="" target="_blank"><i class="fa fa-whatsapp" aria-hidden="true"></i></a>
                                 {% comment %} <i class="fa fa-whatsapp" aria-hidden="true"></i> {% endcomment %}
                             </div>
                             <div class="box">
-                                <a id="gmailshare" href="" target="_blank"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+                                <a style="padding: 14px 18px;" id="gmailshare" href="" target="_blank"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
                                 {% comment %} <i class="fa fa-envelope-o" aria-hidden="true"></i> {% endcomment %}
                             </div>
                             <div class="box">
-                                <a id="smsshare" href="https://web.whatsapp.com/send?text=hello" target="_blank"><i class="fa fa-comments-o" aria-hidden="true"></i></a>
+                                <a style="padding: 14px 18px;" id="smsshare" href="" target="_blank"><i class="fa fa-comments-o" aria-hidden="true"></i></a>
                                 {% comment %} <i class="fa fa-comments-o" aria-hidden="true"></i> {% endcomment %}
                             </div>
                             <div class="box">
-                                <a id="copy" onclick="myFunction()" ><i class="fa fa-clone" aria-hidden="true"></i></a>
+                                <a style="padding: 14px 18px;" id="copy" onclick="myFunction()" ><i class="fa fa-clone" aria-hidden="true"></i></a>
                                 {% comment %} <i class="fa fa-clone" aria-hidden="true"></i> {% endcomment %}
                             </div>
                         </div>
                         <div class="pt-3">
                             <input class="w-100  form_input" placeholder="Copy Link" name="" id="copyshare" type="text" maxlength="250" >
                         </div>
-                        <span id="custom-tooltip">copied!</span>
-                  
                 </div>
+                <span  class="drop first evaporate" id="custom-tooltip">copied to clipboard</span>
             </div>
         </div>
     </div>
@@ -351,9 +338,6 @@
         </div>
     </div>
     </section>
-
-
-    
     <section class="section_update_mediation_modal">
         <div class="modal fade" id="mediation_update_modal" tabindex="-1" aria-labelledby="mediation_update_modal-Label"
         aria-hidden="true">
@@ -483,7 +467,6 @@
 {% endif %}
 {%endfor%}
 {% endif %}
-
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
     $(document).ready(function(){
@@ -565,9 +548,6 @@
                    }
             });
         }
-        
-        
-
     };
 
         function othersfunc(e){
@@ -605,7 +585,6 @@
             'csrfmiddlewaretoken':'{{ csrf_token }}',
         },
         success: function(resp){
-            console.log(resp['message'])
         var msg = resp['message'];
         var splitted_str = msg.split("/");
          $("#testdetaills").empty();
@@ -628,41 +607,17 @@ function prescrbreak(e){
             'csrfmiddlewaretoken':'{{ csrf_token }}',
         },
         success: function(resp){
-            console.log(resp['message'])
-            
         var msg = resp['message'];
-        
-        console.log(msg.length)
          $("#prescr").empty();
         for (let i = 0; i < msg.length; i++) {
            var a= `<p>${msg[i].test}-₹ ${msg[i].pricel1}</p>  `
-           console.log(a)
+          
            $("#prescr").append(a)
           }
         }
     });
 }
 
-/*$("#medicofrom").on("submit", function (e) {
-
-    var datafrom = $('#medicofrom').serialize();
-    $.ajax({
-        url: "{% url 'medicationpost' %}",
-        type: "POST",
-        dataType: "json",
-        data: datafrom,
-        success: function (resp) {
-            $("#medico").val('');
-            if (!resp["message"]){
-                swal("Something Went Wrong", "Try Again", "warning");
-                //alert("Already Subscribed Thank you!!")
-            }
-            else{
-                window.location.reload()
-            }
-        }
-    });       
-})*/
 function reportsharee(e,bookingid){
     
     link=window.location.origin+e
@@ -675,7 +630,7 @@ function reportsharee(e,bookingid){
     $("#gmailshare").attr("href",gmaillink)
     $("#smsshare").attr("href",sms)
     }
-    function myFunction() {
+function myFunction() {
         /* Get the text field */
         var copyText = document.getElementById("copyshare");
         /* Select the text field */
@@ -688,11 +643,8 @@ function reportsharee(e,bookingid){
         setTimeout( function() {
             document.getElementById("custom-tooltip").style.display = "none";
         }, 2000);
-        /* Alert the copied text */
-        //alert("Copied the text: " + copyText.value);
       }
 function deletefunc(e){
-    //  $("#delete").on("click", function(e){ 
                 $.ajax({
                     url: "{% url 'medicationdelete' %}",
                     type: "POST",
@@ -703,7 +655,13 @@ function deletefunc(e){
                         'csrfmiddlewaretoken':'{{ csrf_token }}',
                     },
                     success: function(resp){
-                        $(`#${e}`).hide();
+                        if (resp["medicocount"] == 0){
+                            $(".medicationss").hide()
+                            $(`#${e}`).hide();
+                        }
+                        else{
+                            $(`#${e}`).hide();
+                        }
                     }
                 });
             return false;
@@ -719,9 +677,6 @@ function medicoinfo(e){
                     'csrfmiddlewaretoken':'{{ csrf_token }}',
                 },
                 success: function(resp){
-                    //alert(resp[medic])
-                    console.log(resp)
-                    console.log(resp['medic'])
                     $("#tabmorningupdate").prop("checked", false)
                     $("#tabafternoonupdate").prop("checked", false)
                     $("#tabeveningupdate").prop("checked", false)

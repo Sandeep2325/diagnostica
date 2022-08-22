@@ -555,6 +555,7 @@ SELECT_CHOICES=[
 class coupons(models.Model):
     couponcode=models.CharField(max_length=100,null=True,blank=True,verbose_name="Coupon Code")
     discount=models.CharField(max_length=2,null=True,blank=True,verbose_name="Discount(%)")
+    cityy=models.ForeignKey(city,null=True,blank=True,on_delete=models.CASCADE,verbose_name="City")
     status = models.CharField(
         choices=SELECT_CHOICES,
         max_length=100,
@@ -601,6 +602,7 @@ class contactus(models.Model):
 #     class Meta:
 #         verbose_name_plural="Payment Ids"
 class couponredeem(models.Model):
+    user=models.ForeignKey(User,null=True,blank=True,on_delete=models.PROTECT)
     order_id=models.CharField(max_length=200,null=True,blank=True)
     coupon=models.CharField(max_length=200,null=True,blank=True)
     discountpercen=models.CharField(max_length=200,null=True,blank=True,verbose_name="Discount(%)")
@@ -616,7 +618,8 @@ class requestcall(models.Model):
     lastname=models.CharField(max_length=100,null=True,blank=True,verbose_name="First Name")
     phone=models.CharField(max_length=14,null=True,blank=True,verbose_name="First Name")
     email=models.EmailField(max_length=255,null=True,blank=True)
-    tests=models.ForeignKey(test,null=True,blank=True,on_delete=models.PROTECT)
+    message=models.TextField(null=True,blank=True)
+    # tests=models.ForeignKey(test,null=True,blank=True,on_delete=models.PROTECT)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
     def __str__(self):

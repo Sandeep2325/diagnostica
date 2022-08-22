@@ -35,7 +35,6 @@
                 <p
                   class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">
                   Price</p>
-            
                 {%if city == envcity.Bangalore%}
                 <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{currentObj.Banglore_price}}</h1>
                 {%elif city == envcity.Mumbai %}
@@ -51,9 +50,6 @@
                 {%elif city == envcity.Aurangabad %}
                 <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{currentObj.aurangabad_price}}</h1>
             {%endif%}
-            
-            
-            
                 <p
                   class="d-flex justify-content-center align-content-center align-items-center m-0 fs-18 cl-dark-blue font-bold">
                   Includes {{currentObj.test_name.all.count}}
@@ -148,24 +144,18 @@
                       class="home_pack_viewpack py-3 fs-16 font-bold br-50 ">VIEW PACK</button></a>
                 </div>
               </div>
-
             </div>
             {%endfor%}
-
-
           </div>
         </div>
       </div>
     </div>
   </section>
-
   {%include "footer.html"%}
-
 </body>
 {% comment %} {%for cart in carts%}
 {%for test in cart.items.all%}
 <scripts>
-
 <scripts>
 {%endfor%}
 {%endfor%} {% endcomment %}
@@ -181,7 +171,6 @@
         email: true
       },
     },
-
     messages: {
       'email': {
         required: "This field is required.",
@@ -192,7 +181,6 @@
       form.submit();
     }
   });
-  
   $("#packagebuy").click(function () {
    
    a=$(this).attr("name");

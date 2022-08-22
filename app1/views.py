@@ -172,7 +172,7 @@ def otpRegistration(request):
                     # f"Hi {f},\nThere was a request to change your password!\nIf you did not make this request then please ignore this email.\nOtherwise, please click this link to change your password: [link]"
             # message=f"Hi {f},\n\nGreetings!\nYou are just a step away from accessing your Diagnostica Span account.\nWe are sharing a verification code to access your account. Once you have verified the code, you'll be prompted to access our portal immediately.\n\nYour OTP: {otp}\n\nThank You,\nDiagnostica Span"
             # message = f'Welcome your otp is {otp} '
-                message=f"Hi {firstname},Thank you for Registering to Diagnostica Span,\n Enjoy Our Services \n Thank You\nDiagnostica Span"
+                message=f"Hi {firstname} {lastname},Thank you for Registering to Diagnostica Span,\n Enjoy Our Services \n Thank You\nDiagnostica Span"
                 email_from = settings.EMAIL_HOST_USER
                 recipient_list = [email_address]
                 message = message
@@ -643,7 +643,7 @@ def home(request):
     # send_mail_func.delay()
     if request.method =="GET":
         cit=city.objects.filter(active=True)
-        tests=test.objects.all()
+        # tests=test.objects.all()
         healthcheckup=healthcheckuppackages.objects.all()
         healthpackage=healthpackages.objects.all()
         healthsymptom=healthsymptoms.objects.all()
@@ -662,23 +662,22 @@ def home(request):
             "healthcareblog":healthcareblog,
             "city":cit,
             "currentcity":c,
-            "tests":tests,
             "envcity":envcity,
             "blogcount":healthcareblog.count(),
             "testimonialcount":testimonial.count(),
         }
         res = render(request,'home.html',context)
         return res
-
+    
     if request.method=="POST":
-        testt=request.POST["selectbookhelp"]
-        tes=test.objects.get(id=testt)
         firtname=request.POST["firstname"]
         lastname=request.POST["lastname"]
         phone=request.POST["phone"]
         email=request.POST["email"]
-        requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,tests=tes).save()
-        message = 'Hi\nYou have Call back request for below test.\n{} from {} category from {}'.format(tes.testt,tes.categoryy,c)
+        message1=request.POST["message"]
+        requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,message=message1).save()
+        
+        message = f'Hi\nYou have Call back request for below test from\nName:{firtname} {lastname}\nMobile:{phone}\nEmail:{email}\nMessage:{message1}'
         email_from = settings.EMAIL_HOST_USER
         recipient_list = ["enquiry@spanhealth.com"]
         message = message
@@ -690,24 +689,24 @@ def home(request):
                     recipient_list,
                     fail_silently=False,
             )
-        cit=city.objects.all()
-        tests=test.objects.all()
-        healthcheckup=healthcheckuppackages.objects.all()[0:4]
-        healthpackage=healthpackages.objects.all()
-        healthsymptom=healthsymptoms.objects.all()
-        healthcareblog=healthcareblogs.objects.all()
-        testimonial=testimonials.objects.all()
-        context={
-                "healthcheckup":healthcheckup,
-                "healthpackage":healthpackage,
-                "healthsymptom":healthsymptom,
-                "testimonial":testimonial,
-                "healthcareblog":healthcareblog,
-                "city":cit,
-                "currentcity":c,
-                "tests":tests,
-                "envcity":envcity,
-        }
+        # cit=city.objects.all()
+        # tests=test.objects.all()
+        # healthcheckup=healthcheckuppackages.objects.all()[0:4]
+        # healthpackage=healthpackages.objects.all()
+        # healthsymptom=healthsymptoms.objects.all()
+        # healthcareblog=healthcareblogs.objects.all()
+        # testimonial=testimonials.objects.all()
+        # context={
+        #         "healthcheckup":healthcheckup,
+        #         "healthpackage":healthpackage,
+        #         "healthsymptom":healthsymptom,
+        #         "testimonial":testimonial,
+        #         "healthcareblog":healthcareblog,
+        #         "city":cit,
+        #         "currentcity":c,
+        #         "tests":tests,
+        #         "envcity":envcity,
+        # }
         messages.success(request,"Submitted Successfully")
         return HttpResponseRedirect(reverse("home"))
 
@@ -750,7 +749,6 @@ def healthpackageview(request,slug):
         a,b=tests[:l],tests[l:]
         lstt=[]
         for (a, b) in itertools.zip_longest(a, b,fillvalue=None):
-            # print(a.testt,b.testt, end="--")
             if a != None:
                 item1=a.testt
             else:
@@ -827,9 +825,7 @@ def prescriptionbreak(request):
     if request.method=="POST":
         city=request.session.get("city")
         id=request.POST["id"]
-        print(id)
         a=Prescriptionbook1.objects.get(bookingid=id)
-        print(a)
         strr=[]
         for i in a.test_name.all():
             di={}
@@ -953,7 +949,6 @@ def prescriptionbookview(request):
         if myself=="on":
             User.objects.filter(email=request.user.email).update(first_name=firstname,last_name=lastname,phone_no=contact,age=age,address=address,gender=gender)
         data=prescription_book.objects.get(unique=unique)
-        print("---",data2.unique)
         book_history(
             user=request.user,
             testbooking_id=data.id,
@@ -965,7 +960,7 @@ def prescriptionbookview(request):
                     payment_status=False).save()
         messages.success(
             request, "Thankyou for your booking!, Our admin team will get back to you shortly.")
-        link=request.build_absolute_uri('/bookinghistory/')
+        link=request.build_absolute_uri('/booking-history/')
         message=f'Hello {request.user.first_name},\n You have successfully uploaded your prescription on our website, our internal team will review it and get back to you shortly for further steps.\nYou can always track your bookings/uploads (link: {link})\n\nWe appreciate your patience\nThank You,\nDignostica Span'
             # message = f'Welcome your otp is {otp} '
         email_from = settings.EMAIL_HOST_USER
@@ -985,7 +980,6 @@ def prescriptionbookview(request):
         # return render(request,"uploadprescriptions.html",{"fm":fm})
     else:
         return render(request,"uploadprescriptions.html",{"fm":fm})
-        
 # @login_required(login_url="login/")  
 def testselect(request):
     deviceCookie = request.COOKIES['device']
@@ -1027,7 +1021,6 @@ def testselect(request):
         a=prescription_book.objects.create(
             unique=unique,
             user=request.user,
-            
                           myself=True if myself == "on" else False,
                           others=True if others == "on" else False,
                           others_choice=others_choice,
@@ -1103,7 +1096,6 @@ def cartt(request):
         for i in book:
             temp = re.compile("([a-zA-Z]+)([0-9]+)")
             res = temp.match(i.bookingid).groups()
-            print(res[1])
         try: 
             booking=int(res[1])+1
             if str(booking)==str(bid):
@@ -1112,11 +1104,6 @@ def cartt(request):
                 bookingid="DP"+str(booking)
         except:
             bookingid="DP"+str(bid)
-        # tee=testbook.objects.filter(bookingid=bookingid)
-        # print("-----------tee-------",tee)
-        # tee.delete()
-        # te=testbook.objects.filter(bookingid=bookingid)
-        # print("-----------te-------",te)
         b=prescription_book.objects.create(
                 unique=uniquee,
                 user=request.user,
@@ -1157,9 +1144,7 @@ def cartt(request):
         urll=request.get_host()
         # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,amount)
         callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
-        # print("----------------",callback_url)
-        # print(call)
-        # print(callback_url)
+        
         # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
         context['razorpay_order_id'] = razorpay_order_id
         context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
@@ -1209,14 +1194,10 @@ def cartt(request):
                          amount="{0:1.2f}".format(float(amount)),
                          payment_id=razorpay_order_id,
                          payment_status=False).save()
-        msg=f"Hi\nThere is an Order booked with below details\nBookingID:{bookingid}\nFullname:{firstname}{lastname}\nLocation={c}\nPhone Number:{contact}"
-        number=8105486993
-        sms(msg,number)
+        # msg=f"Hi\nThere is an Order booked with below details\nBookingID:{bookingid}\nFullname:{firstname}{lastname}\nLocation={c}\nPhone Number:{contact}"
+        # number=8105486993
+        # sms(msg,number)
         # for i in data1:
-        #     print(i.items)
-        #     print(i.labtest)
-        #     print(i.packages)
-        #     print(i.healthsymptoms)
         #     if i.items==None and i.labtest==None and i.packages==None and i.healthsymptoms!=None:
         #         print(1)
         #         bookhistory=book_history(
@@ -1420,7 +1401,7 @@ def cartt(request):
         actualamount= request.session.get("actualamount")
         
         if coupon!= None and discountamount!=None and couponpercent!=None and actualamount!=None:
-             couponredeem.objects.create(order_id=razorpay_order_id,coupon=request.session.get("coupon"),discountpercen=request.session.get("couponpercent"),discountamount=request.session.get("discountamount"),actualamount=request.session.get('actualamount')).save()
+             couponredeem.objects.create(user=request.user,order_id=razorpay_order_id,coupon=request.session.get("coupon"),discountpercen=request.session.get("couponpercent"),discountamount=request.session.get("discountamount"),actualamount=request.session.get('actualamount')).save()
         if coupon!=None:
             del request.session['coupon']
         if discountamount!=None:
@@ -1429,7 +1410,6 @@ def cartt(request):
             del request.session['couponpercent']
         if actualamount!=None:
             del request.session['actualamount']
-        # print(razorpay_order)
         return JsonResponse({"message":True,"razorpay_key":settings.RAZOR_KEY_ID,"currency":currency,"razorpayorder":razorpay_order_id,"callback":callback_url})
     
     if not request.user.is_anonymous:
@@ -1506,13 +1486,10 @@ def cartsessiondelete(request):
 def othersdetail(request):
     if request.method=="POST":
         testid=request.POST["testid"]
-        print("----",testid)
         try:
             detail=Prescriptionbook1.objects.get(bookingid=testid)
-            print("prec")
         except:
             detail=testbook.objects.get(bookingid=testid)
-            print("test")
         choice = ""
         gender=""
         if detail.others_choice=="m":
@@ -1536,9 +1513,7 @@ def othersdetail(request):
         return JsonResponse({"message":True,"firstname":detail.firstname,"lastname":detail.lastname,"gender":gender,"otherschoice":choice,"age":detail.age,"phone":detail.contact})
 @csrf_exempt
 def paymenthandler(request,str,amount):
-    # print("---------------",request)
     def verify_signature(response_data):
-        # print("----------------",response_data)
         client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
         b = client.utility.verify_payment_signature(response_data)
         request.session['signatureid']=response_data['razorpay_signature']
@@ -1550,7 +1525,6 @@ def paymenthandler(request,str,amount):
             paymentid=request.POST.get("razorpay_payment_id")
             if paymentid:
                 if verify_signature(request.POST):
-                    # print("-------------",request.POST)
                     transid=request.POST["razorpay_order_id"]
                     cart.objects.filter(user=usr).delete()
                     history=book_history.objects.get(payment_id=transid)
@@ -1558,28 +1532,14 @@ def paymenthandler(request,str,amount):
                     Prescriptionbook1.objects.filter(bookingid=history.bookingid).update(payment_status=True)
                     testbook.objects.filter(bookingid=history.bookingid).update(payment_status=True)
                     history.save()
-                    # signatureid=request.session.get("signatureid")
-                    # print("------",signatureid)
                     payment.objects.create(user=usr,paymentid=paymentid,transid=transid,amount=amount,booking_id=history.bookingid).save()
-                    # if signatureid!=None:
-                    #     del request.session['signatureid']
-                    # print("=====",signatureid)
+                    
                     request.session.delete("amount")
-                    link=request.build_absolute_uri('/bookinghistory/')
+                    link=request.build_absolute_uri('/booking-history/')
                     # message1 = f"Hi there,\nWe have successfully received your payment for booking id: {history.bookingid}.\nOur Medical team will get in touch with you for your mentioned tests.\nClick (link: {link}) to track your bookings.\nThank you\nDignostica Span"
                     email_from = settings.EMAIL_HOST_USER
-                    message1=f"""Hi there,
-
-                            We have successfully received your payment for booking id: {history.bookingid}..\n
-
-                            Our Medical team will get in touch with you for your mentioned tests.\n
-
-                            Click (link:https://spandiagno.com/bookinghistory/) to track your bookings.\n 
-                            
-                            Thank you\n
-                            Dignostica Span"""
+                    message1=f"""Hi there,\nWe have successfully received your payment for booking id: {history.bookingid}..\nOur Medical team will get in touch with you for your mentioned tests.\nClick ({link}) to track your bookings.\nThank you\nDignostica Span"""
                     recipient_list = [history.user.email]
-                    subject = "DIAGNOSTICA SPAN" 
                     send_mail(
                             f"Payment Successfull| Dignostica Span | Booking Id:{history.bookingid}",
                             message1,
@@ -1587,6 +1547,9 @@ def paymenthandler(request,str,amount):
                             recipient_list,
                             fail_silently=False,
                     )
+                    msg=f"Hi\nThere is an Order booked with below details\nBookingID:{history.bookingid}\nFullname:{history.user.firstname} {history.user.lastname}\nLocation={c}\nPhone Number:{history.user.phone_no}"
+                    number=8105486993
+                    sms(msg,number)
                     messages.info(request, "Thankyou for making payment our team will come and collect the sample soon.")
                     # return HttpResponseRedirect(reverse("booking-history"))
                     return redirect("booking-history")
@@ -1597,7 +1560,7 @@ def paymenthandler(request,str,amount):
             else:
                 transid=request.POST["razorpay_order_id"]
                 history=book_history.objects.get(payment_id=transid)
-                link=request.build_absolute_uri('/bookinghistory/')
+                link=request.build_absolute_uri('/booking-history/')
                 email_from = settings.EMAIL_HOST_USER
                 recipient_list = [history.user.email]
                 # subject=f"Subject: Payment Failed| Dignostica Span | Booking Id:{history.bookingid}"
@@ -1625,7 +1588,6 @@ def paymenthandler(request,str,amount):
         else:
             return redirect("booking-history")
     except Exception as e:
-        print(e)
         messages.error(request, "Payment failed Please Retry")
         # return HttpResponseRedirect(reverse("booking-history"))
         return redirect("booking-history")
@@ -1743,9 +1705,6 @@ def addtocart1(request):
     RES = {}
     if request.method=="POST":
         pk=request.POST.getlist("pk[]")
-        print(request.POST)
-        print(pk)
-       
         item=test.objects.filter(id__in=pk)
         if cityy==Bangalore:
             for i in item:
@@ -1806,12 +1765,9 @@ def search(request):
             res = {"valid":True}
             return HttpResponse(json.dumps(res), content_type="application/json")
         else:
-            print(request.POST)
             city=request.session.get("city")
-
             searched=request.POST.get('searched')
             req_cat = request.POST.get("cat")
-            print(searched)
             if req_cat != "all":
                 if searched:
                     tests=test.objects.filter(categoryy__id=req_cat, testt__icontains = searched)
@@ -1860,11 +1816,11 @@ def coupon(request):
     if request.method=="POST":
         coupon=request.POST.get("coupon")
         total=request.POST.get("total")
+        citi=request.session.get("city")
         try:
-            c=coupons.objects.get(couponcode=coupon,status="a")
+            c=coupons.objects.get(couponcode=coupon,status="a",cityy__cityname=citi)
             c.discount
             discount=(float(total)*(int(c.discount)/100))
-            # print(t)
             totall=float(total)-int(discount)
             request.session['discountamount']=discount
             request.session['coupon']=coupon
@@ -2210,8 +2166,8 @@ class BookingHistoryPay(LoginRequiredMixin,View):
             )
             mod.payment_id = razorpay_order['id']
             mod.save()
-            scheme=request.scheme
-            urll=request.get_host()
+            # scheme=request.scheme
+            # urll=request.get_host()
             # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100)
             # callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
             callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100) 
@@ -2357,7 +2313,7 @@ class HealthSymptoms(View):
             request.session['cart_count']= cart.objects.filter(device = deviceCookie).count()
         else:
             request.session['cart_count']= cart.objects.filter(user = request.user).count()
-        print(RES)
+        
         return JsonResponse(RES)
 def privacypolicy(request):
     return render(request,"privacypolicy.html")
@@ -2376,7 +2332,6 @@ import re
 def uploadcsv(request):
         if request.method == "POST":
             csv_file = request.FILES["csv_upload"]
-            print(csv_file)
             if not csv_file.name.endswith('.csv'):
                 messages.warning(
                     request, 'The wrong file type was uploaded')
@@ -2387,9 +2342,8 @@ def uploadcsv(request):
             reader = csv.DictReader(decode_utf8(request.FILES['csv_upload']))
            
             for row in reader:
-                print(row)
                 # des = re.sub(r"</?\[\d+>", "", row.get("Description"))
-                # print(row)
+                
                 # try:
                 n,tests=test.objects.get_or_create(testt=row.get("ï»¿TEST NAME"))
                 if row.get("STARTER")=="Y":
@@ -2443,13 +2397,13 @@ def requestcallheader(request):
         lastname=request.POST["lastname"]
         phone=request.POST["phone"]
         email=request.POST["email"]
-        tests=request.POST["tests"]
-        try:
-            t=test.objects.get(id=int(tests))
-        except:
-            return JsonResponse({"message":"error"})
-        requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,tests=t).save()
-        message = 'Hi\nYou have Call back request for below test.\n{}\n'.format(t.testt)
+        message1=request.POST["message"]
+        # try:
+        #     t=test.objects.get(id=int(tests))
+        # except:
+        #     return JsonResponse({"message":"error"})
+        requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,message=message1).save()
+        message = f'Hi\nYou have Call back request for below test from\nName:{firtname} {lastname}\nMobile:{phone}\nEmail:{email}\nMessage:{message1}'
         email_from = settings.EMAIL_HOST_USER
         recipient_list = ["enquiry@spanhealth.com"]
         message = message
@@ -2486,7 +2440,6 @@ def lifestyletests(request):
     
 def medicationsview(request):
     if request.method=="POST":
-        print(request.POST)
         try:
             medic=request.POST["medico"]
         except:
@@ -2518,10 +2471,10 @@ def medicationdelete(request):
     if request.method=="POST":
         id=request.POST["pk"]
         medications.objects.get(id=id).delete()
-        return JsonResponse({"message":True})  
+        medicocount=medications.objects.all().count()
+        return JsonResponse({"message":True,"medicocount":medicocount})  
 def medicupdate(request):
     if request.method=="POST":
-        print(request.POST)
         id=request.POST["medicid"]
         try:
             medic=request.POST["update_name"]
@@ -2621,7 +2574,7 @@ def readfile(request):
     a=test.objects.filter(Banglore_price__isnull=True)
     file_path1 = os.path.join(settings.STATIC_ROOT)
     file_path= os.path.join(settings.BASE_DIR, 'staticfiles/static')
-    # print(file_path)
+   
     f = open("{}/tests.txt".format(file_path), "w")
     f1 = open("{}/tests.txt".format(file_path1), "w")
     for i in a:
@@ -2633,7 +2586,7 @@ def readfile(request):
     f.close()
     f1.close()
     #open and read the file after the appending:
-    # print(f.read())
+    
     # return FileResponse(f,as_attachment=True,filename="tests.txt",content_type='application/text') 
     return render (request,"tests.html")
 
@@ -2645,18 +2598,13 @@ def sms(message,mobile):
         a=connection.text.split(":")
         deliveryurl=f"""https://www.smsidea.co.in/sms/api/msgstatus.aspx?mobile=9986788880&pass=Malatesh@78&msgtempid={a[1].strip()}"""
         deliveryconnection=requests.get(deliveryurl)
-        print(deliveryconnection.status_code)
         if deliveryconnection.status_code!=200:
             return "Your OTP is not delivered Please try again!"
         else:
             return "Your OTP sent your registered mobile number"
     except Exception as e:
-        # print(e)
         return "Your OTP is not delivered Please try again!"
         
-# def smstest(request):
-#     mobile="8105486993"
-#     message="Diagnostica Span"
-#     sms(message,mobile)
-#     return HttpResponse("Sent")
-    
+
+def dummy(request):
+    return render(request,"dummy.html")    
