@@ -73,14 +73,20 @@ class testadmin(admin.ModelAdmin):
                         yield l.decode('cp1252')
                 reader = csv.DictReader(decode_utf8(request.FILES['csv_upload']))
                 for row in reader:
+                    # print(row)
                     des = re.sub(r"</?\[\d+>", "", row.get("Description"))
                     try:
-                        categoryy=category.objects.get(pk=row.get("category_id"))
+                        categoryy=category.objects.get(categoryy=row.get("category_id"))
+                        testcode=row["Tests"]
+                        b=testcode.split(" - ")
+                        # print(b)
+                        price=row.get("Banglore_price").strip().replace(",","")
+                        price=int(price)
                         obj, created = test.objects.get_or_create(
-                                testt=row["Tests"],
-                                testcode=row["test_code"],
+                                testt=testcode,
+                                testcode=b[0],
                                 categoryy=categoryy,
-                                Banglore_price=row.get("Banglore_price") if row.get("Banglore_price") else None,
+                                Banglore_price=price if row.get("Banglore_price") else None,
                                 Mumbai_price=row.get("Mumbai_price") if row.get("Mumbai_price") else None,
                                 bhopal_price=row.get("bhopal_price") if row.get("bhopal_price") else None,
                                 nanded_price=row.get("nanded_price") if row.get("nanded_price") else None,

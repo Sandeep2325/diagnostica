@@ -88,7 +88,7 @@ class test(models.Model):
     testt=models.TextField(null=True,blank=True,verbose_name="Test")
     testcode=models.CharField(max_length=50,null=True,blank=True,verbose_name="Test Code")
     description=models.TextField(null=True,blank=True)
-    categoryy=models.ForeignKey(category,null=True,blank=True,on_delete=models.CASCADE)
+    categoryy=models.ForeignKey(category,null=True,blank=True,on_delete=models.CASCADE,verbose_name="Category")
     is_active=models.BooleanField(default=True,verbose_name="Is Active?")
     # price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
     Banglore_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Banglore Price")
@@ -98,7 +98,6 @@ class test(models.Model):
     pune_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Pune Price")
     barshi_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Barshi Price")
     aurangabad_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Aurangabad Price")
-
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     # slug = models.SlugField(null=True, unique=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
