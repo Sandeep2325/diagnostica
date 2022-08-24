@@ -1,6 +1,7 @@
 import itertools
 import re
 from subprocess import call
+from unicodedata import decimal
 # import sweetify
 from django.shortcuts import render,redirect
 from .forms import UserProfileForm,UserRegistrationForm, forgotpasswordform, prescriptionform, subscriptionform
@@ -483,15 +484,6 @@ def profilee(request):
                 messages.success(request,"Profile updated Successfully")
             except:
                 messages.error(request,"Please Update every field")
-        # a.age=age
-        # a.address=address
-        # a.save()
-        # messages.success(request,"Profile updated Successfully")
-        # profile=User.objects.get(email=request.user.email)
-        context1={
-            "profile":profile,
-            "cityy":cityy,
-        }
         return redirect("profile")  
              
 def userLogin(request):
@@ -634,7 +626,7 @@ def newsletter(request):
         return JsonResponse({"message":True,"email":email})
     # return render(request,"footer.html")
 def home(request):
-    request.session["city"]="Bangalore"
+    # request.session["city"]="Bangalore"
     deviceCookie = request.COOKIES.get('device')
     c=request.session.get("city")
     envcity={"Bangalore":Bangalore,"Mumbai":Mumbai,"Bhophal":Bhophal,"Nanded":Nanded,"Pune":Pune,"Barshi":Barshi,"Aurangabad":Aurangabad}
@@ -738,7 +730,7 @@ def hpackagess(request):
     return render(request,'healthpackages.html',context)
 
 def healthpackageview(request,slug):
-        c=request.session.get("city")
+        citi=request.session.get("city")
         package=healthpackages.objects.get(slug=slug)
         packages=healthpackages.objects.exclude(slug=slug)
         tests=package.test_name.all()
@@ -775,7 +767,7 @@ def healthpackageview(request,slug):
         context={
             "package":package,
             "packages":packages,
-            "city":c,
+            "city":citi,
             'envcity':envcity,
             "firsthalf":a,
             "secondhalf":b,
@@ -1079,6 +1071,7 @@ def cartt(request):
         d = cart.objects.filter(device = deviceCookie).update(user=request.user)
     # history=book_history.objects.none()
     if request.method=="POST":
+        print(request.POST)
         c=request.session.get("city")
         others=request.POST.get('option1')
         others_choice=request.POST.get("option")
@@ -1088,6 +1081,8 @@ def cartt(request):
         age=request.POST.get('age')
         gender=request.POST.get('gender')
         address=request.POST['address']
+        timeslot=request.POST.get('timeslot')
+        # print("----------------------------",timeslot)
         global uniquee
         uniquee = uuid.uuid4()
         data=cart.objects.filter(user=request.user)
@@ -1153,11 +1148,11 @@ def cartt(request):
         scheme=request.scheme
         urll=request.get_host()
         # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,amount)
-        # callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
+        callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
         # print("----------------",callback_url)
         # print(call)
         # print(callback_url)
-        callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
+        # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
         context['razorpay_order_id'] = razorpay_order_id
         context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
         context['razorpay_amount'] = amount
@@ -1193,6 +1188,7 @@ def cartt(request):
                 gender=gender,
                 location=c,
                 address=address,
+                timeslot=timeslot,
                 bookingid=bookingid)
         data=testbook.objects.get(unique=uniquee) 
         bookhistory=book_history(
@@ -1463,19 +1459,20 @@ def cartt(request):
             da['price']=str(i.price)  
             da["categoryy"]=i.items.categoryy
             data.append(da)
-    try:  
-     
+    try: 
         a=[float(i["price"]) for i in data]
+        total=float('{0:1.2f}'.format(sum(a)))+199
+        # print(float('{0:1.2f}'.format(sum(a)))+199)
         context={
             "data":data,
             "datacount":len(data),
-            "subtotal": '{0:1.2f}'.format(sum(a)) 
+            "subtotal": '{0:1.2f}'.format(sum(a)),
+            "total":total
         }
-    except:
+    except Exception as e:
          context={
             "data":data,
             "datacount":len(data),
-            
         }
     
     if request.user.is_anonymous:

@@ -45,7 +45,7 @@ class testadmin(admin.ModelAdmin):
     # form = testform
     # def get_fieldsets(self, request, obj=None):
     #     fieldsets = super(testadmin, self).get_fieldsets(request, obj)
-    #     fieldsets[0][1]['fields'] += ['price'] 
+    #     fieldsets[0][1]['fields'] += ['price']
     #     return fieldsets
     # prepopulated_fields = {"slug": ("testt",)}
     def action_btn(self, obj):
@@ -107,7 +107,7 @@ class testadmin(admin.ModelAdmin):
             form = CsvImportForm()
             data = {"form": form}
             return render(request, "admin/app1/csv_upload.html", data)
-
+from django.forms.widgets import SelectMultiple,MultiWidget
 class prescriptionbookadmin(admin.ModelAdmin):
     list_display=["users","testname","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address","prescription_file","report","created","updated","action_btn"]        
     readonly_fields=["user","myself","payment_status","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location","bookingid",'price']
@@ -118,7 +118,11 @@ class prescriptionbookadmin(admin.ModelAdmin):
         (_('Patient Details'), {'fields': ("bookingid","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address")}),
         (_('Report'),{'fields':("report",)})
     )
-    
+    filter_horizontal = ('test_name',)
+    # raw_id_fields = ("test_name",)
+    # formfield_overrides = {
+    #     models.ManyToManyField: {'widget': SelectMultiple},
+    # }
     # search_fields = ('testt', 'categoryy__categoryy')
     # list_editable=[""]
     def get_form(self, request, obj=None, **kwargs):
@@ -188,7 +192,7 @@ class prescriptionbookadmin(admin.ModelAdmin):
         return False
 
 class testbookadmin(admin.ModelAdmin):
-    list_display=["users","tests","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address","report","created","updated","action_btn"]        
+    list_display=["users","tests","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address","timeslot","report","created","updated","action_btn"]        
     readonly_fields=["user","myself","payment_status","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location",'bookingid']
     exclude = ('unique',)
     list_filter = ("myself","others","gender")
@@ -266,6 +270,7 @@ class categoryadmin(admin.ModelAdmin):
 class healthcheckup_admin(SummernoteModelAdmin):
     list_display=["package_title","dBanglore_price","created","updated","action_btn"]    
     readonly_fields=["created","updated"]
+    filter_horizontal = ('test_name',)
     # list_editable=["location"]
     prepopulated_fields = {"slug": ("package_title",)}
     summernote_fields = ('description')
@@ -298,6 +303,7 @@ class healthpackage_admin(SummernoteModelAdmin):
     # list_editable=["location"]
     prepopulated_fields = {"slug": ("package_name",)}
     # summernote_fields = ('content','package_name')
+    filter_horizontal = ('test_name',)
     def get_form(self, request, obj=None, **kwargs):
         # if obj.type == "1":
         self.exclude = ("Mumbai_price","bhopal_price","nanded_price","pune_price","barshi_price","aurangabad_price",)
@@ -378,6 +384,7 @@ class healthsymptoms_admin(SummernoteModelAdmin):
     list_display=["name","testname","Banglore_price","created","updated","action_btn"]
     readonly_fields=["created","updated"]
     prepopulated_fields = {"slug": ("name",)}
+    filter_horizontal = ('test_name',)
     summernote_fields = ('symptoms',)
     def get_form(self, request, obj=None, **kwargs):
         # if obj.type == "1":
@@ -574,7 +581,7 @@ class requestadmin(admin.ModelAdmin):
 admin.site.register(faq,faqadmin)
 admin.site.register(contactus,contactusadmin)
 admin.site.register(payment,paymentadmin)
-# admin.site.register(city,cityadmin)
+admin.site.register(city,cityadmin)
 admin.site.register(blogcategory,blogcategoryadmin)
 admin.site.register(test,testadmin)
 # admin.site.register(prescription_book,prescriptionbookadmin)

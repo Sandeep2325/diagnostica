@@ -17,12 +17,10 @@ def last_el(value):
 def is_in(v2,value):
     if v2 in value:
         return True
-    
 @register.filter()
 def split(value, key):
     a=value.split(key)
     return a[0]
-
 @register.filter()
 def split2(value, key):
     a=value.split(key)

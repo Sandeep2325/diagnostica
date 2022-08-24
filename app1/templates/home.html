@@ -17,10 +17,10 @@
               {%if currentcity == None%}
               <h1 class="" id="cityName">Hello,</h1>
               {%else%}
-              <h1 class="" id="cityName">Hello {{currentcity}},</h1>
+              <h1 class="" id="cityName">Hello {{currentcity}}!,</h1>
               {%endif%}
-              <h2 class="">Protect your health with This simple Checkup.</h2>
-              <p class="fs-24">To become <b> “One Stop Solution” </b> for all your Diagnostic needs</p>
+              <h2 class="">Protect your health with our check-ups and packages</h2>
+              <p class="fs-24">We are a<b> “One Stop Solution” </b> for all your Diagnostic needs</p>
               <a href="{%url "bookonline"%}"><button>BOOK A TEST ONLINE</button></a>
             </div>
           </div>
@@ -43,7 +43,7 @@
           <div class="row">
             <div class=" text-end col-lg-7 "> </div>
             <div class=" text-start col-lg-5 ">
-              <h1 class="p-0 m-0" style="color:red; font-weight: bold;">Check out our Span's curated Health packages </h1>
+              <h1 class="p-0 m-0" style="color:red; font-weight: bold;">Check out our curated health and lifestyle packages</h1>
              <a href="{% url 'packages' %}"><button class="mt-lg-5 mt-4">Health Packages</button></a>
             </div>
           </div>
@@ -178,7 +178,6 @@
         </div>
         {%endfor%} {% endcomment %}
 <div id="health_pack_carousel" class="owl-carousel owl-theme">
-        
         {%for package in healthpackage%}
         <div class=" pt-3">
         <div class="py-5 bg-light-grey br-30 health_hover">
@@ -228,7 +227,7 @@
     <div class="container">
       <div class="">
         <div class="row">
-          <h3 class="fs-40  cl-dark-blue font-bold d-flex align-items-center home_health_symp_header m-0 py-lg-5  py-3" id="healt">Health Care</h3>
+          <h3 class="fs-40  cl-dark-blue font-bold d-flex align-items-center home_health_symp_header m-0 py-lg-5  py-3" id="healt">The Diagnostica Blog</h3>
 
           <div id="health-care-slider" class="col-lg-12 health-care-slider owl-carousel owl-theme">
             {%for blog in healthcareblog%}
@@ -264,17 +263,17 @@
     <div class="container">
       <div class="row  py-3">
         <div class="col-lg-6 pe-lg-5 py-3">
-          <h1 class="fs-40 font-bold d-flex align-items-center cl-dark-blue pb-lg-3">About Span</h1>
-          <p class="fs-24 font-regular cl-dark-brown m-0">On December 1 2018, SPAN (www.spanhealth.com) took
-            the
-            first
-            step towards
-            making diagnostics a key vertical. The laboratories are located in Mumbai, Pune, Barshi, and Aurangabad.</p>
-          <p class="fs-24 font-regular cl-dark-brown pt-3">The management is committed to ensuring that the quality of our services
-            continues to meet
-            and exceed your requirements while expanding the number of tests performed locally and also improving the
-            TAT significantly. Diagnostica SPAN has plans of expanding its operations pan-India through organic and
-            franchisee models designed to provide a robust and reliable one-stop solution.</p>
+          <h1 class="fs-40 font-bold d-flex align-items-center cl-dark-blue pb-lg-3">About Diagnostica SPAN</h1>
+          {% comment %} <p class="fs-24 font-regular cl-dark-brown m-0">On December 1 2018, SPAN (www.spanhealth.com) took the first step towards making diagnostics a
+            key vertical. The laboratories are located in Mumbai, Pune, Barshi, and Aurangabad.</p> {% endcomment %}
+          <p class="fs-24 font-regular cl-dark-brown pt-3">About Diagnostica SPAN
+            On December 1 2018, SPAN (www.spanhealth.com) took the first step towards making diagnostics a
+            key vertical. The laboratories are located in Bangalore, Pune, Barshi, Aurangabad, Nanded, Nashik
+            and Bhopal. The management is committed to ensuring that the quality of our services continues to
+            meet and exceed your requirements while expanding the number of tests performed locally and also
+            improving the Turn-Around-Time (TAT) significantly. SPAN Diagnostic Services has plans of
+            expanding its operations pan-India through organic and franchisee models designed to provide a
+            robust and reliable one-stop solution.</p>
           <div class="row py-4">
             <div class="col w-100  ">
               <h1 class="fs-40 cl-light-2-blue font-bold " id="testepeeps">123456</h1>
@@ -344,7 +343,7 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-6 col-md-12 py-4 ">
-            <h1 class="fs-40 font-bold cl-dark-white pe-xxl-5 me-xxl-5">Helping Patients for around The Globe !!!</h1>
+            {% comment %} <h1 class="fs-40 font-bold cl-dark-white pe-xxl-5 me-xxl-5">Helping Patients for around The Globe !!!</h1> {% endcomment %}
             <div class="row">
               <div class="col-12 col-md-6 pe-lg-4 helper_header_col">
                 <div class="d-flex align-items-center">
@@ -432,7 +431,7 @@
       </div>
     </div>
   </section>
-  {% comment %} <section>
+<section>
     <div id="myModal" class="modal fade">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
@@ -462,7 +461,7 @@
         </div>
       </div>
     </div>
-  </section> {% endcomment %}
+  </section>
   {%include "footer.html"%}
 </div>
 </body>

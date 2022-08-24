@@ -156,7 +156,12 @@ class prescription_book(models.Model):
         return "Prescription booking1"
     class Meta:
         verbose_name_plural="Prescription Bookings1" 
-
+        
+TIME_CHOICES = (
+    ("1","7:00AM-11:00AM"),
+    ("2","11:00AM-3:00PM"),
+    ("3","3:00PM-6:00PM")
+)  
 class testbook(models.Model):
     bookingid=models.CharField(max_length=20,null=True,blank=True)
     unique=models.UUIDField(null=True,blank=True)
@@ -172,6 +177,11 @@ class testbook(models.Model):
         max_length=8,
         default="", null=True,blank=True
     )
+    timeslot = models.CharField(
+        choices=TIME_CHOICES,
+        max_length=20,
+        default="", null=True,blank=True,verbose_name="Time Slot"
+    )
     payment_status=models.BooleanField(default=False)
     firstname=models.CharField(max_length=200,null=True,blank=True)
     lastname=models.CharField(max_length=200,null=True,blank=True)
@@ -184,6 +194,7 @@ class testbook(models.Model):
     )
     location=models.CharField(max_length=100,null=True,blank=True)
     address=models.TextField(null=True,blank=True)
+    
     report=models.FileField(upload_to="report",null=True,blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)

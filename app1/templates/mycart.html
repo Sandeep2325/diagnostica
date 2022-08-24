@@ -121,12 +121,21 @@
                                                         <h4 class="fs-20 font-bold cl-dark-blue mb-3">Rs. {{subtotal}}</h4>
                                                     </div>
                                                 </div>
+                                                <div class="row text-center" id="details">
+
+                                                    <div class="col-6">
+                                                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Sample Collection Charges</h4>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Rs. 199</h4>
+                                                    </div>
+                                                </div>
                                                 <div class="row py-4 text-center bg-white sub_total">
                                                     <div class="col-6">
                                                         <h4 class="fs-30 font-bold cl-dark-blue">Total</h4>
                                                     </div>
                                                     <div class="col-6 discount">
-                                                        <h4 class="fs-30 font-bold cl-dark-blue" id="total">Rs. {{subtotal}}</h4>
+                                                        <h4 class="fs-30 font-bold cl-dark-blue" id="total">Rs. {{total}}</h4>
                                                     </div>
                                                 </div>
                                             </div>
@@ -209,6 +218,15 @@
                                         <option value="m">Male</option>
                                         <option value="f">Female</option>
                                         <option value="o">Others</option>
+                                </select>
+                            </div>
+                            <div>
+                                <select class="w-100 mt-3 form-select myself_other" type="select" name="timeslot" id="timeslot">
+                                    <option selected="selected" class="opc-5" disabled>
+                                        Pickup Time Slot</option>
+                                        <option value="1">7:00AM-11:00AM</option>
+                                        <option value="2">11:00AM-3:00PM</option>
+                                        <option value="3">3:00PM-6:00PM</option>
                                 </select>
                             </div>
                             <div>
@@ -353,7 +371,7 @@ function deletefunc(e){
                         <h4 class="fs-20 font-bold cl-dark-blue mb-3">Discount Price(${resp['percent']}%)</h4>
                     </div>
                     <div class="col-6" id="cleardetail">
-                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Rs. ${resp['discount']}</h4>
+                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">- Rs. ${resp['discount']}</h4>
                     </div>
                 `
                 var h4 =`<h4 class="fs-30 font-bold cl-dark-blue" id="total">Rs. ${resp['total']}.00</h4>`;
@@ -476,6 +494,9 @@ $(document).ready(function(){
             'option': {
                 required: true,
             },
+            'timeslot':{
+                required: true,
+            }
         },
     
         messages: {
@@ -517,6 +538,7 @@ $(document).ready(function(){
                     var option1=$("#option1").val();
                     var option=$("#option").val();
                     var address=$("#address").val();
+                    var timeslot=$("#timeslot").val();
                     var total;
                     if(AMOUNT==0){
                         
@@ -540,6 +562,7 @@ $(document).ready(function(){
                             "option1":option1,
                             "option":option,
                             "address":address,
+                            "timeslot":timeslot,
                             csrfmiddlewaretoken:'{{ csrf_token }}',
                            },
                            dataType: "json",

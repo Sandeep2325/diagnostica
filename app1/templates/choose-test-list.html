@@ -85,11 +85,11 @@
                                                 <div class="col-xl-6 col-md-6 test-list">
                                                     <p class="overflow-hidden"> {{test.description}} </p>
                                                 </div>
-                                                <div class="col-xl-3 col-md-2 test-list-price">
+                                                {% comment %} <div class="col-xl-3 col-md-2 test-list-price">
                                                     <p>₹ {{test.Banglore_price}}</p>
-                                                </div>
+                                                </div> {% endcomment %}
                                                 
-                                                {% comment %} {%if city == envcity.Bangalore %}
+                                                {%if city == envcity.Bangalore %}
                                                 <div class="col-xl-3 col-md-2 test-list-price">
                                                     <p>₹ {{test.Banglore_price}}</p>
                                                 </div>
@@ -119,7 +119,7 @@
                                                 <div class="col-xl-3 col-md-2 test-list-price">
                                                     <p>₹ {{test.aurangabad_price}}</p>
                                                 </div>
-                                                {%endif%} {% endcomment %}
+                                                {%endif%}
                                                 
                                                 <div class="col-xl-3 col-md-4 test-list-button" style="display:none"><button id="added"
                                                     class="globalsubmitbutton" >Added</button></div>
@@ -194,11 +194,10 @@
                             </div>
                             <div class="col-xl-3 col-md-4 test-list-button"><button id="addtocart"
                                     name=${resp[i]['id']} class="bg-sky-blue br br-5 cl-dark-white px-5 py-3" onclick=myfunction("${resp[i]['id']}")>Add to
-                                    Cart</button></div>
+        Cart</button></div>
                         </div>
                     </div>`;
                     $("#main-test-div").append(divs);
-
                    }
                 }else{
                     $("#main-test-div").empty();
@@ -211,11 +210,7 @@
                   
                 }
             });
-        
-
     });
-
-
     $("#searched").keyup(function(e){
         var searched = $(this).val();
         var cat = $("#category").val();
@@ -231,7 +226,6 @@
                 },
                 success: function(resp){
                     if(resp.length>0){
-
                     $("#main-test-div").empty();
                    for(var i=0; i<resp.length ; i++){
                     var divs = `<div class="bg-white br-5 px-4 py-3 mt-2">
