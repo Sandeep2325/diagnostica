@@ -112,7 +112,7 @@ class prescriptionbookadmin(admin.ModelAdmin):
     list_display=["users","testname","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address","prescription_file","report","created","updated","action_btn"]        
     readonly_fields=["user","myself","payment_status","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location","bookingid",'price']
     exclude = ('unique',)
-    list_filter = ("user","myself","others","gender")
+    list_filter = ("myself","others","gender")
     fieldsets = (
         (_('Prescription'), {'fields': ('user','prescription_file', 'test_name','price')}),
         (_('Patient Details'), {'fields': ("bookingid","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address")}),
@@ -191,7 +191,7 @@ class testbookadmin(admin.ModelAdmin):
     list_display=["users","tests","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address","report","created","updated","action_btn"]        
     readonly_fields=["user","myself","payment_status","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location",'bookingid']
     exclude = ('unique',)
-    list_filter = ("user","myself","others","gender")
+    list_filter = ("myself","others","gender")
     # search_fields = ('testt', 'categoryy__categoryy')
     # list_editable=[""]
     fieldsets = (
