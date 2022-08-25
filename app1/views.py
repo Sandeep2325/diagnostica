@@ -1850,7 +1850,7 @@ def coupon(request):
             c.discount
             discount=(float(total)*(int(c.discount)/100))
             # print(t)
-            totall=float(total)-int(discount)
+            totall=(float(total)-int(discount))+199
             request.session['discountamount']=discount
             request.session['coupon']=coupon
             request.session['couponpercent']=c.discount
