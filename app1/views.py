@@ -89,7 +89,8 @@ def aboutus(request):
     return render (request,"aboutus.html")
 def cityy(request):
     city=request.POST.get("city")
-    request.session["city"]=city
+    request.session["city"]="Bangalore"
+    request.session["tempcity"]=city
     return JsonResponse({"message":True,"city":city})
 
 def Registration(request):
@@ -627,6 +628,7 @@ def newsletter(request):
     # return render(request,"footer.html")
 def home(request):
     # request.session["city"]="Bangalore"
+    # request.session["city"]="Bangalore"
     deviceCookie = request.COOKIES.get('device')
     c=request.session.get("city")
     envcity={"Bangalore":Bangalore,"Mumbai":Mumbai,"Bhophal":Bhophal,"Nanded":Nanded,"Pune":Pune,"Barshi":Barshi,"Aurangabad":Aurangabad}
@@ -806,7 +808,6 @@ def healthpackageview(request,slug):
         # # context['razorpay_amount'] = amount
         # context['currency'] = currency
         return render(request,'packagedetail.html',context)
-
 def testdetails(request):
     if request.method=="POST":
             id=request.POST["id"]
@@ -1016,7 +1017,6 @@ def testselect(request):
         a=prescription_book.objects.create(
             unique=unique,
             user=request.user,
-            
                           myself=True if myself == "on" else False,
                           others=True if others == "on" else False,
                           others_choice=others_choice,
@@ -1148,11 +1148,11 @@ def cartt(request):
         scheme=request.scheme
         urll=request.get_host()
         # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,amount)
-        callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
+        # callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
         # print("----------------",callback_url)
         # print(call)
         # print(callback_url)
-        # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
+        callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
         context['razorpay_order_id'] = razorpay_order_id
         context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
         context['razorpay_amount'] = amount

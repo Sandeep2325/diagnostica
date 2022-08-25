@@ -17,7 +17,7 @@
               {%if currentcity == None%}
               <h1 class="" id="cityName">Hello,</h1>
               {%else%}
-              <h1 class="" id="cityName">Hello {{currentcity}}!,</h1>
+              <h1 class="" id="cityName">Hello {{request.session.tempcity}}!,</h1>
               {%endif%}
               <h2 class="">Protect your health with our check-ups and packages</h2>
               <p class="fs-24">We are a<b> “One Stop Solution” </b> for all your Diagnostic needs</p>
@@ -188,7 +188,8 @@
                 <p
                   class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">
                   Price</p>
-                {%if currentcity == envcity.Bangalore%}
+                  {% comment %} <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.Banglore_price}}</h1> {% endcomment %}
+               {%if currentcity == envcity.Bangalore%}
                 <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.Banglore_price}}</h1>
                 {%elif currentcity == envcity.Mumbai%}
                 <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.Mumbai_price}}</h1>
