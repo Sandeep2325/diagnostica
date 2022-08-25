@@ -118,7 +118,7 @@
                                                         <h4 class="fs-20 font-bold cl-dark-blue mb-3">Sub Total</h4>
                                                     </div>
                                                     <div class="col-6">
-                                                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Rs. {{subtotal}}</h4>
+                                                        <h4 class="fs-20 font-bold cl-dark-blue mb-3" id="subtotal">Rs. {{subtotal}}</h4>
                                                     </div>
                                                 </div>
                                                 <div class="row text-center" id="details">
@@ -127,7 +127,7 @@
                                                         <h4 class="fs-20 font-bold cl-dark-blue mb-3">Sample Collection Charges</h4>
                                                     </div>
                                                     <div class="col-6">
-                                                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Rs. 199</h4>
+                                                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Rs. 199.00</h4>
                                                     </div>
                                                 </div>
                                                 <div class="row py-4 text-center bg-white sub_total">
@@ -135,7 +135,7 @@
                                                         <h4 class="fs-30 font-bold cl-dark-blue">Total</h4>
                                                     </div>
                                                     <div class="col-6 discount">
-                                                        <h4 class="fs-30 font-bold cl-dark-blue" id="total">Rs. {{total}}</h4>
+                                                        <h4 class="fs-30 font-bold cl-dark-blue" id="total">Rs. {{total|floatformat:2}}</h4>
                                                     </div>
                                                 </div>
                                             </div>
@@ -337,7 +337,7 @@ function deletefunc(e){
  
 }
     $('#cpnbtn').on('click', function(e){
-        var a=$("#total").text();
+        var a=$("#subtotal").text();
         var coupon=$("#coupon").val()
         if (coupon== ''){
             swal("", "Please Enter Coupon", "error")
