@@ -265,15 +265,13 @@
       <div class="row  py-3">
         <div class="col-lg-6 pe-lg-5 py-3">
           <h1 class="fs-40 font-bold d-flex align-items-center cl-dark-blue pb-lg-3">About Diagnostica SPAN</h1>
-          {% comment %} <p class="fs-24 font-regular cl-dark-brown m-0">On December 1 2018, SPAN (www.spanhealth.com) took the first step towards making diagnostics a
-            key vertical. The laboratories are located in Mumbai, Pune, Barshi, and Aurangabad.</p> {% endcomment %}
           <p class="fs-24 font-regular cl-dark-brown pt-3">
             On December 1 2018, SPAN (www.spanhealth.com) took the first step towards making diagnostics a
             key vertical. The laboratories are located in Bangalore, Pune, Barshi, Aurangabad, Nanded, Nashik
             and Bhopal. The management is committed to ensuring that the quality of our services continues to
             meet and exceed your requirements while expanding the number of tests performed locally and also
             improving the Turn-Around-Time (TAT) significantly. SPAN Diagnostic Services has plans of
-            expanding its operations pan-India through organic and franchisee models designed to provide a
+            expanding its operations pan-India through organic and franchisee models designed to provide a 
             robust and reliable one-stop solution.</p>
           <div class="row py-4">
             <div class="col w-100  ">
@@ -723,7 +721,6 @@ $(document).ready(function(){
           'csrfmiddlewaretoken':'{{ csrf_token }}',
       },
       success: function(resp){
-          
           if(!resp['message']){
               swal('',"Already Added",'info');
           }else{

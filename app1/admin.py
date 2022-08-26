@@ -322,8 +322,6 @@ class healthpackage_admin(SummernoteModelAdmin):
         html += "<a class='text-danger fa fa-trash ml-2' href='/admin/app1/healthpackages/"+str(obj.id)+"/delete/'></a></div>"
         return format_html(html)
     action_btn.short_description = "Action"
-    
-    
     def get_urls(self):
             urls = super().get_urls()
             new_urls = [path('upload-csv/', self.upload_csv), ]

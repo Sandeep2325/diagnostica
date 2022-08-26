@@ -194,7 +194,6 @@ class testbook(models.Model):
     )
     location=models.CharField(max_length=100,null=True,blank=True)
     address=models.TextField(null=True,blank=True)
-    
     report=models.FileField(upload_to="report",null=True,blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
@@ -565,6 +564,7 @@ SELECT_CHOICES=[
 class coupons(models.Model):
     couponcode=models.CharField(max_length=100,null=True,blank=True,verbose_name="Coupon Code")
     discount=models.CharField(max_length=2,null=True,blank=True,verbose_name="Discount(%)")
+    # cityy=models.ForeignKey(city,null=True,blank=True,on_delete=models.CASCADE,verbose_name="City")
     status = models.CharField(
         choices=SELECT_CHOICES,
         max_length=100,
@@ -572,7 +572,6 @@ class coupons(models.Model):
     )
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
-    
     def __str__(self):
         return self.couponcode
     class Meta:
@@ -581,7 +580,6 @@ class coupons(models.Model):
 class faq(models.Model):
     question=models.CharField(max_length=600,null=True,blank=True)
     answer=models.TextField(null=True,blank=True)
-
     def __str__(self):
         return self.question
 

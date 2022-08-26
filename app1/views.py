@@ -673,7 +673,7 @@ def home(request):
         email_from = settings.EMAIL_HOST_USER
         recipient_list = ["enquiry@spanhealth.com"]
         message = message
-        subject = "Request Call back" 
+        subject = "Request Call back"
         send_mail(
                     subject,
                     message,
@@ -2368,7 +2368,7 @@ def uploadcsv(request):
            
             for row in reader:
                 print(row)
-                n,tests=test.objects.get_or_create(testt=row.get("ï»¿TEST NAME"))
+                n,tests=test.objects.get_or_create(testcode=row.get("TEST CODE"))
                 if row.get("STARTER")=="Y":
                     a=healthpackages.objects.get(package_name="STARTER")
                     a.test_name.add(n)
