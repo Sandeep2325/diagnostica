@@ -230,9 +230,7 @@
                                         <option value="3">3:00PM-6:00PM</option>
                                 </select>
                             </div>
-                            <div>
-                                <textarea rows="2" class="w-100 myself_other form_input mt-3" placeholder="Address" name="address1" id="address" type="text" ></textarea>
-                            </div>
+                            
                             <div>
                                 <select class="w-100 mt-3 form-select myself_other" type="select" name="City" id="City">
                                     <option selected="selected" class="opc-5" disabled>
@@ -241,6 +239,9 @@
                                         <option value="{{i.id}}">{{i.cityname}}</option>
                                         {%endfor%}
                                 </select>
+                            </div>
+                            <div>
+                                <textarea rows="2" class="w-100 myself_other form_input mt-3" placeholder="Address" name="address1" id="address" type="text" ></textarea>
                             </div>
                             <div>
                                 <input class="w-100  form_input mt-3" placeholder="Pincode" name="pincode" id="pincode" type="text" maxlength="250"/>
@@ -299,10 +300,17 @@
             form.submit();
         }
     });
-
     $("#checkout11").click(function() {
         if("{{ user.is_authenticated }}"==="False"){
-            window.location.replace("{% url 'user-login' %}?next={% url 'cart' %}");
+            swal({
+                title:"Please Login to Checkout",
+                icon:"info",
+                button:"ok"
+            }).then(function() {
+                window.location.replace("{% url 'user-login' %}?next={% url 'cart' %}")})
+            //window.setTimeout(function(){window.location.replace("{% url 'user-login' %}?next={% url 'cart' %}")},10000)
+           // window.location.replace("{% url 'user-login' %}?next={% url 'cart' %}");
+            
         }
       })
     $("#delete1").on("click", function(e){
