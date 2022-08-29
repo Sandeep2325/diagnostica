@@ -36,6 +36,7 @@ import environ
 import shortuuid
 from num2words import num2words
 import re
+from datetime import datetime  
 env = environ.Env()
 global OBJ_COUNT
 OBJ_COUNT = 0
@@ -1148,11 +1149,11 @@ def cartt(request):
         scheme=request.scheme
         urll=request.get_host()
         # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,amount)
-        # callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
+        callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
         # print("----------------",callback_url)
         # print(call)
         # print(callback_url)
-        callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
+        # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
         context['razorpay_order_id'] = razorpay_order_id
         context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
         context['razorpay_amount'] = amount
@@ -1845,20 +1846,30 @@ def coupon(request):
     if request.method=="POST":
         coupon=request.POST.get("coupon")
         total=request.POST.get("total")
+        citi=request.session.get("tempcity")
+        # couponval=/^.{1,15}$/
+        # result = re.match(couponval,coupon)
         try:
             c=coupons.objects.get(couponcode=coupon,status="a")
-            c.discount
-            discount=(float(total)*(int(c.discount)/100))
-            # print(t)
-            totall=(float(total)-int(discount))+199
-            request.session['discountamount']=discount
-            request.session['coupon']=coupon
-            request.session['couponpercent']=c.discount
-            request.session['actualamount']=total
-            # request.session["couponamount"]=totall
-            return JsonResponse({"message":True,"total":float(totall),"percent":c.discount,"discount":"{:.2f}".format(discount)})
+            couponcount=couponredeem.objects.filter(coupon=coupon).count()
+            if c.cityy.filter(cityname=citi).exists():
+                if c.limit!=0:
+                    if couponcount<=c.limit:
+                        c.discount
+                        discount=(float(total)*(int(c.discount)/100))
+                        totall=(float(total)-int(discount))+199
+                        request.session['discountamount']=discount
+                        request.session['coupon']=coupon
+                        request.session['couponpercent']=c.discount
+                        request.session['actualamount']=total
+                        return JsonResponse({"message":True,"total":float(totall),"percent":c.discount,"discount":"{:.2f}".format(discount)})
+                    else:
+                        return JsonResponse({"message":False})
+                else:
+                    return JsonResponse({"message":False})
+            else:
+                return JsonResponse({"message":False})
         except:
-            
             return JsonResponse({"message":False})
 def razorpayclose(request):
     if request.method=="POST":
@@ -2275,7 +2286,7 @@ class HealthSymptoms(View):
             device = deviceCookie,
             healthsymptoms = healthSympObj,
             user = request.user if not request.user.is_anonymous else None,
-            price=healthSympObj.Banglore_price,)
+            price=healthSympObj.discounted_price,)
             res = {"message":created,"pack":healthSympObj.name}
             RES = res
         elif cityy == Mumbai:
@@ -2283,7 +2294,7 @@ class HealthSymptoms(View):
             device = deviceCookie,
             packages = healthSympObj,
             user = request.user if not request.user.is_anonymous else None,
-            price=healthSympObj.Mumbai_price,
+            price=healthSympObj.discounted_price,
             )
             res = {"message":created}
             RES = res
@@ -2292,7 +2303,7 @@ class HealthSymptoms(View):
             device = deviceCookie,
             packages = healthSympObj,
             user = request.user if not request.user.is_anonymous else None,
-            price=healthSympObj.bhopal_price,
+            price=healthSympObj.discounted_price,
             )
             res = {"message":created}
             RES = res
@@ -2301,7 +2312,7 @@ class HealthSymptoms(View):
             device = deviceCookie,
             packages = healthSympObj,
             user = request.user if not request.user.is_anonymous else None,
-            price=healthSympObj.nanded_price,
+            price=healthSympObj.discounted_price,
             )
             res = {"message":created}
             RES = res
@@ -2311,7 +2322,7 @@ class HealthSymptoms(View):
             device = deviceCookie,
             packages = healthSympObj,
             user = request.user if not request.user.is_anonymous else None,
-            price=healthSympObj.pune_price,
+            price=healthSympObj.discounted_price,
             )
             res = {"message":created}
             RES = res
@@ -2320,7 +2331,7 @@ class HealthSymptoms(View):
             device = deviceCookie,
             packages = healthSympObj,
             user = request.user if not request.user.is_anonymous else None,
-            price=healthSympObj.barshi_price,
+            price=healthSympObj.discounted_price,
             )
             res = {"message":created}
             RES = res
@@ -2329,7 +2340,7 @@ class HealthSymptoms(View):
             device = deviceCookie,
             packages = healthSympObj,
             user = request.user if not request.user.is_anonymous else None,
-            price=healthSympObj.aurangabad_price,
+            price=healthSympObj.discounted_price,
             )
             res = {"message":created}
             RES = res

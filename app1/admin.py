@@ -306,7 +306,7 @@ class healthpackage_admin(SummernoteModelAdmin):
     filter_horizontal = ('test_name',)
     def get_form(self, request, obj=None, **kwargs):
         # if obj.type == "1":
-        self.exclude = ("Mumbai_price","bhopal_price","nanded_price","pune_price","barshi_price","aurangabad_price",)
+        self.exclude = ("Mumbai_price","bhopal_price","nanded_price","pune_price","barshi_price","aurangabad_price","discounted_price",)
         form = super(healthpackage_admin, self).get_form(request, obj, **kwargs)
         return form
     # def testname(self, obj):
@@ -379,7 +379,7 @@ class healthpackage_admin(SummernoteModelAdmin):
             return render(request, "admin/app1/csv_upload.html", data)
     
 class healthsymptoms_admin(SummernoteModelAdmin):
-    list_display=["name","testname","Banglore_price","created","updated","action_btn"]
+    list_display=["name","testname","Banglore_price","discounted_price","created","updated","action_btn"]
     readonly_fields=["created","updated"]
     prepopulated_fields = {"slug": ("name",)}
     filter_horizontal = ('test_name',)
@@ -537,7 +537,79 @@ class bookhistoryadmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
 class couponadmin(admin.ModelAdmin):
-    list_display=["couponcode","discount","status"]
+    list_display=["couponcode","discount","Locations","limit","status","created","updated","action_btn"]
+    list_filter=["cityy"]
+    list_editable=["status"]
+    filter_horizontal = ('cityy',)
+    def Locations(self, obj):
+        return ", ".join([
+            city.cityname for city in obj.cityy.all()
+        ])
+    Locations.short_description = "Locations"
+    def action_btn(self, obj):
+        html = "<div class='field-action_btn d-flex m-8'> <a class='fa fa-edit ml-2' href='/admin/app1/coupons/" + \
+            str(obj.id)+"/change/'></a><br></br>"
+        # html += "<a class='text-success fa fa-eye ml-2' href='/admin/app1/healthpackages/" + \
+        #     str(obj.id)+"/change/'></a><br></br>"
+        html += "<a class='text-danger fa fa-trash ml-2' href='/admin/app1/coupons/"+str(obj.id)+"/delete/'></a></div>"
+        return format_html(html)
+    action_btn.short_description = "Action"
+    def get_urls(self):
+        urls = super().get_urls()
+        new_urls = [path('upload-csv/', self.upload_csv),path('export-csv/', self.export)]
+        return new_urls + urls
+    def upload_csv(self, request):
+            if request.method == "POST":
+                csv_file = request.FILES["csv_upload"]
+                if not csv_file.name.endswith('.csv'):
+                    messages.warning(
+                        request, 'The wrong file type was uploaded')
+                    return HttpResponseRedirect(request.path_info)
+                def decode_utf8(input_iterator):
+                    for l in input_iterator:
+                        yield l.decode('cp1252')
+                reader = csv.DictReader(decode_utf8(request.FILES['csv_upload']))
+                for row in reader:
+                    # print(row)
+                    try:
+                        cityname=row.get("city_id")
+                        citynamee=cityname.split(",")
+                        # cityy=city.objects.get(pk=row.get("city_id"))
+                        obj, created = coupons.objects.get_or_create(
+                                couponcode=row["ï»¿Coupon_Code"],
+                                discount=row["Discount"],
+                                limit=row["limit"],
+                                status=row["status"],
+                                )
+                        for citi in citynamee:
+                            cityy=city.objects.get(cityname=citi)
+                            obj.cityy.add(cityy)
+                    except IndexError:
+                        pass
+                    except (IntegrityError):
+                        form = CsvImportForm()
+                        data = {"form": form}
+                        message = messages.warning(
+                            request, 'Something went wrong! check your file again \n 1.Upload correct file \n 2.Check you data once')
+                        return render(request, "admin/app1/csv_upload.html", data)
+                url = reverse('admin:index')
+                return HttpResponseRedirect(url)
+            form = CsvImportForm()
+            data = {"form": form}
+            return render(request, "admin/app1/csv_upload.html", data) 
+    def export(self,request):
+        response = HttpResponse(
+        content_type='text/csv',
+        headers={'Content-Disposition': 'attachment; filename="couponsdata.csv"'},)
+        writer = csv.writer(response)
+        writer.writerow(["Coupon Code","Discount","limit","Locations","status"])
+        for i in coupons.objects.all():
+            def Locations():
+                return ", ".join([
+                city.cityname for city in i.cityy.all()
+                ])
+            writer.writerow([i.couponcode,i.discount,i.limit,Locations(),i.status])
+        return response
     # readonly_fields=["created","updated"]
 class cartadmin(admin.ModelAdmin):
     list_display=["user","items","categoryy","price","created","updated"]

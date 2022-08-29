@@ -14,6 +14,7 @@ from django.conf import settings
 from django.db.models.signals import post_save,m2m_changed
 from django.dispatch import receiver
 from shortuuid.django_fields import ShortUUIDField  
+from django.core.exceptions import ValidationError
 # phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', 
 #                                 message = "Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
 
@@ -363,7 +364,7 @@ class healthpackages(models.Model):
     pune_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Pune Price")
     barshi_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Barshi Price")
     aurangabad_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Aurangabad Price")
-
+    discounted_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Discounted Price")
     slug = models.SlugField(null=True, unique=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
@@ -391,6 +392,7 @@ class healthsymptoms(models.Model):
     pune_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Pune Price")
     barshi_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Barshi Price")
     aurangabad_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Aurangabad Price")
+    discounted_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Banglore Discounted Price")
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
 
@@ -564,16 +566,27 @@ SELECT_CHOICES=[
 class coupons(models.Model):
     couponcode=models.CharField(max_length=100,null=True,blank=True,verbose_name="Coupon Code")
     discount=models.CharField(max_length=2,null=True,blank=True,verbose_name="Discount(%)")
+    limit=models.IntegerField(null=True,blank=True,verbose_name="Usage Limit")
+    cityy=models.ManyToManyField(city,blank=True)
     # cityy=models.ForeignKey(city,null=True,blank=True,on_delete=models.CASCADE,verbose_name="City")
     status = models.CharField(
         choices=SELECT_CHOICES,
         max_length=100,
         default="a", null=True
     )
+    startdate=models.DateTimeField(null=True, blank=True)
+    enddate=models.DateTimeField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
     def __str__(self):
         return self.couponcode
+    
+    def clean(self):
+        try:
+            if self.startdate > self.enddate:
+                raise ValidationError("Start Date should be less than End Date")
+        except:
+            pass
     class Meta:
         verbose_name_plural="Coupons"
 
@@ -624,7 +637,7 @@ class requestcall(models.Model):
     lastname=models.CharField(max_length=100,null=True,blank=True,verbose_name="First Name")
     phone=models.CharField(max_length=14,null=True,blank=True,verbose_name="First Name")
     email=models.EmailField(max_length=255,null=True,blank=True)
-    tests=models.ForeignKey(test,null=True,blank=True,on_delete=models.PROTECT)
+    tests=models.ForeignKey(test,null=True,blank=True,on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
     def __str__(self):
