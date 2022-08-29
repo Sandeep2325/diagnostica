@@ -183,6 +183,7 @@ class testbook(models.Model):
         max_length=20,
         default="", null=True,blank=True,verbose_name="Time Slot"
     )
+    date=models.DateField(null=True,blank=True)
     payment_status=models.BooleanField(default=False)
     firstname=models.CharField(max_length=200,null=True,blank=True)
     lastname=models.CharField(max_length=200,null=True,blank=True)
@@ -193,7 +194,8 @@ class testbook(models.Model):
         max_length=8,
         default="", null=True,blank=True
     )
-    location=models.CharField(max_length=100,null=True,blank=True)
+    locationn=models.ForeignKey(city,null=True,blank=True,on_delete=models.CASCADE,verbose_name="Location")
+    pincode=models.CharField(max_length=100,null=True,blank=True,verbose_name="Pincode")
     address=models.TextField(null=True,blank=True)
     report=models.FileField(upload_to="report",null=True,blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)

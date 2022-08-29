@@ -36,7 +36,7 @@ import environ
 import shortuuid
 from num2words import num2words
 import re
-from datetime import datetime  
+from datetime import datetime,timezone 
 env = environ.Env()
 global OBJ_COUNT
 OBJ_COUNT = 0
@@ -1068,6 +1068,7 @@ razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KE
 
 def cartt(request):
     deviceCookie = request.COOKIES.get('device')
+    cit=city.objects.filter(active=True)
     if not request.user.is_anonymous:
         d = cart.objects.filter(device = deviceCookie).update(user=request.user)
     # history=book_history.objects.none()
@@ -1083,6 +1084,9 @@ def cartt(request):
         gender=request.POST.get('gender')
         address=request.POST['address']
         timeslot=request.POST.get('timeslot')
+        date=request.POST.get('date')
+        location=request.POST.get('location')
+        pincode=request.POST.get('pincode')
         # print("----------------------------",timeslot)
         global uniquee
         uniquee = uuid.uuid4()
@@ -1105,11 +1109,6 @@ def cartt(request):
                 bookingid="DP"+str(booking)
         except:
             bookingid="DP"+str(bid)
-        # tee=testbook.objects.filter(bookingid=bookingid)
-        # print("-----------tee-------",tee)
-        # tee.delete()
-        # te=testbook.objects.filter(bookingid=bookingid)
-        # print("-----------te-------",te)
         b=prescription_book.objects.create(
                 unique=uniquee,
                 user=request.user,
@@ -1187,10 +1186,12 @@ def cartt(request):
                 contact=contact,
                 age=age,
                 gender=gender,
-                location=c,
+                locationn=city.objects.get(id=int(location)),
+                pincode=pincode,
+                date=date,
                 address=address,
                 timeslot=timeslot,
-                bookingid=bookingid)
+                bookingid=bookingid,)
         data=testbook.objects.get(unique=uniquee) 
         bookhistory=book_history(
                  user=request.user,
@@ -1465,6 +1466,7 @@ def cartt(request):
         total=float('{0:1.2f}'.format(sum(a)))+199
         # print(float('{0:1.2f}'.format(sum(a)))+199)
         context={
+            "city":cit,
             "data":data,
             "datacount":len(data),
             "subtotal": '{0:1.2f}'.format(sum(a)),
@@ -1472,6 +1474,7 @@ def cartt(request):
         }
     except Exception as e:
          context={
+            "city":cit,
             "data":data,
             "datacount":len(data),
         }
@@ -1851,18 +1854,25 @@ def coupon(request):
         # result = re.match(couponval,coupon)
         try:
             c=coupons.objects.get(couponcode=coupon,status="a")
+            # print(datetime.now(timezone.utc))
+            # print(c.startdate)
             couponcount=couponredeem.objects.filter(coupon=coupon).count()
-            if c.cityy.filter(cityname=citi).exists():
-                if c.limit!=0:
-                    if couponcount<=c.limit:
-                        c.discount
-                        discount=(float(total)*(int(c.discount)/100))
-                        totall=(float(total)-int(discount))+199
-                        request.session['discountamount']=discount
-                        request.session['coupon']=coupon
-                        request.session['couponpercent']=c.discount
-                        request.session['actualamount']=total
-                        return JsonResponse({"message":True,"total":float(totall),"percent":c.discount,"discount":"{:.2f}".format(discount)})
+            print(datetime.now(timezone.utc)>c.enddate)
+            print(datetime.now(timezone.utc)<c.enddate)
+            if datetime.now(timezone.utc)<c.enddate:
+                if c.cityy.filter(cityname=citi).exists():
+                    if c.limit!=0:
+                        if couponcount<=c.limit:
+                            c.discount
+                            discount=(float(total)*(int(c.discount)/100))
+                            totall=(float(total)-int(discount))+199
+                            request.session['discountamount']=discount
+                            request.session['coupon']=coupon
+                            request.session['couponpercent']=c.discount
+                            request.session['actualamount']=total
+                            return JsonResponse({"message":True,"total":float(totall),"percent":c.discount,"discount":"{:.2f}".format(discount)})
+                        else:
+                            return JsonResponse({"message":False})
                     else:
                         return JsonResponse({"message":False})
                 else:

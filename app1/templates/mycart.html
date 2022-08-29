@@ -2,7 +2,7 @@
 {% load static %}
 
 {%block content%}
-<body>
+<body onload="setAttr()">
     {%include 'header.html'%}
     <section class="sub_header py-xl-4 py-3">
         <div class="container">
@@ -219,6 +219,9 @@
                                 </select>
                             </div>
                             <div>
+                                <input class="w-100  form_input mt-3" placeholder="Date" name="Date" id="Date" type="Date" maxlength="250"/>
+                            </div>
+                            <div>
                                 <select class="w-100 mt-3 form-select myself_other" type="select" name="timeslot" id="timeslot">
                                     <option selected="selected" class="opc-5" disabled>
                                         Pickup Time Slot</option>
@@ -229,6 +232,18 @@
                             </div>
                             <div>
                                 <textarea rows="2" class="w-100 myself_other form_input mt-3" placeholder="Address" name="address1" id="address" type="text" ></textarea>
+                            </div>
+                            <div>
+                                <select class="w-100 mt-3 form-select myself_other" type="select" name="City" id="City">
+                                    <option selected="selected" class="opc-5" disabled>
+                                        City</option>
+                                        {%for i in city%}
+                                        <option value="{{i.id}}">{{i.cityname}}</option>
+                                        {%endfor%}
+                                </select>
+                            </div>
+                            <div>
+                                <input class="w-100  form_input mt-3" placeholder="Pincode" name="pincode" id="pincode" type="text" maxlength="250"/>
                             </div>
                             <button class="mx-lg-0 mx-3 mt-4 globalsubmitbutton"
                                 type="submit" name="submit" id="checkout">SUBMIT</button>
@@ -498,6 +513,15 @@ $(document).ready(function(){
             },
             'timeslot':{
                 required: true,
+            },
+            'City':{
+                required: true,
+            },
+            'pincode':{
+                required: true,
+            },
+            'Date':{
+                required: true,
             }
         },
     
@@ -527,6 +551,15 @@ $(document).ready(function(){
             },
             'address': {
                 required: "This field is required."
+            },
+            'City':{
+                required: "This field is required.",
+            },
+            'pincode':{
+                required: "This field is required.",
+            },
+            'Date':{
+                required: "This field is required.",
             }
     
         },
@@ -541,6 +574,9 @@ $(document).ready(function(){
                     var option=$("#option").val();
                     var address=$("#address").val();
                     var timeslot=$("#timeslot").val();
+                    var date=$("#Date").val();
+                    var location=$("#City").val();
+                    var pincode=$("#pincode").val();
                     var total;
                     if(AMOUNT==0){
                         
@@ -565,6 +601,9 @@ $(document).ready(function(){
                             "option":option,
                             "address":address,
                             "timeslot":timeslot,
+                            "date":date,
+                            "location":location,
+                            "pincode":pincode,
                             csrfmiddlewaretoken:'{{ csrf_token }}',
                            },
                            dataType: "json",
@@ -613,6 +652,20 @@ $(document).ready(function(){
         }
     });
 }); 
+function setAttr() {
+    var d = new Date();
+    var curr_date = d.getDate();
+    var curr_month = d.getMonth() + 1; //Months are zero based
+    if (curr_month < 10)
+        curr_month = '0' + curr_month;
+
+    if (curr_date < 10)
+        curr_date = '0' + curr_date;
+
+    var curr_year = d.getFullYear();
+    var d1 = curr_year + "-" + curr_month + "-" + curr_date;
+    $('#Date').attr('min', d1);
+};
     </script>
 {%endblock%}
 

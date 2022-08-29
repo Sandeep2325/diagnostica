@@ -18,6 +18,7 @@ import re
 from django.contrib.auth.models import Group
 from django.utils.translation import gettext_lazy as _
 from app1.views import sms
+from django_admin_listfilter_dropdown.filters import DropdownFilter, RelatedDropdownFilter
 # Register your models here.
 class cityadmin(admin.ModelAdmin):
     list_display=["cityname","imagee","active","created","updated"]
@@ -192,8 +193,8 @@ class prescriptionbookadmin(admin.ModelAdmin):
         return False
 
 class testbookadmin(admin.ModelAdmin):
-    list_display=["users","tests","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address","timeslot","report","created","updated","action_btn"]        
-    readonly_fields=["user","myself","payment_status","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location",'bookingid']
+    list_display=["users","tests","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address","pincode","date","timeslot","report","created","updated","action_btn"]        
+    readonly_fields=["user","myself","payment_status","others","others_choice","firstname","lastname","contact","age","gender","created","updated","locationn",'bookingid']
     exclude = ('unique',)
     list_filter = ("myself","others","gender")
     # search_fields = ('testt', 'categoryy__categoryy')
@@ -536,9 +537,14 @@ class bookhistoryadmin(admin.ModelAdmin):
     patient_infoo.short_description = "Patient Info"
     def has_add_permission(self, request):
         return False
+
 class couponadmin(admin.ModelAdmin):
     list_display=["couponcode","discount","Locations","limit","status","created","updated","action_btn"]
     list_filter=["cityy"]
+    # list_filter=(
+    #     ("cityy",RelatedDropdownFilter),
+    #     ("couponcode",DropdownFilter),)
+    search_fields=["couponcode"]
     list_editable=["status"]
     filter_horizontal = ('cityy',)
     def Locations(self, obj):
@@ -602,13 +608,13 @@ class couponadmin(admin.ModelAdmin):
         content_type='text/csv',
         headers={'Content-Disposition': 'attachment; filename="couponsdata.csv"'},)
         writer = csv.writer(response)
-        writer.writerow(["Coupon Code","Discount","limit","Locations","status"])
+        writer.writerow(["Coupon Code","Discount","limit","Locations","status","start Date","End Date","Created","Updated"])
         for i in coupons.objects.all():
             def Locations():
                 return ", ".join([
                 city.cityname for city in i.cityy.all()
                 ])
-            writer.writerow([i.couponcode,i.discount,i.limit,Locations(),i.status])
+            writer.writerow([i.couponcode,i.discount,i.limit,Locations(),i.status,i.startdate,i.enddate,i.created,i.updated])
         return response
     # readonly_fields=["created","updated"]
 class cartadmin(admin.ModelAdmin):
