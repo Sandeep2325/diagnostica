@@ -392,7 +392,7 @@ class healthsymptoms(models.Model):
     pune_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Pune Price")
     barshi_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Barshi Price")
     aurangabad_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Aurangabad Price")
-    discounted_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Banglore Discounted Price")
+    discounted_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Price")
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
 

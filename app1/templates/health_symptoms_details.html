@@ -38,7 +38,7 @@
                 {%if city == envcity.Bangalore%}
                 {% comment %} <strike
                     class="ps-xl-3 ps-2 text-center fs-20 font-bold cl-light-blue health_price_disc">₹{{currentObj.Banglore_price}}</strike> {% endcomment %}
-                <strike class="fs-30 cl-dark-blue d-flex justify-content-center m-0 ">₹{{currentObj.Banglore_price}}</strike>
+                {% comment %} <strike class="fs-30 cl-dark-blue d-flex justify-content-center m-0 ">₹{{currentObj.Banglore_price}}</strike> {% endcomment %}
                 <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{currentObj.discounted_price}}</h1>
                 {%elif city == envcity.Mumbai %}
                 <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{currentObj.Mumbai_price}}</h1>
@@ -128,7 +128,7 @@
                     class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">
                     Price</p>
                     {%if city == envcity.Bangalore%}
-                    <strike class="fs-30 cl-dark-blue d-flex justify-content-center m-0 ">₹{{pack.Banglore_price}}</strike>
+                    {% comment %} <strike class="fs-30 cl-dark-blue d-flex justify-content-center m-0 ">₹{{pack.Banglore_price}}</strike> {% endcomment %}
                   <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.discounted_price}}</h1>
                   {%elif city == envcity.Mumbai %}
                   <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.Mumbai_price}}</h1>

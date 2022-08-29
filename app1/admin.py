@@ -379,14 +379,14 @@ class healthpackage_admin(SummernoteModelAdmin):
             return render(request, "admin/app1/csv_upload.html", data)
     
 class healthsymptoms_admin(SummernoteModelAdmin):
-    list_display=["name","testname","Banglore_price","discounted_price","created","updated","action_btn"]
+    list_display=["name","testname","discounted_price","created","updated","action_btn"]
     readonly_fields=["created","updated"]
     prepopulated_fields = {"slug": ("name",)}
     filter_horizontal = ('test_name',)
     summernote_fields = ('symptoms',)
     def get_form(self, request, obj=None, **kwargs):
         # if obj.type == "1":
-        self.exclude = ("Mumbai_price","bhopal_price","nanded_price","pune_price","barshi_price","aurangabad_price",)
+        self.exclude = ("Banglore_price","Mumbai_price","bhopal_price","nanded_price","pune_price","barshi_price","aurangabad_price",)
         form = super(healthsymptoms_admin, self).get_form(request, obj, **kwargs)
         return form
     def testname(self, obj):
