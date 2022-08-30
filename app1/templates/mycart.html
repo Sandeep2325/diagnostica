@@ -244,7 +244,7 @@
                                 <textarea rows="2" class="w-100 myself_other form_input mt-3" placeholder="Address" name="address1" id="address" type="text" ></textarea>
                             </div>
                             <div>
-                                <input class="w-100  form_input mt-3" placeholder="Pincode" name="pincode" id="pincode" type="text" maxlength="250"/>
+                                <input class="w-100  form_input mt-3" placeholder="Pincode" name="pincode" id="pincode" type="number" maxlength="250"/>
                             </div>
                             <button class="mx-lg-0 mx-3 mt-4 globalsubmitbutton"
                                 type="submit" name="submit" id="checkout">SUBMIT</button>
@@ -314,10 +314,7 @@
         }
       })
     $("#delete1").on("click", function(e){
-        
         var idd = $(this).attr('name');
-        
-        
             $.ajax({
                 url: "{% url 'destroy' %}",
                 type: "POST",
@@ -469,6 +466,9 @@ $(document).ready(function(){
     jQuery.validator.addMethod("phone_regex", function (value, element) {
         return this.optional(element) || /^[0-9\.\-_]{10,30}$/i.test(value);
     }, "Enter valid phone number");
+    jQuery.validator.addMethod("pincode_regex", function (value, element) {
+        return this.optional(element) || /^[0-9]*$/i.test(value);
+    }, "Enter valid pincode");
     jQuery.validator.addMethod("age_regex", function (value, element) {
         return this.optional(element) || /^[0-9\.\-_]{1,2}$/i.test(value);
     }, "Enter valid age");
@@ -527,6 +527,9 @@ $(document).ready(function(){
             },
             'pincode':{
                 required: true,
+                minlength: 6,
+                maxlength: 6,
+                pincode_regex: true,
             },
             'Date':{
                 required: true,
