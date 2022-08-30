@@ -299,7 +299,6 @@ def testbookings(sender, instance, **kwargs):
           
     book_history.objects.filter(uni=instance.bookingid).update(amount=sum(a))
     # instance.price=sum(a)
-    
     Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=sum(a))
     # if (instance.payment_status== True) and (bool(instance.report) == True):
     #     send_mail(str("Tests Report | Dignostica Span"),
@@ -566,7 +565,7 @@ SELECT_CHOICES=[
     ("i","Inactive")
 ]
 class coupons(models.Model):
-    couponcode=models.CharField(max_length=100,null=True,blank=True,verbose_name="Coupon Code")
+    couponcode=models.CharField(max_length=15,null=True,blank=True,verbose_name="Coupon Code",help_text=_('Enter maximum 15 characters only'))
     discount=models.CharField(max_length=2,null=True,blank=True,verbose_name="Discount(%)")
     limit=models.IntegerField(null=True,blank=True,verbose_name="Usage Limit")
     cityy=models.ManyToManyField(city,blank=True)
@@ -624,6 +623,7 @@ class contactus(models.Model):
 #     class Meta:
 #         verbose_name_plural="Payment Ids"
 class couponredeem(models.Model):
+    user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
     order_id=models.CharField(max_length=200,null=True,blank=True)
     coupon=models.CharField(max_length=200,null=True,blank=True)
     discountpercen=models.CharField(max_length=200,null=True,blank=True,verbose_name="Discount(%)")

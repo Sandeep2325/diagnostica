@@ -19,6 +19,7 @@ from django.contrib.auth.models import Group
 from django.utils.translation import gettext_lazy as _
 from app1.views import sms
 from django_admin_listfilter_dropdown.filters import DropdownFilter, RelatedDropdownFilter
+import datetime
 # Register your models here.
 class cityadmin(admin.ModelAdmin):
     list_display=["cityname","imagee","active","created","updated"]
@@ -165,7 +166,7 @@ class prescriptionbookadmin(admin.ModelAdmin):
                 return messages.warning(request, 'Please Upload Report')
             elif(i.payment_status== False) and (bool(i.report) == False):
                 return messages.warning(request, 'Please Check Payment and Report')
-    sendreportemail.short_description = "SMS Report"
+    sendreportemail.short_description = "Report Email"
     
     def sendreportsms(self, request, queryset):
         for i in queryset:
@@ -179,7 +180,7 @@ class prescriptionbookadmin(admin.ModelAdmin):
                 return messages.warning(request, 'Please Upload Report')
             elif(i.payment_status== False) and (bool(i.report) == False):
                 return messages.warning(request, 'Please Check Payment and Report')
-    sendreportsms.short_description = "Report Email"
+    sendreportsms.short_description = "Report SMS"
     actions = [sendreportsms,sendreportemail]
     # def reportt(self):
     #     print("hello")
@@ -240,7 +241,6 @@ class testbookadmin(admin.ModelAdmin):
                 return messages.warning(request, 'Please Upload Report')
             elif(i.payment_status== False) and (bool(i.report) == False):
                 return messages.warning(request, 'Please Check Payment and Report')
-            
     sendreportemail.short_description = "Report Email"
     def sendreportsms(self, request, queryset):
         for i in queryset:
@@ -485,6 +485,19 @@ class UserAdmin(OriginalUserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         (_('Personal info'), {'fields': ('photo','first_name','last_name', "phone_no",'age','gender','location','address')}),
+        (
+            _("Permissions"),
+            {
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    
+                    "user_permissions",
+                ),
+            },
+        ),
+       
     )
     def action_btn(self, obj):
         html = "<div class='field-action_btn d-flex m-8'> <a class='fa fa-edit ml-2' href='/admin/app1/user/" + \
@@ -539,7 +552,7 @@ class bookhistoryadmin(admin.ModelAdmin):
         return False
 
 class couponadmin(admin.ModelAdmin):
-    list_display=["couponcode","discount","Locations","limit","status","created","updated","action_btn"]
+    list_display=["couponcode","discount","Locations","limit","status","startdate","enddate","created","updated","action_btn"]
     list_filter=["cityy"]
     # list_filter=(
     #     ("cityy",RelatedDropdownFilter),
@@ -575,9 +588,14 @@ class couponadmin(admin.ModelAdmin):
                     for l in input_iterator:
                         yield l.decode('cp1252')
                 reader = csv.DictReader(decode_utf8(request.FILES['csv_upload']))
+               
                 for row in reader:
                     # print(row)
                     try:
+                        startdate = datetime.datetime.strptime(row["startdate"], '%d-%m-%Y %H:%M')
+                        enddate = datetime.datetime.strptime(row["enddate"], '%d-%m-%Y %H:%M')
+                        # startdate = datetime.datetime.strptime(row["startdate"],"%d-%m-%y %H:%M")
+                        # enddate = datetime.datetime.strptime(row["enddate"],"%d-%m-%y %H:%M")
                         cityname=row.get("city_id")
                         citynamee=cityname.split(",")
                         # cityy=city.objects.get(pk=row.get("city_id"))
@@ -586,6 +604,8 @@ class couponadmin(admin.ModelAdmin):
                                 discount=row["Discount"],
                                 limit=row["limit"],
                                 status=row["status"],
+                                startdate=startdate,
+                                enddate=enddate,
                                 )
                         for citi in citynamee:
                             cityy=city.objects.get(cityname=citi)
@@ -634,7 +654,6 @@ class testnamee(ChangeList):
             date_hierarchy, search_fields, list_select_related,
             list_per_page, list_max_show_all, list_editable, 
             model_admin)
-        
         # these need to be defined here, and not in MovieAdmin
         self.list_display = "id","user","test_name","myself","others","others_choice","firstname","lastname","contact","age","gender","prescription_file","created","updated"
     # self.list_display_links = ['name']
@@ -651,6 +670,16 @@ class invoiceadmin(admin.ModelAdmin):
     list_display=['order_id',"items","labtest","packages","healthsymptoms","price"]
 class couponredeemadmin(admin.ModelAdmin):
     list_display=['order_id',"coupon","discountpercen","discountamount","created",]
+    def export(self,request,queryset):
+        response = HttpResponse(
+        content_type='text/csv',
+        headers={'Content-Disposition': 'attachment; filename="redeemedcoupon.csv"'},)
+        writer = csv.writer(response)
+        writer.writerow(["User","Order_id","Coupon","Discount Percent","Discount Amount","Actual Amount","Created"])
+        for i in queryset:
+            writer.writerow([i.user,i.order_id,i.coupon,i.discountpercen,i.discountamount,i.actualamount,i.created])
+        return response
+    actions = [export]
 class requestadmin(admin.ModelAdmin):
     list_display=['firstname','lastname','phone','email','tests','created','updated']
     

@@ -205,17 +205,20 @@ def resendotp(request):
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [email_address]
     message = message
-    subject = "OTP Verification | Dignostica Span" 
-    userr=User.objects.get(email=email_address) 
-    a=sms(message,userr.phone_no)
-    # send_mail(
-    #         subject,
-    #         message,
-    #         email_from,
-    #         recipient_list,
-    #         fail_silently=False,
-    # )
-    messages.success(request,a)
+    subject = "OTP Verification | Dignostica Span"
+    try: 
+        userr=User.objects.get(email=email_address) 
+        a=sms(message,userr.phone_no)
+        # send_mail(
+        #         subject,
+        #         message,
+        #         email_from,
+        #         recipient_list,
+        #         fail_silently=False,
+        # )
+        messages.success(request,a)
+    except:
+        messages.warning(request,"Something went wrong")
     return redirect('/registration/otp/')
 @login_required(login_url="/login/")
 def changepassword(request):
@@ -301,16 +304,19 @@ def resendotpforgot(request):
     recipient_list = [email_address]
     message = message
     subject = "OTP Verification | Dignostica Span"
-    userr=User.objects.get(email=email_address) 
-    a=sms(message,userr.phone_no)
-    # send_mail(
-    #         subject,
-    #         message,
-    #         email_from,
-    #         recipient_list,
-    #         fail_silently=False,
-    # )
-    messages.success(request,a)
+    try:
+        userr=User.objects.get(email=email_address) 
+        a=sms(message,userr.phone_no)
+        # send_mail(
+        #         subject,
+        #         message,
+        #         email_from,
+        #         recipient_list,
+        #         fail_silently=False,
+        # )
+        messages.success(request,a)
+    except:
+        messages.warning(request,"Something went wrong")
     return redirect('forgotpassword/otp/')
 def changeresend(request):
     # if request.method=="POST":
@@ -323,16 +329,19 @@ def changeresend(request):
     recipient_list = [email_address]
     message = message
     subject = "OTP Verification | Dignostica Span" 
-    userr=User.objects.get(email=email_address) 
-    a=sms(message,userr.phone_no)
-    # send_mail(
-    #         subject,
-    #         message,
-    #         email_from,
-    #         recipient_list,
-    #         fail_silently=False,
-    # )
-    messages.success(request,a)
+    try:
+        userr=User.objects.get(email=email_address) 
+        a=sms(message,userr.phone_no)
+        # send_mail(
+        #         subject,
+        #         message,
+        #         email_from,
+        #         recipient_list,
+        #         fail_silently=False,
+        # )
+        messages.success(request,a)
+    except:
+        messages.success(request,"Something went wrong")
     return redirect('changepasswordotp/')
 def changepasswordotp(request):
     if request.user.is_anonymous:
@@ -383,7 +392,6 @@ def passwordcheck(request):
             if a == None:
             # User.objects.get(email=request.user.email,password=password) 
                 return JsonResponse({"message":False})
-                
             else:
                 return JsonResponse({"message":True})
         except Exception as e: 
@@ -408,7 +416,6 @@ def otpforgotpassword(request):
                 User.objects.filter(
                                 email=email_address
                 ).update(password=hash_pwd)
-
                 request.session.delete('otp')
                 request.session.delete('email')
                 request.session.delete('password')
@@ -1018,15 +1025,15 @@ def testselect(request):
         a=prescription_book.objects.create(
             unique=unique,
             user=request.user,
-                          myself=True if myself == "on" else False,
-                          others=True if others == "on" else False,
-                          others_choice=others_choice,
-                          firstname=firstname,
-                          lastname=lastname,
-                          contact=contact,
-                          age=age,
-                          gender=gender,
-                          location=c)
+            myself=True if myself == "on" else False,
+            others=True if others == "on" else False,
+            others_choice=others_choice,
+            firstname=firstname,
+            lastname=lastname,
+            contact=contact,
+            age=age,
+            gender=gender,
+            location=c)
         for j in test_name:
             item=test.objects.get(id=j)
             a.test_name.add(item)   
@@ -1148,11 +1155,11 @@ def cartt(request):
         scheme=request.scheme
         urll=request.get_host()
         # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,amount)
-        callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
+        # callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
         # print("----------------",callback_url)
         # print(call)
         # print(callback_url)
-        # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
+        callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
         context['razorpay_order_id'] = razorpay_order_id
         context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
         context['razorpay_amount'] = amount
@@ -1415,7 +1422,7 @@ def cartt(request):
         actualamount= request.session.get("actualamount")
         
         if coupon!= None and discountamount!=None and couponpercent!=None and actualamount!=None:
-             couponredeem.objects.create(order_id=razorpay_order_id,coupon=request.session.get("coupon"),discountpercen=request.session.get("couponpercent"),discountamount=request.session.get("discountamount"),actualamount=request.session.get('actualamount')).save()
+             couponredeem.objects.create(user=request.user,order_id=razorpay_order_id,coupon=request.session.get("coupon"),discountpercen=request.session.get("couponpercent"),discountamount=request.session.get("discountamount"),actualamount=request.session.get('actualamount')).save()
         if coupon!=None:
             del request.session['coupon']
         if discountamount!=None:
@@ -1425,6 +1432,7 @@ def cartt(request):
         if actualamount!=None:
             del request.session['actualamount']
         # print(razorpay_order)
+        # messages.info(request,"Please Login to checkout")
         return JsonResponse({"message":True,"razorpay_key":settings.RAZOR_KEY_ID,"currency":currency,"razorpayorder":razorpay_order_id,"callback":callback_url})
     
     if not request.user.is_anonymous:
@@ -1735,9 +1743,6 @@ def addtocart1(request):
     RES = {}
     if request.method=="POST":
         pk=request.POST.getlist("pk[]")
-        print(request.POST)
-        print(pk)
-       
         item=test.objects.filter(id__in=pk)
         if cityy==Bangalore:
             for i in item:
@@ -1761,7 +1766,6 @@ def categoryy(request):
         pk=request.POST["pk"]
         searched_name = request.POST.get("searched")
         b=[]
-
         if pk != "all":
             if searched_name:
                 tests=test.objects.filter(categoryy__id=pk, testt__icontains = searched_name)
@@ -1854,15 +1858,11 @@ def coupon(request):
         # result = re.match(couponval,coupon)
         try:
             c=coupons.objects.get(couponcode=coupon,status="a")
-            # print(datetime.now(timezone.utc))
-            # print(c.startdate)
             couponcount=couponredeem.objects.filter(coupon=coupon).count()
-            print(datetime.now(timezone.utc)>c.enddate)
-            print(datetime.now(timezone.utc)<c.enddate)
             if datetime.now(timezone.utc)<c.enddate:
                 if c.cityy.filter(cityname=citi).exists():
                     if c.limit!=0:
-                        if couponcount<=c.limit:
+                        if couponcount<c.limit:
                             c.discount
                             discount=(float(total)*(int(c.discount)/100))
                             totall=(float(total)-int(discount))+199
@@ -1872,15 +1872,18 @@ def coupon(request):
                             request.session['actualamount']=total
                             return JsonResponse({"message":True,"total":float(totall),"percent":c.discount,"discount":"{:.2f}".format(discount)})
                         else:
+                            # print("------------")
                             return JsonResponse({"message":False})
                     else:
                         return JsonResponse({"message":False})
                 else:
                     return JsonResponse({"message":False})
             else:
+                # print("------------")
                 return JsonResponse({"message":False})
         except:
             return JsonResponse({"message":False})
+        
 def razorpayclose(request):
     if request.method=="POST":
         paymentid=request.POST["paymentid"]
@@ -2144,6 +2147,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
     def get(self, request,*args, **kwargs):
         # medics=medications.objects.filter(user=request.user)
         his = []
+        cit=city.objects.filter(active=True)
         bookhistories=book_history.objects.filter(user=request.user).order_by('-created')
         testbooking=prescription_book.objects.filter(user=request.user)
         payments=payment.objects.filter(user=request.user).order_by('-date')
@@ -2194,6 +2198,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 his.append(hi)
 
         context={
+            "city":cit,
             "bookhistories":his,
             "bookinghistorylength":len(his),
             "paymentcount":payments.count(),
@@ -2502,12 +2507,11 @@ def readfile(request):
 import requests
 def sms(message,mobile):
     try:
-        url=f"""https://www.smsidea.co.in/smsstatuswithid.aspx?mobile=9986788880&pass=Malatesh@78&senderid=TSTMSG&to={mobile}&msg={message}"""
+        url=f"""https://www.smsidea.co.in/smsstatuswithid.aspx?mobile=9986788880&pass=Malatesh@78&senderid=SPANDS&to={mobile}&msg={message}"""
         connection=requests.get(url)
         a=connection.text.split(":")
         deliveryurl=f"""https://www.smsidea.co.in/sms/api/msgstatus.aspx?mobile=9986788880&pass=Malatesh@78&msgtempid={a[1].strip()}"""
         deliveryconnection=requests.get(deliveryurl)
-        print(deliveryconnection.status_code)
         if deliveryconnection.status_code!=200:
             return "Your OTP is not delivered Please try again!"
         else:

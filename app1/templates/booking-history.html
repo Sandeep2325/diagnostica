@@ -104,8 +104,6 @@
                                                     {% else %}
                                                     <td data-label="Booking Details"><a id="testdetails" name="{{bookhistory.id}}" data-bs-toggle="modal" data-bs-target="#testdetaill" class="br bg-dark-white cursor" onclick='testfunc({{bookhistory.id}})';>{{bookhistory.bookingdetails|truncatechars:10}}</a></td>
                                                     {% endif %}
-                                                    
-
                                                     {%if bookhistory.amount == None%}
                                                         <td data-label="Amount">-</td>
                                                     {%elif bookhistory.prescription%}
@@ -126,6 +124,12 @@
                                                             {% if bookhistory.amount == None %}
                                                             onclick='paymentFunction("{{bookhistory.uni}}", "false")';
                                                             {% else %}onclick='paymentFunction("{{bookhistory.uni}}", "true")';{% endif %}id="testbooking{{bookhistory.testbooking_id}}">Pay Now</button>
+                                                            {% comment %} <br><br>
+                                                            <button
+                                                            class="br br-5 fs-16 font-bold bg-dark-green cl-dark-white download text-center paynow-btn" 
+                                                            {% if bookhistory.amount == None %}
+                                                            onclick='paymentFunction("{{bookhistory.uni}}", "false")';
+                                                            {% else %}data-bs-toggle="modal" data-bs-target="#paymentinfo1" onclick='unikey("{{bookhistory.uni}}", "true")';{% endif %}id="testbooking{{bookhistory.testbooking_id}}">check</button> {% endcomment %}
                                                     </td>
                                                     {%else%}
                                                     {%if bookhistory.report %}
@@ -192,6 +196,97 @@
             </div>
         </div>
     </section>
+
+    <section class="paymentinfo" id ="paymentinfo">
+        <div class="modal fade" id="paymentinfo1" tabindex="-1" aria-labelledby="paymentinfomodalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content  p-3 p-sm-4">
+                    <div class="modal-body">
+                        <button type="button" class="btn-close  close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                        <form method="post" id="checkoutinfoform">
+                           {%csrf_token%}
+                            <h3 class="fs-30 font-bold cl-dark-blue text-center">Checkout Information</h3>
+                            {% comment %} <div>
+                                <select class="w-100 mt-3 form-select " type="select" name="option1" id="option1">
+                                    <option selected="selected" class="opc-5" disabled>Select Test For</option>
+                                    <option value="m">My-Self</option>
+                                    <option value="o">Others</option>
+                                </select>
+                            </div>
+                            <div>
+                                <select class="w-100 mt-3 form-select " type="select" name="option" id="option">
+                                    <option selected="selected" class="opc-5" disabled>To Whom</option>
+                                    <option value="m">Mother</option>
+                                    <option value="f">Father</option>
+                                    <option value="w">Wife</option>
+                                    <option value="s">Son</option>
+                                    <option value="s">Daughter</option>
+                                    <option value="s">Others</option>
+                                </select>
+                            </div>
+                            <div>
+                                <input class="w-100  form_input mt-3 " placeholder="First Name" name="firstname" id="firstname"
+                                    type="text" maxlength="250" >
+                            </div>
+                            <div>
+                                <input class="w-100  form_input mt-3" placeholder="Last Name" name="lastname" id="lastname"
+                                    type="text" maxlength="250" >
+                            </div>
+                            <div>
+                                <input class="w-100  form_input mt-3" placeholder="Mobile Number" name="phone" id="phone"
+                                    type="number" maxlength="250">
+                            </div>
+                            <div>
+                                <input class="w-100  form_input mt-3" placeholder="Age" name="age" id="age" type="number" maxlength="250"/>
+                            </div>
+                            <div>
+                                <select class="w-100 mt-3 form-select myself_other" type="select" name="gender" id="gender">
+                                    <option selected="selected" class="opc-5" disabled>
+                                        Gender</option>
+                                        <option value="m">Male</option>
+                                        <option value="f">Female</option>
+                                        <option value="o">Others</option>
+                                </select>
+                            </div> {% endcomment %}
+                            <div>
+                                <input class="w-100  form_input mt-3" placeholder="Date" name="Date" id="Date" type="Date" maxlength="250"/>
+                            </div>
+                            <div>
+                                <select class="w-100 mt-3 form-select myself_other" type="select" name="timeslot" id="timeslot">
+                                    <option selected="selected" class="opc-5" disabled>
+                                        Pickup Time Slot</option>
+                                        <option value="1">7:00AM-11:00AM</option>
+                                        <option value="2">11:00AM-3:00PM</option>
+                                        <option value="3">3:00PM-6:00PM</option>
+                                </select>
+                            </div>
+                            <div>
+                                <select class="w-100 mt-3 form-select myself_other" type="select" name="City" id="City">
+                                    <option selected="selected" class="opc-5" disabled>
+                                        City</option>
+                                        {%for i in city%}
+                                        <option value="{{i.id}}">{{i.cityname}}</option>
+                                        {%endfor%}
+                                </select>
+                            </div>
+                            <div>
+                                <textarea rows="2" class="w-100 myself_other form_input mt-3" placeholder="Address" name="address1" id="address" type="text" ></textarea>
+                            </div>
+                            <div>
+                                <input class="w-100  form_input mt-3" placeholder="Pincode" name="pincode" id="pincode" type="number" maxlength="250"/>
+                            </div>
+                            <input id="hiddenuni" name="hiddenuni" hidden />
+                            <button class="mx-lg-0 mx-3 mt-4 globalsubmitbutton"
+                                type="submit" name="submit" id="checkout" onclick='paymentFunction(document.getElementById("hiddenuni").value,"true")'>SUBMIT</button>
+                        {% comment %} </form> {% endcomment %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="otherspop" id ="otherspop1">
         <div class="modal fade" id="otherspop" tabindex="-1" aria-labelledby="otherspopLabel"
             aria-hidden="true">
@@ -447,5 +542,9 @@ function prescrbreak(e){
     });
 }
 
+function unikey(e){
+$("#hiddenuni").empty()
+$("#hiddenuni").val(e)
+}
 </script>
 {%endblock%}
