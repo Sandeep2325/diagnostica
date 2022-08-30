@@ -255,8 +255,10 @@
             swal('',"Already Added",'info');
         }else{
           a=resp['pack']
-            swal(a,"Package Added to Cart",'success');
-            window.setTimeout(function(){location.reload()},1500)
+            swal(a,"Package Added to Cart",'success').then(function(){
+              window.setTimeout(function(){location.reload()})
+            });
+            //window.setTimeout(function(){location.reload()},1500)
            // window.location.reload();
         }
         
