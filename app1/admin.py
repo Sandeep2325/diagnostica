@@ -22,7 +22,7 @@ from django_admin_listfilter_dropdown.filters import DropdownFilter, RelatedDrop
 import datetime
 # Register your models here.
 class cityadmin(admin.ModelAdmin):
-    list_display=["cityname","imagee","active","created","updated"]
+    list_display=["id","cityname","imagee","active","created","updated"]
     list_editable=["active"]
     def imagee(self, obj):
         # a=obj.image.first()
@@ -111,15 +111,18 @@ class testadmin(admin.ModelAdmin):
             return render(request, "admin/app1/csv_upload.html", data)
 from django.forms.widgets import SelectMultiple,MultiWidget
 class prescriptionbookadmin(admin.ModelAdmin):
-    list_display=["users","testname","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address","prescription_file","report","created","updated","action_btn"]        
-    readonly_fields=["user","myself","payment_status","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location","bookingid",'price']
+    list_display=["users","bookingid","testname","payment_status","paymentmethod","myself","others","others_choice","firstname","lastname","contact","age","gender","address","timeslot","prescription_file","report","created","updated","action_btn"]        
+    readonly_fields=["user","myself","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location","bookingid",'price']
     exclude = ('unique',)
-    list_filter = ("myself","others","gender")
+    list_filter = ("myself","others",'paymentmethod','payment_status')
+    search_fields = ('bookingid',)
     fieldsets = (
         (_('Prescription'), {'fields': ('user','prescription_file', 'test_name','price')}),
-        (_('Patient Details'), {'fields': ("bookingid","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address")}),
+        (_('Coupon'),{'fields':('coupon',)}),
+        (_('Patient Details'), {'fields': ("bookingid","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address","pincode","location","paymentmethod")}),
         (_('Report'),{'fields':("report",)})
     )
+    autocomplete_fields = ['coupon']
     filter_horizontal = ('test_name',)
     # raw_id_fields = ("test_name",)
     # formfield_overrides = {
@@ -194,15 +197,15 @@ class prescriptionbookadmin(admin.ModelAdmin):
         return False
 
 class testbookadmin(admin.ModelAdmin):
-    list_display=["users","tests","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address","pincode","date","timeslot","report","created","updated","action_btn"]        
+    list_display=["users","bookingid","tests","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address","pincode","date","timeslot","report","created","updated","action_btn"]        
     readonly_fields=["user","myself","payment_status","others","others_choice","firstname","lastname","contact","age","gender","created","updated","locationn",'bookingid']
     exclude = ('unique',)
-    list_filter = ("myself","others","gender")
-    # search_fields = ('testt', 'categoryy__categoryy')
+    list_filter = ("myself","others","gender","payment_status")
+    search_fields = ('bookingid',)
     # list_editable=[""]
     fieldsets = (
         (_('Tests'), {'fields': ('user','tests')}),
-        (_('Patient Details'), {'fields': ("bookingid",'payment_status',"myself","others","others_choice","firstname","lastname","contact","age","gender","address")}),
+        (_('Patient Details'), {'fields': ("bookingid",'payment_status',"myself","others","others_choice","firstname","lastname","contact","age","gender","address","pincode","date","timeslot")}),
         (_('Report'),{'fields':("report",)})
     )
     def get_form(self, request, obj=None, **kwargs):
@@ -513,7 +516,7 @@ class bookhistoryadmin(admin.ModelAdmin):
     list_display=["bookingid","users","patient_infoo","booking_type","bookingdetails","amount","status","payment_status","created","updated","action_btn"]    
     readonly_fields=["created","updated",'bookingid','payment_id']
     list_filter = ("user","booking_type")
-    search_fields = ('bookingid',)
+    search_fields = ('bookingid','payment_id')
     def get_form(self, request, obj=None, **kwargs):
         # if obj.type == "1":
         self.exclude = ('testbooking_id','report','uni' )
@@ -553,7 +556,7 @@ class bookhistoryadmin(admin.ModelAdmin):
 
 class couponadmin(admin.ModelAdmin):
     list_display=["couponcode","discount","Locations","limit","status","startdate","enddate","created","updated","action_btn"]
-    list_filter=["cityy"]
+    list_filter=["cityy","status"]
     # list_filter=(
     #     ("cityy",RelatedDropdownFilter),
     #     ("couponcode",DropdownFilter),)
@@ -588,35 +591,44 @@ class couponadmin(admin.ModelAdmin):
                     for l in input_iterator:
                         yield l.decode('cp1252')
                 reader = csv.DictReader(decode_utf8(request.FILES['csv_upload']))
-               
                 for row in reader:
-                    # print(row)
                     try:
-                        startdate = datetime.datetime.strptime(row["startdate"], '%d-%m-%Y %H:%M')
-                        enddate = datetime.datetime.strptime(row["enddate"], '%d-%m-%Y %H:%M')
-                        # startdate = datetime.datetime.strptime(row["startdate"],"%d-%m-%y %H:%M")
-                        # enddate = datetime.datetime.strptime(row["enddate"],"%d-%m-%y %H:%M")
-                        cityname=row.get("city_id")
-                        citynamee=cityname.split(",")
-                        # cityy=city.objects.get(pk=row.get("city_id"))
-                        obj, created = coupons.objects.get_or_create(
-                                couponcode=row["ï»¿Coupon_Code"],
-                                discount=row["Discount"],
-                                limit=row["limit"],
-                                status=row["status"],
-                                startdate=startdate,
-                                enddate=enddate,
-                                )
-                        for citi in citynamee:
-                            cityy=city.objects.get(cityname=citi)
-                            obj.cityy.add(cityy)
-                    except IndexError:
-                        pass
+                        try:
+                            coupons.objects.get(couponcode=row["ï»¿Coupon_Code"])
+                            form = CsvImportForm()
+                            data = {"form": form}
+                            messages.warning(request,row["ï»¿Coupon_Code"]+" Already Exists")
+                            return render(request, "admin/app1/csv_upload.html", data)
+                        except:
+                            startdate = datetime.datetime.strptime(row["startdate"], '%d-%m-%Y %H:%M')
+                            enddate = datetime.datetime.strptime(row["enddate"], '%d-%m-%Y %H:%M')
+                            cityname=row.get("city_id")
+                            citynamee=cityname.split(",")
+                            # cityy=city.objects.get(pk=row.get("city_id"))
+                            obj, created = coupons.objects.get_or_create(
+                                    couponcode=row["ï»¿Coupon_Code"],
+                                    discount=row["Discount"],
+                                    limit=row["limit"],
+                                    status=row["status"],
+                                    startdate=startdate,
+                                    enddate=enddate,
+                                    )
+                            for citi in citynamee:
+                                cityy=city.objects.get(id=citi)
+                                obj.cityy.add(cityy)
+                    # except IndexError:
+                    #     pass
                     except (IntegrityError):
                         form = CsvImportForm()
                         data = {"form": form}
                         message = messages.warning(
                             request, 'Something went wrong! check your file again \n 1.Upload correct file \n 2.Check you data once')
+                        return render(request, "admin/app1/csv_upload.html", data)
+                    except Exception as e:
+                        form = CsvImportForm()
+                        data = {"form": form}
+                        message = messages.warning(
+                            request, e)
                         return render(request, "admin/app1/csv_upload.html", data)
                 url = reverse('admin:index')
                 return HttpResponseRedirect(url)

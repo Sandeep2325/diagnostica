@@ -278,7 +278,8 @@ def forgotpassword(request):
             recipient_list = [e]
             message = message
             subject = "DIAGNOSTICA SPAN | FORGOT PASSWORD"
-            p_number=userr.phone_no 
+            p_number=userr.phone_no
+            templateid=1507166152065523633
             a=sms(message,p_number)
             # send_mail(
             #         subject,
@@ -1587,6 +1588,15 @@ def paymenthandler(request,str,amount):
                             recipient_list,
                             fail_silently=False,
                     )
+                    mes=f"Payment is Done for Booking ID:{history.bookingid}\nPlease Checkit"
+                    send_mail(
+                        f"Payment Successfull| Dignostica Span | Booking Id:{history.bookingid}",
+                        mes,
+                        email_from,
+                        # ["reachus@spanhealth.com"],
+                        ["sandeep.nexevo@gmail.com"],
+                        fail_silently=False,
+                    )
                     messages.info(request, "Thankyou for making payment our team will come and collect the sample soon.")
                     # return HttpResponseRedirect(reverse("booking-history"))
                     return redirect("booking-history")
@@ -1623,11 +1633,25 @@ def paymenthandler(request,str,amount):
                 # return HttpResponseRedirect(reverse("booking-history"))
                 return redirect("booking-history")
         else:
+            
             return redirect("booking-history")
     except Exception as e:
-        print(e)
+        # print(request.POST["error[metadata]"])
+        metadata=request.POST["error[metadata]"]
+        print(metadata)
+        print(json.loads(metadata))
+        a=json.loads(metadata)
+        print(a["order_id"])
+        # print(metadata[0])
+        # print(request.POST.get("order_id"))
+        # order_id=request.POST.get(a["order_id"])
+        history=book_history.objects.get(payment_id=a["order_id"])
+        # for i in history:
+        #     a=i.bookingid
+        Prescriptionbook1.objects.filter(bookingid=history.bookingid).delete()
+        testbook.objects.filter(bookingid=history.bookingid).delete()
+        history.delete()
         messages.error(request, "Payment failed Please Retry")
-        # return HttpResponseRedirect(reverse("booking-history"))
         return redirect("booking-history")
 
 def subscriptionview(request):
@@ -1857,29 +1881,30 @@ def coupon(request):
         # couponval=/^.{1,15}$/
         # result = re.match(couponval,coupon)
         try:
-            c=coupons.objects.get(couponcode=coupon,status="a")
+            c=coupons.objects.get(couponcode=coupon,status="active")
             couponcount=couponredeem.objects.filter(coupon=coupon).count()
-            if datetime.now(timezone.utc)<c.enddate:
-                if c.cityy.filter(cityname=citi).exists():
-                    if c.limit!=0:
-                        if couponcount<c.limit:
-                            c.discount
-                            discount=(float(total)*(int(c.discount)/100))
-                            totall=(float(total)-int(discount))+199
-                            request.session['discountamount']=discount
-                            request.session['coupon']=coupon
-                            request.session['couponpercent']=c.discount
-                            request.session['actualamount']=total
-                            return JsonResponse({"message":True,"total":float(totall),"percent":c.discount,"discount":"{:.2f}".format(discount)})
+            if datetime.now(timezone.utc)>c.startdate:
+                if datetime.now(timezone.utc)<c.enddate:
+                    if c.cityy.filter(cityname=citi).exists():
+                        if c.limit!=0 or c.limit>0:
+                            if couponcount<c.limit:
+                                c.discount
+                                discount=(float(total)*(int(c.discount)/100))
+                                totall=(float(total)-int(discount))+199
+                                request.session['discountamount']=discount
+                                request.session['coupon']=coupon
+                                request.session['couponpercent']=c.discount
+                                request.session['actualamount']=total
+                                return JsonResponse({"message":True,"total":float(totall),"percent":c.discount,"discount":"{:.2f}".format(discount)})
+                            else:
+                                return JsonResponse({"message":False})
                         else:
-                            # print("------------")
                             return JsonResponse({"message":False})
                     else:
                         return JsonResponse({"message":False})
                 else:
                     return JsonResponse({"message":False})
             else:
-                # print("------------")
                 return JsonResponse({"message":False})
         except:
             return JsonResponse({"message":False})
@@ -2164,6 +2189,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 hi["patient_info"] = i.patient_info
                 hi["booking_type"] = i.booking_type
                 hi["bookingdetails"] = i.bookingdetails
+                hi["paymentmethod"] = testbooking.paymentmethod
                 try:
                     hi['prescription'] = testbooking.prescription_file
                 except:
@@ -2188,6 +2214,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 hi["patient_info"] = i.patient_info
                 hi["booking_type"] = i.booking_type
                 hi["bookingdetails"] = i.bookingdetails
+                hi["paymentmethod"] = None
                 # hi['prescription'] = testbooking.prescription_file
                 hi['payment_status'] = i.payment_status
                 try:
@@ -2207,11 +2234,20 @@ class BookingHistoryPay(LoginRequiredMixin,View):
         }
         return render(request,"booking-history.html",context)
     def post(self, request, *args, **kwargs):
+        # print("-------",request.POST)
         if request.POST.get("action") == "retreive_data":
+            print("--------",request.POST)
+            
             id=request.POST.get('id')
+            date=request.POST["date"]
+            citid=request.POST["city"]
+            address=request.POST["address"]
+            pincode=request.POST["pincode"]
+            paymentmethod=request.POST["paymentmethod"]
+            citi=city.objects.get(id=int(citid))
+            Prescriptionbook1.objects.filter(bookingid=id).update(date=date,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod)
             mod = book_history.objects.get(uni=id)
             client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
-
             tot_amt = float(mod.amount) * 100
             razorpay_order = client.order.create(
                 {"amount": tot_amt, "currency": "INR", "payment_capture": "1"}
@@ -2221,8 +2257,8 @@ class BookingHistoryPay(LoginRequiredMixin,View):
             scheme=request.scheme
             urll=request.get_host()
             # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100)
-            # callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
-            callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100) 
+            callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
+            # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100) 
             to_return = {
                 "razorKey":settings.RAZOR_KEY_ID,
                 "valid":True,
@@ -2272,6 +2308,26 @@ class BookingHistoryPay(LoginRequiredMixin,View):
             mod.payment_id = None
             mod.payment_status = False
             mod.save()
+            to_return = {"valid":True}
+        if request.POST.get("action") == "COD":
+            id=request.POST["id"]
+            date=request.POST["date"]
+            citid=request.POST["city"]
+            address=request.POST["address"]
+            pincode=request.POST["pincode"]
+            paymentmethod=request.POST["paymentmethod"]
+            citi=city.objects.get(id=int(citid))
+            Prescriptionbook1.objects.filter(bookingid=id).update(date=date,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod)
+            email_from = settings.EMAIL_HOST_USER
+            mes=f"Cash On Delivery Booking for Booking ID:{id}\nPlease Checkit"
+            send_mail(
+                f"Cash On delivery | Dignostica Span | Booking Id:{id}",
+                mes,
+                email_from,
+                # ["reachus@spanhealth.com"],
+                ["sandeep.nexevo@gmail.com"],
+                fail_silently=False,
+            )
             to_return = {"valid":True}
         return HttpResponse(json.dumps(to_return), content_type="application/json")
 
@@ -2508,6 +2564,7 @@ import requests
 def sms(message,mobile):
     try:
         url=f"""https://www.smsidea.co.in/smsstatuswithid.aspx?mobile=9986788880&pass=Malatesh@78&senderid=SPANDS&to={mobile}&msg={message}"""
+        # url=f"""https://www.smsidea.co.in/smsstatuswithid.aspx?mobile=9986788880&pass=Malatesh@78&senderid=SPANDS&to={mobile}&msg={message}&peid=1501615380000049113&templateid={templateid}"""
         connection=requests.get(url)
         a=connection.text.split(":")
         deliveryurl=f"""https://www.smsidea.co.in/sms/api/msgstatus.aspx?mobile=9986788880&pass=Malatesh@78&msgtempid={a[1].strip()}"""

@@ -356,6 +356,7 @@ function deletefunc(e){
 }
     $('#cpnbtn').on('click', function(e){
         var a=$("#subtotal").text();
+        var b=$("#total").text()
         var coupon=$("#coupon").val()
         var re=/^.{1,15}$/
         if (!re.test(coupon)){
@@ -379,7 +380,7 @@ function deletefunc(e){
                 $(".discount").empty();
                 if (!resp['message']){
                    // alert("Invalid Coupon")
-                   var h4 =`<h4 class="fs-30 font-bold cl-dark-blue" id="total"> ${a}</h4>`;
+                   var h4 =`<h4 class="fs-30 font-bold cl-dark-blue" id="total"> ${b}</h4>`;
                  swal("Invalid Coupon", "Please Enter valid Coupon Code", "error")
                   // alert("Invalid Coupon");
                    /* $('#output').html(data.msg) response message */

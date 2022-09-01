@@ -1946,7 +1946,7 @@ textarea {
 .pack_detail_table table th,
 .pack_detail_table table td {
     padding: .625em;
-    text-align: center;
+    text-align: start;
 }
 
 .pack_detail_table table th {

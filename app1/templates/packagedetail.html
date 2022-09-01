@@ -132,25 +132,20 @@
 
               <table class="mx-2">
                 <tbody>
-                  {% comment %} {%for test in tesst %} {% endcomment %}
                   {%for j in tesst%}
                   <tr>
-                    {% comment %} {% if forloop.counter < 25 %} {% endcomment %}
                     {%if j|first_el != None%}
                     <td data-label="">{{j|first_el}}</td>
                     {%else%}
                     
                     <td data-label="">-</td>
                     {%endif%}
-                   {% comment %} {%else%} {% endcomment %}
                    {%if j|last_el != None%}
                     <td data-label="">{{j|last_el}}</td>
                     {%else%}
                     <td data-label="">-</td>
                     {%endif%}
-                    {% comment %} {%endif%}  {% endcomment %}
                   </tr>
-                  {% comment %} {%endfor%} {% endcomment %}
                   {%endfor%}
                 
                 </tbody>

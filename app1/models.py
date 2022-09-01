@@ -223,6 +223,10 @@ def reportresponse(sender, instance, **kwargs):
     #               [instance.user.email],
     #               fail_silently=False)    
     ...            
+PAYMENT_METHOD = (
+    ("1","Cash on Delivery"),
+    ("2","Online"),
+)  
 class Prescriptionbook1(models.Model):
     bookingid=models.CharField(max_length=20,null=True,blank=True)
     unique=models.UUIDField(null=True,blank=True)
@@ -237,6 +241,13 @@ class Prescriptionbook1(models.Model):
         max_length=8,
         default="", null=True,blank=True
     )
+    date=models.DateField(null=True,blank=True)
+    timeslot = models.CharField(
+        choices=TIME_CHOICES,
+        max_length=20,
+        default="", null=True,blank=True,verbose_name="Time Slot"
+    )
+    
     payment_status=models.BooleanField(default=False)
     firstname=models.CharField(max_length=200,null=True,blank=True)
     lastname=models.CharField(max_length=200,null=True,blank=True)
@@ -250,10 +261,16 @@ class Prescriptionbook1(models.Model):
     price=models.CharField(max_length=20,null=True,blank=True)
     location=models.CharField(max_length=100,null=True,blank=True)
     address=models.TextField(null=True,blank=True)
+    pincode=models.CharField(max_length=100,null=True,blank=True,verbose_name="Pincode")
+    paymentmethod=models.CharField(
+        choices=PAYMENT_METHOD,
+        max_length=100,
+        default="", null=True,blank=True,verbose_name="Payment Method"
+    )
+    coupon=models.ForeignKey("coupons",null=True,blank=True,on_delete=models.SET_NULL)
     report=models.FileField(upload_to="report",null=True,blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
-    
     def __str__(self):
         return "Prescription booking"
     class Meta:
@@ -294,26 +311,59 @@ def testbookings(sender, instance, **kwargs):
             
         elif instance.location=="Aurangabad":
             a.append(i.aurangabad_price)
-    # print(sender)
-    # print(sum(a))
-          
-    book_history.objects.filter(uni=instance.bookingid).update(amount=sum(a))
-    # instance.price=sum(a)
-    Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=sum(a))
+    if sum(a)!=0:
+        book_history.objects.filter(uni=instance.bookingid).update(amount=sum(a)+199)
+        Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=sum(a)+199)
+    else:
+        book_history.objects.filter(uni=instance.bookingid).update(amount=None)
+        Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=None)
+    # print("-------",instance.coupon.couponcode)    
+    # if instance.coupon:
+    #     print("---------",instance.coupon.couponcode) 
+    #     try:
+    #         from datetime import datetime,timezone 
+    #         c=coupons.objects.get(couponcode=instance.coupon.couponcode,status="active")
+    #         couponcount=couponredeem.objects.filter(coupon=instance.coupon).count()
+    #         if datetime.now(timezone.utc)>c.startdate:
+    #             if datetime.now(timezone.utc)<c.enddate:
+    #                 if c.cityy.filter(cityname=instance.location).exists():
+    #                     if c.limit!=0 or c.limit>0:
+    #                         if couponcount<c.limit:
+    #                             c.discount
+    #                             discount=(float(instance.price-199)*(int(c.discount)/100))
+    #                             totall=(float(instance.price)-int(discount))+199
+    #                             instance.price=totall
+    #                             # request.session['discountamount']=discount
+    #                             # request.session['coupon']=coupon
+    #                             # request.session['couponpercent']=c.discount
+    #                             # request.session['actualamount']=total
+    #     #                         return JsonResponse({"message":True,"total":float(totall),"percent":c.discount,"discount":"{:.2f}".format(discount)})
+    #     #                     else:
+    #     #                         return JsonResponse({"message":False})
+    #     #                 else:
+    #     #                     return JsonResponse({"message":False})
+    #     #             else:
+    #     #                 return JsonResponse({"message":False})
+    #     #         else:
+    #     #             return JsonResponse({"message":False})
+    #     #     else:
+    #     #         return JsonResponse({"message":False})
+    #     except Exception as e:
+    #         print("-----------",e)
+    #         # return JsonResponse({"message":False})
     # if (instance.payment_status== True) and (bool(instance.report) == True):
     #     send_mail(str("Tests Report | Dignostica Span"),
     #               (f"Hi {instance.user.first_name},\n Thank for using our Services.\nThis mail is regarding the booking id: {instance.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please visit to review and download it..\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"),
     #               settings.EMAIL_HOST_USER,
     #               [instance.user.email],
     #               fail_silently=False)
-    if (instance.test_name.first()!=None) and (bool(instance.prescription_file)==True and bool(instance.report) == False): 
-            # print("sent")
-            # link=request.build_absolute_uri('/bookinghistory/')
-            send_mail(str("Booking Confirmation | Dignostica Span" ),
-                        (f"Hi {instance.user.first_name} ,\nThis mail is regarding the booking id: {instance.bookingid}, recently booked by you, \nWe have reviewed your prescription and have added the tests for your testing Please check your dashboard,\nKindly visit your dashboard to review it and pay the mentioned amount to confirm the booking.\nHave a speedy and healthy recovery.\nThank you,\nDignostica Span"),
-                        settings.EMAIL_HOST_USER,
-                        [instance.user.email],
-                        fail_silently=False)
+    # if (instance.test_name.first()!=None) and (bool(instance.prescription_file)==True and bool(instance.report) == False): 
+            
+    #         send_mail(str("Booking Confirmation | Dignostica Span" ),
+    #                     (f"Hi {instance.user.first_name} ,\nThis mail is regarding the booking id: {instance.bookingid}, recently booked by you, \nWe have reviewed your prescription and have added the tests for your testing Please check your dashboard,\nKindly visit your dashboard to review it and pay the mentioned amount to confirm the booking.\nHave a speedy and healthy recovery.\nThank you,\nDignostica Span"),
+    #                     settings.EMAIL_HOST_USER,
+    #                     [instance.user.email],
+    #                     fail_silently=False)
 m2m_changed.connect(testbookings, sender=Prescriptionbook1.test_name.through)
 post_save.disconnect(testbookings, sender=Prescriptionbook1) 
 
@@ -561,19 +611,19 @@ class socialmedialinks(models.Model):
     class Meta:
         verbose_name_plural="Social media links"
 SELECT_CHOICES=[
-    ("a","Active"),
-    ("i","Inactive")
+    ("active","Active"),
+    ("inactive","Inactive")
 ]
 class coupons(models.Model):
-    couponcode=models.CharField(max_length=15,null=True,blank=True,verbose_name="Coupon Code",help_text=_('Enter maximum 15 characters only'))
+    couponcode=models.CharField(max_length=15,null=True,blank=True,verbose_name="Coupon Code",help_text=_('Enter maximum 15 characters only'),unique=True)
     discount=models.CharField(max_length=2,null=True,blank=True,verbose_name="Discount(%)")
-    limit=models.IntegerField(null=True,blank=True,verbose_name="Usage Limit")
+    limit=models.PositiveIntegerField(null=True,blank=True,verbose_name="Usage Limit")
     cityy=models.ManyToManyField(city,blank=True)
     # cityy=models.ForeignKey(city,null=True,blank=True,on_delete=models.CASCADE,verbose_name="City")
     status = models.CharField(
         choices=SELECT_CHOICES,
         max_length=100,
-        default="a", null=True
+        default="active", null=True
     )
     startdate=models.DateTimeField(null=True, blank=True)
     enddate=models.DateTimeField(null=True, blank=True)

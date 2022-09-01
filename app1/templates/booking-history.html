@@ -1,7 +1,7 @@
 {% extends "index.html" %}
 {% load static %}
 {%block content%}
-<body>
+<body onload="setAttr()">
     {% include "header.html"%}
     <section class="sub_header py-xl-4 py-3">
         <div class="container">
@@ -19,13 +19,6 @@
     </section>
     <section class="section_booking_history pb-5 mb-5" >
         <div class="container">
-            {% comment %} {% if messages %}
-            
-            {% for msg in  messages %}
-            <center>{{msg}}</center>
-            {% endfor %}
-
-            {% endif %} {% endcomment %}
             <div class="row">
                 <div class="col-lg-12">
                     <div class=" bg-light-grey py-4 py-lg-0 br-15">
@@ -83,8 +76,6 @@
                                                 <tr>
                                                     {% if bookhistory.bookingid == None %}
                                                     <td data-label="ID">-
-
-                                                       
                                                     </td>
                                                      {%else%}
                                                      <td data-label="ID">{{bookhistory.bookingid}}
@@ -111,7 +102,6 @@
                                                     {%else%}
                                                     <td data-label="Amount">₹ {{bookhistory.amount}}</td>
                                                     {%endif%}
-
                                                     {%if not bookhistory.payment_status%}
                                                         <td data-label="Payment Status">Not paid</td>
                                                     {%else%}
@@ -119,17 +109,18 @@
                                                     {%endif%}
                                                     {% comment %} <td data-label="Status">On Process</td> {% endcomment %}
                                                     {%if  bookhistory.payment_status == False%}
-                                                    <td data-label="Report"><button
+                                                    <td data-label="Report">
+                                                        {% comment %}<button
                                                             class="br br-5 fs-16 font-bold bg-dark-green cl-dark-white download text-center paynow-btn" 
                                                             {% if bookhistory.amount == None %}
                                                             onclick='paymentFunction("{{bookhistory.uni}}", "false")';
                                                             {% else %}onclick='paymentFunction("{{bookhistory.uni}}", "true")';{% endif %}id="testbooking{{bookhistory.testbooking_id}}">Pay Now</button>
-                                                            {% comment %} <br><br>
+                                                            <br><br> {% endcomment %}
                                                             <button
                                                             class="br br-5 fs-16 font-bold bg-dark-green cl-dark-white download text-center paynow-btn" 
                                                             {% if bookhistory.amount == None %}
                                                             onclick='paymentFunction("{{bookhistory.uni}}", "false")';
-                                                            {% else %}data-bs-toggle="modal" data-bs-target="#paymentinfo1" onclick='unikey("{{bookhistory.uni}}", "true")';{% endif %}id="testbooking{{bookhistory.testbooking_id}}">check</button> {% endcomment %}
+                                                            {% else %}data-bs-toggle="modal" data-bs-target="#paymentinfo1" onclick='unikey("{{bookhistory.uni}}", "true")';{% endif %}id="testbooking{{bookhistory.testbooking_id}}">Check out</button>
                                                     </td>
                                                     {%else%}
                                                     {%if bookhistory.report %}
@@ -137,7 +128,7 @@
                                                         <a href="{{bookhistory.report.url}}"
                                                         class="" download><button class="download br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue">Download
                                                         Now</button></a>
-                                                </td>
+                                                        </td>
                                                     {% else %}
                                                     <td data-label="Report">
                                                         <a href="#"
@@ -148,11 +139,8 @@
                                                 {%endfor%}
                                             </tbody>
                                         </table>
-
-                                       
                                     </div>
                                     {% comment %} table end {% endcomment %}
-                                    
                                     <div class="tab-pane fade pb-5 " id="pills-profile" role="tabpanel"
                                         aria-labelledby="pills-profile-tab" tabindex="0">
                                         <h1 class="text-center fs-30 font-bold cl-dark-blue mb-4" id="nodata">No Record Found...</h1>
@@ -167,7 +155,6 @@
                                                     <td class="t_head" scope="col">Invoice</td>
                                                 </tr>
                                             </thead>
-
                                             <tbody>
                                                 {%for payment in payments%}
                                                 <tr>
@@ -205,8 +192,8 @@
                     <div class="modal-body">
                         <button type="button" class="btn-close  close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
-                        <form method="post" id="checkoutinfoform">
-                           {%csrf_token%}
+                        {% comment %} <form method="post" id="checkoutinfoform">
+                           {%csrf_token%} {% endcomment %}
                             <h3 class="fs-30 font-bold cl-dark-blue text-center">Checkout Information</h3>
                             {% comment %} <div>
                                 <select class="w-100 mt-3 form-select " type="select" name="option1" id="option1">
@@ -272,21 +259,51 @@
                                 </select>
                             </div>
                             <div>
-                                <textarea rows="2" class="w-100 myself_other form_input mt-3" placeholder="Address" name="address1" id="address" type="text" ></textarea>
+                                <textarea rows="2" class="w-100 myself_other form_input mt-3" placeholder="Address" name="address1" id="address1" type="text" ></textarea>
                             </div>
                             <div>
                                 <input class="w-100  form_input mt-3" placeholder="Pincode" name="pincode" id="pincode" type="number" maxlength="250"/>
                             </div>
+                            <div>
+                                <select class="w-100 mt-3 form-select myself_other" type="select" name="paymentmethod" id="paymentmethod" onchange='couponshow()'>
+                                    <option selected="selected" class="opc-5" disabled>
+                                        Payment Method</option>
+                                        <option value="1">Cash on Delivery</option>
+                                        <option value="2">Online</option>
+                                        {% comment %} <option value="3">3:00PM-6:00PM</option> {% endcomment %}
+                                </select>
+                            </div>
+                            <div>
+                                <input class="w-100  form_input mt-3" style="display:none" placeholder="Coupon" name="coupon" id="coupon" type="text" maxlength="15"/>
+                            </div>
+                            {% comment %} <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3 h-100" style="margin-top:-50px ;">
+                                <div class="row ">
+                                    <div class="col-6">
+                                        <div class="bg-white myself_other ms-3 ms-lg-0 mt-lg-0 mt-3 form_input">
+                                            <input class="form_input cursor" type="radio" name="radio_self" id="myself" />
+                                            <label for="myself" class="cursor">My Self</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="bg-white myself_other me-3 me-lg-0 mt-lg-0 mt-3  form_input">
+                                            <input class="form_input cursor" checked type="radio" name="radio_others" id="others" />
+                                            <label for="others" class="cursor">Others</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> {% endcomment %}
+                            <input id="action" name="action" hidden />
                             <input id="hiddenuni" name="hiddenuni" hidden />
-                            <button class="mx-lg-0 mx-3 mt-4 globalsubmitbutton"
+                            {% comment %} <button class="mx-lg-0 mx-3 mt-4 globalsubmitbutton"
+                                type="submit" name="submit" id="checkout">SUBMIT</button> {% endcomment %}
+                                <button class="mx-lg-0 mx-3 mt-4 globalsubmitbutton"
                                 type="submit" name="submit" id="checkout" onclick='paymentFunction(document.getElementById("hiddenuni").value,"true")'>SUBMIT</button>
-                        {% comment %} </form> {% endcomment %}
+                            {% comment %} </form> {% endcomment %}
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-
+    </section>  
     <section class="otherspop" id ="otherspop1">
         <div class="modal fade" id="otherspop" tabindex="-1" aria-labelledby="otherspopLabel"
             aria-hidden="true">
@@ -303,7 +320,6 @@
             </div>
         </div>
     </section>
-
     <section class="testdetail" id ="testdetails">
         <div class="modal fade" id="testdetaill" tabindex="-1" aria-labelledby="otherspopLabel"
             aria-hidden="true">
@@ -312,16 +328,13 @@
                     <div class="modal-body">
                         <button type="button" class="btn-close  close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
-                        
-                            <div id="testdetaills" >
-                                
+                            <div id="testdetaills">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
     <section class="prescriptionbreak" id ="prescriptionbreak">
         <div class="modal fade" id="prescriptionbreaks" tabindex="-1" aria-labelledby="otherspopLabel"
             aria-hidden="true">
@@ -370,7 +383,6 @@
 {% endif %}
 {%endfor%}
 {% endif %}
-
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
     $(document).ready(function(){
@@ -400,67 +412,106 @@
         if (status=="false"){
             swal('Hello','You booking under review progress by our experts. Please try after sometime.If you have any queries related to booking please contact our support team +91 9769 351 301','info')
             //alert("Please wait till your prescription is viewed by our doctors.");
-            
         }else{
-            $.ajax({
-                type:"POST",
-                data: {
-                    action:"retreive_data",
-                    id : ids,
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                   },
-                   dataType: "json",
-                   success: function(resp){
-                    
-                    if(resp['valid']){
-                    }
-                    var amount = parseInt(resp['amount']);
-                    var options = {
-                            key: resp['razorKey'],
-                            amount: amount, 
-                            currency: "INR",
-                            description: "Diagnostica Span",
-                            //image: "{% static 'img/invoice_logo.png' %}",
-                            order_id: resp["order_id"],
-                            callback_url: resp['callbackUrl'],
-                            redirect: true,
-                            theme: {
-                                "color": "#005aeb"
-                            },
-                            modal: { 
-                                escape: false,
-                                ondismiss: function()
-                                { 
-                                    $.ajax({
-                                    type: 'post',
-                                    headers: {
-                                        'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
-                                    },
-                                    data: {
-                                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                                    action:"payment_canceled",
-                                    obj_id:ids,
-                                    order_id:resp["order_id"],
-                                    },
-                                    dataType: 'json',
-                                    success: function (response) {
-                                    }
-                                    });
+            var timeslot=$("#timeslot").val();
+            var date=$("#Date").val();
+            var city=$("#City").val();
+            var address=$("#address1").val();
+            var pincode=$("#pincode").val();
+            var paymentmethod=$("#paymentmethod").val();
+            var coupon=$("#coupon").val();
+            console.log(paymentmethod)
+            if (timeslot==null || date=='' || city==null || address=='' || pincode=='' || paymentmethod==null){
+                swal("", "Please update every field", "warning");
+            }
+            else{
+                $("#paymentinfo").hide()
+                    if (paymentmethod=="2"){
+                        $.ajax({
+                            type:"POST",
+                            data: {
+                                action:"retreive_data",
+                                id : ids,
+                                timeslot:timeslot,
+                                date:date,
+                                city:city,
+                                address:address,
+                                pincode:pincode,
+                                paymentmethod:paymentmethod,
+                                coupon:coupon,
+                                csrfmiddlewaretoken: '{{ csrf_token }}',
+                               },
+                               dataType: "json",
+                               success: function(resp){
+                                if(resp['valid']){
                                 }
-                            },
-                        };
-                        var rzp1 = new Razorpay(options);
-                        rzp1.open();
-                   }
-            });
-        }
-        
-        
-
-    };
-
+                                var amount = parseInt(resp['amount']);
+                                var options = {
+                                        key: resp['razorKey'],
+                                        amount: amount, 
+                                        currency: "INR",
+                                        description: "Diagnostica Span",
+                                        //image: "{% static 'img/invoice_logo.png' %}",
+                                        order_id: resp["order_id"],
+                                        callback_url: resp['callbackUrl'],
+                                        redirect: true,
+                                        theme: {
+                                            "color": "#005aeb"
+                                        },
+                                        modal: { 
+                                            escape: false,
+                                            ondismiss: function()
+                                            { 
+                                                $.ajax({
+                                                type: 'post',
+                                                headers: {
+                                                    'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
+                                                },
+                                                data: {
+                                                csrfmiddlewaretoken: '{{ csrf_token }}',
+                                                action:"payment_canceled",
+                                                obj_id:ids,
+                                                order_id:resp["order_id"],
+                                                },
+                                                dataType: 'json',
+                                                success: function (response) {
+                                                    window.location.reload()
+                                                    }
+                                                });
+                                            }
+                                        },
+                                    };
+                                    var rzp1 = new Razorpay(options);
+                                    rzp1.open();
+                               }
+                        });
+                }
+                else{
+                    $.ajax({
+                        type:"POST",
+                        data:{
+                            action:"COD",
+                            id : ids,
+                            timeslot:timeslot,
+                            date:date,
+                            city:city,
+                            address:address,
+                            pincode:pincode,
+                            paymentmethod:paymentmethod,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        dataType:"json",
+                        success:function(resp){
+                            swal("","Thank you for booking","info").then(function(){
+                                window.location.reload()
+                            })
+                        }
+                    })
+                    }
+                }
+            }
+        };
         function othersfunc(e){
-      
         $.ajax({
             url: "{% url 'othersdetail' %}",
             type: "POST",
@@ -470,8 +521,6 @@
                 'csrfmiddlewaretoken':'{{ csrf_token }}',
             },
             success: function(resp){
-                
-               
               //  $("#choice").text(resp['otherschoice']);
               // $("#firstname").text(resp['firstname']);
               //$("#lastname").text(resp['lastname']);
@@ -488,11 +537,8 @@
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="age">Age : ${resp['age']}</h3>
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="phone">Mobile No : ${resp['phone']}</h3>`
                $("#othersspop").append(detail);
-               
             }
         });
-    
-
 }
     function testfunc(e){
     $.ajax({
@@ -533,18 +579,137 @@ function prescrbreak(e){
         
         console.log(msg.length)
          $("#prescr").empty();
+        var sample=`Sample Collection Charges - ₹ 199.00`
         for (let i = 0; i < msg.length; i++) {
-           var a= `<p>${msg[i].test}-₹ ${msg[i].pricel1}</p>  `
+           var a= `<p>${msg[i].test} - ₹ ${msg[i].pricel1}</p>  `
            console.log(a)
            $("#prescr").append(a)
           }
+          $("#prescr").append(sample)
         }
     });
 }
 
 function unikey(e){
 $("#hiddenuni").empty()
+$('#action').empty()
 $("#hiddenuni").val(e)
+$('#action').val("retreive_data")
 }
+function setAttr() {
+    var d = new Date();
+    var curr_date = d.getDate();
+    var curr_month = d.getMonth() + 1; //Months are zero based
+    if (curr_month < 10)
+        curr_month = '0' + curr_month;
+    if (curr_date < 10)
+        curr_date = '0' + curr_date;
+    var curr_year = d.getFullYear();
+    var d1 = curr_year + "-" + curr_month + "-" + curr_date;
+    $('#Date').attr('min', d1);
+};
+
+function couponshow(){
+    $("#paymentmethod").find("option:selected").each(function(){
+    var optionValue = $(this).attr("value");
+    //alert(optionValue)
+    if(optionValue=="2"){
+        $("#coupon").attr('style',  'display:block');
+    }
+    if(optionValue=="1"){
+        $("#coupon").attr('style',  'display:none');
+    }
+    })
+}
+
+/*$("#checkoutinfoform").validate({
+    rules:{
+        'timeslot':{
+            required: true,
+        },
+        'City':{
+            required: true,
+        },
+        'pincode':{
+            required: true,
+            minlength: 6,
+            maxlength: 6,
+            pincode_regex: true,
+        },
+        'Date':{
+            required: true,
+        },
+        'address1':{
+            required:true,
+        },
+        "paymentmethod":{
+            required:true,
+        }
+    },
+    messages:{
+        'City':{
+            required: "This field is required.",
+        },
+        'pincode':{
+            required: "This field is required.",
+        },
+        'Date':{
+            required: "This field is required.",
+        }
+    },
+submitHandler:function(form){
+    ids=$("#hiddenuni").text();
+    $.ajax({
+    type:"POST",
+    data: {
+        action:"retreive_data",
+        id : ids,
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+       },
+       dataType: "json",
+       success: function(resp){
+        if(resp['valid']){
+        }
+        var amount = parseInt(resp['amount']);
+        var options = {
+                key: resp['razorKey'],
+                amount: amount, 
+                currency: "INR",
+                description: "Diagnostica Span",
+                //image: "{% static 'img/invoice_logo.png' %}",
+                order_id: resp["order_id"],
+                callback_url: resp['callbackUrl'],
+                redirect: true,
+                theme: {
+                    "color": "#005aeb"
+                },
+                modal: { 
+                    escape: false,
+                    ondismiss: function()
+                    { 
+                        $.ajax({
+                        type: 'post',
+                        headers: {
+                            'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
+                        },
+                        data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        action:"payment_canceled",
+                        obj_id:ids,
+                        order_id:resp["order_id"],
+                        },
+                        dataType: 'json',
+                        success: function (response) {
+                        }
+                        });
+                    }
+                },
+            };
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
+       }
+});
+}
+})*/
 </script>
 {%endblock%}
