@@ -829,27 +829,50 @@ def prescriptionbreak(request):
         print(id)
         a=Prescriptionbook1.objects.get(bookingid=id)
         print(a)
-        strr=[]
-        for i in a.test_name.all():
-            di={}
-            di["test"]=(i.testt)
-            if city == Bangalore:
-                di["pricel1"]=str(i.Banglore_price)
-            elif city== Mumbai:
-                di["pricel1"]=str(i.Mumbai_price)
-            elif city== Bhophal:
-                di["pricel1"]=str(i.bhopal_price)
-            elif city== Nanded:
-                di["pricel1"]=str(i.nanded_price)
-            elif city== Pune:
-                di["pricel1"]=str(i.pune_price)
-            elif city== Barshi:
-                di["pricel1"]=str(i.barshi_price)
-            elif city== Aurangabad:
-                di["pricel1"]=str(i.aurangabad_price)
-            strr.append(di)
-        # listToStr = '/'.join(map(str, strr))
-        return JsonResponse({"message":strr})
+        if a.coupon == None:
+            strr=[]
+            for i in a.test_name.all():
+                di={}
+                di["test"]=(i.testt)
+                if city == Bangalore:
+                    di["pricel1"]=str(i.Banglore_price)
+                elif city== Mumbai:
+                    di["pricel1"]=str(i.Mumbai_price)
+                elif city== Bhophal:
+                    di["pricel1"]=str(i.bhopal_price)
+                elif city== Nanded:
+                    di["pricel1"]=str(i.nanded_price)
+                elif city== Pune:
+                    di["pricel1"]=str(i.pune_price)
+                elif city== Barshi:
+                    di["pricel1"]=str(i.barshi_price)
+                elif city== Aurangabad:
+                    di["pricel1"]=str(i.aurangabad_price)
+                strr.append(di)
+            # listToStr = '/'.join(map(str, strr))
+            return JsonResponse({"message":strr,"coupon":False})
+        else:
+            strr=[]
+            for i in a.test_name.all():
+                di={}
+                di["test"]=(i.testt)
+                if city == Bangalore:
+                    di["pricel1"]=str(i.Banglore_price)
+                elif city== Mumbai:
+                    di["pricel1"]=str(i.Mumbai_price)
+                elif city== Bhophal:
+                    di["pricel1"]=str(i.bhopal_price)
+                elif city== Nanded:
+                    di["pricel1"]=str(i.nanded_price)
+                elif city== Pune:
+                    di["pricel1"]=str(i.pune_price)
+                elif city== Barshi:
+                    di["pricel1"]=str(i.barshi_price)
+                elif city== Aurangabad:
+                    di["pricel1"]=str(i.aurangabad_price)
+                strr.append(di)
+            # listToStr = '/'.join(map(str, strr))
+            return JsonResponse({"message":strr,"couponcode":a.coupon.couponcode,"coupon":True})
 def healthsymptomview(request,slug):
     deviceCookie = request.COOKIES.get('device')
     c=request.session.get("city")
@@ -1875,27 +1898,30 @@ def destroy(request):
         return JsonResponse({"message":"success"})
 def coupon(request):
     if request.method=="POST":
-        coupon=request.POST.get("coupon")
-        total=request.POST.get("total")
-        citi=request.session.get("tempcity")
-        # couponval=/^.{1,15}$/
-        # result = re.match(couponval,coupon)
-        try:
-            c=coupons.objects.get(couponcode=coupon,status="active")
-            couponcount=couponredeem.objects.filter(coupon=coupon).count()
-            if datetime.now(timezone.utc)>c.startdate:
-                if datetime.now(timezone.utc)<c.enddate:
-                    if c.cityy.filter(cityname=citi).exists():
-                        if c.limit!=0 or c.limit>0:
-                            if couponcount<c.limit:
-                                c.discount
-                                discount=(float(total)*(int(c.discount)/100))
-                                totall=(float(total)-int(discount))+199
-                                request.session['discountamount']=discount
-                                request.session['coupon']=coupon
-                                request.session['couponpercent']=c.discount
-                                request.session['actualamount']=total
-                                return JsonResponse({"message":True,"total":float(totall),"percent":c.discount,"discount":"{:.2f}".format(discount)})
+        if request.POST.get("action")=="cart":
+            coupon=request.POST.get("coupon")
+            total=request.POST.get("total")
+            citi=request.session.get("tempcity")
+            # couponval=/^.{1,15}$/
+            # result = re.match(couponval,coupon)
+            try:
+                c=coupons.objects.get(couponcode=coupon,status="active")
+                couponcount=couponredeem.objects.filter(coupon=coupon).count()
+                if datetime.now(timezone.utc)>c.startdate:
+                    if datetime.now(timezone.utc)<c.enddate:
+                        if c.cityy.filter(cityname=citi).exists():
+                            if c.limit!=0 or c.limit>0:
+                                if couponcount<c.limit:
+                                    c.discount
+                                    discount=(float(total)*(int(c.discount)/100))
+                                    totall=(float(total)-int(discount))+199
+                                    request.session['discountamount']=discount
+                                    request.session['coupon']=coupon
+                                    request.session['couponpercent']=c.discount
+                                    request.session['actualamount']=total
+                                    return JsonResponse({"message":True,"total":float(totall),"percent":c.discount,"discount":"{:.2f}".format(discount)})
+                                else:
+                                    return JsonResponse({"message":False})
                             else:
                                 return JsonResponse({"message":False})
                         else:
@@ -1904,11 +1930,48 @@ def coupon(request):
                         return JsonResponse({"message":False})
                 else:
                     return JsonResponse({"message":False})
-            else:
+            except:
                 return JsonResponse({"message":False})
-        except:
-            return JsonResponse({"message":False})
-        
+        if request.POST.get("action")=="prescription":
+            coupon=request.POST.get("coupon")
+            total=request.POST.get("total")
+            uni=request.POST.get("uni")
+            citi=request.session.get("tempcity")
+            # couponval=/^.{1,15}$/
+            # result = re.match(couponval,coupon)
+            try:
+                c=coupons.objects.get(couponcode=coupon,status="active")
+                couponcount=couponredeem.objects.filter(coupon=coupon).count()
+                presc=Prescriptionbook1.objects.get(bookingid=uni)
+                if presc.coupon==None:
+                    if datetime.now(timezone.utc)>c.startdate:
+                        if datetime.now(timezone.utc)<c.enddate:
+                            if c.cityy.filter(cityname=citi).exists():
+                                if c.limit!=0 or c.limit>0:
+                                    if couponcount<c.limit:
+                                        c.discount
+                                        discount=(float(total)*(int(c.discount)/100))
+                                        totall=(float(total)-int(discount))+199
+                                        request.session['discountamount']=discount
+                                        request.session['coupon']=coupon
+                                        request.session['couponpercent']=c.discount
+                                        request.session['actualamount']=total
+                                        return JsonResponse({"message":True,"total":float(totall),"percent":c.discount,"discount":"{:.2f}".format(discount)})
+                                    else:
+                                        return JsonResponse({"message":False})
+                                else:
+                                    return JsonResponse({"message":False})
+                            else:
+                                return JsonResponse({"message":False})
+                        else:
+                            return JsonResponse({"message":False})
+                    else:
+                        return JsonResponse({"message":False})
+                else:
+                    return JsonResponse({"message":"exists"})
+            except:
+                return JsonResponse({"message":False})
+            
 def razorpayclose(request):
     if request.method=="POST":
         paymentid=request.POST["paymentid"]
@@ -2233,39 +2296,83 @@ class BookingHistoryPay(LoginRequiredMixin,View):
             "testbooking":testbooking,
         }
         return render(request,"booking-history.html",context)
+    
     def post(self, request, *args, **kwargs):
         # print("-------",request.POST)
         if request.POST.get("action") == "retreive_data":
-            print("--------",request.POST)
-            
+            # print("--------",request.POST)
             id=request.POST.get('id')
             date=request.POST["date"]
             citid=request.POST["city"]
             address=request.POST["address"]
             pincode=request.POST["pincode"]
             paymentmethod=request.POST["paymentmethod"]
-            citi=city.objects.get(id=int(citid))
-            Prescriptionbook1.objects.filter(bookingid=id).update(date=date,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod)
-            mod = book_history.objects.get(uni=id)
-            client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
-            tot_amt = float(mod.amount) * 100
-            razorpay_order = client.order.create(
-                {"amount": tot_amt, "currency": "INR", "payment_capture": "1"}
-            )
-            mod.payment_id = razorpay_order['id']
-            mod.save()
-            scheme=request.scheme
-            urll=request.get_host()
-            # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100)
-            callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
-            # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100) 
-            to_return = {
-                "razorKey":settings.RAZOR_KEY_ID,
-                "valid":True,
-                "amount":tot_amt,
-                "order_id":razorpay_order['id'],
-                "callbackUrl":callback_url,
-            }
+            coupon=request.POST.get("coupon")
+            amount=request.POST["amount"]
+            price=float(amount.split("₹ ")[1])
+            try:
+                coup=coupons.objects.get(couponcode=coupon)
+                citi=city.objects.get(id=int(citid))
+                Prescriptionbook1.objects.filter(bookingid=id).update(date=date,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,coupon=coup,price=price)
+                mod = book_history.objects.get(uni=id)
+                mod.amount=price
+                client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+                tot_amt = float(mod.amount) * 100
+                razorpay_order = client.order.create(
+                    {"amount": tot_amt, "currency": "INR", "payment_capture": "1"}
+                )
+                mod.payment_id = razorpay_order['id']
+                mod.save()
+                coupon=request.session.get("coupon")
+                discountamount=request.session.get("discountamount")
+                couponpercent=request.session.get("couponpercent")
+                actualamount= request.session.get("actualamount")
+                if coupon!= None and discountamount!=None and couponpercent!=None and actualamount!=None:
+                     couponredeem.objects.create(user=request.user,order_id=history.payment_id,coupon=request.session.get("coupon"),discountpercen=request.session.get("couponpercent"),discountamount=request.session.get("discountamount"),actualamount=request.session.get('actualamount')).save()
+                if coupon!=None:
+                    del request.session['coupon']
+                if discountamount!=None:
+                    del request.session['discountamount']
+                if couponpercent!=None:
+                    del request.session['couponpercent']
+                if actualamount!=None:
+                    del request.session['actualamount']
+                scheme=request.scheme
+                urll=request.get_host()
+                # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100)
+                callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
+                # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100) 
+                to_return = {
+                    "razorKey":settings.RAZOR_KEY_ID,
+                    "valid":True,
+                    "amount":tot_amt,
+                    "order_id":razorpay_order['id'],
+                    "callbackUrl":callback_url,
+                }
+            except:
+                citi=city.objects.get(id=int(citid))
+                Prescriptionbook1.objects.filter(bookingid=id).update(date=date,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod)
+                mod = book_history.objects.get(uni=id)
+               
+                client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+                tot_amt = float(mod.amount) * 100
+                razorpay_order = client.order.create(
+                    {"amount": tot_amt, "currency": "INR", "payment_capture": "1"}
+                )
+                mod.payment_id = razorpay_order['id']
+                mod.save()
+                scheme=request.scheme
+                urll=request.get_host()
+                # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100)
+                callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
+                # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100) 
+                to_return = {
+                    "razorKey":settings.RAZOR_KEY_ID,
+                    "valid":True,
+                    "amount":tot_amt,
+                    "order_id":razorpay_order['id'],
+                    "callbackUrl":callback_url,
+                }
             try:
                 items=Prescriptionbook1.objects.get(bookingid=id)
                 for item in items.test_name.all():
@@ -2310,24 +2417,61 @@ class BookingHistoryPay(LoginRequiredMixin,View):
             mod.save()
             to_return = {"valid":True}
         if request.POST.get("action") == "COD":
+            print("-------",request.POST)
             id=request.POST["id"]
             date=request.POST["date"]
             citid=request.POST["city"]
             address=request.POST["address"]
             pincode=request.POST["pincode"]
             paymentmethod=request.POST["paymentmethod"]
-            citi=city.objects.get(id=int(citid))
-            Prescriptionbook1.objects.filter(bookingid=id).update(date=date,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod)
-            email_from = settings.EMAIL_HOST_USER
-            mes=f"Cash On Delivery Booking for Booking ID:{id}\nPlease Checkit"
-            send_mail(
-                f"Cash On delivery | Dignostica Span | Booking Id:{id}",
-                mes,
-                email_from,
-                # ["reachus@spanhealth.com"],
-                ["sandeep.nexevo@gmail.com"],
-                fail_silently=False,
-            )
+            coupon=request.POST.get("coupon")
+            amount=request.POST["amount"]
+            price=float(amount.split("₹ ")[1])
+            print("------------",price)
+            try:
+                a=coupons.objects.get(couponcode=coupon)
+                citi=city.objects.get(id=int(citid))
+                Prescriptionbook1.objects.filter(bookingid=id).update(date=date,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,coupon=a,price=price)
+                book_history.objects.filter(uni=id).update(amount=price)
+                history=book_history.objects.get(uni=id)
+                coupon=request.session.get("coupon")
+                discountamount=request.session.get("discountamount")
+                couponpercent=request.session.get("couponpercent")
+                actualamount= request.session.get("actualamount")
+                print("payment id-----------",history.payment_id)
+                if coupon!= None and discountamount!=None and couponpercent!=None and actualamount!=None:
+                     couponredeem.objects.create(user=request.user,order_id=history.payment_id,coupon=request.session.get("coupon"),discountpercen=request.session.get("couponpercent"),discountamount=request.session.get("discountamount"),actualamount=request.session.get('actualamount')).save()
+                if coupon!=None:
+                    del request.session['coupon']
+                if discountamount!=None:
+                    del request.session['discountamount']
+                if couponpercent!=None:
+                    del request.session['couponpercent']
+                if actualamount!=None:
+                    del request.session['actualamount']
+                email_from = settings.EMAIL_HOST_USER
+                mes=f"Cash On Delivery Booking for Booking ID:{id}\nPlease Checkit"
+                send_mail(
+                    f"Cash On delivery | Dignostica Span | Booking Id:{id}",
+                    mes,
+                    email_from,
+                    # ["reachus@spanhealth.com"],
+                    ["sandeep.nexevo@gmail.com"],
+                    fail_silently=False,
+                )
+            except:
+                citi=city.objects.get(id=int(citid))
+                Prescriptionbook1.objects.filter(bookingid=id).update(date=date,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod)
+                email_from = settings.EMAIL_HOST_USER
+                mes=f"Cash On Delivery Booking for Booking ID:{id}\nPlease Checkit"
+                send_mail(
+                    f"Cash On delivery | Dignostica Span | Booking Id:{id}",
+                    mes,
+                    email_from,
+                    # ["reachus@spanhealth.com"],
+                    ["sandeep.nexevo@gmail.com"],
+                    fail_silently=False,
+                )
             to_return = {"valid":True}
         return HttpResponse(json.dumps(to_return), content_type="application/json")
 

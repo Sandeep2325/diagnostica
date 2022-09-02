@@ -20,6 +20,7 @@ from django.utils.translation import gettext_lazy as _
 from app1.views import sms
 from django_admin_listfilter_dropdown.filters import DropdownFilter, RelatedDropdownFilter
 import datetime
+from django.contrib.auth.models import Permission
 # Register your models here.
 class cityadmin(admin.ModelAdmin):
     list_display=["id","cityname","imagee","active","created","updated"]
@@ -130,10 +131,30 @@ class prescriptionbookadmin(admin.ModelAdmin):
     # }
     # search_fields = ('testt', 'categoryy__categoryy')
     # list_editable=[""]
+    
     def get_form(self, request, obj=None, **kwargs):
-        # if obj.type == "1":
         self.exclude = ("unique",)
         form = super(prescriptionbookadmin, self).get_form(request, obj, **kwargs)
+        # print(obj.coupon)
+        # a=form.base_fields["coupon"].queryset
+        # a=coupons.objects.filter(couponcode=obj.coupon)
+        # b=a.filter(couponcode=obj.coupon)
+        # if b.exists():
+        #     print("------------------")
+        #     self.readonly_fields=["user","coupon","myself","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location","bookingid",'price']
+        # else:
+        #     print("+++++++")
+        #     self.readonly_fields=["user","myself","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location","bookingid",'price']
+        # print(b)
+        # if b==
+        # print("----------",a)
+        # cleaned_data = super(form, self).clean()
+        # cou=cleaned_data.get("coupon")
+        # print(cou)
+        # if form.base_fields["coupon"]!=None:
+        #     self.readonly_fields=("coupon",)
+        # self.fields['sku'].widget.attrs['readonly'] = True
+        # form.base_fields['coupon'].widget.attrs['readonly'] = True
         return form
     def testname(self, obj):
         return ", ".join([
@@ -722,6 +743,7 @@ admin.site.register(couponredeem,couponredeemadmin)
 admin.site.unregister(Group)
 admin.site.register(requestcall,requestadmin)
 admin.site.unregister(get_attachment_model())
+# admin.site.register(Permission)
 
 
 

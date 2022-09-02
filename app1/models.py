@@ -1,5 +1,6 @@
 
 from distutils.command.upload import upload
+from functools import wraps
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import PermissionsMixin
@@ -15,6 +16,9 @@ from django.db.models.signals import post_save,m2m_changed
 from django.dispatch import receiver
 from shortuuid.django_fields import ShortUUIDField  
 from django.core.exceptions import ValidationError
+from django.utils.safestring import mark_safe
+# from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 # phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', 
 #                                 message = "Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
 
@@ -258,7 +262,7 @@ class Prescriptionbook1(models.Model):
         max_length=8,
         default="", null=True,blank=True
     )
-    price=models.CharField(max_length=20,null=True,blank=True)
+    price=models.CharField(max_length=20,null=True,blank=True,verbose_name="Price(Rs)",help_text=mark_safe(_('<p style="color:green">Rs 199 Will be Added As Sample Collection charges</p>')))
     location=models.CharField(max_length=100,null=True,blank=True)
     address=models.TextField(null=True,blank=True)
     pincode=models.CharField(max_length=100,null=True,blank=True,verbose_name="Pincode")
@@ -267,10 +271,17 @@ class Prescriptionbook1(models.Model):
         max_length=100,
         default="", null=True,blank=True,verbose_name="Payment Method"
     )
-    coupon=models.ForeignKey("coupons",null=True,blank=True,on_delete=models.SET_NULL)
+    coupon=models.ForeignKey("coupons",null=True,blank=True,on_delete=models.SET_NULL,help_text=mark_safe(_('<small style="color:red">*Coupon Should be Apply Only Once"</small>')))
     report=models.FileField(upload_to="report",null=True,blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
+    
+    # @property
+    # def payment(self):
+    #     if self.payment_status== True:
+    #         return book_history.objects.filter(uni=self.bookingid).update(payment_status=True)
+            # return self.test_name.all().count()
+    
     def __str__(self):
         return "Prescription booking"
     class Meta:
@@ -285,72 +296,98 @@ class Prescriptionbook1(models.Model):
     #                   [self.user.email],
     #                   fail_silently=False)
     #     return super().save(self,*args,**kwargs)
-
+ 
 @receiver(post_save, sender=Prescriptionbook1)
 def testbookings(sender, instance, **kwargs):
     # print("qwertyu")
-    a=[]
-    for i in instance.test_name.all():
-        if instance.location=="Bangalore":
-            a.append(i.Banglore_price)
-            
-        elif instance.location=="Mumbai":
-            a.append(i.Mumbai_price)
-            
-        elif instance.location=="Bhophal":
-            a.append(i.bhopal_price)
-            
-        elif instance.location=="Nanded":
-            a.append(i.nanded_price)
-            
-        elif instance.location=="Pune":
-            a.append(i.pune_price)
-            
-        elif instance.location=="Barshi":
-            a.append(i.barshi_price)
-            
-        elif instance.location=="Aurangabad":
-            a.append(i.aurangabad_price)
-    if sum(a)!=0:
-        book_history.objects.filter(uni=instance.bookingid).update(amount=sum(a)+199)
-        Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=sum(a)+199)
-    else:
-        book_history.objects.filter(uni=instance.bookingid).update(amount=None)
-        Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=None)
+    if instance.price==None:
+        a=[]
+        for i in instance.test_name.all():
+            if instance.location=="Bangalore":
+                a.append(i.Banglore_price)
+
+            elif instance.location=="Mumbai":
+                a.append(i.Mumbai_price)
+
+            elif instance.location=="Bhophal":
+                a.append(i.bhopal_price)
+
+            elif instance.location=="Nanded":
+                a.append(i.nanded_price)
+
+            elif instance.location=="Pune":
+                a.append(i.pune_price)
+
+            elif instance.location=="Barshi":
+                a.append(i.barshi_price)
+
+            elif instance.location=="Aurangabad":
+                a.append(i.aurangabad_price)
+
+        if sum(a)!=0:
+            book_history.objects.filter(uni=instance.bookingid).update(amount=sum(a)+199)
+            Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=sum(a)+199)
+        else:
+            book_history.objects.filter(uni=instance.bookingid).update(amount=None)
+            Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=None)
+        
+    if instance.payment_status== True:
+        book_history.objects.filter(uni=instance.bookingid).update(payment_status=True)
+        
     # print("-------",instance.coupon.couponcode)    
-    # if instance.coupon:
-    #     print("---------",instance.coupon.couponcode) 
-    #     try:
-    #         from datetime import datetime,timezone 
-    #         c=coupons.objects.get(couponcode=instance.coupon.couponcode,status="active")
-    #         couponcount=couponredeem.objects.filter(coupon=instance.coupon).count()
-    #         if datetime.now(timezone.utc)>c.startdate:
-    #             if datetime.now(timezone.utc)<c.enddate:
-    #                 if c.cityy.filter(cityname=instance.location).exists():
-    #                     if c.limit!=0 or c.limit>0:
-    #                         if couponcount<c.limit:
-    #                             c.discount
-    #                             discount=(float(instance.price-199)*(int(c.discount)/100))
-    #                             totall=(float(instance.price)-int(discount))+199
-    #                             instance.price=totall
-    #                             # request.session['discountamount']=discount
-    #                             # request.session['coupon']=coupon
-    #                             # request.session['couponpercent']=c.discount
-    #                             # request.session['actualamount']=total
-    #     #                         return JsonResponse({"message":True,"total":float(totall),"percent":c.discount,"discount":"{:.2f}".format(discount)})
-    #     #                     else:
-    #     #                         return JsonResponse({"message":False})
-    #     #                 else:
-    #     #                     return JsonResponse({"message":False})
-    #     #             else:
-    #     #                 return JsonResponse({"message":False})
-    #     #         else:
-    #     #             return JsonResponse({"message":False})
-    #     #     else:
-    #     #         return JsonResponse({"message":False})
-    #     except Exception as e:
-    #         print("-----------",e)
-    #         # return JsonResponse({"message":False})
+    if instance.coupon:
+        print("---------",instance.coupon.couponcode) 
+        try:
+            from datetime import datetime,timezone 
+            c=coupons.objects.get(couponcode=instance.coupon.couponcode,status="active")
+            couponcount=couponredeem.objects.filter(coupon=instance.coupon).count()
+            if datetime.now(timezone.utc)>c.startdate:
+                if datetime.now(timezone.utc)<c.enddate:
+                    if c.cityy.filter(cityname=instance.location).exists():
+                        if c.limit!=0 or c.limit>0:
+                            if couponcount<c.limit:
+                                c.discount
+                                print("=====",c.discount)
+                                print(float(float(instance.price)-199))
+                                discount=(float(float(instance.price)-199)*(int(c.discount)/100))
+                                print("###########",discount)
+                                totall=(float(float(instance.price)-199)-int(discount))+199
+                                print(totall)
+                                # instance.price=totall
+                                Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=totall)
+                                book_history.objects.filter(uni=instance.bookingid).update(amount=totall)
+                                # instance.save()
+                                # request.session['discountamount']=discount
+                                # request.session['coupon']=coupon
+                                # request.session['couponpercent']=c.discount
+                                # request.session['actualamount']=total
+                                # return JsonResponse({"message":True,"total":float(totall),"percent":c.discount,"discount":"{:.2f}".format(discount)})
+                            else:
+                                instance.coupon=None
+                                # raise ValidationError("Invalid Coupon")
+                                # return JsonResponse({"message":False})
+                        else:
+                            instance.coupon=None
+                            # raise ValidationError("Invalid Coupon")
+                            # return JsonResponse({"message":False})
+                    else:
+                        instance.coupon=None
+                        # raise ValidationError("Invalid Coupon")
+                        # return JsonResponse({"message":False})
+                else:
+                    instance.coupon=None
+                    # raise ValidationError("Invalid Coupon")
+                    # return JsonResponse({"message":False})
+            else:
+                instance.coupon=None
+                # raise ValidationError("Invalid Coupon")
+                # return JsonResponse({"message":False})
+        except Exception as e:
+            print("-----------",e)
+            # c=coupons.objects.get(couponcode=instance.coupon.couponcode) 
+            instance.coupon=None
+            # raise ValidationError("Invalid Coupon")
+            # return JsonResponse({"message":False})
     # if (instance.payment_status== True) and (bool(instance.report) == True):
     #     send_mail(str("Tests Report | Dignostica Span"),
     #               (f"Hi {instance.user.first_name},\n Thank for using our Services.\nThis mail is regarding the booking id: {instance.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please visit to review and download it..\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"),
@@ -365,7 +402,7 @@ def testbookings(sender, instance, **kwargs):
     #                     [instance.user.email],
     #                     fail_silently=False)
 m2m_changed.connect(testbookings, sender=Prescriptionbook1.test_name.through)
-post_save.disconnect(testbookings, sender=Prescriptionbook1) 
+# post_save.disconnect(testbookings, sender=Prescriptionbook1) 
 
 class healthcheckuppackages(models.Model):
     package_title=models.CharField(max_length=200,null=True,blank=True,verbose_name="Test Name")

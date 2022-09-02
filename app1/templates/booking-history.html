@@ -72,7 +72,6 @@
                                             </thead>
                                             <tbody>
                                                 {% for bookhistory in bookhistories %}
-                                           
                                                 <tr>
                                                     {% if bookhistory.bookingid == None %}
                                                     <td data-label="ID">-
@@ -116,24 +115,32 @@
                                                             onclick='paymentFunction("{{bookhistory.uni}}", "false")';
                                                             {% else %}onclick='paymentFunction("{{bookhistory.uni}}", "true")';{% endif %}id="testbooking{{bookhistory.testbooking_id}}">Pay Now</button>
                                                             <br><br> {% endcomment %}
+                                                            {%if bookhistory.paymentmethod == "1"%}
+                                                            <a href="#"
+                                                            class=""><button class="download br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue">COD</button></a>
+                                                            {%else%}
                                                             <button
                                                             class="br br-5 fs-16 font-bold bg-dark-green cl-dark-white download text-center paynow-btn" 
                                                             {% if bookhistory.amount == None %}
                                                             onclick='paymentFunction("{{bookhistory.uni}}", "false")';
-                                                            {% else %}data-bs-toggle="modal" data-bs-target="#paymentinfo1" onclick='unikey("{{bookhistory.uni}}", "true")';{% endif %}id="testbooking{{bookhistory.testbooking_id}}">Check out</button>
-                                                    </td>
+                                                            {% else %}data-bs-toggle="modal" data-bs-target="#paymentinfo1" onclick='unikey("{{bookhistory.uni}}","{{bookhistory.amount}}","true")';{% endif %}id="testbooking{{bookhistory.testbooking_id}}">Check out</button>
+                                                    {%endif%}
+                                                        </td>
+                                                    {% comment %} {%elif bookhistory.paymentmethod == "1"%}
+                                                    <a href="#"
+                                                        class=""><button class="download br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue">COD</button></a> {% endcomment %}
                                                     {%else%}
-                                                    {%if bookhistory.report %}
-                                                    <td data-label="Report">
+                                                        {%if bookhistory.report %}
+                                                        <td data-label="Report">
                                                         <a href="{{bookhistory.report.url}}"
                                                         class="" download><button class="download br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue">Download
                                                         Now</button></a>
                                                         </td>
-                                                    {% else %}
-                                                    <td data-label="Report">
+                                                        {% else %}
+                                                        <td data-label="Report">
                                                         <a href="#"
                                                         class=""><button class="download br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue">No File</button></a>
-                                                    {% endif %}
+                                                        {% endif %}
                                                     {%endif%}
                                                 </tr>
                                                 {%endfor%}
@@ -183,14 +190,13 @@
             </div>
         </div>
     </section>
-
     <section class="paymentinfo" id ="paymentinfo">
         <div class="modal fade" id="paymentinfo1" tabindex="-1" aria-labelledby="paymentinfomodalLabel"
             aria-hidden="true">
             <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content  p-3 p-sm-4">
                     <div class="modal-body">
-                        <button type="button" class="btn-close  close" data-bs-dismiss="modal"
+                        <button type="button" id="checkoutinfoclose" class="btn-close  close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                         {% comment %} <form method="post" id="checkoutinfoform">
                            {%csrf_token%} {% endcomment %}
@@ -237,6 +243,10 @@
                                         <option value="o">Others</option>
                                 </select>
                             </div> {% endcomment %}
+                            <div class="bg-light-blue br-5 p-3 d-flex align-items-center">
+                                <label>Total Price:</label>
+                                <p class="m-0 ps-2 font-bold" id="totalprice"></p>
+                            </div>
                             <div>
                                 <input class="w-100  form_input mt-3" placeholder="Date" name="Date" id="Date" type="Date" maxlength="250"/>
                             </div>
@@ -262,10 +272,11 @@
                                 <textarea rows="2" class="w-100 myself_other form_input mt-3" placeholder="Address" name="address1" id="address1" type="text" ></textarea>
                             </div>
                             <div>
-                                <input class="w-100  form_input mt-3" placeholder="Pincode" name="pincode" id="pincode" type="number" maxlength="250"/>
+                                <input class="w-100  form_input mt-3" placeholder="Pincode" name="pincode" id="pincode" type="number" pattern=".{6,6}"/>
+                                <p class="error pincodeerror"><p>
                             </div>
                             <div>
-                                <select class="w-100 mt-3 form-select myself_other" type="select" name="paymentmethod" id="paymentmethod" onchange='couponshow()'>
+                                <select class="w-100 mt-3 form-select myself_other" type="select" name="paymentmethod" id="paymentmethod" >
                                     <option selected="selected" class="opc-5" disabled>
                                         Payment Method</option>
                                         <option value="1">Cash on Delivery</option>
@@ -273,29 +284,20 @@
                                         {% comment %} <option value="3">3:00PM-6:00PM</option> {% endcomment %}
                                 </select>
                             </div>
-                            <div>
-                                <input class="w-100  form_input mt-3" style="display:none" placeholder="Coupon" name="coupon" id="coupon" type="text" maxlength="15"/>
-                            </div>
-                            {% comment %} <div class="px-xl-4 col-xl-6 col-lg-6 mx-auto pt-3 h-100" style="margin-top:-50px ;">
-                                <div class="row ">
-                                    <div class="col-6">
-                                        <div class="bg-white myself_other ms-3 ms-lg-0 mt-lg-0 mt-3 form_input">
-                                            <input class="form_input cursor" type="radio" name="radio_self" id="myself" />
-                                            <label for="myself" class="cursor">My Self</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="bg-white myself_other me-3 me-lg-0 mt-lg-0 mt-3  form_input">
-                                            <input class="form_input cursor" checked type="radio" name="radio_others" id="others" />
-                                            <label for="others" class="cursor">Others</label>
-                                        </div>
-                                    </div>
+                            <div class="row mt-3" id="cpndesc">
+                                <div class="col-8">
+                                    <input class="w-100  form_input " placeholder="Coupon"
+                                        id="coupon" name="coupon" type="search" onsearch="coupRemove()" maxlength="15"/>
                                 </div>
-                            </div> {% endcomment %}
-                            <input id="action" name="action" hidden />
+                                <div class="col-4 ps-0">
+                                    <button
+                                        class="coupon_apply br br-5 text-center fs-14 font-regular w-100 h-100 bg-dark cl-dark-white" id="cpnbtnn" >APPLY</button>
+                                </div>
+                                {% comment %} <p class="error cpnerror"><p> {% endcomment %}
+                                {% comment %} <p class="text-success cpnsuccess"><p> {% endcomment %}
+                            </div>
+                            <input id="originprice" name="originprice" hidden />
                             <input id="hiddenuni" name="hiddenuni" hidden />
-                            {% comment %} <button class="mx-lg-0 mx-3 mt-4 globalsubmitbutton"
-                                type="submit" name="submit" id="checkout">SUBMIT</button> {% endcomment %}
                                 <button class="mx-lg-0 mx-3 mt-4 globalsubmitbutton"
                                 type="submit" name="submit" id="checkout" onclick='paymentFunction(document.getElementById("hiddenuni").value,"true")'>SUBMIT</button>
                             {% comment %} </form> {% endcomment %}
@@ -420,11 +422,18 @@
             var pincode=$("#pincode").val();
             var paymentmethod=$("#paymentmethod").val();
             var coupon=$("#coupon").val();
-            console.log(paymentmethod)
+            var amount=$("#totalprice").html();
+            //console.log(paymentmethod)
             if (timeslot==null || date=='' || city==null || address=='' || pincode=='' || paymentmethod==null){
+                $(".pincodeerror").html("")
                 swal("", "Please update every field", "warning");
             }
+            else if(pincode.length<6 || pincode.length>6){
+                $(".pincodeerror").html("Enter valid pincode")
+                //swal("", "Enter Valid pincode", "warning");
+                }
             else{
+                $(".pincodeerror").html("")
                 $("#paymentinfo").hide()
                     if (paymentmethod=="2"){
                         $.ajax({
@@ -439,6 +448,7 @@
                                 pincode:pincode,
                                 paymentmethod:paymentmethod,
                                 coupon:coupon,
+                                amount:amount,
                                 csrfmiddlewaretoken: '{{ csrf_token }}',
                                },
                                dataType: "json",
@@ -498,11 +508,13 @@
                             address:address,
                             pincode:pincode,
                             paymentmethod:paymentmethod,
+                            amount:amount,
+                            coupon:coupon,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         dataType:"json",
                         success:function(resp){
-                            swal("","Thank you for booking","info").then(function(){
+                            swal("","Thank you for booking","success").then(function(){
                                 window.location.reload()
                             })
                         }
@@ -563,7 +575,6 @@
 }
 
 function prescrbreak(e){
-   
     $.ajax({
         url: "{% url 'prescriptionbreak' %}",
         type: "POST",
@@ -573,10 +584,9 @@ function prescrbreak(e){
             'csrfmiddlewaretoken':'{{ csrf_token }}',
         },
         success: function(resp){
-            console.log(resp['message'])
-            
+        if(!resp['coupon']){
+        console.log(resp['message'])
         var msg = resp['message'];
-        
         console.log(msg.length)
          $("#prescr").empty();
         var sample=`Sample Collection Charges - ₹ 199.00`
@@ -587,14 +597,32 @@ function prescrbreak(e){
           }
           $("#prescr").append(sample)
         }
+        else{
+                var msg = resp['message'];
+                console.log(msg.length)
+                 $("#prescr").empty();
+                var sample=`<p>Sample Collection Charges - ₹ 199.00</p>`
+                var couponc=`<h5>Coupon Code - ${resp['couponcode']}</h5>`
+                for (let i = 0; i < msg.length; i++) {
+                   var a= `<p>${msg[i].test} - ₹ ${msg[i].pricel1}</p>  `
+                   console.log(a)
+                   $("#prescr").append(a)
+                  }
+                  $("#prescr").append(sample)
+                  $("#prescr").append(couponc)
+        }
+        }
     });
 }
 
-function unikey(e){
+function unikey(e,price){
+    console.log(price)
 $("#hiddenuni").empty()
-$('#action').empty()
+$("#originprice").empty()
 $("#hiddenuni").val(e)
-$('#action').val("retreive_data")
+$("#totalprice").html("₹ " +price)
+$("#originprice").val("₹ "+price)
+
 }
 function setAttr() {
     var d = new Date();
@@ -622,94 +650,98 @@ function couponshow(){
     })
 }
 
-/*$("#checkoutinfoform").validate({
-    rules:{
-        'timeslot':{
-            required: true,
-        },
-        'City':{
-            required: true,
-        },
-        'pincode':{
-            required: true,
-            minlength: 6,
-            maxlength: 6,
-            pincode_regex: true,
-        },
-        'Date':{
-            required: true,
-        },
-        'address1':{
-            required:true,
-        },
-        "paymentmethod":{
-            required:true,
-        }
-    },
-    messages:{
-        'City':{
-            required: "This field is required.",
-        },
-        'pincode':{
-            required: "This field is required.",
-        },
-        'Date':{
-            required: "This field is required.",
-        }
-    },
-submitHandler:function(form){
-    ids=$("#hiddenuni").text();
-    $.ajax({
-    type:"POST",
-    data: {
-        action:"retreive_data",
-        id : ids,
-        csrfmiddlewaretoken: '{{ csrf_token }}',
-       },
-       dataType: "json",
-       success: function(resp){
-        if(resp['valid']){
-        }
-        var amount = parseInt(resp['amount']);
-        var options = {
-                key: resp['razorKey'],
-                amount: amount, 
-                currency: "INR",
-                description: "Diagnostica Span",
-                //image: "{% static 'img/invoice_logo.png' %}",
-                order_id: resp["order_id"],
-                callback_url: resp['callbackUrl'],
-                redirect: true,
-                theme: {
-                    "color": "#005aeb"
-                },
-                modal: { 
-                    escape: false,
-                    ondismiss: function()
-                    { 
-                        $.ajax({
-                        type: 'post',
-                        headers: {
-                            'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
-                        },
-                        data: {
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                        action:"payment_canceled",
-                        obj_id:ids,
-                        order_id:resp["order_id"],
-                        },
-                        dataType: 'json',
-                        success: function (response) {
-                        }
-                        });
-                    }
-                },
-            };
-            var rzp1 = new Razorpay(options);
-            rzp1.open();
-       }
-});
+//$("#coupon").focus(function(){
+ //   $("#currentPassword-errorr").remove();
+    
+//});
+    $("#cpnbtnn").click(function(){
+        var coupon=$("#coupon").val();
+        var total=$("#totalprice").html();
+        var total2=total.split("₹ ")[1]
+        var totalfloat=parseFloat(total2).toFixed(2)-199
+        var uni= $("#hiddenuni").val()
+      //alert()
+          $.ajax({
+               url: "{% url 'coupon' %}",
+               type : "POST", 
+               data: {
+                "action":"prescription",
+                "uni":uni,
+                "coupon" : coupon,
+                "total":totalfloat,
+                "csrfmiddlewaretoken": '{{ csrf_token }}',
+               },
+               dataType: "json",
+               success: function(resp){
+                $("#cpnbtnn").prop('disabled', true);
+                //alert()
+                //if(resp["message"]=="exists"){
+                //    $("#totalprice").html(total);
+                //    //var h4 =`<h4 class="fs-30 font-bold cl-dark-blue" id="total"> ${b}</h4>`;
+                //  swal("", "Coupon Already Applied", "info")
+                //}
+                if (!resp['message']){
+                    // alert("Invalid Coupon")
+                    $("#totalprice").html(total);
+                    //var h4 =`<h4 class="fs-30 font-bold cl-dark-blue" id="total"> ${b}</h4>`;
+                    var err=`<p class="error cpnerror">Please Enter valid Coupon Code<p>`
+                    $("#cpndesc").append(err)
+                        //$(".cpnerror").html("Please Enter valid Coupon Code")
+                    //swal("Invalid Coupon", "Please Enter valid Coupon Code", "error")
+               }
+               else if(resp["message"]=="exists"){
+                $("#totalprice").html(total);
+                //var h4 =`<h4 class="fs-30 font-bold cl-dark-blue" id="total"> ${b}</h4>`;
+                //$(".cpnerror").html("Coupon Already Applied")
+                var err=`<p class="error cpnerror">Coupon Already Applied<p>`
+                $("#cpndesc").append(err)
+                //swal("", "Coupon Already Applied", "info")
+               }
+               else{
+                //alert(resp['total'])
+                $("#totalprice").html("₹ "+resp['total']+".00");
+                var succe=`<p class="text-success cpnsuccess">Coupon Applied<p>
+                    <div id="cpnbreak">
+                    <div class="col-8" id="">
+                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Discount Percentage - ${resp["percent"]}%</h4>
+                    </div>
+                    <div class="col-8" id="cleardetail">
+                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Discount Price - Rs. ${resp["discount"]}</h4>
+                    </div>
+                    <div>
+                    `
+                    $("#cpndesc").append(succe)
+                //$(".cpnsuccess").html("Coupon Applied")
+               }
+            }
+           });
+      });
+function coupRemove(){
+    total=$("#originprice").val()
+ $.ajax({
+     url: "{% url 'couponsessiondelete' %}",
+     type: "GET",
+     dataType: "json",
+     success: function(resp){
+        $("#cpnbtnn").prop('disabled', false);
+        $(".cpnerror").html("")
+        $(".cpnsuccess").html("")
+        $("#cpnbreak").html("")
+        $("#totalprice").html(total);
+        //window.location.reload();
+     }
+ });
+ //window.location.reload()
 }
-})*/
+$("#checkoutinfoclose").click(function(){
+ window.location.reload()
+    //$('#paymentinfo1').find('input:text').val('');   
+})
+$(document).ready(function(){
+    $("#paymentinfo1").modal({
+     backdrop: 'static',
+    keyboard: false
+ });
+})
 </script>
 {%endblock%}

@@ -363,7 +363,6 @@ function deletefunc(e){
             swal("", "Coupon code should be less than 15 characters", "error")
             if (coupon== ''){
                 swal("", "Please Enter Coupon", "error")
-                
             }
          }
         else{
@@ -371,6 +370,7 @@ function deletefunc(e){
                url: "{% url 'coupon' %}",
                type : "POST", 
                data: {
+                "action":"cart",
                 "coupon" : coupon,
                 "total":a.split("Rs.")[1],
                 csrfmiddlewaretoken: '{{ csrf_token }}',
