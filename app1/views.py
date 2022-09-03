@@ -1,10 +1,10 @@
 import itertools
 import re
-from subprocess import call
-from unicodedata import decimal
+
+import os
 # import sweetify
 from django.shortcuts import render,redirect
-from .forms import UserProfileForm,UserRegistrationForm, forgotpasswordform, prescriptionform, subscriptionform
+from .forms import UserProfileForm,UserRegistrationForm, forgotpasswordform, subscriptionform
 from django.contrib.auth.hashers import make_password
 import random
 from app1.models import *
@@ -67,7 +67,6 @@ def dashboard(request):
     outstand=book_history.objects.filter(payment_status=False)
     totalamount=[]
     outstandingamount=[]
-    
     for i in bookamount:
         if i.amount is not None:
             totalamount.append(int(float(i.amount)))
@@ -852,27 +851,52 @@ def prescriptionbreak(request):
             # listToStr = '/'.join(map(str, strr))
             return JsonResponse({"message":strr,"coupon":False})
         else:
-            strr=[]
-            for i in a.test_name.all():
-                di={}
-                di["test"]=(i.testt)
-                if city == Bangalore:
-                    di["pricel1"]=str(i.Banglore_price)
-                elif city== Mumbai:
-                    di["pricel1"]=str(i.Mumbai_price)
-                elif city== Bhophal:
-                    di["pricel1"]=str(i.bhopal_price)
-                elif city== Nanded:
-                    di["pricel1"]=str(i.nanded_price)
-                elif city== Pune:
-                    di["pricel1"]=str(i.pune_price)
-                elif city== Barshi:
-                    di["pricel1"]=str(i.barshi_price)
-                elif city== Aurangabad:
-                    di["pricel1"]=str(i.aurangabad_price)
-                strr.append(di)
-            # listToStr = '/'.join(map(str, strr))
-            return JsonResponse({"message":strr,"couponcode":a.coupon.couponcode,"coupon":True})
+            try:
+                redeem=couponredeem.objects.get(booking_id=id)
+                strr=[]
+                for i in a.test_name.all():
+                    di={}
+                    di["test"]=(i.testt)
+                    if city == Bangalore:
+                        di["pricel1"]=str(i.Banglore_price)
+                    elif city== Mumbai:
+                        di["pricel1"]=str(i.Mumbai_price)
+                    elif city== Bhophal:
+                        di["pricel1"]=str(i.bhopal_price)
+                    elif city== Nanded:
+                        di["pricel1"]=str(i.nanded_price)
+                    elif city== Pune:
+                        di["pricel1"]=str(i.pune_price)
+                    elif city== Barshi:
+                        di["pricel1"]=str(i.barshi_price)
+                    elif city== Aurangabad:
+                        di["pricel1"]=str(i.aurangabad_price)
+                    strr.append(di)
+                # listToStr = '/'.join(map(str, strr))
+                return JsonResponse({"message":strr,"couponcode":a.coupon.couponcode,"coupon":True,"coupondiscount":redeem.discountpercen,"discountamount":redeem.discountamount})
+            except:
+                # redeem=couponredeem.objects.get(booking_id=id)
+                strr=[]
+                for i in a.test_name.all():
+                    di={}
+                    di["test"]=(i.testt)
+                    if city == Bangalore:
+                        di["pricel1"]=str(i.Banglore_price)
+                    elif city== Mumbai:
+                        di["pricel1"]=str(i.Mumbai_price)
+                    elif city== Bhophal:
+                        di["pricel1"]=str(i.bhopal_price)
+                    elif city== Nanded:
+                        di["pricel1"]=str(i.nanded_price)
+                    elif city== Pune:
+                        di["pricel1"]=str(i.pune_price)
+                    elif city== Barshi:
+                        di["pricel1"]=str(i.barshi_price)
+                    elif city== Aurangabad:
+                        di["pricel1"]=str(i.aurangabad_price)
+                    strr.append(di)
+                # listToStr = '/'.join(map(str, strr))
+                return JsonResponse({"message":strr,"couponcode":a.coupon.couponcode,"coupon":True})
 def healthsymptomview(request,slug):
     deviceCookie = request.COOKIES.get('device')
     c=request.session.get("city")
@@ -913,7 +937,7 @@ def prescriptionbookview(request):
     c=request.session.get("city")
     if request.user.is_anonymous:
         return HttpResponseRedirect(reverse("user-login"))
-    fm=prescriptionform()
+   
     if request.method=="POST":
         prescription_file=request.FILES.get("file")
         myself=request.POST.get("radio_self")
@@ -942,20 +966,21 @@ def prescriptionbookview(request):
                 bookingid="DP"+str(booking)
         except:
             bookingid="DP"+str(bid)
-        prescription_book(
-            user=request.user,
-            unique=unique,
-            prescription_file=prescription_file,
-            myself=True if myself == "on" else False,
-            others=True if others == "on" else False,
-            others_choice=others_choice,
-            firstname=firstname,
-            lastname=lastname,
-            contact=contact,
-            age=age,
-            gender=gender,
-            location=c,
-            address=address).save()
+        # prescription_book(
+        #     user=request.user,
+        #     unique=unique,
+        #     prescription_file=prescription_file,
+        #     myself=True if myself == "on" else False,
+        #     others=True if others == "on" else False,
+        #     others_choice=others_choice,
+        #     firstname=firstname,
+        #     lastname=lastname,
+        #     contact=contact,
+        #     age=age,
+        #     gender=gender,
+        #     location=c,
+        #     address=address).save()
+        
         Prescriptionbook1(
             user=request.user,
             unique=unique,
@@ -974,10 +999,10 @@ def prescriptionbookview(request):
         data2=Prescriptionbook1.objects.get(unique=unique)
         if myself=="on":
             User.objects.filter(email=request.user.email).update(first_name=firstname,last_name=lastname,phone_no=contact,age=age,address=address,gender=gender)
-        data=prescription_book.objects.get(unique=unique)
+        # data=prescription_book.objects.get(unique=unique)
         book_history(
             user=request.user,
-            testbooking_id=data.id,
+            testbooking_id=data2.id,
             uni=data2.bookingid,
             bookingid=bookingid,
             patient_info="myself" if others==None else "others",
@@ -1006,7 +1031,7 @@ def prescriptionbookview(request):
         return HttpResponseRedirect(reverse("booking-history"))
         # return render(request,"uploadprescriptions.html",{"fm":fm})
     else:
-        return render(request,"uploadprescriptions.html",{"fm":fm})
+        return render(request,"uploadprescriptions.html")
         
 # @login_required(login_url="login/")  
 def testselect(request):
@@ -1046,21 +1071,21 @@ def testselect(request):
         s = shortuuid.ShortUUID(alphabet="0123456789")
         bid = s.random(length=5)
         bookingid="DP"+str(bid)
-        a=prescription_book.objects.create(
-            unique=unique,
-            user=request.user,
-            myself=True if myself == "on" else False,
-            others=True if others == "on" else False,
-            others_choice=others_choice,
-            firstname=firstname,
-            lastname=lastname,
-            contact=contact,
-            age=age,
-            gender=gender,
-            location=c)
-        for j in test_name:
-            item=test.objects.get(id=j)
-            a.test_name.add(item)   
+        # a=prescription_book.objects.create(
+        #     unique=unique,
+        #     user=request.user,
+        #     myself=True if myself == "on" else False,
+        #     others=True if others == "on" else False,
+        #     others_choice=others_choice,
+        #     firstname=firstname,
+        #     lastname=lastname,
+        #     contact=contact,
+        #     age=age,
+        #     gender=gender,
+        #     location=c)
+        # for j in test_name:
+        #     item=test.objects.get(id=j)
+        #     a.test_name.add(item)   
         for i in test_name:
             item=test.objects.get(id=i)
             if c==Bangalore:
@@ -1140,20 +1165,20 @@ def cartt(request):
                 bookingid="DP"+str(booking)
         except:
             bookingid="DP"+str(bid)
-        b=prescription_book.objects.create(
-                unique=uniquee,
-                user=request.user,
-                myself=True if others == "m" else False,
-                others=True if others == "o" else False,
-                others_choice=others_choice,
-                firstname=firstname,
-                lastname=lastname,
-                contact=contact,
-                age=age,
-                gender=gender,
-                location=c,
-                address=address).save()
-        data2=prescription_book.objects.get(unique=uniquee)
+        # b=prescription_book.objects.create(
+        #         unique=uniquee,
+        #         user=request.user,
+        #         myself=True if others == "m" else False,
+        #         others=True if others == "o" else False,
+        #         others_choice=others_choice,
+        #         firstname=firstname,
+        #         lastname=lastname,
+        #         contact=contact,
+        #         age=age,
+        #         gender=gender,
+        #         location=c,
+        #         address=address).save()
+        # data2=prescription_book.objects.get(unique=uniquee)
         if others=="m":
             User.objects.filter(email=request.user.email).update(first_name=firstname,last_name=lastname,phone_no=contact,age=age,address=address,gender=gender)
         data1=cart.objects.filter(user=request.user)
@@ -1226,7 +1251,7 @@ def cartt(request):
         data=testbook.objects.get(unique=uniquee) 
         bookhistory=book_history(
                  user=request.user,
-                 testbooking_id=data2.id,
+                 testbooking_id=data.id,
                  uni=data.bookingid,
                  bookingid=bookingid,
                  patient_info="Myself" if others == "m" else "others",
@@ -1446,7 +1471,7 @@ def cartt(request):
         actualamount= request.session.get("actualamount")
         
         if coupon!= None and discountamount!=None and couponpercent!=None and actualamount!=None:
-             couponredeem.objects.create(user=request.user,order_id=razorpay_order_id,coupon=request.session.get("coupon"),discountpercen=request.session.get("couponpercent"),discountamount=request.session.get("discountamount"),actualamount=request.session.get('actualamount')).save()
+             couponredeem.objects.create(user=request.user,booking_id=data.bookingid,order_id=razorpay_order_id,coupon=request.session.get("coupon"),discountpercen=request.session.get("couponpercent"),discountamount=request.session.get("discountamount"),actualamount=request.session.get('actualamount')).save()
         if coupon!=None:
             del request.session['coupon']
         if discountamount!=None:
@@ -1656,7 +1681,6 @@ def paymenthandler(request,str,amount):
                 # return HttpResponseRedirect(reverse("booking-history"))
                 return redirect("booking-history")
         else:
-            
             return redirect("booking-history")
     except Exception as e:
         # print(request.POST["error[metadata]"])
@@ -1860,7 +1884,6 @@ def search(request):
                     tests=test.objects.filter(categoryy__id=req_cat)
             else:
                 tests=test.objects.filter(testt__icontains=searched)
-
             b=[]
             for tesst in tests:
                 a={}
@@ -2237,7 +2260,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
         his = []
         cit=city.objects.filter(active=True)
         bookhistories=book_history.objects.filter(user=request.user).order_by('-created')
-        testbooking=prescription_book.objects.filter(user=request.user)
+        # testbooking=prescription_book.objects.filter(user=request.user)
         payments=payment.objects.filter(user=request.user).order_by('-date')
         for i in bookhistories:
             try:
@@ -2328,7 +2351,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 couponpercent=request.session.get("couponpercent")
                 actualamount= request.session.get("actualamount")
                 if coupon!= None and discountamount!=None and couponpercent!=None and actualamount!=None:
-                     couponredeem.objects.create(user=request.user,order_id=history.payment_id,coupon=request.session.get("coupon"),discountpercen=request.session.get("couponpercent"),discountamount=request.session.get("discountamount"),actualamount=request.session.get('actualamount')).save()
+                     couponredeem.objects.create(user=request.user,booking_id=id,order_id=history.payment_id,coupon=request.session.get("coupon"),discountpercen=request.session.get("couponpercent"),discountamount=request.session.get("discountamount"),actualamount=request.session.get('actualamount')).save()
                 if coupon!=None:
                     del request.session['coupon']
                 if discountamount!=None:
@@ -2340,8 +2363,8 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 scheme=request.scheme
                 urll=request.get_host()
                 # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100)
-                callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
-                # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100) 
+                # callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
+                callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100) 
                 to_return = {
                     "razorKey":settings.RAZOR_KEY_ID,
                     "valid":True,
@@ -2427,7 +2450,6 @@ class BookingHistoryPay(LoginRequiredMixin,View):
             coupon=request.POST.get("coupon")
             amount=request.POST["amount"]
             price=float(amount.split("₹ ")[1])
-            print("------------",price)
             try:
                 a=coupons.objects.get(couponcode=coupon)
                 citi=city.objects.get(id=int(citid))
@@ -2438,9 +2460,8 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 discountamount=request.session.get("discountamount")
                 couponpercent=request.session.get("couponpercent")
                 actualamount= request.session.get("actualamount")
-                print("payment id-----------",history.payment_id)
                 if coupon!= None and discountamount!=None and couponpercent!=None and actualamount!=None:
-                     couponredeem.objects.create(user=request.user,order_id=history.payment_id,coupon=request.session.get("coupon"),discountpercen=request.session.get("couponpercent"),discountamount=request.session.get("discountamount"),actualamount=request.session.get('actualamount')).save()
+                     couponredeem.objects.create(user=request.user,booking_id=id,order_id=history.payment_id,coupon=request.session.get("coupon"),discountpercen=request.session.get("couponpercent"),discountamount=request.session.get("discountamount"),actualamount=request.session.get('actualamount')).save()
                 if coupon!=None:
                     del request.session['coupon']
                 if discountamount!=None:
@@ -2684,8 +2705,8 @@ def lifestyletests(request):
             if str(carrt.items.id) in id:
                 test1.append(str(carrt.items.id))
         return JsonResponse({"message":test1})
+    
 
-import os
 def readfile(request):
     a=test.objects.filter(Banglore_price__isnull=True)
     file_path1 = os.path.join(settings.STATIC_ROOT)

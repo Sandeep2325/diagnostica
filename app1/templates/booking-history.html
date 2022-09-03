@@ -1,8 +1,12 @@
 {% extends "index.html" %}
 {% load static %}
 {%block content%}
+
 <body onload="setAttr()">
+    <div class="preload" style="display:none"><img src="http://i.imgur.com/KUJoe.gif">
+    </div>
     {% include "header.html"%}
+    <div id="loaderr" class="center"></div>
     <section class="sub_header py-xl-4 py-3">
         <div class="container">
             <div class="row">
@@ -97,7 +101,7 @@
                                                     {%if bookhistory.amount == None%}
                                                         <td data-label="Amount">-</td>
                                                     {%elif bookhistory.prescription%}
-                                                        <td data-label="Amount">₹ {{bookhistory.amount}}<i  id ="prescriptiontest" data-bs-toggle="modal" data-bs-target="#prescriptionbreaks" class="fa fa-info br-5 cursor" aria-hidden="true" style="text-align:center;background:#d5e6f7; padding:5px 9px;margin-left:5px " onclick='prescrbreak("{{bookhistory.uni}}")'></i></td>
+                                                        <td data-label="Amount">₹ {{bookhistory.amount}}<i  id ="prescriptiontest" data-bs-toggle="modal" data-bs-target="#prescriptionbreaks" class="fa fa-info br-5 cursor" aria-hidden="true" style="text-align:center;background:#d5e6f7; padding:5px 9px;margin-left:5px " onclick='prescrbreak("{{bookhistory.uni}}","₹ {{bookhistory.amount}}")'></i></td>
                                                     {%else%}
                                                     <td data-label="Amount">₹ {{bookhistory.amount}}</td>
                                                     {%endif%}
@@ -252,7 +256,7 @@
                             </div>
                             <div>
                                 <select class="w-100 mt-3 form-select myself_other" type="select" name="timeslot" id="timeslot">
-                                    <option selected="selected" class="opc-5" disabled>
+                                        <option selected="selected" class="opc-5" disabled>
                                         Pickup Time Slot</option>
                                         <option value="1">7:00AM-11:00AM</option>
                                         <option value="2">11:00AM-3:00PM</option>
@@ -497,6 +501,7 @@
                         });
                 }
                 else{
+            $(".preload").css("display","block");
                     $.ajax({
                         type:"POST",
                         data:{
@@ -514,6 +519,7 @@
                         },
                         dataType:"json",
                         success:function(resp){
+                            $(".preload").css("display","none");
                             swal("","Thank you for booking","success").then(function(){
                                 window.location.reload()
                             })
@@ -533,14 +539,7 @@
                 'csrfmiddlewaretoken':'{{ csrf_token }}',
             },
             success: function(resp){
-              //  $("#choice").text(resp['otherschoice']);
-              // $("#firstname").text(resp['firstname']);
-              //$("#lastname").text(resp['lastname']);
-              //  $("#gender").text(resp['gender']);
-              //  $("#gender").text(resp['age']);
-             //   $("#gender").text(resp['phone']);
              $("#othersspop").empty();
-             
                var detail=` <h3 class="fs-20 font-bold cl-dark-blue text-center" id="choice">To Whom : ${resp['otherschoice']}</h3>
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="fistname">First Name : ${resp['firstname']}</h3>
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="lastname">Last Name : ${resp['lastname']}</h3>
@@ -574,7 +573,8 @@
     });
 }
 
-function prescrbreak(e){
+function prescrbreak(e,totalpric){
+    console.log(e)
     $.ajax({
         url: "{% url 'prescriptionbreak' %}",
         type: "POST",
@@ -589,7 +589,9 @@ function prescrbreak(e){
         var msg = resp['message'];
         console.log(msg.length)
          $("#prescr").empty();
+         var totall=`<h5 class="fs-20 font-bold cl-dark mb-3">Total Price - ${totalpric}</h5>`
         var sample=`Sample Collection Charges - ₹ 199.00`
+        $("#prescr").append(totall)
         for (let i = 0; i < msg.length; i++) {
            var a= `<p>${msg[i].test} - ₹ ${msg[i].pricel1}</p>  `
            console.log(a)
@@ -601,15 +603,27 @@ function prescrbreak(e){
                 var msg = resp['message'];
                 console.log(msg.length)
                  $("#prescr").empty();
+                 var totall=`<h5 class="fs-20 font-bold cl-dark mb-3">Total Price - ${totalpric}</h5>`
                 var sample=`<p>Sample Collection Charges - ₹ 199.00</p>`
-                var couponc=`<h5>Coupon Code - ${resp['couponcode']}</h5>`
+                
+                var couponc=`<h5 class="fs-20 font-bold cl-dark mb-3">Coupon Code - ${resp['couponcode']}</h5>
+                <div class="col-8" id="">
+                    <h4 class="fs-20 font-bold cl-dark mb-3">Discount Percentage - ${resp["coupondiscount"]}%</h4>
+                </div>
+                <div class="col-8" id="cleardetail">
+                    <h4 class="fs-20 font-bold cl-dark mb-3">Discount Price - Rs. ${resp["discountamount"]}</h4>
+                </div>`
+                $("#prescr").append(totall)
                 for (let i = 0; i < msg.length; i++) {
                    var a= `<p>${msg[i].test} - ₹ ${msg[i].pricel1}</p>  `
                    console.log(a)
                    $("#prescr").append(a)
                   }
                   $("#prescr").append(sample)
-                  $("#prescr").append(couponc)
+                  if(resp["coupondiscount"]!=undefined){
+                    $("#prescr").append(couponc)
+                }
+                 // $("#prescr").append(couponc)
         }
         }
     });
@@ -636,7 +650,6 @@ function setAttr() {
     var d1 = curr_year + "-" + curr_month + "-" + curr_date;
     $('#Date').attr('min', d1);
 };
-
 function couponshow(){
     $("#paymentmethod").find("option:selected").each(function(){
     var optionValue = $(this).attr("value");

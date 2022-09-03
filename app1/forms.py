@@ -28,18 +28,18 @@ class forgotpasswordform(forms.Form):
     email = forms.EmailField(validators=[email_exist])
     password = forms.CharField(required=True, validators=[validate_password])
     password2 = forms.CharField(required=True, validators=[validate_password])
-class prescriptionform(forms.ModelForm):
-    class Meta:
-        model=prescription_book
-        fields=["user","prescription_file","myself","others","others_choice","firstname","lastname","contact","age","gender"]
+# class prescriptionform(forms.ModelForm):
+#     class Meta:
+#         model=prescription_book
+#         fields=["user","prescription_file","myself","others","others_choice","firstname","lastname","contact","age","gender"]
         # fields="__all__"
         # read_only_fields=["user"]
-class selectedtestform(forms.ModelForm):
-    class Meta:
-        model=prescription_book
-        # fields=["user","test_name",]
-        fields="__all__"
-        read_only_fields=["user"]
+# class selectedtestform(forms.ModelForm):
+#     class Meta:
+#         model=prescription_book
+#         # fields=["user","test_name",]
+#         fields="__all__"
+#         read_only_fields=["user"]
 class subscriptionform(forms.ModelForm):
     class Meta:
         fields="__all__"

@@ -18,7 +18,7 @@ import re
 from django.contrib.auth.models import Group
 from django.utils.translation import gettext_lazy as _
 from app1.views import sms
-from django_admin_listfilter_dropdown.filters import DropdownFilter, RelatedDropdownFilter
+# from django_admin_listfilter_dropdown.filters import DropdownFilter, RelatedDropdownFilter
 import datetime
 from django.contrib.auth.models import Permission
 # Register your models here.
@@ -504,25 +504,33 @@ class socialmediaadmin(admin.ModelAdmin):
     #     return super().has_add_permission(request)
 
 class UserAdmin(OriginalUserAdmin): 
-    list_display = ['id','first_name','last_name','email',"phone_no",'age','gender','location','address','date_joined']
+    list_display = ['id','first_name','last_name','email',"phone_no",'age','gender','location','address','date_joined','action_btn']
     # list_editable=['is_confirmed']
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
-        (_('Personal info'), {'fields': ('photo','first_name','last_name', "phone_no",'age','gender','location','address')}),
+        (None, {'fields': ('email', 'password','aggregator')}),
+        (_('Personal info'), {'fields': ('photo','first_name','last_name', "phone_no",'age','gender','location','address',)}),
         (
             _("Permissions"),
             {
                 "fields": (
-                    "is_active",
+                    # "is_active",
                     "is_staff",
                     "is_superuser",
-                    
+                    "groups",
                     "user_permissions",
                 ),
             },
         ),
-       
     )
+    # def has_delete_permission(self, request,obj=None):
+    #     return False
+    def get_form(self, request, obj=None, **kwargs):
+        # Get form from original UserAdmin.
+        form = super(UserAdmin, self).get_form(request, obj, **kwargs)
+        if 'user_permissions' in form.base_fields:
+            permissions = form.base_fields['user_permissions']
+            permissions.queryset = permissions.queryset.exclude(content_type__app_label__in=['admin', 'auth','sessions','django_summernote','contenttypes','admin_black','django_celery','django_celery_beat'])
+        return form
     def action_btn(self, obj):
         html = "<div class='field-action_btn d-flex m-8'> <a class='fa fa-edit ml-2' href='/admin/app1/user/" + \
             str(obj.id)+"/change/'></a><br></br>"
@@ -574,7 +582,6 @@ class bookhistoryadmin(admin.ModelAdmin):
     patient_infoo.short_description = "Patient Info"
     def has_add_permission(self, request):
         return False
-
 class couponadmin(admin.ModelAdmin):
     list_display=["couponcode","discount","Locations","limit","status","startdate","enddate","created","updated","action_btn"]
     list_filter=["cityy","status"]
@@ -660,6 +667,9 @@ class couponadmin(admin.ModelAdmin):
         response = HttpResponse(
         content_type='text/csv',
         headers={'Content-Disposition': 'attachment; filename="couponsdata.csv"'},)
+        # response = HttpResponse(
+        # content_type='application/ms-excel',
+        # headers={'Content-Disposition': 'attachment; filename="couponsdata.xls"'},)
         writer = csv.writer(response)
         writer.writerow(["Coupon Code","Discount","limit","Locations","status","start Date","End Date","Created","Updated"])
         for i in coupons.objects.all():
@@ -695,6 +705,8 @@ class priceadmin(admin.ModelAdmin):
     list_display=["testt","city","price"]
 class paymentadmin(admin.ModelAdmin):
     list_display=["user","paymentid","transid","amount","date"]
+    def has_add_permission(self, request):
+        return False
 class contactusadmin(admin.ModelAdmin):
     list_display=["fullname","email","phone","subject","message",'created','updated']
 class faqadmin(admin.ModelAdmin):
@@ -702,7 +714,8 @@ class faqadmin(admin.ModelAdmin):
 class invoiceadmin(admin.ModelAdmin):
     list_display=['order_id',"items","labtest","packages","healthsymptoms","price"]
 class couponredeemadmin(admin.ModelAdmin):
-    list_display=['order_id',"coupon","discountpercen","discountamount","created",]
+    list_display=["user","booking_id",'order_id',"coupon","discountpercen","discountamount","created",]
+    search_fields=["booking_id","coupon","order_id","user"]
     def export(self,request,queryset):
         response = HttpResponse(
         content_type='text/csv',
@@ -715,7 +728,7 @@ class couponredeemadmin(admin.ModelAdmin):
     actions = [export]
 class requestadmin(admin.ModelAdmin):
     list_display=['firstname','lastname','phone','email','tests','created','updated']
-    
+admin.site.register(User,UserAdmin)
 admin.site.register(faq,faqadmin)
 admin.site.register(contactus,contactusadmin)
 admin.site.register(payment,paymentadmin)
@@ -725,7 +738,6 @@ admin.site.register(test,testadmin)
 # admin.site.register(prescription_book,prescriptionbookadmin)
 admin.site.register(testbook,testbookadmin)
 admin.site.register(Prescriptionbook1,prescriptionbookadmin)
-admin.site.register(User,UserAdmin)
 admin.site.register(category,categoryadmin)
 admin.site.register(healthcheckuppackages,healthcheckup_admin)
 admin.site.register(healthpackages,healthpackage_admin)
@@ -740,9 +752,24 @@ admin.site.register(subscription,subscriptionadmin)
 admin.site.register(coupons,couponadmin)
 admin.site.register(couponredeem,couponredeemadmin)
 # admin.site.register(invoicee,invoiceadmin)
-admin.site.unregister(Group)
 admin.site.register(requestcall,requestadmin)
 admin.site.unregister(get_attachment_model())
+class MyGroupAdminForm(forms.ModelForm):
+    class Meta:
+        model = Group
+        fields = ('name', 'permissions')
+
+    permissions = forms.ModelMultipleChoiceField(
+        Permission.objects.exclude(content_type__app_label__in=['admin', 'auth','sessions','django_summernote','contenttypes','admin_black','django_celery','django_celery_beat']),
+        widget=admin.widgets.FilteredSelectMultiple(_('permissions'), False))
+
+class MyGroupAdmin(admin.ModelAdmin):
+    form = MyGroupAdminForm
+    search_fields = ('name',)
+    ordering = ('name',)
+
+admin.site.unregister(Group)
+admin.site.register(Group, MyGroupAdmin)
 # admin.site.register(Permission)
 
 

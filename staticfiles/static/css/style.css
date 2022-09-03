@@ -1982,3 +1982,23 @@ textarea {
         border-bottom: 0;
     }
 }
+
+#loaderr {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    border: 12px solid #f3f3f3;
+    border-radius: 50%;
+    display: none;
+    border-top: 12px solid #444444;
+    width: 70px;
+    height: 70px;
+    z-index: 9999;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}

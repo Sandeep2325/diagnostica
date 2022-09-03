@@ -1,4 +1,5 @@
 
+from asyncio.windows_events import NULL
 from distutils.command.upload import upload
 from functools import wraps
 from django.db import models
@@ -37,6 +38,7 @@ class city(models.Model):
         return self.cityname
     class Meta:
         verbose_name_plural="City"
+        verbose_name="City"
 class aboutspan(models.Model):
     description1=models.TextField(null=True,blank=True)
     testedpeople=models.IntegerField(null=True,blank=True)  
@@ -49,6 +51,7 @@ class aboutspan(models.Model):
         return str(self.description1)[0:15]
     class Meta:
         verbose_name_plural = "About Span"
+        verbose_name = "About Span"
         
 GENDER_CHOICES = (
   
@@ -73,6 +76,7 @@ class User(AbstractUser,PermissionsMixin):
         max_length=8,
         default="", null=True,blank=True
     )
+    aggregator = models.BooleanField(default=False,)
     is_used = models.BooleanField(default=False)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name','phone_no']
@@ -89,6 +93,7 @@ class category(models.Model):
         return self.categoryy
     class Meta:
         verbose_name_plural = "Test Category"
+        verbose_name = "Test Category"
 class test(models.Model):
     testt=models.TextField(null=True,blank=True,verbose_name="Test")
     testcode=models.CharField(max_length=50,null=True,blank=True,verbose_name="Test Code")
@@ -117,6 +122,7 @@ class test(models.Model):
     #     return super().save(*args, **kwargs)
     class Meta:
         verbose_name_plural = "Tests"
+        verbose_name="Master Test"
 STATUS_CHOICES1 = (
     ('m', 'Mother'),
     ('f', 'Father'),
@@ -130,37 +136,38 @@ STATUS_CHOICES = (
     ('f', 'Female'),
     ('o','Others')
 )   
-class prescription_book(models.Model):
-    unique=models.UUIDField(null=True,blank=True)
-    user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
-    prescription_file=models.FileField(upload_to="prescription",null=True,blank=True)
-    test_name=models.ManyToManyField(test,blank=True)
-    price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
-    myself=models.BooleanField(default=False)
-    others=models.BooleanField(default=False)
-    others_choice = models.CharField(
-        choices=STATUS_CHOICES1,
-        max_length=8,
-        default="", null=True,blank=True
-    )
-    firstname=models.CharField(max_length=200,null=True,blank=True)
-    lastname=models.CharField(max_length=200,null=True,blank=True)
-    contact=models.CharField(max_length=200,null=True,blank=True)
-    age=models.CharField(max_length=3,null=True,blank=True)
-    gender = models.CharField(
-        choices=STATUS_CHOICES,
-        max_length=8,
-        default="", null=True,blank=True
-    )
-    location=models.CharField(max_length=100,null=True,blank=True)
-    address=models.TextField(null=True,blank=True)
-    created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
-    updated = models.DateTimeField(auto_now=True,null=True, blank=True)
+# class prescription_book(models.Model):
+#     unique=models.UUIDField(null=True,blank=True)
+#     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
+#     prescription_file=models.FileField(upload_to="prescription",null=True,blank=True)
+#     test_name=models.ManyToManyField(test,blank=True)
+#     price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
+#     myself=models.BooleanField(default=False)
+#     others=models.BooleanField(default=False)
+#     others_choice = models.CharField(
+#         choices=STATUS_CHOICES1,
+#         max_length=8,
+#         default="", null=True,blank=True
+#     )
+#     firstname=models.CharField(max_length=200,null=True,blank=True)
+#     lastname=models.CharField(max_length=200,null=True,blank=True)
+#     contact=models.CharField(max_length=200,null=True,blank=True)
+#     age=models.CharField(max_length=3,null=True,blank=True)
+#     gender = models.CharField(
+#         choices=STATUS_CHOICES,
+#         max_length=8,
+#         default="", null=True,blank=True
+#     )
+#     location=models.CharField(max_length=100,null=True,blank=True)
+#     address=models.TextField(null=True,blank=True)
+#     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
+#     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
 
-    def __str__(self):
-        return "Prescription booking1"
-    class Meta:
-        verbose_name_plural="Prescription Bookings1" 
+#     def __str__(self):
+#         return "Prescription booking1"
+#     class Meta:
+#         default_permissions = ('add',)
+#         verbose_name_plural="Prescription Bookings1" 
         
 TIME_CHOICES = (
     ("1","7:00AM-11:00AM"),
@@ -209,7 +216,7 @@ class testbook(models.Model):
         return "Test booking"
     class Meta:
         verbose_name_plural="Test Bookings" 
-    
+        verbose_name="Test Bookings"
 @receiver(post_save, sender=testbook)
 def reportresponse(sender, instance, **kwargs):
     
@@ -286,7 +293,7 @@ class Prescriptionbook1(models.Model):
         return "Prescription booking"
     class Meta:
         verbose_name_plural="Prescription Bookings"
-
+        verbose_name="Prescription Bookings"
     # def save(self,*args,**kwargs):
     #     if (self.payment_status== True) and (bool(self.report) == True):
     #         print("--------in")
@@ -356,12 +363,7 @@ def testbookings(sender, instance, **kwargs):
                                 # instance.price=totall
                                 Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=totall)
                                 book_history.objects.filter(uni=instance.bookingid).update(amount=totall)
-                                # instance.save()
-                                # request.session['discountamount']=discount
-                                # request.session['coupon']=coupon
-                                # request.session['couponpercent']=c.discount
-                                # request.session['actualamount']=total
-                                # return JsonResponse({"message":True,"total":float(totall),"percent":c.discount,"discount":"{:.2f}".format(discount)})
+                                couponredeem.objects.create(user=instance.user,booking_id=instance.bookingid,coupon=instance.coupon.couponcode,discountpercen=c.discount,discountamount=discount,actualamount=float(instance.price)-199).save()
                             else:
                                 instance.coupon=None
                                 # raise ValidationError("Invalid Coupon")
@@ -403,7 +405,6 @@ def testbookings(sender, instance, **kwargs):
     #                     fail_silently=False)
 m2m_changed.connect(testbookings, sender=Prescriptionbook1.test_name.through)
 # post_save.disconnect(testbookings, sender=Prescriptionbook1) 
-
 class healthcheckuppackages(models.Model):
     package_title=models.CharField(max_length=200,null=True,blank=True,verbose_name="Test Name")
     test_name=models.ManyToManyField(test,blank=True)
@@ -433,6 +434,7 @@ class healthcheckuppackages(models.Model):
         return self.package_title
     class Meta:
         verbose_name_plural = "Popular Tests"
+        verbose_name="Popular Tests"
     def save(self, *args, **kwargs):  # new
         if not self.slug:
             self.slug = slugify(self.package_title)
@@ -460,6 +462,7 @@ class healthpackages(models.Model):
         return self.package_name
     class Meta:
         verbose_name_plural = "Health Packages"
+        verbose_name = "Health Packages"
     def save(self, *args, **kwargs):  # new
         if not self.slug:
             self.slug = slugify(uuid.uuid4())
@@ -488,6 +491,7 @@ class healthsymptoms(models.Model):
         return self.name
     class Meta:
         verbose_name_plural = "Life Style Assesments"
+        verbose_name = "Life Style Assesments"
     # def save(self, *args, **kwargs):  # new
     #     a=[]
     #     for i in self.test_name.all():
@@ -525,6 +529,7 @@ class healthcareblogs(models.Model):
         return self.title
     class Meta:
         verbose_name_plural = "Blogs"
+        verbose_name = "Blogs"
     def save(self, *args, **kwargs):  # new
         if not self.slug:
             self.slug = slugify(self.title)
@@ -539,6 +544,7 @@ class blogcategory(models.Model):
         return self.category
     class Meta:
         verbose_name_plural="Blogs Category"
+        verbose_name="Blogs Category"
 class testimonials(models.Model):
     username=models.CharField(max_length=200,null=True,blank=True)
     photo=models.ImageField(upload_to='testimonials',max_length=500, verbose_name="Profile photo", null=True, blank=True)
@@ -549,6 +555,7 @@ class testimonials(models.Model):
         return self.username
     class Meta:
         verbose_name_plural = "Testimonials"
+        verbose_name = "Testimonials"
         
 class cart(models.Model):
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
@@ -606,6 +613,7 @@ class book_history(models.Model):
         return "Book History"
     class Meta:
         verbose_name_plural="Booking Histories"
+        verbose_name="Booking Histories"
    
 @receiver(post_save, sender=book_history)
 def reportresponse(sender, instance, **kwargs):
@@ -630,6 +638,7 @@ class payment(models.Model):
 
     class Meta:
         verbose_name_plural="Payments History"
+        verbose_name="Payments History"
 class subscription(models.Model):
     email=models.EmailField(max_length=255,null=True,blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
@@ -647,6 +656,7 @@ class socialmedialinks(models.Model):
         return "Social Media Links"
     class Meta:
         verbose_name_plural="Social media links"
+        verbose_name="Social media links"
 SELECT_CHOICES=[
     ("active","Active"),
     ("inactive","Inactive")
@@ -677,6 +687,7 @@ class coupons(models.Model):
             pass
     class Meta:
         verbose_name_plural="Coupons"
+        verbose_name="Coupons"
 
 class faq(models.Model):
     question=models.CharField(max_length=600,null=True,blank=True)
@@ -686,6 +697,7 @@ class faq(models.Model):
 
     class Meta:
         verbose_name_plural="FAQ"
+        verbose_name="FAQ"
 
 class contactus(models.Model):
     fullname=models.CharField(max_length=200,blank=True,null=True)
@@ -699,6 +711,7 @@ class contactus(models.Model):
         return self.fullname
     class Meta:
         verbose_name_plural="Contact us form"
+        verbose_name="Contact us form"
 
 # class paymentids(models.Model):
 #     orderid=models.CharField(max_length=200,null=True,blank=True),
@@ -711,6 +724,7 @@ class contactus(models.Model):
 #         verbose_name_plural="Payment Ids"
 class couponredeem(models.Model):
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
+    booking_id=models.CharField(max_length=50,null=True,blank=True)
     order_id=models.CharField(max_length=200,null=True,blank=True)
     coupon=models.CharField(max_length=200,null=True,blank=True)
     discountpercen=models.CharField(max_length=200,null=True,blank=True,verbose_name="Discount(%)")
@@ -721,6 +735,7 @@ class couponredeem(models.Model):
         return self.order_id
     class Meta:
         verbose_name_plural="Redeemed Coupons"
+        verbose_name="Redeemed Coupons"
 class requestcall(models.Model):
     firstname=models.CharField(max_length=100,null=True,blank=True,verbose_name="First Name")
     lastname=models.CharField(max_length=100,null=True,blank=True,verbose_name="First Name")
@@ -733,6 +748,7 @@ class requestcall(models.Model):
         return self.firstname
     class Meta:
         verbose_name_plural="Call Back Requests"
+        verbose_name="Call Back Requests"
     
 
     

@@ -137,3 +137,8 @@ blockquote {
 .field-password {
     display: none!important;
 }
+
+
+/* #id_user_permissions_from option {
+    display: none!important;
+} */

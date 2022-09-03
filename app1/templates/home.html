@@ -312,7 +312,6 @@
       </div>
     </div>
   </section>
-
   <section class="section_testimonial" id="testicount">
     <div class="container">
       <div class="row">
@@ -418,13 +417,12 @@
                     </select>
                   </div>
                   <div class="col-12 py-3 mt-4"><button
-                      class="globalsubmitbutton" type="submit">Submit</button>
+                      class="globalsubmitbutton" type="submit" id="requestbtn">Submit</button>
                   </div>
                 </div>
               </div>
             </form>
           </div>
-
         </div>
       </div>
     </div>
@@ -686,6 +684,7 @@ $(document).ready(function(){
       },
     },
     submitHandler: function (form) {
+      $("#requestbtn").prop("disabled",true);
       form.submit();
     }
   });

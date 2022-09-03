@@ -1,0 +1,60 @@
+{%extends "indexx.html"%}
+    {%block content%}
+
+      <div class="container py-5">
+        <div class="row m-0 h-100 ">
+            {% comment %} <div class="col p-0 text-center d-flex justify-content-center align-items-center display-none">
+                <img src="login.svg" class="w-100">
+            </div> {% endcomment %}
+            <div class="col-6 mx-auto p-0 bg-custom d-flex justify-content-center align-items-center flex-column py-5">
+                <form method="post" class="w-75" action="#">
+                    {%csrf_token%}
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="text" class="form-control" name="email" id="email" placeholder="Email"
+                            required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="text" class="form-control" name="password" id="password" placeholder="password"
+                            required>
+                    </div>
+                 
+                    <button type="submit" class="btn btn-custom btn-lg btn-block mt-3">Login Now</button>
+                </form>
+            </div>
+        </div>
+      </div>
+ 
+   {% if messages %}
+   {% for message in messages %}
+   {% if message.tags == "error"%}
+   <script>
+  
+     $(document).ready(function(){
+      // swal('{{message}}');
+       swal({
+       title:'{{message}}',
+       //text: "You clicked the button!",
+       icon:"warning",
+       button:"ok"
+   });
+     });
+   </script>
+   {%else%}
+   <script>
+     $(document).ready(function(){
+      // swal('{{message}}');
+   
+       swal({
+       title:'{{message}}',
+       //text: "You clicked the button!",
+       icon:"success",
+       button:"ok"
+   });
+     });
+   </script>
+   {% endif %}
+   {%endfor%}
+   {% endif %}
+   {%endblock%}

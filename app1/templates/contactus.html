@@ -54,7 +54,7 @@
                                                 placeholder="Your Message" name="message" maxlength="250"></textarea>
                                         </div>
                                         <div class="col-12 pt-4 mt-lg-2">
-                                            <button class="contact_button br br-5 cl-dark-white fs-18 font-bold" type="submit">SEND
+                                            <button class="contact_button br br-5 cl-dark-white fs-18 font-bold" type="submit" id="callbackbtn">SEND
                                                 MESSAGE</button>
                                         </div>
                                     </div>
@@ -89,12 +89,9 @@
             </div>
         </div>
     </section>
-
     {%include "footer.html"%}
 </body>
-
 <script>
-
     jQuery.validator.addMethod("name_regex", function (value, element) {
         return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);
     }, "Enter valid name");
@@ -154,6 +151,7 @@
             },
         },
         submitHandler: function (form) {
+            $("#callbackbtn").prop("disabled",true);
             form.submit();
         }
     });

@@ -1,28 +1,22 @@
 {% load i18n static admin_black %}
-
 {% if user.is_active and user.is_staff or has_permission %}
     <div class="sidebar">
         <div class="sidebar-wrapper">
             <div class="logo">
                 <a href="{% url 'admin:index' %}" class="simple-text logo-normal">{% trans 'Diagnostica Span' %}</a>
             </div>
-           
             <ul class="nav">
                 <li>
-                    {% comment %} <a href="{{ site_url }}">
-                        
-                        <p class="home">{% trans 'Site' %}</p>
-                    </a> {% endcomment %}
                     <a href="{% url 'admin:index' %}">
                        
                         <p class="home">
                             <i class="tim-icons icon-chart-pie-36"></i>{% trans 'Dashboard' %}</p>
                     </a>
                 </li>
-                
                 {% admin_black_get_menu as app_list %}
                 {% if app_list %}
                     {% for app in app_list %}
+                    {%if app.app_label == "app1"%}
                         {% if app.has_perms and not app.pinned %}
                             <li>
                                 <a{% if not app.models and app.url %} href="{{ app.url }}"{% endif %}
@@ -32,9 +26,7 @@
                                                                       data-order="{{ forloop.counter }}"
                                         {% if app.url_blank %} target="_blank"{% endif %}>
                                     <i class="{{ app.icon }}"></i>
-                                    
                                     <p>
-
                                        <i class="tim-icons icon-single-02"></i> 
                                         Admin 
                                         {% if app.models %}
@@ -63,11 +55,12 @@
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
                                                     {% comment %} <i class="tim-icons icon-paper"></i> {% endcomment %}
+                                                    
                                                     <a href="{{ model.url }}">
                                                         <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
-                                                        <span>{{ model.label }}</span>
-                                                        
+                                                        <span>{{ model.label }}yutyutyu</span>
                                                     </a>
+                                                    
                                                 </li>
                                             {% else %}
                                                 <li>{{ model.label }}</li>
@@ -85,21 +78,21 @@
                                             {% else %}
                                                 <li>{{ model.label }}</li>
                                             {% endif %}
-                                            {%elif model.label == "Booking Histories"%}
+                                            {%elif model.label == "City"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
-                                                    {% comment %} <i class="tim-icons icon-refresh-02"></i> {% endcomment %}
+                                                    {% comment %} <i class="tim-icons icon-tap-02"></i> {% endcomment %}
                                                     <a href="{{ model.url }}">
                                                         <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
                                                         <span>{{ model.label }}</span>
-                                                       
+                                                        
                                                     </a>
                                                 </li>
                                             {% else %}
                                                 <li>{{ model.label }}</li>
                                             {% endif %}
 
-                                            {%elif model.label == "City"%}
+                                            {%elif model.label == "Booking Histories"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
                                                     {% comment %} <i class="tim-icons icon-refresh-02"></i> {% endcomment %}
@@ -146,15 +139,12 @@
                                 {% endif %}
                             </li>
                         {% endif %}
+                        {% endif %}
                     {% endfor %}
                 {% endif %}
-
-
-
-
-
                 {% if app_list %}
                     {% for app in app_list %}
+                    {%if app.app_label == "app1"%}
                         {% if app.has_perms and not app.pinned %}
                             <li>
                                 <a{% if not app.models and app.url %} href="{{ app.url }}"{% endif %}
@@ -222,6 +212,7 @@
                                 {% endif %}
                             </li>
                         {% endif %}
+                        {% endif %}
                     {% endfor %}
                 {% endif %}
                 {% if app_list %}
@@ -241,61 +232,15 @@
                             <i class="fa fa-users stroke-transparent" aria-hidden="true"></i>{% trans 'Registered Users' %}</p>
                     </a>
                 </li>
-{%endif%}
-{%endfor%}
-{%endif%}
-{%endif%}
-{%endfor%}
-{%endif%}
-
-
-                {% comment %} {% if app_list %}
-                    {% for app in app_list %}
-                        {% if app.has_perms and not app.pinned %}
-                            <li>
-                                <a{% if not app.models and app.url %} href="{{ app.url }}"{% endif %}
-                                                                      class="navbar-btn sidebar-link popup-section-link app-item"
-                                                                      data-app-label="{{ app.app_label }}"
-                                                                      data-popup-section-class="sidebar-popup-section-{{ app.app_label }}"
-                                                                      data-order="{{ forloop.counter }}"
-                                        {% if app.url_blank %} target="_blank"{% endif %}>
-                                    <i class="{{ app.icon }}"></i>
-                                    <p><i class="fa fa-users stroke-transparent" aria-hidden="true"></i>
-                                        Users 
-                                        {% if app.models %}
-                                            <span class="tim-icons icon-minimal-down m-2"></span>
-                                        {% endif %}
-                                    </p>
-                                </a>
-
-                                {% if app.models %}
-                                    <ul class="navbar-dropdown">
-                                        {% for model in app.models %}
-                                        {%if model.label == "Registered Users"%}
-                                            {% if model.url %}
-                                                <li class="{{ direction.panel }}">
-                                                    <a href="{{ model.url }}">
-                                                     <a href="{{ model.url }}"> 
-                                                        <span>{{ model.label }}</span>
-                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
-                                                    </a>
-                                                </li>
-                                            {% else %}
-                                                <li>{{ model.label }}</li>
-                                            {% endif %}
-                                            {%endif%}
-                                            
-                                        {% endfor %}
-                                    </ul>
-                                {% endif %}
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %} {% endcomment %}
-
-
+                {%endif%}
+                {%endfor%}
+                {%endif%}
+                {%endif%}
+                {%endfor%}
+                {%endif%}
                 {% if app_list %}
                     {% for app in app_list %}
+                    {%if app.app_label == "app1"%}
                         {% if app.has_perms and not app.pinned %}
                             <li>
                                 <a{% if not app.models and app.url %} href="{{ app.url }}"{% endif %}
@@ -323,7 +268,6 @@
                                                     <a href="{{ model.url }}">
                                                         <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
                                                         <span>{{ model.label }}</span>
-                                                       
                                                     </a>
                                                 </li>
                                             {% else %}
@@ -348,6 +292,7 @@
                                 {% endif %}
                             </li>
                         {% endif %}
+                        {% endif %}
                     {% endfor %}
                 {% endif %}
 
@@ -358,10 +303,6 @@
                 {% for model in app.models %}
                                         {%if model.label == "Payments History"%}
                 <li>
-                    {% comment %} <a href="{{ site_url }}">
-                        
-                        <p class="home">{% trans 'Site' %}</p>
-                    </a> {% endcomment %}
                     <a href="{{ model.url }}">
                        
                         <p class="home">
@@ -374,57 +315,9 @@
 {%endif%}
 {%endfor%}
 {%endif%}
-                {% comment %} {% if app_list %}
-                    {% for app in app_list %}
-                        {% if app.has_perms and not app.pinned %}
-                            <li>
-                                <a{% if not app.models and app.url %} href="{{ app.url }}"{% endif %}
-                                                                      class="navbar-btn sidebar-link popup-section-link app-item"
-                                                                      data-app-label="{{ app.app_label }}"
-                                                                      data-popup-section-class="sidebar-popup-section-{{ app.app_label }}"
-                                                                      data-order="{{ forloop.counter }}"
-                                        {% if app.url_blank %} target="_blank"{% endif %}>
-                                    <i class="{{ app.icon }}"></i>
-                                    <p><i class="tim-icons icon-money-coins"></i> 
-                                        Payment 
-                                        {% if app.models %}
-                                            <span class="tim-icons icon-minimal-down m-2"></span>
-                                        {% endif %}
-                                    </p>
-                                </a>
-
-                                {% if app.models %}
-                                    <ul class="navbar-dropdown">
-                                        {% for model in app.models %}
-                                        {%if model.label == "Payments History"%}
-                                            {% if model.url %}
-                                                <li class="{{ direction.panel }}">
-                                                    <i class="tim-icons icon-money-coins"></i> 
-                                                    <a href="{{ model.url }}">
-                                                        <span>{{ model.label }}</span>
-                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
-                                                    </a>
-                                                </li>
-                                            {% else %}
-                                                <li>{{ model.label }}</li>
-                                            {% endif %}
-                                            
-                                            {%endif%}
-                                            
-                                        {% endfor %}
-                                    </ul>
-                                {% endif %}
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %} {% endcomment %}
-
-
-
-
-                
                 {% if app_list %}
                     {% for app in app_list %}
+                    {%if app.app_label == "app1"%}
                         {% if app.has_perms and not app.pinned %}
                             <li>
                                 <a{% if not app.models and app.url %} href="{{ app.url }}"{% endif %}
@@ -476,16 +369,15 @@
                                 {% endif %}
                             </li>
                         {% endif %}
+                        {% endif %}
                     {% endfor %}
                 {% endif %}
 
 
-
-
-
-
                 {% if app_list %}
+               
                     {% for app in app_list %}
+                    {%if app.app_label == "app1"%}
                         {% if app.has_perms and not app.pinned %}
                             <li>
                                 <a{% if not app.models and app.url %} href="{{ app.url }}"{% endif %}
@@ -573,7 +465,61 @@
                                             {% else %}
                                                 <li>{{ model.label }}</li>
                                             {% endif %}
+                                            
+                                            {%elif model.label == "Franchise"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    {% comment %} <i class="fa fa-question-circle" aria-hidden="true"></i> {% endcomment %}
+                                                    <a href="{{ model.url }}">
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                        <span>{{ model.label }}</span>
+                                                        
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
 
+                                            {%elif model.label == "User Medications"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    {% comment %} <i class="fa fa-question-circle" aria-hidden="true"></i> {% endcomment %}
+                                                    <a href="{{ model.url }}">
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                        <span>{{ model.label }}</span>
+                                                        
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
+
+                                            {%elif model.label == "Careers Form"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    {% comment %} <i class="fa fa-question-circle" aria-hidden="true"></i> {% endcomment %}
+                                                    <a href="{{ model.url }}">
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                        <span>{{ model.label }}</span>
+                                                        
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
+                                            {%elif model.label == "Career Designations"%}
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    {% comment %} <i class="fa fa-question-circle" aria-hidden="true"></i> {% endcomment %}
+                                                    <a href="{{ model.url }}">
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                        <span>{{ model.label }}</span>
+                                                        
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
                                             {%elif model.label == "Testimonials"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
@@ -595,8 +541,31 @@
                                 {% endif %}
                             </li>
                         {% endif %}
+                        {% endif %}
                     {% endfor %}
                 {% endif %}
+                {% if app_list %}
+                {% for app in app_list %}
+                {%if app.app_label == "auth" %}
+              
+                {% if app.has_perms and not app.pinned %}
+                {% if app.models %}
+                {% for model in app.models %}
+                {%if model.label == "Groups"%}
+                <li>
+                    <a href="{{ model.url }}">
+                       
+                        <p class="home">
+                            <i class="fa fa-users stroke-transparent" aria-hidden="true"></i>{% trans 'Groups' %}</p>
+                    </a>
+                </li>
+                {%endif%}
+                {%endfor%}
+                {%endif%}
+                {%endif%}
+                {%endif%}
+                {%endfor%}
+                {%endif%}
             </ul>
         </div>
     </div>

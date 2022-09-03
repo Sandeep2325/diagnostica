@@ -165,7 +165,6 @@
     </section>
 </body>
 <script> 
-    
   jQuery.validator.addMethod("name_regex", function (value, element) {
     return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);
   }, "Enter valid name");
@@ -237,7 +236,9 @@
       swal("", "Please update every field", "warning");
     }    
     else{ 
-    $.ajax({
+      $('#request_call_back').prop('disabled', true);
+      //$("#request_call_back").("disabled",true)
+      $.ajax({
         url: "{% url 'requestcall' %}",
         type: "POST",
         dataType: "json",
@@ -250,6 +251,7 @@
             'csrfmiddlewaretoken': '{{ csrf_token }}',
         },
         success: function (resp) {
+          $('#request_call_back').prop('disabled', false);
             $("#emaill").val('');
             if (!resp["message"]){
                 swal("Something Went Wrong", "Try Again", "warning");

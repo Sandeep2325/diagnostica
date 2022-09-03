@@ -25,3 +25,7 @@ def split(value, key):
 def split2(value, key):
     a=value.split(key)
     return a[1]
+
+# @register.filter()
+# def subtract(value, arg):
+#     return value - arg

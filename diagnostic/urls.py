@@ -19,6 +19,7 @@ from app1 import urls
 # from app1 import *
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('aggregator/',include("aggregator.urls")),
     path('',include("app1.urls")),
     path('summernote/', include('django_summernote.urls')),
     # path('baton/', include('baton.urls')),

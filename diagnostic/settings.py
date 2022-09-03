@@ -27,12 +27,9 @@ ALLOWED_HOSTS = [
     "www.spandiagno.com",
      ]
 env = environ.Env()
-
-
 # Application definition
 
 INSTALLED_APPS = [
-    
     'admin_black.apps.AdminBlackConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "app1",
+    "aggregator",
+    # "django_admin_listfilter_dropdown",
     # 'baton.autodiscover',
     
 ]
@@ -85,8 +84,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 WSGI_APPLICATION = 'diagnostic.wsgi.application'
 AUTH_USER_MODEL = 'app1.User'
-
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
@@ -94,26 +91,26 @@ AUTH_USER_MODEL = 'app1.User'
 #     }
 # }
 
-DATABASES = {  
-    'default': {  
-        'ENGINE': 'django.db.backends.mysql',  
-        'NAME': 'spandiagnodb',  
-        'USER': 'spandiagno_user',  
-        'PASSWORD': 'spanDiagnoV2db',  
-        'HOST': 'spandiagnov2.cubknyrg0xrn.us-east-2.rds.amazonaws.com',  
-        'PORT': '3306',   
-    }  
-} 
 # DATABASES = {  
 #     'default': {  
-#         'ENGINE': 'django.db.backends.mysql', 
-#         'NAME': 'diagnospan1',  
-#         'USER': 'root',  
-#         'PASSWORD': 'Sandeep@8105',  
-#         'HOST': 'localhost',  
-#         'PORT': '3306',
-#     }
-#     }
+#         'ENGINE': 'django.db.backends.mysql',  
+#         'NAME': 'spandiagnodb',  
+#         'USER': 'spandiagno_user',  
+#         'PASSWORD': 'spanDiagnoV2db',  
+#         'HOST': 'spandiagnov2.cubknyrg0xrn.us-east-2.rds.amazonaws.com',  
+#         'PORT': '3306',   
+#     }  
+# } 
+DATABASES = {  
+    'default': {  
+        'ENGINE': 'django.db.backends.mysql', 
+        'NAME': 'diagnospan1',  
+        'USER': 'root',  
+        'PASSWORD': 'Sandeep@8105',  
+        'HOST': 'localhost',  
+        'PORT': '3306',
+    }
+}
 # DATABASES = {  
 #     'default': {  
 #         'ENGINE': 'django.db.backends.mysql',  
@@ -169,12 +166,10 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Kolkata'
-
+# DATETIME_FORMAT = '%d-%m-%Y %H:%M:%S'
 USE_I18N = True
-
+USE_L10N = False
 USE_TZ = True
-
-import os
 STATICFILES_DIRS  = [
 
         os.path.join(BASE_DIR, 'staticfiles/static'),
@@ -189,16 +184,19 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
-RAZOR_KEY_ID = "rzp_live_ZSkJErOIklssAc"
-RAZOR_KEY_SECRET = "Er7q5aHnDix03E1y66x0bMIA"
+# RAZOR_KEY_ID = "rzp_live_ZSkJErOIklssAc"
+# RAZOR_KEY_SECRET = "Er7q5aHnDix03E1y66x0bMIA"
 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_USE_TLS = True
-# # EMAIL_USE_SSL=FALSE
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = "gowdasandeep8105@gmail.com"
-# EMAIL_HOST_PASSWORD = 'atkzlpfgzcvpdhai'
+
+RAZOR_KEY_ID = "rzp_test_JiD8eNtJ2aNwZr"
+RAZOR_KEY_SECRET = "gtukARkLZ5U4Bjo9EfCSWkMf"
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+# EMAIL_USE_SSL=FALSE
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "gowdasandeep8105@gmail.com"
+EMAIL_HOST_PASSWORD = 'atkzlpfgzcvpdhai'
 
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_HOST = 'mail.spandiagno.com'
@@ -207,13 +205,13 @@ RAZOR_KEY_SECRET = "Er7q5aHnDix03E1y66x0bMIA"
 # EMAIL_HOST_USER = "donotreplay@spandiagno.com"
 # EMAIL_HOST_PASSWORD = 'Fullmoon22@'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp-mail.outlook.com'
-EMAIL_USE_TLS = True
-# EMAIL_USE_SSL=FALSE
-EMAIL_PORT = 587
-EMAIL_HOST_USER = "enquiry@spanhealth.com"
-EMAIL_HOST_PASSWORD = 'Ravi@123'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp-mail.outlook.com'
+# EMAIL_USE_TLS = True
+# # EMAIL_USE_SSL=FALSE
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = "enquiry@spanhealth.com"
+# EMAIL_HOST_PASSWORD = 'Ravi@123'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # SESSION_SAVE_EVERY_REQUEST =True
@@ -234,14 +232,8 @@ JAZZMIN_SETTINGS = {
     "default_icon_parents": "",
     "default_icon_children": "",
     }
-# CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Asia/Kolkata'
-CELERY_RESULT_BACKEND = 'django-db'
-#CELERY BEAT
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+
 
 SESSION_COOKIE_AGE = 1209600
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
