@@ -347,56 +347,63 @@ def testbookings(sender, instance, **kwargs):
             from datetime import datetime,timezone 
             c=coupons.objects.get(couponcode=instance.coupon.couponcode,status="active")
             couponcount=couponredeem.objects.filter(coupon=instance.coupon).count()
-            if datetime.now(timezone.utc)>c.startdate:
-                if datetime.now(timezone.utc)<c.enddate:
-                    if c.cityy.filter(cityname=instance.location).exists():
-                        # if c.limit!=0 or c.limit>0:
-                        try:
-                            if couponcount<c.limit:
+            presc=Prescriptionbook1.objects.get(bookingid=instance.bookingid)
+            if presc.coupon==None:
+                if datetime.now(timezone.utc)>c.startdate:
+                    if datetime.now(timezone.utc)<c.enddate:
+                        if c.cityy.filter(cityname=instance.location).exists():
+                            # if c.limit!=0 or c.limit>0:
+                            try:
+                                if couponcount<c.limit:
+                                    c.discount
+                                    # print("=====",c.discount)
+                                    # print(float(float(instance.price)-199))
+                                    discount=(float(float(instance.price)-199)*(int(c.discount)/100))
+                                    # print("###########",discount)
+                                    totall=(float(float(instance.price)-199)-int(discount))+199
+                                    # print(totall)
+                                    # instance.price=totall
+                                    Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=totall)
+                                    book_history.objects.filter(uni=instance.bookingid).update(amount=totall)
+                                    couponredeem.objects.create(user=instance.user,booking_id=instance.bookingid,coupon=instance.coupon.couponcode,discountpercen=c.discount,discountamount=discount,actualamount=float(instance.price)-199).save()
+                                else:
+                                    instance.coupon=None
+                            except:
                                 c.discount
-                                print("=====",c.discount)
+                                # print("=====",c.discount)
                                 print(float(float(instance.price)-199))
                                 discount=(float(float(instance.price)-199)*(int(c.discount)/100))
-                                print("###########",discount)
+                                # print("###########",discount)
                                 totall=(float(float(instance.price)-199)-int(discount))+199
-                                print(totall)
+                                # print(totall)
                                 # instance.price=totall
                                 Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=totall)
                                 book_history.objects.filter(uni=instance.bookingid).update(amount=totall)
                                 couponredeem.objects.create(user=instance.user,booking_id=instance.bookingid,coupon=instance.coupon.couponcode,discountpercen=c.discount,discountamount=discount,actualamount=float(instance.price)-199).save()
-                            else:
-                                instance.coupon=None
-                        except:
-                            c.discount
-                            print("=====",c.discount)
-                            print(float(float(instance.price)-199))
-                            discount=(float(float(instance.price)-199)*(int(c.discount)/100))
-                            print("###########",discount)
-                            totall=(float(float(instance.price)-199)-int(discount))+199
-                            print(totall)
-                            # instance.price=totall
-                            Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=totall)
-                            book_history.objects.filter(uni=instance.bookingid).update(amount=totall)
-                            couponredeem.objects.create(user=instance.user,booking_id=instance.bookingid,coupon=instance.coupon.couponcode,discountpercen=c.discount,discountamount=discount,actualamount=float(instance.price)-199).save()
-        
-                                # raise ValidationError("Invalid Coupon")
-                                # return JsonResponse({"message":False})
-                        # else:
-                        #     instance.coupon=None
-                        #     # raise ValidationError("Invalid Coupon")
-                        #     # return JsonResponse({"message":False})
+
+                                    # raise ValidationError("Invalid Coupon")
+                                    # return JsonResponse({"message":False})
+                            # else:
+                            #     instance.coupon=None
+                            #     # raise ValidationError("Invalid Coupon")
+                            #     # return JsonResponse({"message":False})
+                        else:
+                            instance.coupon=None
+                            # raise ValidationError("Invalid Coupon")
+                            # return JsonResponse({"message":False})
                     else:
                         instance.coupon=None
                         # raise ValidationError("Invalid Coupon")
                         # return JsonResponse({"message":False})
+
                 else:
                     instance.coupon=None
                     # raise ValidationError("Invalid Coupon")
                     # return JsonResponse({"message":False})
             else:
-                instance.coupon=None
-                # raise ValidationError("Invalid Coupon")
-                # return JsonResponse({"message":False})
+                    instance.coupon=None
+                    # raise ValidationError("Invalid Coupon")
+                    # return JsonResponse({"message":False})
         except Exception as e:
             print("-----------",e)
             # c=coupons.objects.get(couponcode=instance.coupon.couponcode) 
@@ -745,7 +752,7 @@ class couponredeem(models.Model):
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     actualamount=models.CharField(max_length=20,null=True,blank=True)
     def __str__(self):
-        return self.order_id
+        return self.coupon
     class Meta:
         verbose_name_plural="Redeemed Coupons"
         verbose_name="Redeemed Coupons"

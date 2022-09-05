@@ -1943,9 +1943,7 @@ def coupon(request):
                                     request.session['actualamount']=total
                                     return JsonResponse({"message":True,"total":float(totall),"percent":c.discount,"discount":"{:.2f}".format(discount)})
                                 else:
-
                                     return JsonResponse({"message":False})
-                            
                             except:
                                 c.discount
                                 discount=(float(total)*(int(c.discount)/100))
@@ -1967,15 +1965,12 @@ def coupon(request):
                    
                     return JsonResponse({"message":False})
             except Exception as e:
-                
                 return JsonResponse({"message":False})
         if request.POST.get("action")=="prescription":
             coupon=request.POST.get("coupon")
             total=request.POST.get("total")
             uni=request.POST.get("uni")
             citi=request.session.get("tempcity")
-            # couponval=/^.{1,15}$/
-            # result = re.match(couponval,coupon)
             try:
                 c=coupons.objects.get(couponcode=coupon,status="active")
                 couponcount=couponredeem.objects.filter(coupon=coupon).count()
