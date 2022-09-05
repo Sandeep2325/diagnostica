@@ -2290,7 +2290,10 @@ class BookingHistoryPay(LoginRequiredMixin,View):
         payments=payment.objects.filter(user=request.user).order_by('-date')
         for i in bookhistories:
             try:
-                testbooking=Prescriptionbook1.objects.get(bookingid=i.uni)
+                try:
+                    testbooking=Prescriptionbook1.objects.get(bookingid=i.uni)
+                except:
+                    pass
                 hi = {}
                 hi["id"] = i.id
                 hi["created"] = i.created
@@ -2314,8 +2317,10 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 hi['amount'] = i.amount
                 his.append(hi)
             except:
-                testbooking=testbook.objects.get(bookingid=i.uni)
-                # hi['prescription'] = None
+                try:
+                    testbooking=testbook.objects.get(bookingid=i.uni)
+                except:
+                    pass
                 hi = {}
                 hi["id"] = i.id
                 hi["created"] = i.created
@@ -2335,7 +2340,6 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                     hi['report'] = None
                 hi['amount'] = i.amount
                 his.append(hi)
-
         context={
             "city":cit,
             "bookhistories":his,
