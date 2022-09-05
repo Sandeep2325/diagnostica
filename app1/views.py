@@ -2270,7 +2270,14 @@ def invoice(request,orderid):
         "amount":c
             }
     template_name='invoice2.html'
+    from django.core.files import File
     pdf = html_to_pdf(template_name,context_dict)
+    receipt_file = BytesIO(pdf.content)
+    print("-------",receipt_file)
+    filee = invoicee.objects.get(order_id=orderid)
+    print(File(receipt_file, "invoice2.pdf"))
+    filee.file = File(receipt_file, "invoice2.pdf")
+    filee.save()
     return FileResponse(pdf,as_attachment=True,filename="invoice2.pdf",content_type='application/pdf') 
 
 from django.contrib.auth.mixins import LoginRequiredMixin

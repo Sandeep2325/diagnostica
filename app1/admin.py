@@ -728,6 +728,15 @@ class couponredeemadmin(admin.ModelAdmin):
     actions = [export]
 class requestadmin(admin.ModelAdmin):
     list_display=['firstname','lastname','phone','email','tests','created','updated']
+class invoiceeadmin(admin.ModelAdmin):
+    list_display=['user','order_id','file','created','updated']
+    
+    def has_add_permission(self, request):
+        return False
+    
+    
+    def has_delete_permission(self, request):
+        return False
 admin.site.register(User,UserAdmin)
 admin.site.register(faq,faqadmin)
 admin.site.register(contactus,contactusadmin)
@@ -754,6 +763,7 @@ admin.site.register(couponredeem,couponredeemadmin)
 # admin.site.register(invoicee,invoiceadmin)
 admin.site.register(requestcall,requestadmin)
 admin.site.unregister(get_attachment_model())
+admin.site.register(invoicee,invoiceeadmin)
 class MyGroupAdminForm(forms.ModelForm):
     class Meta:
         model = Group

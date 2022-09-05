@@ -91,26 +91,26 @@ AUTH_USER_MODEL = 'app1.User'
 #     }
 # }
 
-# DATABASES = {  
-#     'default': {  
-#         'ENGINE': 'django.db.backends.mysql',  
-#         'NAME': 'spandiagnodb',  
-#         'USER': 'spandiagno_user',  
-#         'PASSWORD': 'spanDiagnoV2db',  
-#         'HOST': 'spandiagnov2.cubknyrg0xrn.us-east-2.rds.amazonaws.com',  
-#         'PORT': '3306',   
-#     }  
-# } 
 DATABASES = {  
     'default': {  
-        'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'diagnospan1',  
-        'USER': 'root',  
-        'PASSWORD': 'Sandeep@8105',  
-        'HOST': 'localhost',  
-        'PORT': '3306',
-    }
-}
+        'ENGINE': 'django.db.backends.mysql',  
+        'NAME': 'spandiagnodb',  
+        'USER': 'spandiagno_user',  
+        'PASSWORD': 'spanDiagnoV2db',  
+        'HOST': 'spandiagnov2.cubknyrg0xrn.us-east-2.rds.amazonaws.com',  
+        'PORT': '3306',   
+    }  
+} 
+# DATABASES = {  
+#     'default': {  
+#         'ENGINE': 'django.db.backends.mysql', 
+#         'NAME': 'diagnospan1',  
+#         'USER': 'root',  
+#         'PASSWORD': 'Sandeep@8105',  
+#         'HOST': 'localhost',  
+#         'PORT': '3306',
+#     }
+# }
 # DATABASES = {  
 #     'default': {  
 #         'ENGINE': 'django.db.backends.mysql',  
@@ -186,8 +186,6 @@ STATIC_URL = '/static/'
 
 RAZOR_KEY_ID = "rzp_live_ZSkJErOIklssAc"
 RAZOR_KEY_SECRET = "Er7q5aHnDix03E1y66x0bMIA"
-
-
 # RAZOR_KEY_ID = "rzp_test_JiD8eNtJ2aNwZr"
 # RAZOR_KEY_SECRET = "gtukARkLZ5U4Bjo9EfCSWkMf"
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
