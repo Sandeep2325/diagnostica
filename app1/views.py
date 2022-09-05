@@ -2286,7 +2286,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
         his = []
         cit=city.objects.filter(active=True)
         bookhistories=book_history.objects.filter(user=request.user).order_by('-created')
-        testbooking=Prescriptionbook1.objects.filter(user=request.user)
+        # testbooking=Prescriptionbook1.objects.filter(user=request.user)
         payments=payment.objects.filter(user=request.user).order_by('-date')
         for i in bookhistories:
             try:
@@ -2342,7 +2342,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
             "bookinghistorylength":len(his),
             "paymentcount":payments.count(),
             "payments":payments,
-            "testbooking":testbooking,
+            # "testbooking":testbooking,
         }
         return render(request,"booking-history.html",context)
     
