@@ -2387,8 +2387,8 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 scheme=request.scheme
                 urll=request.get_host()
                 # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100)
-                callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
-                # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100) 
+                # callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
+                callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100) 
                 to_return = {
                     "razorKey":settings.RAZOR_KEY_ID,
                     "valid":True,
