@@ -1641,8 +1641,8 @@ def paymenthandler(request,str,amount):
                         f"Payment Successfull| Dignostica Span | Booking Id:{history.bookingid}",
                         mes,
                         email_from,
-                        # ["reachus@spanhealth.com"],
-                        ["sandeep.nexevo@gmail.com"],
+                        ["reachus@spanhealth.com"],
+                        # ["sandeep.nexevo@gmail.com"],
                         fail_silently=False,
                     )
                     messages.info(request, "Thankyou for making payment our team will come and collect the sample soon.")
@@ -2476,8 +2476,8 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                     f"Cash On delivery | Dignostica Span | Booking Id:{id}",
                     mes,
                     email_from,
-                    # ["reachus@spanhealth.com"],
-                    ["sandeep.nexevo@gmail.com"],
+                    ["reachus@spanhealth.com"],
+                    # ["sandeep.nexevo@gmail.com"],
                     fail_silently=False,
                 )
             except:
@@ -2489,8 +2489,8 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                     f"Cash On delivery | Dignostica Span | Booking Id:{id}",
                     mes,
                     email_from,
-                    # ["reachus@spanhealth.com"],
-                    ["sandeep.nexevo@gmail.com"],
+                    ["reachus@spanhealth.com"],
+                    # ["sandeep.nexevo@gmail.com"],
                     fail_silently=False,
                 )
             to_return = {"valid":True}
