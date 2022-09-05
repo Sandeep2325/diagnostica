@@ -8,7 +8,6 @@
             <ul class="nav">
                 <li>
                     <a href="{% url 'admin:index' %}">
-                       
                         <p class="home">
                             <i class="tim-icons icon-chart-pie-36"></i>{% trans 'Dashboard' %}</p>
                     </a>
@@ -35,7 +34,7 @@
                                     </p>
                                 </a>
 
-                                {% if app.models %}
+                                {% if app.models%}
                                     <ul class="navbar-dropdown">
                                         {% for model in app.models %}
                                         {%if model.label == "City"%}
@@ -51,20 +50,21 @@
                                             {% else %}
                                                 <li>{{ model.label }}</li>
                                             {% endif %}
+
                                             {%elif model.label == "Prescription Bookings"%}
+                                            
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
                                                     {% comment %} <i class="tim-icons icon-paper"></i> {% endcomment %}
-                                                    
                                                     <a href="{{ model.url }}">
                                                         <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
-                                                        <span>{{ model.label }}yutyutyu</span>
+                                                        <span>{{ model.label }}</span>
                                                     </a>
-                                                    
                                                 </li>
                                             {% else %}
                                                 <li>{{ model.label }}</li>
                                             {% endif %}
+
                                             {%elif model.label == "Test Bookings"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
@@ -72,7 +72,6 @@
                                                     <a href="{{ model.url }}">
                                                         <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
                                                         <span>{{ model.label }}</span>
-                                                        
                                                     </a>
                                                 </li>
                                             {% else %}
@@ -107,13 +106,13 @@
                                             {% endif %}
 
                                             {%elif model.label == "Test Category"%}
+                                            {{model}}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
                                                     {% comment %} <i class="tim-icons icon-components"></i> {% endcomment %}
                                                     <a href="{{ model.url }}">
                                                         <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
                                                         <span>{{ model.label }}</span>
-                                                      
                                                     </a>
                                                 </li>
                                             {% else %}
