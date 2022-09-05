@@ -1925,15 +1925,14 @@ def coupon(request):
             coupon=request.POST.get("coupon")
             total=request.POST.get("total")
             citi=request.session.get("tempcity")
-            # couponval=/^.{1,15}$/
-            # result = re.match(couponval,coupon)
             try:
                 c=coupons.objects.get(couponcode=coupon,status="active")
                 couponcount=couponredeem.objects.filter(coupon=coupon).count()
                 if datetime.now(timezone.utc)>c.startdate:
                     if datetime.now(timezone.utc)<c.enddate:
                         if c.cityy.filter(cityname=citi).exists():
-                            if c.limit!=0 or c.limit>0:
+                            # if c.limit!=0 or c.limit>0:
+                            try:
                                 if couponcount<c.limit:
                                     c.discount
                                     discount=(float(total)*(int(c.discount)/100))
@@ -1944,16 +1943,31 @@ def coupon(request):
                                     request.session['actualamount']=total
                                     return JsonResponse({"message":True,"total":float(totall),"percent":c.discount,"discount":"{:.2f}".format(discount)})
                                 else:
+
                                     return JsonResponse({"message":False})
-                            else:
-                                return JsonResponse({"message":False})
+                            
+                            except:
+                                c.discount
+                                discount=(float(total)*(int(c.discount)/100))
+                                totall=(float(total)-int(discount))+199
+                                request.session['discountamount']=discount
+                                request.session['coupon']=coupon
+                                request.session['couponpercent']=c.discount
+                                request.session['actualamount']=total
+                                return JsonResponse({"message":True,"total":float(totall),"percent":c.discount,"discount":"{:.2f}".format(discount)})
+                            # else:
+                            #     return JsonResponse({"message":False})
                         else:
+                          
                             return JsonResponse({"message":False})
                     else:
+                        
                         return JsonResponse({"message":False})
                 else:
+                   
                     return JsonResponse({"message":False})
-            except:
+            except Exception as e:
+                
                 return JsonResponse({"message":False})
         if request.POST.get("action")=="prescription":
             coupon=request.POST.get("coupon")
@@ -1970,7 +1984,8 @@ def coupon(request):
                     if datetime.now(timezone.utc)>c.startdate:
                         if datetime.now(timezone.utc)<c.enddate:
                             if c.cityy.filter(cityname=citi).exists():
-                                if c.limit!=0 or c.limit>0:
+                                # if c.limit!=0 or c.limit>0:
+                                try:
                                     if couponcount<c.limit:
                                         c.discount
                                         discount=(float(total)*(int(c.discount)/100))
@@ -1981,9 +1996,19 @@ def coupon(request):
                                         request.session['actualamount']=total
                                         return JsonResponse({"message":True,"total":float(totall),"percent":c.discount,"discount":"{:.2f}".format(discount)})
                                     else:
+                                        print("---------")
                                         return JsonResponse({"message":False})
-                                else:
-                                    return JsonResponse({"message":False})
+                                except:
+                                    c.discount
+                                    discount=(float(total)*(int(c.discount)/100))
+                                    totall=(float(total)-int(discount))+199
+                                    request.session['discountamount']=discount
+                                    request.session['coupon']=coupon
+                                    request.session['couponpercent']=c.discount
+                                    request.session['actualamount']=total
+                                    return JsonResponse({"message":True,"total":float(totall),"percent":c.discount,"discount":"{:.2f}".format(discount)})
+                                # else:
+                                #     return JsonResponse({"message":False})
                             else:
                                 return JsonResponse({"message":False})
                         else:
@@ -1992,7 +2017,8 @@ def coupon(request):
                         return JsonResponse({"message":False})
                 else:
                     return JsonResponse({"message":"exists"})
-            except:
+            except Exception as e:
+                print("---------",e)
                 return JsonResponse({"message":False})
             
 def razorpayclose(request):

@@ -350,7 +350,8 @@ def testbookings(sender, instance, **kwargs):
             if datetime.now(timezone.utc)>c.startdate:
                 if datetime.now(timezone.utc)<c.enddate:
                     if c.cityy.filter(cityname=instance.location).exists():
-                        if c.limit!=0 or c.limit>0:
+                        # if c.limit!=0 or c.limit>0:
+                        try:
                             if couponcount<c.limit:
                                 c.discount
                                 print("=====",c.discount)
@@ -365,12 +366,25 @@ def testbookings(sender, instance, **kwargs):
                                 couponredeem.objects.create(user=instance.user,booking_id=instance.bookingid,coupon=instance.coupon.couponcode,discountpercen=c.discount,discountamount=discount,actualamount=float(instance.price)-199).save()
                             else:
                                 instance.coupon=None
+                        except:
+                            c.discount
+                            print("=====",c.discount)
+                            print(float(float(instance.price)-199))
+                            discount=(float(float(instance.price)-199)*(int(c.discount)/100))
+                            print("###########",discount)
+                            totall=(float(float(instance.price)-199)-int(discount))+199
+                            print(totall)
+                            # instance.price=totall
+                            Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=totall)
+                            book_history.objects.filter(uni=instance.bookingid).update(amount=totall)
+                            couponredeem.objects.create(user=instance.user,booking_id=instance.bookingid,coupon=instance.coupon.couponcode,discountpercen=c.discount,discountamount=discount,actualamount=float(instance.price)-199).save()
+        
                                 # raise ValidationError("Invalid Coupon")
                                 # return JsonResponse({"message":False})
-                        else:
-                            instance.coupon=None
-                            # raise ValidationError("Invalid Coupon")
-                            # return JsonResponse({"message":False})
+                        # else:
+                        #     instance.coupon=None
+                        #     # raise ValidationError("Invalid Coupon")
+                        #     # return JsonResponse({"message":False})
                     else:
                         instance.coupon=None
                         # raise ValidationError("Invalid Coupon")
@@ -664,7 +678,7 @@ class coupons(models.Model):
     couponcode=models.CharField(max_length=15,null=True,blank=True,verbose_name="Coupon Code",help_text=_('Enter maximum 15 characters only'),unique=True)
     discount=models.CharField(max_length=2,null=True,blank=True,verbose_name="Discount(%)")
     limit=models.PositiveIntegerField(null=True,blank=True,verbose_name="Usage Limit")
-    cityy=models.ManyToManyField(city,blank=True)
+    cityy=models.ManyToManyField(city,blank=True,verbose_name="City")
     # cityy=models.ForeignKey(city,null=True,blank=True,on_delete=models.CASCADE,verbose_name="City")
     status = models.CharField(
         choices=SELECT_CHOICES,
