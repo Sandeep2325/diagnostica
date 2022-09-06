@@ -257,3 +257,6 @@ function hexToRGB(hex, alpha) {
 $('.field-prescription_file a').click(function() {
     alert();
 })
+$("#id_user_permissions_from  option").click(function() {
+    $(this).html().replace("app1 | ", "")
+});

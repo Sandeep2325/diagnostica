@@ -54,6 +54,7 @@ notification = {
 };
 
 $(document).ready(function() {
+
     $().ready(function() {
 
         $(".btn btn-primary btn-xs").hide();
@@ -200,7 +201,6 @@ function AjaxUpdateAdminBlackSetting(form_data) {
 /* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
 var dropdown = document.getElementsByClassName("navbar-btn");
 var i;
-
 for (i = 0; i < dropdown.length; i++) {
     dropdown[i].addEventListener("click", function() {
         this.classList.toggle("active");
@@ -214,6 +214,7 @@ for (i = 0; i < dropdown.length; i++) {
 }
 //$('.field-prescription_file a').click(function() {
 $('.field-prescription_file a').attr("target", "_blank")
-    // $("#id_user_permissions_from").hide();
-    // $('option[title="app1 | aboutspan | Can add aboutspan"]').hide();
-    //})
+$("#id_user_permissions_from  option").each(function() {
+    a = $(this).html().replace("app1 | ", "")
+    console.log(a)
+});

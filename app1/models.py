@@ -19,6 +19,14 @@ from django.core.exceptions import ValidationError
 from django.utils.safestring import mark_safe
 # from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import gettext_lazy as _
+# from app1.views import html_to_pdf  
+from num2words import num2words   
+from django.core.files import File   
+from io import BytesIO
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.http import HttpResponse
+shipping_charges=199
 # phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', 
 #                                 message = "Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
 
@@ -67,7 +75,7 @@ class User(AbstractUser,PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     phone_no = models.CharField(max_length=13, null=True, unique=True,verbose_name="Mobile number")
-    location=models.ForeignKey(city, verbose_name=_("Locations"), null=True,blank=True,on_delete=models.SET_NULL)
+    location=models.ForeignKey(city, verbose_name=_("Locations"), null=True,blank=True,on_delete=models.CASCADE)
     age=models.CharField(max_length=50,blank=True,null=True)
     address=models.TextField(null=True,blank=True)
     gender = models.CharField(
@@ -204,6 +212,7 @@ class testbook(models.Model):
         max_length=8,
         default="", null=True,blank=True
     )
+    comments=models.TextField(null=True,blank=True,verbose_name="Comments")
     locationn=models.ForeignKey(city,null=True,blank=True,on_delete=models.CASCADE,verbose_name="Location")
     pincode=models.CharField(max_length=100,null=True,blank=True,verbose_name="Pincode")
     address=models.TextField(null=True,blank=True)
@@ -234,7 +243,7 @@ def reportresponse(sender, instance, **kwargs):
     #               fail_silently=False)    
     ...            
 PAYMENT_METHOD = (
-    ("1","Cash on Delivery"),
+    ("1","Cash on Collection"),
     ("2","Online"),
 )  
 class Prescriptionbook1(models.Model):
@@ -277,7 +286,8 @@ class Prescriptionbook1(models.Model):
         max_length=100,
         default="", null=True,blank=True,verbose_name="Payment Method"
     )
-    coupon=models.ForeignKey("coupons",null=True,blank=True,on_delete=models.SET_NULL,help_text=mark_safe(_('<small style="color:red">*Coupon Should be Apply Only Once"</small>')))
+    coupon=models.ForeignKey("coupons",null=True,blank=True,on_delete=models.CASCADE,help_text=mark_safe(_('<small style="color:red">*Coupon Should be Apply Only Once"</small>')))
+    comments=models.TextField(null=True,blank=True,verbose_name="Comments")
     report=models.FileField(upload_to="report",null=True,blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
@@ -331,8 +341,8 @@ def testbookings(sender, instance, **kwargs):
                 a.append(i.aurangabad_price)
 
         if sum(a)!=0:
-            book_history.objects.filter(uni=instance.bookingid).update(amount=sum(a)+199)
-            Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=sum(a)+199)
+            book_history.objects.filter(uni=instance.bookingid).update(amount=sum(a)+shipping_charges)
+            Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=sum(a)+shipping_charges)
         else:
             book_history.objects.filter(uni=instance.bookingid).update(amount=None)
             Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=None)
@@ -358,28 +368,28 @@ def testbookings(sender, instance, **kwargs):
                                     c.discount
                                     # print("=====",c.discount)
                                     # print(float(float(instance.price)-199))
-                                    discount=(float(float(instance.price)-199)*(int(c.discount)/100))
+                                    discount=(float(float(instance.price)-shipping_charges)*(int(c.discount)/100))
                                     # print("###########",discount)
-                                    totall=(float(float(instance.price)-199)-int(discount))+199
+                                    totall=(float(float(instance.price)-shipping_charges)-int(discount))+shipping_charges
                                     # print(totall)
                                     # instance.price=totall
                                     Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=totall)
                                     book_history.objects.filter(uni=instance.bookingid).update(amount=totall)
-                                    couponredeem.objects.create(user=instance.user,booking_id=instance.bookingid,coupon=instance.coupon.couponcode,discountpercen=c.discount,discountamount=discount,actualamount=float(instance.price)-199).save()
+                                    couponredeem.objects.create(user=instance.user,booking_id=instance.bookingid,coupon=instance.coupon.couponcode,discountpercen=c.discount,discountamount=discount,actualamount=float(instance.price)-shipping_charges).save()
                                 else:
                                     instance.coupon=None
                             except:
                                 c.discount
                                 # print("=====",c.discount)
-                                print(float(float(instance.price)-199))
-                                discount=(float(float(instance.price)-199)*(int(c.discount)/100))
+                                print(float(float(instance.price)-shipping_charges))
+                                discount=(float(float(instance.price)-shipping_charges)*(int(c.discount)/100))
                                 # print("###########",discount)
-                                totall=(float(float(instance.price)-199)-int(discount))+199
+                                totall=(float(float(instance.price)-shipping_charges)-int(discount))+shipping_charges
                                 # print(totall)
                                 # instance.price=totall
                                 Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=totall)
                                 book_history.objects.filter(uni=instance.bookingid).update(amount=totall)
-                                couponredeem.objects.create(user=instance.user,booking_id=instance.bookingid,coupon=instance.coupon.couponcode,discountpercen=c.discount,discountamount=discount,actualamount=float(instance.price)-199).save()
+                                couponredeem.objects.create(user=instance.user,booking_id=instance.bookingid,coupon=instance.coupon.couponcode,discountpercen=c.discount,discountamount=discount,actualamount=float(instance.price)-shipping_charges).save()
 
                                     # raise ValidationError("Invalid Coupon")
                                     # return JsonResponse({"message":False})
@@ -405,7 +415,7 @@ def testbookings(sender, instance, **kwargs):
                     # raise ValidationError("Invalid Coupon")
                     # return JsonResponse({"message":False})
         except Exception as e:
-            print("-----------",e)
+            # print("-----------",e)
             # c=coupons.objects.get(couponcode=instance.coupon.couponcode) 
             instance.coupon=None
             # raise ValidationError("Invalid Coupon")
@@ -582,20 +592,28 @@ class cart(models.Model):
     items=models.ForeignKey(test,null=True,blank=True,on_delete=models.CASCADE)
     labtest=models.ForeignKey(healthcheckuppackages,null=True,blank=True,on_delete=models.CASCADE)
     packages=models.ForeignKey(healthpackages,null=True,blank=True,on_delete=models.CASCADE)
-    categoryy=models.ForeignKey(category,null=True,blank=True,on_delete=models.SET_NULL)
-    healthsymptoms = models.ForeignKey(healthsymptoms, verbose_name=_("Health Symptoms"), on_delete=models.SET_NULL, null=True, blank=True)
+    categoryy=models.ForeignKey(category,null=True,blank=True,on_delete=models.CASCADE)
+    healthsymptoms = models.ForeignKey(healthsymptoms, verbose_name=_("Health Symptoms"), on_delete=models.CASCADE, null=True, blank=True)
     price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
     device = models.CharField(_("Device"), max_length=200,null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
-
+    
+def html_to_pdf(template_src, context_dict={}):
+    template = get_template(template_src)
+    html  = template.render(context_dict)
+    result = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    return None
 class invoicee(models.Model):
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
     order_id=models.CharField(max_length=200,null=True,blank=True)
     items=models.ForeignKey(test,null=True,blank=True,on_delete=models.CASCADE)
     labtest=models.ForeignKey(healthcheckuppackages,null=True,blank=True,on_delete=models.CASCADE)
     packages=models.ForeignKey(healthpackages,null=True,blank=True,on_delete=models.CASCADE)
-    healthsymptoms = models.ForeignKey(healthsymptoms, verbose_name=_("Health Symptoms"), on_delete=models.SET_NULL, null=True, blank=True)
+    healthsymptoms = models.ForeignKey(healthsymptoms, verbose_name=_("Health Symptoms"), on_delete=models.CASCADE, null=True, blank=True)
     price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
     file=models.FileField(upload_to='invoice',max_length=500, verbose_name="Invoice File", null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
@@ -606,6 +624,100 @@ class invoicee(models.Model):
     class Meta:
         verbose_name_plural = "Invoice"
         verbose_name = "Invoice"
+    # def save(self, *args, **kwargs):
+    #     order=book_history.objects.get(payment_id=self.order_id)
+    #     payments=payment.objects.get(transid=self.order_id)
+    #     try:
+    #         testbooking=Prescriptionbook1.objects.get(bookingid=order.uni)
+    #     except:
+    #         testbooking=testbook.objects.get(bookingid=order.uni)
+            
+    #     invoic=invoicee.objects.filter(order_id=self.order_id)
+    #     amount=payments.amount
+    #     amount1=num2words(int(float(amount)), lang = 'en_IN')
+    #     c=amount1.replace(",","")
+    #     try:
+    #         coupoonn=couponredeem.objects.get(order_id=self.order_id)
+    #         couponamount=coupoonn.actualamount
+    #         couponamount=num2words(int(float(couponamount)), lang = 'en_IN')
+    #         a=couponamount.replace(",","")
+    #         amount=num2words(int(float(amount)), lang = 'en_IN')
+    #         b=amount.replace(",","")
+    #         context_dict={
+            
+    #         "order":order,
+    #         "payments":payments,
+    #         "testbooking":testbooking,
+    #         "tests":invoic,
+    #         "coupon":coupoonn,
+    #         "couponamount":a,
+    #         "amount":b
+    #             }
+
+    #     except:
+    #         # coupoonn=couponredeem.objects.get(order_id=orderid)
+    #         context_dict={
+    #         "order":order,
+    #         "payments":payments,
+    #         "testbooking":testbooking,
+    #         "tests":invoic,
+    #         # "couponamount":num2words(int(couponamount), to = 'ordinal'),
+    #         "amount":c
+    #             }
+    #     template_name='invoice2.html'
+    #     pdf = html_to_pdf(template_name,context_dict)
+    #     receipt_file = BytesIO(pdf.content)
+    #     filee = invoicee.objects.get(order_id=self.order_id)
+    #     filee.file = File(receipt_file, "invoice2.pdf")
+    #     filee.save()
+
+# @receiver(post_save, sender=invoicee)
+# def invoiceefile(sender, instance, **kwargs):
+#     order=book_history.objects.get(payment_id=instance.order_id)
+#     payments=payment.objects.get(transid=instance.order_id)
+#     try:
+#         testbooking=Prescriptionbook1.objects.get(bookingid=order.uni)
+#     except:
+#         testbooking=testbook.objects.get(bookingid=order.uni)
+#     invoic=invoicee.objects.filter(order_id=instance.order_id)
+#     amount=payments.amount
+#     amount1=num2words(int(float(amount)), lang = 'en_IN')
+#     c=amount1.replace(",","")
+#     try:
+#         coupoonn=couponredeem.objects.get(order_id=instance.order_id)
+#         couponamount=coupoonn.actualamount
+#         couponamount=num2words(int(float(couponamount)), lang = 'en_IN')
+#         a=couponamount.replace(",","")
+#         amount=num2words(int(float(amount)), lang = 'en_IN')
+#         b=amount.replace(",","")
+#         context_dict={
+        
+#         "order":order,
+#         "payments":payments,
+#         "testbooking":testbooking,
+#         "tests":invoic,
+#         "coupon":coupoonn,
+#         "couponamount":a,
+#         "amount":b
+#             }
+        
+#     except:
+#         # coupoonn=couponredeem.objects.get(order_id=orderid)
+#         context_dict={
+#         "order":order,
+#         "payments":payments,
+#         "testbooking":testbooking,
+#         "tests":invoic,
+#         # "couponamount":num2words(int(couponamount), to = 'ordinal'),
+#         "amount":c
+#             }
+#     template_name='invoice2.html'
+#     pdf = html_to_pdf(template_name,context_dict)
+#     receipt_file = BytesIO(pdf.content)
+#     filee = invoicee.objects.get(order_id=instance.order_id)
+#     filee.file = File(receipt_file, "invoice2.pdf")
+#     filee.save()
+    
 STATUS=[
     ('p','On Process'),
     ('u',"updated"),
@@ -675,6 +787,7 @@ class subscription(models.Model):
         return self.email
     class Meta:
         verbose_name_plural="Subscriptions"
+        verbose_name="Subscriptions"
 class socialmedialinks(models.Model):
     name=models.CharField(max_length=100,null=True,blank=True)
     url=models.URLField(null=True,blank=True)
@@ -694,6 +807,7 @@ class coupons(models.Model):
     discount=models.CharField(max_length=2,null=True,blank=True,verbose_name="Discount(%)")
     limit=models.PositiveIntegerField(null=True,blank=True,verbose_name="Usage Limit")
     cityy=models.ManyToManyField(city,blank=True,verbose_name="City")
+    
     # cityy=models.ForeignKey(city,null=True,blank=True,on_delete=models.CASCADE,verbose_name="City")
     status = models.CharField(
         choices=SELECT_CHOICES,

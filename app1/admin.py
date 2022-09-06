@@ -121,7 +121,8 @@ class prescriptionbookadmin(admin.ModelAdmin):
         (_('Prescription'), {'fields': ('user','prescription_file', 'test_name','price')}),
         (_('Coupon'),{'fields':('coupon',)}),
         (_('Patient Details'), {'fields': ("bookingid","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address","pincode","location","paymentmethod")}),
-        (_('Report'),{'fields':("report",)})
+        (_('Report'),{'fields':("report",)}),
+        (_('Comments'),{'fields':("comments",)})
     )
     autocomplete_fields = ['coupon']
     filter_horizontal = ('test_name',)
@@ -227,7 +228,8 @@ class testbookadmin(admin.ModelAdmin):
     fieldsets = (
         (_('Tests'), {'fields': ('user','tests')}),
         (_('Patient Details'), {'fields': ("bookingid",'payment_status',"myself","others","others_choice","firstname","lastname","contact","age","gender","address","pincode","date","timeslot")}),
-        (_('Report'),{'fields':("report",)})
+        (_('Report'),{'fields':("report",)}),
+        (_('Comments'),{'fields':("comments",)})
     )
     def get_form(self, request, obj=None, **kwargs):
         # if obj.type == "1":

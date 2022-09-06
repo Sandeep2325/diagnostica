@@ -1,52 +1,5 @@
 {%extends "indexx.html"%}
 {%block content%}
-<div class="container">
-    <a class="bg-primary" href={%url "aggregator-logout" %}>logout</a>
-    <div class="row">
-        <div class="col-12">
-            <div class="py-2 pt-5 ">
-                <div class="row mt-3">
-                    <div class="col-2">
-                        <input class="w-100  form_input " placeholder="search"
-                            id="search" name="search" type="search" maxlength="15"/>
-                    </div>
-                    <div class="col-1 ps-2">
-                        <button
-                            class="coupon_apply br br-5 text-center fs-14 font-regular w-100 h-100 btn btn-primary" >APPLY</button>
-                    </div>
-                </div>
-                <table class="table table-bordered">
-                    <thead class="thead-dark">
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">First</th>
-                        <th scope="col">Last</th>
-                        <th scope="col">Handle</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>@twitter</td>
-                      </tr>
-                    </tbody>
-                  </table>
-            </div>
-        </div>
-    </div>
-</div>
+<a href={% url "aggregator-logout"%}>Logout</a>
+<h6>Aggregator Dashboard</h6>
 {%endblock%}

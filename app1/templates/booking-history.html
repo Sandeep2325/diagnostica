@@ -71,7 +71,6 @@
                                                     <td class="t_head" scope="col">Payment Status</td>
                                                     {% comment %} <td class="t_head" scope="col">Status</td> {% endcomment %}
                                                     <td class="t_head" scope="col">Report</td>
-
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -283,7 +282,7 @@
                                 <select class="w-100 mt-3 form-select myself_other" type="select" name="paymentmethod" id="paymentmethod" >
                                     <option selected="selected" class="opc-5" disabled>
                                         Payment Method</option>
-                                        <option value="1">Cash on Delivery</option>
+                                        <option value="1">Cash on Collection</option>
                                         <option value="2">Online</option>
                                         {% comment %} <option value="3">3:00PM-6:00PM</option> {% endcomment %}
                                 </select>
@@ -433,7 +432,7 @@
                 swal("", "Please update every field", "warning");
             }
             else if(pincode.length<6 || pincode.length>6){
-                $(".pincodeerror").html("Enter valid pincode")
+                $(".pincodeerror").html("Please enter valid pin-code")
                 //swal("", "Enter Valid pincode", "warning");
                 }
             else{

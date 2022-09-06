@@ -41,8 +41,6 @@ except ImportError:
 default_apps_icon = {
     'auth': 'tim-icons icon-single-02'
 }
-
-
 class JsonResponse(HttpResponse):
     """
     An HTTP response class that consumes data to be serialized to JSON.
@@ -80,7 +78,6 @@ def get_app_list(context, order=True):
 
         if has_module_perms:
             perms = model_admin.get_model_perms(request)
-
             # Check whether user has any perm for this module.
             # If so, add the module to the model_list.
             if True in perms.values():
@@ -101,6 +98,33 @@ def get_app_list(context, order=True):
                         model_dict['add_url'] = reverse('admin:%s_%s_add' % info, current_app=admin_site.name)
                     except NoReverseMatch:
                         pass
+                # if perms.get('delete', False):
+                #     try:
+                #         model_dict['admin_url'] = reverse('admin:%s_%s_changelist' % info, current_app=admin_site.name)
+                #     except NoReverseMatch:
+                #         pass
+                if perms.get('view', False):
+                    try:
+                        model_dict['admin_url'] = reverse('admin:%s_%s_changelist' % info, current_app=admin_site.name)
+                    except NoReverseMatch:
+                        pass
+               
+                if perms.get('delete', False):
+                    try:
+                        model_dict['admin_url'] = reverse('admin:%s_%s_changelist' % info, current_app=admin_site.name)
+                    except NoReverseMatch:
+                        pass   
+                # if perms.get('add', True):
+                #     try:
+                #         model_dict['add_url'] = reverse('admin:%s_%s_add' % info, current_app=admin_site.name)
+                #     except NoReverseMatch:
+                #         pass
+                # if perms.get('view', False):
+                #     print("----------------")
+                #     try:
+                #         model_dict['add_url'] = reverse('admin:%s_%s_view' % info, current_app=admin_site.name)
+                #     except NoReverseMatch:
+                #         pass
                 if app_label in app_dict:
                     app_dict[app_label]['models'].append(model_dict)
                 else:
@@ -119,21 +143,18 @@ def get_app_list(context, order=True):
                         'has_module_perms': has_module_perms,
                         'models': [model_dict],
                     }
-
                 if not app_icon:
                     app_icon = default_apps_icon[app_label] if app_label in default_apps_icon else None
                 app_dict[app_label]['icon'] = app_icon
 
     # Sort the apps alphabetically.
     app_list = list(app_dict.values())
-
     if order:
         app_list.sort(key=lambda x: x['name'].lower())
 
         # Sort the models alphabetically within each app.
         for app in app_list:
             app['models'].sort(key=lambda x: x['name'])
-
     return app_list
 
 
@@ -150,14 +171,9 @@ def get_admin_site(context):
                 return func_closure.cell_contents
     except:
         pass
-
     return admin.site
-
-
 def get_admin_site_name(context):
     return get_admin_site(context).name
-
-
 class SuccessMessageMixin(object):
     """
     Adds a success message on successful form submission.
@@ -443,13 +459,11 @@ def get_menu_items(context):
                     current_found = True
                 else:
                     model['current'] = False
-
             if not current_found and app.get('url') and context['request'].path.startswith(app['url']):
                 app['current'] = True
                 current_found = True
             else:
                 app['current'] = False
-
     return app_list
 
 

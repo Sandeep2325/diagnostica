@@ -19590,3 +19590,8 @@ select#id_permissions_from {
 select#id_groups_from {
     background-color: #ffffff!important;
 }
+
+
+/* select#id_user_permissions_from option {
+    display: none;
+} */

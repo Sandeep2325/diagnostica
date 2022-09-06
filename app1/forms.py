@@ -2,6 +2,7 @@ from dataclasses import fields
 from django import forms
 from django.forms import ModelForm
 from app1.models import *
+# from app1.models import subscription
 import datetime
 from django.contrib.auth.password_validation import validate_password
 class CsvImportForm(forms.Form):

@@ -50,6 +50,7 @@ Nanded=env("Nanded")
 Pune=env("Pune")
 Barshi=env("Barshi")
 Aurangabad=env("Aurangabad")
+shipping_charges=199
 from django.core import serializers
 def indextable1(request):
     precriptionb = serializers.serialize("json", Prescriptionbook1.objects.all().order_by('-created'))
@@ -1025,6 +1026,14 @@ def prescriptionbookview(request):
                 recipient_list,
                 fail_silently=False,
         )
+        msg=f"Hi\nThere is an Upload Prescription order booked with following details\nBookingID:{bookingid}\nFullname:{firstname}{lastname}\nLocation={c}\nPhone Number:{contact}"
+        send_mail(
+            subject,
+            msg,
+            email_from,
+            ["reachus@spanhealth.com"],
+            fail_silently=False,
+                  )
         # msg=f"Hi\nThere is an Prescription Upload order booked with below details\nBookingID:{bookingid}\nFirstname:{firstname}\nLastname:{lastname}\n"
         # number=####
         # sms(msg,number)
@@ -1520,7 +1529,7 @@ def cartt(request):
             data.append(da)
     try: 
         a=[float(i["price"]) for i in data]
-        total=float('{0:1.2f}'.format(sum(a)))+199
+        total=float('{0:1.2f}'.format(sum(a)))+shipping_charges
         # print(float('{0:1.2f}'.format(sum(a)))+199)
         context={
             "city":cit,
@@ -1642,7 +1651,6 @@ def paymenthandler(request,str,amount):
                         mes,
                         email_from,
                         ["reachus@spanhealth.com"],
-                        # ["sandeep.nexevo@gmail.com"],
                         fail_silently=False,
                     )
                     messages.info(request, "Thankyou for making payment our team will come and collect the sample soon.")
@@ -1936,7 +1944,7 @@ def coupon(request):
                                 if couponcount<c.limit:
                                     c.discount
                                     discount=(float(total)*(int(c.discount)/100))
-                                    totall=(float(total)-int(discount))+199
+                                    totall=(float(total)-int(discount))+shipping_charges
                                     request.session['discountamount']=discount
                                     request.session['coupon']=coupon
                                     request.session['couponpercent']=c.discount
@@ -1947,7 +1955,7 @@ def coupon(request):
                             except:
                                 c.discount
                                 discount=(float(total)*(int(c.discount)/100))
-                                totall=(float(total)-int(discount))+199
+                                totall=(float(total)-int(discount))+shipping_charges
                                 request.session['discountamount']=discount
                                 request.session['coupon']=coupon
                                 request.session['couponpercent']=c.discount
@@ -1984,7 +1992,7 @@ def coupon(request):
                                     if couponcount<c.limit:
                                         c.discount
                                         discount=(float(total)*(int(c.discount)/100))
-                                        totall=(float(total)-int(discount))+199
+                                        totall=(float(total)-int(discount))+shipping_charges
                                         request.session['discountamount']=discount
                                         request.session['coupon']=coupon
                                         request.session['couponpercent']=c.discount
@@ -1996,7 +2004,7 @@ def coupon(request):
                                 except:
                                     c.discount
                                     discount=(float(total)*(int(c.discount)/100))
-                                    totall=(float(total)-int(discount))+199
+                                    totall=(float(total)-int(discount))+shipping_charges
                                     request.session['discountamount']=discount
                                     request.session['coupon']=coupon
                                     request.session['couponpercent']=c.discount
@@ -2272,12 +2280,12 @@ def invoice(request,orderid):
     template_name='invoice2.html'
     from django.core.files import File
     pdf = html_to_pdf(template_name,context_dict)
-    receipt_file = BytesIO(pdf.content)
-    print("-------",receipt_file)
-    filee = invoicee.objects.get(order_id=orderid)
-    print(File(receipt_file, "invoice2.pdf"))
-    filee.file = File(receipt_file, "invoice2.pdf")
-    filee.save()
+    # receipt_file = BytesIO(pdf.content)
+    # print("-------",receipt_file)
+    # filee = invoicee.objects.get(order_id=orderid)
+    # # print(File(receipt_file, "invoice2.pdf"))
+    # filee.file = File(receipt_file, "invoice2.pdf")
+    # filee.save()
     return FileResponse(pdf,as_attachment=True,filename="invoice2.pdf",content_type='application/pdf') 
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -2292,10 +2300,10 @@ class BookingHistoryPay(LoginRequiredMixin,View):
         payments=payment.objects.filter(user=request.user).order_by('-date')
         for i in bookhistories:
             try:
-                try:
-                    testbooking=Prescriptionbook1.objects.get(bookingid=i.uni)
-                except:
-                    pass
+                # try:
+                testbooking=Prescriptionbook1.objects.get(bookingid=i.uni)
+                # except:
+                #     pass
                 hi = {}
                 hi["id"] = i.id
                 hi["created"] = i.created
@@ -2319,10 +2327,10 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 hi['amount'] = i.amount
                 his.append(hi)
             except:
-                try:
-                    testbooking=testbook.objects.get(bookingid=i.uni)
-                except:
-                    pass
+                # try:
+                testbooking=testbook.objects.get(bookingid=i.uni)
+                # except:
+                #     pass
                 hi = {}
                 hi["id"] = i.id
                 hi["created"] = i.created
@@ -2508,8 +2516,8 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                     f"Cash On delivery | Dignostica Span | Booking Id:{id}",
                     mes,
                     email_from,
-                    ["reachus@spanhealth.com"],
-                    # ["sandeep.nexevo@gmail.com"],
+                    # ["reachus@spanhealth.com"],
+                    ["sandeep.nexevo@gmail.com"],
                     fail_silently=False,
                 )
             except:
@@ -2521,8 +2529,8 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                     f"Cash On delivery | Dignostica Span | Booking Id:{id}",
                     mes,
                     email_from,
-                    ["reachus@spanhealth.com"],
-                    # ["sandeep.nexevo@gmail.com"],
+                    # ["reachus@spanhealth.com"],
+                    ["sandeep.nexevo@gmail.com"],
                     fail_silently=False,
                 )
             to_return = {"valid":True}
