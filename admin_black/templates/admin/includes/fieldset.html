@@ -6,6 +6,7 @@
                 <div class="description">{{ fieldset.description|safe }}</div>
             {% endif %}
         </div>
+
         <div class="card-body">
             {% for line in fieldset %}
                 <div class="row {{ direction.panel }}">
@@ -29,6 +30,7 @@
                                         </div>
                                     {% else %}
                                         {{ field.label_tag }}
+
                                         {% if field.is_readonly %}
                                             <div class="readonly">{{ field.contents }}</div>
                                         {% else %}

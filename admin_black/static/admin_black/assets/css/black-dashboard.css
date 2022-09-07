@@ -19499,12 +19499,99 @@ span.navbar-toggler-bar.bar1 {
     background-color: #27293d
 }
 
+
 /* shivraj code */
 
 select#id_location {
     margin-bottom: 23px;
 }
+
 .fa {
     display: flex;
     align-items: center;
 }
+
+#id_test_name_from {
+    background-color: #fdfdfd!important;
+}
+
+#id_test_name_input {
+    width: 346px;
+    height: 30px;
+    margin-left: -2px;
+}
+
+#id_cityy_to {
+    height: 297px!important;
+}
+
+.selector-available h2 {
+    margin-bottom: 7px;
+    line-height: 1.2;
+    font-size: 14px;
+}
+
+.selector-chosen h2 {
+    background: #ffffff!important;
+    color: var(--header-link-color);
+    font-size: 14px;
+}
+
+.selector-chosen {
+    width: 376px!important;
+}
+
+
+/* .related-widget-wrapper {
+    margin-left: 164px;
+} */
+
+input {
+    font-size: 15px;
+}
+
+select#id_test_name_to {
+    height: 300px!important;
+}
+
+select#id_cityy_from {
+    background-color: #fdfdfd!important;
+}
+
+.help-icon {
+    display: none!important;
+}
+
+.selector-chosen select {
+    border-top: 1px solid!important;
+}
+
+select#id_user_permissions_from {
+    background-color: #ffffff!important;
+}
+
+.select2-container--open .select2-dropdown--below {
+    border-top: 1px solid!important;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.select2-selection--single {
+    background-color: var(--body-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    border: 2px solid!important;
+}
+
+select#id_permissions_from {
+    background-color: #ffffff!important;
+}
+
+select#id_groups_from {
+    background-color: #ffffff!important;
+}
+
+
+/* select#id_user_permissions_from option {
+    display: none;
+} */

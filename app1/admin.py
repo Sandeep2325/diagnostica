@@ -18,9 +18,12 @@ import re
 from django.contrib.auth.models import Group
 from django.utils.translation import gettext_lazy as _
 from app1.views import sms
+# from django_admin_listfilter_dropdown.filters import DropdownFilter, RelatedDropdownFilter
+import datetime
+from django.contrib.auth.models import Permission
 # Register your models here.
 class cityadmin(admin.ModelAdmin):
-    list_display=["cityname","imagee","active","created","updated"]
+    list_display=["id","cityname","imagee","active","created","updated"]
     list_editable=["active"]
     def imagee(self, obj):
         # a=obj.image.first()
@@ -45,7 +48,7 @@ class testadmin(admin.ModelAdmin):
     # form = testform
     # def get_fieldsets(self, request, obj=None):
     #     fieldsets = super(testadmin, self).get_fieldsets(request, obj)
-    #     fieldsets[0][1]['fields'] += ['price'] 
+    #     fieldsets[0][1]['fields'] += ['price']
     #     return fieldsets
     # prepopulated_fields = {"slug": ("testt",)}
     def action_btn(self, obj):
@@ -73,14 +76,20 @@ class testadmin(admin.ModelAdmin):
                         yield l.decode('cp1252')
                 reader = csv.DictReader(decode_utf8(request.FILES['csv_upload']))
                 for row in reader:
+                    # print(row)
                     des = re.sub(r"</?\[\d+>", "", row.get("Description"))
                     try:
-                        categoryy=category.objects.get(pk=row.get("category_id"))
+                        categoryy=category.objects.get(categoryy=row.get("category_id"))
+                        testcode=row["Tests"]
+                        b=testcode.split(" - ")
+                        # print(b)
+                        price=row.get("Banglore_price").strip().replace(",","")
+                        price=int(price)
                         obj, created = test.objects.get_or_create(
-                                testt=row["Tests"],
-                                testcode=row["test_code"],
+                                testt=testcode,
+                                testcode=b[0],
                                 categoryy=categoryy,
-                                Banglore_price=row.get("Banglore_price") if row.get("Banglore_price") else None,
+                                Banglore_price=price if row.get("Banglore_price") else None,
                                 Mumbai_price=row.get("Mumbai_price") if row.get("Mumbai_price") else None,
                                 bhopal_price=row.get("bhopal_price") if row.get("bhopal_price") else None,
                                 nanded_price=row.get("nanded_price") if row.get("nanded_price") else None,
@@ -101,24 +110,52 @@ class testadmin(admin.ModelAdmin):
             form = CsvImportForm()
             data = {"form": form}
             return render(request, "admin/app1/csv_upload.html", data)
-
+from django.forms.widgets import SelectMultiple,MultiWidget
 class prescriptionbookadmin(admin.ModelAdmin):
-    list_display=["users","testname","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address","prescription_file","report","created","updated","action_btn"]        
-    readonly_fields=["user","myself","payment_status","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location","bookingid",'price']
+    list_display=["users","bookingid","testname","payment_status","paymentmethod","myself","others","others_choice","firstname","lastname","contact","age","gender","address","timeslot","prescription_file","report","created","updated","action_btn"]        
+    readonly_fields=["user","myself","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location","bookingid",'price']
     exclude = ('unique',)
-    list_filter = ("user","myself","others","gender")
+    list_filter = ("myself","others",'paymentmethod','payment_status')
+    search_fields = ('bookingid',)
     fieldsets = (
         (_('Prescription'), {'fields': ('user','prescription_file', 'test_name','price')}),
-        (_('Patient Details'), {'fields': ("bookingid","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address")}),
-        (_('Report'),{'fields':("report",)})
+        (_('Coupon'),{'fields':('coupon',)}),
+        (_('Patient Details'), {'fields': ("bookingid","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address","pincode","location","paymentmethod")}),
+        (_('Report'),{'fields':("report",)}),
+        (_('Comments'),{'fields':("comments",)})
     )
-    
+    autocomplete_fields = ['coupon']
+    filter_horizontal = ('test_name',)
+    # raw_id_fields = ("test_name",)
+    # formfield_overrides = {
+    #     models.ManyToManyField: {'widget': SelectMultiple},
+    # }
     # search_fields = ('testt', 'categoryy__categoryy')
     # list_editable=[""]
+    
     def get_form(self, request, obj=None, **kwargs):
-        # if obj.type == "1":
         self.exclude = ("unique",)
         form = super(prescriptionbookadmin, self).get_form(request, obj, **kwargs)
+        # print(obj.coupon)
+        # a=form.base_fields["coupon"].queryset
+        # a=coupons.objects.filter(couponcode=obj.coupon)
+        # b=a.filter(couponcode=obj.coupon)
+        # if b.exists():
+        #     print("------------------")
+        #     self.readonly_fields=["user","coupon","myself","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location","bookingid",'price']
+        # else:
+        #     print("+++++++")
+        #     self.readonly_fields=["user","myself","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location","bookingid",'price']
+        # print(b)
+        # if b==
+        # print("----------",a)
+        # cleaned_data = super(form, self).clean()
+        # cou=cleaned_data.get("coupon")
+        # print(cou)
+        # if form.base_fields["coupon"]!=None:
+        #     self.readonly_fields=("coupon",)
+        # self.fields['sku'].widget.attrs['readonly'] = True
+        # form.base_fields['coupon'].widget.attrs['readonly'] = True
         return form
     def testname(self, obj):
         return ", ".join([
@@ -183,16 +220,17 @@ class prescriptionbookadmin(admin.ModelAdmin):
         return False
 
 class testbookadmin(admin.ModelAdmin):
-    list_display=["users","tests","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address","report","created","updated","action_btn"]        
-    readonly_fields=["user","myself","payment_status","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location",'bookingid']
+    list_display=["users","bookingid","tests","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address","pincode","date","timeslot","report","created","updated","action_btn"]        
+    readonly_fields=["user","myself","payment_status","others","others_choice","firstname","lastname","contact","age","gender","created","updated","locationn",'bookingid']
     exclude = ('unique',)
-    list_filter = ("myself","others","gender")
-    # search_fields = ('testt', 'categoryy__categoryy')
+    list_filter = ("myself","others","gender","payment_status")
+    search_fields = ('bookingid',)
     # list_editable=[""]
     fieldsets = (
         (_('Tests'), {'fields': ('user','tests')}),
-        (_('Patient Details'), {'fields': ("bookingid",'payment_status',"myself","others","others_choice","firstname","lastname","contact","age","gender","address")}),
-        (_('Report'),{'fields':("report",)})
+        (_('Patient Details'), {'fields': ("bookingid",'payment_status',"myself","others","others_choice","firstname","lastname","contact","age","gender","address","pincode","date","timeslot")}),
+        (_('Report'),{'fields':("report",)}),
+         (_('Comments'),{'fields':("comments",)})
     )
     def get_form(self, request, obj=None, **kwargs):
         # if obj.type == "1":
@@ -260,6 +298,7 @@ class categoryadmin(admin.ModelAdmin):
 class healthcheckup_admin(SummernoteModelAdmin):
     list_display=["package_title","dBanglore_price","created","updated","action_btn"]    
     readonly_fields=["created","updated"]
+    filter_horizontal = ('test_name',)
     # list_editable=["location"]
     prepopulated_fields = {"slug": ("package_title",)}
     summernote_fields = ('description')
@@ -292,9 +331,10 @@ class healthpackage_admin(SummernoteModelAdmin):
     # list_editable=["location"]
     prepopulated_fields = {"slug": ("package_name",)}
     # summernote_fields = ('content','package_name')
+    filter_horizontal = ('test_name',)
     def get_form(self, request, obj=None, **kwargs):
         # if obj.type == "1":
-        self.exclude = ("Mumbai_price","bhopal_price","nanded_price","pune_price","barshi_price","aurangabad_price",)
+        self.exclude = ("Mumbai_price","bhopal_price","nanded_price","pune_price","barshi_price","aurangabad_price","discounted_price",)
         form = super(healthpackage_admin, self).get_form(request, obj, **kwargs)
         return form
     # def testname(self, obj):
@@ -310,8 +350,6 @@ class healthpackage_admin(SummernoteModelAdmin):
         html += "<a class='text-danger fa fa-trash ml-2' href='/admin/app1/healthpackages/"+str(obj.id)+"/delete/'></a></div>"
         return format_html(html)
     action_btn.short_description = "Action"
-    
-    
     def get_urls(self):
             urls = super().get_urls()
             new_urls = [path('upload-csv/', self.upload_csv), ]
@@ -369,13 +407,14 @@ class healthpackage_admin(SummernoteModelAdmin):
             return render(request, "admin/app1/csv_upload.html", data)
     
 class healthsymptoms_admin(SummernoteModelAdmin):
-    list_display=["name","testname","Banglore_price","created","updated","action_btn"]
+    list_display=["name","testname","discounted_price","created","updated","action_btn"]
     readonly_fields=["created","updated"]
     prepopulated_fields = {"slug": ("name",)}
+    filter_horizontal = ('test_name',)
     summernote_fields = ('symptoms',)
     def get_form(self, request, obj=None, **kwargs):
         # if obj.type == "1":
-        self.exclude = ("Mumbai_price","bhopal_price","nanded_price","pune_price","barshi_price","aurangabad_price",)
+        self.exclude = ("Banglore_price","Mumbai_price","bhopal_price","nanded_price","pune_price","barshi_price","aurangabad_price",)
         form = super(healthsymptoms_admin, self).get_form(request, obj, **kwargs)
         return form
     def testname(self, obj):
@@ -468,12 +507,33 @@ class socialmediaadmin(admin.ModelAdmin):
     #     return super().has_add_permission(request)
 
 class UserAdmin(OriginalUserAdmin): 
-    list_display = ['id','first_name','last_name','email',"phone_no",'age','gender','location','address','date_joined']
+    list_display = ['id','first_name','last_name','email',"phone_no",'age','gender','location','address','date_joined','action_btn']
     # list_editable=['is_confirmed']
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
-        (_('Personal info'), {'fields': ('photo','first_name','last_name', "phone_no",'age','gender','location','address')}),
+        (None, {'fields': ('email', 'password','aggregator')}),
+        (_('Personal info'), {'fields': ('photo','first_name','last_name', "phone_no",'age','gender','location','address',)}),
+        (
+            _("Permissions"),
+            {
+                "fields": (
+                    # "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    "groups",
+                    "user_permissions",
+                ),
+            },
+        ),
     )
+    # def has_delete_permission(self, request,obj=None):
+    #     return False
+    def get_form(self, request, obj=None, **kwargs):
+        # Get form from original UserAdmin.
+        form = super(UserAdmin, self).get_form(request, obj, **kwargs)
+        if 'user_permissions' in form.base_fields:
+            permissions = form.base_fields['user_permissions']
+            permissions.queryset = permissions.queryset.exclude(content_type__app_label__in=['admin', 'auth','sessions','django_summernote','contenttypes','admin_black','django_celery','django_celery_beat'])
+        return form
     def action_btn(self, obj):
         html = "<div class='field-action_btn d-flex m-8'> <a class='fa fa-edit ml-2' href='/admin/app1/user/" + \
             str(obj.id)+"/change/'></a><br></br>"
@@ -488,7 +548,7 @@ class bookhistoryadmin(admin.ModelAdmin):
     list_display=["bookingid","users","patient_infoo","booking_type","bookingdetails","amount","status","payment_status","created","updated","action_btn"]    
     readonly_fields=["created","updated",'bookingid','payment_id']
     list_filter = ("user","booking_type")
-    search_fields = ('bookingid',)
+    search_fields = ('bookingid','payment_id')
     def get_form(self, request, obj=None, **kwargs):
         # if obj.type == "1":
         self.exclude = ('testbooking_id','report','uni' )
@@ -526,18 +586,30 @@ class bookhistoryadmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
 class couponadmin(admin.ModelAdmin):
-    list_display=["couponcode","discount","cityy","status","action_btn"]
-    # readonly_fields=["created","updated"]
+    list_display=["couponcode","discount","Locations","limit","status","startdate","enddate","created","updated","action_btn"]
+    list_filter=["cityy","status"]
+    # list_filter=(
+    #     ("cityy",RelatedDropdownFilter),
+    #     ("couponcode",DropdownFilter),)
+    search_fields=["couponcode"]
+    list_editable=["status"]
+    filter_horizontal = ('cityy',)
+    def Locations(self, obj):
+        return ", ".join([
+            city.cityname for city in obj.cityy.all()
+        ])
+    Locations.short_description = "Locations"
     def action_btn(self, obj):
         html = "<div class='field-action_btn d-flex m-8'> <a class='fa fa-edit ml-2' href='/admin/app1/coupons/" + \
             str(obj.id)+"/change/'></a><br></br>"
-        # html += "<a class='text-success fa fa-eye ml-2' href='/admin/app1/test/" + \
+        # html += "<a class='text-success fa fa-eye ml-2' href='/admin/app1/healthpackages/" + \
         #     str(obj.id)+"/change/'></a><br></br>"
         html += "<a class='text-danger fa fa-trash ml-2' href='/admin/app1/coupons/"+str(obj.id)+"/delete/'></a></div>"
         return format_html(html)
+    action_btn.short_description = "Action"
     def get_urls(self):
         urls = super().get_urls()
-        new_urls = [path('upload-csv/', self.upload_csv), ]
+        new_urls = [path('upload-csv/', self.upload_csv),path('export-csv/', self.export)]
         return new_urls + urls
     def upload_csv(self, request):
             if request.method == "POST":
@@ -551,27 +623,66 @@ class couponadmin(admin.ModelAdmin):
                         yield l.decode('cp1252')
                 reader = csv.DictReader(decode_utf8(request.FILES['csv_upload']))
                 for row in reader:
-                    print(row)
                     try:
-                        cityy=city.objects.get(pk=row.get("city_id"))
-                        obj, created = coupons.objects.get_or_create(
-                                couponcode=row["ï»¿Coupon_Code"],
-                                discount=row["Discount"],
-                                cityy=cityy,)
-                    except IndexError:
-                        pass
+                        try:
+                            coupons.objects.get(couponcode=row["ï»¿Coupon_Code"])
+                            form = CsvImportForm()
+                            data = {"form": form}
+                            messages.warning(request,row["ï»¿Coupon_Code"]+" Already Exists")
+                            return render(request, "admin/app1/csv_upload.html", data)
+                        except:
+                            startdate = datetime.datetime.strptime(row["startdate"], '%d-%m-%Y %H:%M')
+                            enddate = datetime.datetime.strptime(row["enddate"], '%d-%m-%Y %H:%M')
+                            cityname=row.get("city_id")
+                            citynamee=cityname.split(",")
+                            # cityy=city.objects.get(pk=row.get("city_id"))
+                            obj, created = coupons.objects.get_or_create(
+                                    couponcode=row["ï»¿Coupon_Code"],
+                                    discount=row["Discount"],
+                                    limit=row["limit"],
+                                    status=row["status"],
+                                    startdate=startdate,
+                                    enddate=enddate,
+                                    )
+                            for citi in citynamee:
+                                cityy=city.objects.get(id=citi)
+                                obj.cityy.add(cityy)
+                    # except IndexError:
+                    #     pass
                     except (IntegrityError):
                         form = CsvImportForm()
                         data = {"form": form}
                         message = messages.warning(
                             request, 'Something went wrong! check your file again \n 1.Upload correct file \n 2.Check you data once')
                         return render(request, "admin/app1/csv_upload.html", data)
+                    except Exception as e:
+                        form = CsvImportForm()
+                        data = {"form": form}
+                        message = messages.warning(
+                            request, e)
+                        return render(request, "admin/app1/csv_upload.html", data)
                 url = reverse('admin:index')
                 return HttpResponseRedirect(url)
             form = CsvImportForm()
             data = {"form": form}
-            return render(request, "admin/app1/csv_upload.html", data)  
-          
+            return render(request, "admin/app1/csv_upload.html", data) 
+    def export(self,request):
+        response = HttpResponse(
+        content_type='text/csv',
+        headers={'Content-Disposition': 'attachment; filename="couponsdata.csv"'},)
+        # response = HttpResponse(
+        # content_type='application/ms-excel',
+        # headers={'Content-Disposition': 'attachment; filename="couponsdata.xls"'},)
+        writer = csv.writer(response)
+        writer.writerow(["Coupon Code","Discount","limit","Locations","status","start Date","End Date","Created","Updated"])
+        for i in coupons.objects.all():
+            def Locations():
+                return ", ".join([
+                city.cityname for city in i.cityy.all()
+                ])
+            writer.writerow([i.couponcode,i.discount,i.limit,Locations(),i.status,i.startdate,i.enddate,i.created,i.updated])
+        return response
+    # readonly_fields=["created","updated"]
 class cartadmin(admin.ModelAdmin):
     list_display=["user","items","categoryy","price","created","updated"]
 class blogcategoryadmin(admin.ModelAdmin):
@@ -589,7 +700,6 @@ class testnamee(ChangeList):
             date_hierarchy, search_fields, list_select_related,
             list_per_page, list_max_show_all, list_editable, 
             model_admin)
-        
         # these need to be defined here, and not in MovieAdmin
         self.list_display = "id","user","test_name","myself","others","others_choice","firstname","lastname","contact","age","gender","prescription_file","created","updated"
     # self.list_display_links = ['name']
@@ -598,6 +708,8 @@ class priceadmin(admin.ModelAdmin):
     list_display=["testt","city","price"]
 class paymentadmin(admin.ModelAdmin):
     list_display=["user","paymentid","transid","amount","date"]
+    def has_add_permission(self, request):
+        return False
 class contactusadmin(admin.ModelAdmin):
     list_display=["fullname","email","phone","subject","message",'created','updated']
 class faqadmin(admin.ModelAdmin):
@@ -605,9 +717,28 @@ class faqadmin(admin.ModelAdmin):
 class invoiceadmin(admin.ModelAdmin):
     list_display=['order_id',"items","labtest","packages","healthsymptoms","price"]
 class couponredeemadmin(admin.ModelAdmin):
-    list_display=["user",'order_id',"coupon","discountpercen","discountamount","created",]
+    list_display=["user","booking_id",'order_id',"coupon","discountpercen","discountamount","created",]
+    search_fields=["booking_id","coupon","order_id","user"]
+    def export(self,request,queryset):
+        response = HttpResponse(
+        content_type='text/csv',
+        headers={'Content-Disposition': 'attachment; filename="redeemedcoupon.csv"'},)
+        writer = csv.writer(response)
+        writer.writerow(["User","Order_id","Coupon","Discount Percent","Discount Amount","Actual Amount","Created"])
+        for i in queryset:
+            writer.writerow([i.user,i.order_id,i.coupon,i.discountpercen,i.discountamount,i.actualamount,i.created])
+        return response
+    actions = [export]
 class requestadmin(admin.ModelAdmin):
-    list_display=['firstname','lastname','phone','email','message','created','updated']
+    list_display=['firstname','lastname','phone','email','tests','created','updated']
+class invoiceeadmin(admin.ModelAdmin):
+    list_display=['user','order_id','file','created','updated']
+    
+    def has_add_permission(self, request):
+        return False
+    
+    def has_delete_permission(self, request):
+        return False
 class medicationsadmin(admin.ModelAdmin):
     list_display=['users','medic','morning','afternoon','evening','night','created','updated']
     def users(self,obj):
@@ -618,21 +749,20 @@ class medicationsadmin(admin.ModelAdmin):
             pass
 class franchiseadmin(admin.ModelAdmin):
     list_display=['fullname','phoneno','email','taluka','district','state','address','message','created','updated']
-
 class careersadmin(admin.ModelAdmin):
     list_display=['fullname','phoneno','email','cv','message','created','updated']
 class careersopeningsadmin(admin.ModelAdmin):
     list_display=['designations','created','updated']
+admin.site.register(User,UserAdmin)
 admin.site.register(faq,faqadmin)
 admin.site.register(contactus,contactusadmin)
 admin.site.register(payment,paymentadmin)
-# admin.site.register(city,cityadmin)
+admin.site.register(city,cityadmin)
 admin.site.register(blogcategory,blogcategoryadmin)
 admin.site.register(test,testadmin)
 # admin.site.register(prescription_book,prescriptionbookadmin)
 admin.site.register(testbook,testbookadmin)
 admin.site.register(Prescriptionbook1,prescriptionbookadmin)
-admin.site.register(User,UserAdmin)
 admin.site.register(category,categoryadmin)
 admin.site.register(healthcheckuppackages,healthcheckup_admin)
 admin.site.register(healthpackages,healthpackage_admin)
@@ -646,14 +776,31 @@ admin.site.register(subscription,subscriptionadmin)
 # admin.site.register(socialmedialinks,socialmediaadmin)
 admin.site.register(coupons,couponadmin)
 admin.site.register(couponredeem,couponredeemadmin)
+# admin.site.register(invoicee,invoiceadmin)
 admin.site.register(medications,medicationsadmin)
 admin.site.register(franchisee,franchiseadmin)
+admin.site.register(requestcall,requestadmin)
 admin.site.register(careersopenings,careersopeningsadmin)
 admin.site.register(careers,careersadmin)
-# admin.site.register(invoicee,invoiceadmin)
-admin.site.unregister(Group)
-admin.site.register(requestcall,requestadmin)
 admin.site.unregister(get_attachment_model())
+admin.site.register(invoicee,invoiceeadmin)
+class MyGroupAdminForm(forms.ModelForm):
+    class Meta:
+        model = Group
+        fields = ('name', 'permissions')
+
+    permissions = forms.ModelMultipleChoiceField(
+        Permission.objects.exclude(content_type__app_label__in=['admin', 'auth','sessions','django_summernote','contenttypes','admin_black','django_celery','django_celery_beat']),
+        widget=admin.widgets.FilteredSelectMultiple(_('permissions'), False))
+
+class MyGroupAdmin(admin.ModelAdmin):
+    form = MyGroupAdminForm
+    search_fields = ('name',)
+    ordering = ('name',)
+
+admin.site.unregister(Group)
+admin.site.register(Group, MyGroupAdmin)
+# admin.site.register(Permission)
 
 
 

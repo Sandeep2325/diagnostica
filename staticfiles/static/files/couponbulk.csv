@@ -1,0 +1,13 @@
+﻿Coupon_Code,Discount,city_id,limit,status,startdate,enddate
+Coupon1,12,"Bangalore,Pune",1,a,31-08-2022 09:48,01-09-2022 11:48
+Coupon2,15,"Bangalore,Pune",2,i,01-09-2022 11:48,02-09-2022 11:48
+Coupon3,10,"Bangalore,Mumbai",3,a,02-09-2022 11:48,03-09-2022 11:48
+Coupon4,5,"Bangalore,Pune",4,i,03-09-2022 11:48,04-09-2022 11:48
+Coupon5,20,"Bangalore,Pune",5,a,04-09-2022 11:48,05-09-2022 11:48
+Coupon6,15,"Bangalore,Pune",6,i,05-09-2022 11:48,06-09-2022 11:48
+Coupon7,10,"Bangalore,Pune",7,a,06-09-2022 11:48,07-09-2022 11:48
+Coupon8,25,"Bangalore,Pune",8,i,07-09-2022 11:48,08-09-2022 11:48
+Coupon9,12,"Bangalore,Pune",9,a,08-09-2022 11:48,09-09-2022 11:48
+Coupon10,15,"Bangalore,Pune",10,i,09-09-2022 11:48,10-09-2022 11:48
+Coupon11,10,"Bangalore,Pune",11,a,10-09-2022 11:48,11-09-2022 11:48
+Coupon12,5,"Bangalore,Pune",12,i,11-09-2022 11:48,12-09-2022 11:48

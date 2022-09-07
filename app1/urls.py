@@ -83,8 +83,5 @@ urlpatterns = [
     path("career",views.career,name="career"),
     path("send-report/<str:phone>/<str:bookingid>/",views.sendreport,name="sendreport"),
     path("report",views.reportotp,name="reportotp"),
-    path("dummy",views.dummy,name="dummy")
-    # path('sms',views.smstest,name="sms")
-    # url('download/<path>', serve, {'document root': settings.MEDIA_ROOT}),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

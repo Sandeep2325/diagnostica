@@ -1,4 +1,5 @@
 {% load static %}
+
 <body>
     <section class="section_nav_bar bg-light-grey py-1 py-sm-2 py-lg-3 py-xl-4">
         <div class="container">
@@ -126,24 +127,33 @@
                             </div>
                             <div>
                                 <input class="w-100  form_input mt-3" placeholder="Phone Number" name="phone" id="ph"
-                                    type="text" maxlength="250">
+                                    type="text" maxlength="12">
                             </div>
                             <div>
                                 <input class="w-100  form_input mt-3" placeholder="Email Address" name="email" id="emai" type="text" maxlength="250"/>
                             </div>
-                            <div>
-                                <textarea class="w-100 form_input mt-3" rows="1" cols="50"
-                                    placeholder="Message" name="message" id="message" maxlength="250"></textarea>
-
-                              {% comment %} <select class="w-100 mt-2  form-select" type="select" id ="selectt"
-                              name="selectbookhelp">
-                              <option selected="selected" class="opc-5" disabled>Select
-                              Test<span
+                            <div >
+                              <select class="w-100 mt-2  form-select" type="select" id ="selectt"
+                      name="selectbookhelp">
+                      <option selected="selected" class="opc-5" disabled>Select
+                        Test<span
                         class="cl-red ps-1">*</span></option>
                       {%for test in tests%}
                       <option  value={{test.id}}>{{test.testt}}</option>
                       {%endfor%}
-                    </select> {% endcomment %}
+                    </select>
+                                {% comment %} <select class="w-100 mt-3  form-select" type="select"
+                                  name="selectbookhelp">
+                                  <option selected="selected" class="opc-5" disabled>Select
+                                    Test<span
+                                    class="cl-red ps-1">*</span></option>
+                                  <option>test</option>
+                                  <option>test</option>
+                                  <option>test</option>
+                                  <option>test</option>
+                                  <option>test</option>
+                                  <option>test</option>
+                                </select> {% endcomment %}
                               </div>
                             <button class="mx-lg-0 mx-3 mt-4 globalsubmitbutton"
                                 type="submit" name="submit" id="request_call_back">SUBMIT</button>
@@ -155,7 +165,6 @@
     </section>
 </body>
 <script> 
-    
   jQuery.validator.addMethod("name_regex", function (value, element) {
     return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);
   }, "Enter valid name");
@@ -216,17 +225,20 @@
       form.submit();
     }
   });
+
   $("#request_call_back").on("click", function (e) {
     var email = $("#emai").val();
     var firstname = $("#fname").val();
     var phone = $("#ph").val();
     var lastname = $("#lname").val();
-    var message=$("#message").val();
-    if (email=='' || firstname=='' || phone=='' || lastname=='' ||message==''){
+    var tests=$("#selectt").val();
+    if (email=='' || firstname=='' || phone=='' || lastname==''){
       swal("", "Please update every field", "warning");
     }    
     else{ 
-    $.ajax({
+      $('#request_call_back').prop('disabled', true);
+      //$("#request_call_back").("disabled",true)
+      $.ajax({
         url: "{% url 'requestcall' %}",
         type: "POST",
         dataType: "json",
@@ -239,6 +251,7 @@
             'csrfmiddlewaretoken': '{{ csrf_token }}',
         },
         success: function (resp) {
+          $('#request_call_back').prop('disabled', false);
             $("#emaill").val('');
             if (!resp["message"]){
                 swal("Something Went Wrong", "Try Again", "warning");
@@ -255,6 +268,7 @@
   }            
 });
 function userinfoo(){
+
   $.ajax({
       url:"{% url 'userinfo' %}",
       method:"get",
@@ -263,6 +277,7 @@ function userinfoo(){
       },
       dataType: "json",
       success: function(resp){
+          
       $("#fname").val(resp['firstname']);
       $("#lname").val(resp['lastname']);
       //$("#age").val(resp['age']);
@@ -273,5 +288,7 @@ function userinfoo(){
      
       }
   })
+
 };
 </script>
+

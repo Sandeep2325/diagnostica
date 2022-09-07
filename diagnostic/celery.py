@@ -3,13 +3,14 @@ import os
 from celery import Celery
 from django.conf import settings
 from celery.schedules import crontab
+# from app1.task import send_mail_func
 # from app1.tasks import send_mail_func
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'diagnostic.settings')
 app = Celery('app1',backend=settings.CELERY_RESULT_BACKEND,broker=settings.CELERY_BROKER_URL)
 app.conf.enable_utc = False
 app.conf.update(timezone = 'Asia/Kolkata')
 app.config_from_object(settings, namespace='CELERY')
-
+# print(app.conf.beat_schedule)
 # Celery Beat Settings
 app.conf.beat_schedule = {
     'send-mail': {
@@ -18,6 +19,7 @@ app.conf.beat_schedule = {
         # 'args': ('Firstdata',)
     }
 }
+# print(app.conf.beat_schedule)
 # app.conf.beat_schedule = {  
 #     'send-every-friday': {  
 #         'task': 'app1.task.send_mail_func',  

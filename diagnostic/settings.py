@@ -2,6 +2,7 @@
 from pathlib import Path
 import environ
 import os
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
@@ -26,6 +27,7 @@ ALLOWED_HOSTS = [
     "www.spandiagno.com",
      ]
 env = environ.Env()
+# Application definition
 
 INSTALLED_APPS = [
     'admin_black.apps.AdminBlackConfig',
@@ -36,10 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "app1",
+    "aggregator",
     "django_celery_beat",
     "django_celery_results",
+    
 ]
 INSTALLED_APPS += ('django_summernote', ) 
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -48,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'diagnostic.urls'
@@ -78,8 +84,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 WSGI_APPLICATION = 'diagnostic.wsgi.application'
 AUTH_USER_MODEL = 'app1.User'
-
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
@@ -99,15 +103,14 @@ AUTH_USER_MODEL = 'app1.User'
 # } 
 DATABASES = {  
     'default': {  
-        'ENGINE': 'django.db.backends.mysql',  
-
-        'NAME': 'spandiango2',  
+        'ENGINE': 'django.db.backends.mysql', 
+        'NAME': 'diagnomerge',  
         'USER': 'root',  
         'PASSWORD': 'Sandeep@8105',  
         'HOST': 'localhost',  
         'PORT': '3306',
     }
-    }
+}
 # DATABASES = {  
 #     'default': {  
 #         'ENGINE': 'django.db.backends.mysql',  
@@ -163,12 +166,10 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Kolkata'
-
+# DATETIME_FORMAT = '%d-%m-%Y %H:%M:%S'
 USE_I18N = True
-
+USE_L10N = False
 USE_TZ = True
-
-import os
 STATICFILES_DIRS  = [
 
         os.path.join(BASE_DIR, 'staticfiles/static'),
@@ -183,9 +184,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
+# RAZOR_KEY_ID = "rzp_live_ZSkJErOIklssAc"
+# RAZOR_KEY_SECRET = "Er7q5aHnDix03E1y66x0bMIA"
 RAZOR_KEY_ID = "rzp_test_JiD8eNtJ2aNwZr"
 RAZOR_KEY_SECRET = "gtukARkLZ5U4Bjo9EfCSWkMf"
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
@@ -237,17 +239,8 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Kolkata'
 CELERY_ALWAYS_EAGER=True
 CELERY_RESULT_BACKEND = 'django-db'
-# CELERY_BEAT_SCHEDULE={
-#     'send-mail': {
-#         'task': 'app1.task.send_mail_func',
-#         # 'schedule': crontab(hour=0, minute=46, day_of_month=19, month_of_year = 6),
-#         'schedule': crontab(minute='*/1'),
-#         #'args': (2,)
-#     }
-# }
-
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
-# from app1.views import TIME
+
 SESSION_COOKIE_AGE = 1209600
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SESSION_COOKIE_SECURE = True

@@ -1,0 +1,25 @@
+{% comment %} {% extends "index.html" %} {% endcomment %}
+<!doctype html>
+   <html lang="en">
+    {%load static%}
+ <head>
+       <meta charset="utf-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1">
+       <link rel="stylesheet" href="{%static "fontawesome/css/font-awesome.min.css"%}">
+        <link rel="stylesheet" href="{%static "css/bootstrap.min.css"%}">
+        <link rel="stylesheet" href="{%static "css/owl.carousel.min.css"%}">
+        <link rel="stylesheet" href="{%static "css/owl.theme.default.min.css"%}">
+        <script type="text/javascript"src="{%static "js/jquery-3.6.0.min.js"%}"></script>
+        <script type="text/javascript" src="{%static "js/bootstrap.bundle.min.js"%}"></script>
+        <script type="text/javascript" src="{%static "js/owl.carousel.min.js"%}"></script>
+       <link rel="stylesheet" href="{% static 'css/style2.css' %}">
+       <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+       <title>Diagnostica Span</title>
+   </head>
+   <body>
+    {%block content%}
+   {%endblock%}
+</body>
+ </html>

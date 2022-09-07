@@ -36,7 +36,10 @@
                   class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">
                   Price</p>
                 {%if city == envcity.Bangalore%}
-                <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{currentObj.Banglore_price}}</h1>
+                {% comment %} <strike
+                    class="ps-xl-3 ps-2 text-center fs-20 font-bold cl-light-blue health_price_disc">₹{{currentObj.Banglore_price}}</strike> {% endcomment %}
+                {% comment %} <strike class="fs-30 cl-dark-blue d-flex justify-content-center m-0 ">₹{{currentObj.Banglore_price}}</strike> {% endcomment %}
+                <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{currentObj.discounted_price}}</h1>
                 {%elif city == envcity.Mumbai %}
                 <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{currentObj.Mumbai_price}}</h1>
                 {%elif city == envcity.Bhophal %}
@@ -55,7 +58,6 @@
                   Includes {{currentObj.test_name.all.count}}
                   Tests
                 </p>
-            
               </div>
             </div>
             <div class="d-flex justify-content-center pt-xl-5 pt-3">
@@ -69,8 +71,16 @@
             <h2 class="fs-35 font-regular cl-dark-blue text-center m-0 pb-lg-5 pb-4">Package includes
               {{currentObj.test_name.all.count}} Tests
             </h2>
+            {%for test in currentObj.test_name.all %}
+            <div class="col-12 h-100 ms-xl-5">
+              <div class="">
+                <h3 class="fs-30 cl-dark-blue cbc_test">{{test.testt}}</h3>
+              </div>
+              {% comment %} <p class="pb-4 pe-lg-5 m-0">{{test.description}}</p> {% endcomment %}
+            </div>
+            {%endfor%}
+                   {% comment %} <div class="table-responsive-lg mx-2 ">
 
-                   <div class="table-responsive-lg mx-2 ">
                     <table class="table caption-top table-striped">
                       <thead>
                         <tr>
@@ -95,10 +105,9 @@
                     </table>
                     <div class="d-flex justify-content-center  pt-3 my-3">
                       <button class="home_pack_viewpack py-2 fs-16 font-bold br-50" onclick=addtocart()>Add To Cart</button>
-                    </div>
-                   </div>
-              </div> 
-
+                    </div> 
+                   </div>{% endcomment %}
+              </div>
             </div>
           </div>
           <div class="row bg-white py-5">
@@ -119,7 +128,8 @@
                     class="font-bold fs-20 cl-dark-blue d-flex justify-content-center align-content-center align-items-center m-0">
                     Price</p>
                     {%if city == envcity.Bangalore%}
-                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.Banglore_price}}</h1>
+                    {% comment %} <strike class="fs-30 cl-dark-blue d-flex justify-content-center m-0 ">₹{{pack.Banglore_price}}</strike> {% endcomment %}
+                  <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.discounted_price}}</h1>
                   {%elif city == envcity.Mumbai %}
                   <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{pack.Mumbai_price}}</h1>
                   {%elif city == envcity.Bhophal %}
@@ -144,18 +154,24 @@
                       class="home_pack_viewpack py-3 fs-16 font-bold br-50 ">VIEW PACK</button></a>
                 </div>
               </div>
+
             </div>
             {%endfor%}
+
+
           </div>
         </div>
       </div>
     </div>
   </section>
+
   {%include "footer.html"%}
+
 </body>
 {% comment %} {%for cart in carts%}
 {%for test in cart.items.all%}
 <scripts>
+
 <scripts>
 {%endfor%}
 {%endfor%} {% endcomment %}
@@ -171,6 +187,7 @@
         email: true
       },
     },
+
     messages: {
       'email': {
         required: "This field is required.",
@@ -181,6 +198,7 @@
       form.submit();
     }
   });
+  
   $("#packagebuy").click(function () {
    
    a=$(this).attr("name");
@@ -197,10 +215,11 @@
             swal('',"Already Added",'info');
         }else{
           a=resp['pack']
-            swal(a,"Added to Cart",'success');
-            window.setTimeout(function(){location.reload()},1500)
+            swal(a,"Added to Cart",'success').then(function(){
+              window.setTimeout(function(){location.reload()})
+            });
+            //window.setTimeout(function(){location.reload()},1500)
         }
-        
     },
 });
   });

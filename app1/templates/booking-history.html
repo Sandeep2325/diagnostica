@@ -1,8 +1,12 @@
 {% extends "index.html" %}
 {% load static %}
 {%block content%}
-<body>
+
+<body onload="setAttr()">
+    <div class="preload" style="display:none"><img src="http://i.imgur.com/KUJoe.gif">
+    </div>
     {% include "header.html"%}
+    <div id="loaderr" class="center"></div>
     <section class="sub_header py-xl-4 py-3">
         <div class="container">
             <div class="row">
@@ -19,13 +23,6 @@
     </section>
     <section class="section_booking_history pb-5 mb-5" >
         <div class="container">
-            {% comment %} {% if messages %}
-            
-            {% for msg in  messages %}
-            <center>{{msg}}</center>
-            {% endfor %}
-
-            {% endif %} {% endcomment %}
             <div class="row">
                 <div class="col-lg-12">
                     <div class=" bg-light-grey py-4 py-lg-0 br-15">
@@ -79,12 +76,9 @@
                                             </thead>
                                             <tbody>
                                                 {% for bookhistory in bookhistories %}
-                                           
                                                 <tr>
                                                     {% if bookhistory.bookingid == None %}
                                                     <td data-label="ID">-
-
-                                                       
                                                     </td>
                                                      {%else%}
                                                      <td data-label="ID">{{bookhistory.bookingid}}
@@ -107,11 +101,10 @@
                                                     {%if bookhistory.amount == None%}
                                                         <td data-label="Amount">-</td>
                                                     {%elif bookhistory.prescription%}
-                                                        <td data-label="Amount">₹ {{bookhistory.amount}}<i  id ="prescriptiontest" data-bs-toggle="modal" data-bs-target="#prescriptionbreaks" class="fa fa-info br-5 cursor" aria-hidden="true" style="text-align:center;background:#d5e6f7; padding:5px 9px;margin-left:5px " onclick='prescrbreak("{{bookhistory.uni}}")'></i></td>
+                                                        <td data-label="Amount">₹ {{bookhistory.amount}}<i  id ="prescriptiontest" data-bs-toggle="modal" data-bs-target="#prescriptionbreaks" class="fa fa-info br-5 cursor" aria-hidden="true" style="text-align:center;background:#d5e6f7; padding:5px 9px;margin-left:5px " onclick='prescrbreak("{{bookhistory.uni}}","₹ {{bookhistory.amount}}")'></i></td>
                                                     {%else%}
                                                     <td data-label="Amount">₹ {{bookhistory.amount}}</td>
                                                     {%endif%}
-
                                                     {%if not bookhistory.payment_status%}
                                                         <td data-label="Payment Status">Not paid</td>
                                                     {%else%}
@@ -119,25 +112,48 @@
                                                     {%endif%}
                                                     {% comment %} <td data-label="Status">On Process</td> {% endcomment %}
                                                     {%if  bookhistory.payment_status == False%}
-                                                    <td data-label="Report"><button
+                                                    <td data-label="Report">
+                                                        {% comment %}<button
                                                             class="br br-5 fs-16 font-bold bg-dark-green cl-dark-white download text-center paynow-btn" 
                                                             {% if bookhistory.amount == None %}
                                                             onclick='paymentFunction("{{bookhistory.uni}}", "false")';
                                                             {% else %}onclick='paymentFunction("{{bookhistory.uni}}", "true")';{% endif %}id="testbooking{{bookhistory.testbooking_id}}">Pay Now</button>
-                                                    </td>
+                                                            <br><br> {% endcomment %}
+                                                            {%if bookhistory.paymentmethod == "1"%}
+                                                            <a href="#"
+                                                            class=""><button class="download br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue">COD</button></a>
+                                                            {%else%}
+                                                            <button
+                                                            class="br br-5 fs-16 font-bold bg-dark-green cl-dark-white download text-center paynow-btn" 
+                                                            {% if bookhistory.amount == None %}
+                                                            onclick='paymentFunction("{{bookhistory.uni}}", "false")';
+                                                            {% else %}data-bs-toggle="modal" data-bs-target="#paymentinfo1" onclick='unikey("{{bookhistory.uni}}","{{bookhistory.amount}}","true")';{% endif %}id="testbooking{{bookhistory.testbooking_id}}">Check out</button>
+                                                    {%endif%}
+                                                        </td>
+                                                    {% comment %} {%elif bookhistory.paymentmethod == "1"%}
+                                                    <a href="#"
+                                                        class=""><button class="download br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue">COD</button></a> {% endcomment %}
                                                     {%else%}
-                                                    {%if bookhistory.report %}
-                                                    <td data-label="Report" class="d-flex justify-content-between">
-                                                        <a href="{{bookhistory.report.url}}"
-                                                        class="" download><button style="padding-left:20px; padding-right:20px;" class="py-2 br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue"><i class="fa fa-download" aria-hidden="true"></i></button></a>
-                                                        <a data-bs-toggle="modal" data-bs-target="#social_report_share"
-                                                        class="" download><button onclick="reportsharee('{{bookhistory.report.url}}','{{bookhistory.bookingid}}')"style="padding-left:20px; padding-right:20px" class="py-2 br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue"><i class="fa fa-share-square-o" aria-hidden="true"></i></button></a>
-                                                </td>
-                                                    {% else %}
-                                                    <td data-label="Report">
+                                                        {%if bookhistory.report %}
+                                                        <td data-label="Report" class="d-flex justify-content-between">
+                                                            <a href="{{bookhistory.report.url}}" class="" download><button
+                                                                    style="padding-left:20px; padding-right:20px;"
+                                                                    class="py-2 br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue"><i
+                                                                        class="fa fa-download"
+                                                                        aria-hidden="true"></i></button></a>
+                                                            <a data-bs-toggle="modal" data-bs-target="#social_report_share"
+                                                                class="" download><button
+                                                                    onclick="reportsharee('{{bookhistory.report.url}}','{{bookhistory.bookingid}}')"
+                                                                    style="padding-left:20px; padding-right:20px"
+                                                                    class="py-2 br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue"><i
+                                                                        class="fa fa-share-square-o"
+                                                                        aria-hidden="true"></i></button></a>
+                                                        </td>
+                                                        {% else %}
+                                                        <td data-label="Report">
                                                         <a href="#"
                                                         class=""><button class="download br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue">No File</button></a>
-                                                    {% endif %}
+                                                        {% endif %}
                                                     {%endif%}
                                                 </tr>
                                                 {%endfor%}
@@ -145,7 +161,6 @@
                                         </table>
                                     </div>
                                     {% comment %} table end {% endcomment %}
-                                    
                                     <div class="tab-pane fade pb-5 " id="pills-profile" role="tabpanel"
                                         aria-labelledby="pills-profile-tab" tabindex="0">
                                         <h1 class="text-center fs-30 font-bold cl-dark-blue mb-4" id="nodata">No Record Found...</h1>
@@ -160,7 +175,6 @@
                                                     <td class="t_head" scope="col">Invoice</td>
                                                 </tr>
                                             </thead>
-
                                             <tbody>
                                                 {%for payment in payments%}
                                                 <tr>
@@ -179,12 +193,15 @@
                                     </div>
                                     <div class="tab-pane fade pb-5" id="pills-contact" role="tabpanel"
                                         aria-labelledby="pills-contact-tab" tabindex="0">
-                                        {% comment %} <h1 class="text-center fs-30 font-bold cl-dark-blue mb-4">No Record Found...</h1> {% endcomment %}
+                                        {% comment %} <h1 class="text-center fs-30 font-bold cl-dark-blue mb-4">No
+                                            Record Found...</h1> {% endcomment %}
                                         <div class="text-center">
-                                            <button data-bs-toggle="modal" data-bs-target="#mediation_modal" class="px-5 py-2 bg-sky-blue br-5 fs-18 mb-2 cl-dark-white br" type="submit" value="submit">Add Medications</button>
+                                            <button data-bs-toggle="modal" data-bs-target="#mediation_modal"
+                                                class="px-5 py-2 bg-sky-blue br-5 fs-18 mb-2 cl-dark-white br"
+                                                type="submit" value="submit">Add Medications</button>
                                         </div>
-                                {%if medicscount != 0 %}
-                                        <table class="medicationss" >
+                                        {%if medicscount != 0 %}
+                                        <table class="medicationss">
                                             <thead>
                                                 <tr class="text-center">
                                                     <td class="t_head text-center" scope="col">Sl No</td>
@@ -193,57 +210,85 @@
                                                     <td class="t_head text-lg-center" scope="col">Afternoon</td>
                                                     <td class="t_head text-lg-center" scope="col">Evening</td>
                                                     <td class="t_head text-lg-center" scope="col">Night</td>
-                                                    {% comment %} <td class="t_head text-lg-center" scope="col">Date</td> {% endcomment %}
+                                                    {% comment %} <td class="t_head text-lg-center" scope="col">Date
+                                                    </td> {% endcomment %}
                                                     <td class="t_head text-lg-center" scope="col">Action</td>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {%for medic in medics%}
                                                 <tr id="{{medic.id}}">
-                                                    <td class="text-lg-center" data-label="Tablet Name">{{forloop.counter}}</td>
-                                                    <td class="text-lg-center" data-label="Tablet Name">{{medic.medic}}</td>
-                                                     {%if medic.morning == True %} 
-                                                     <td class="text-lg-center" data-label="Morning"><i class="fa fa-check" aria-hidden="true"></i></td>
-                                                     {%else%}
+                                                    <td class="text-lg-center" data-label="Tablet Name">
+                                                        {{forloop.counter}}</td>
+                                                    <td class="text-lg-center" data-label="Tablet Name">{{medic.medic}}
+                                                    </td>
+                                                    {%if medic.morning == True %}
+                                                    <td class="text-lg-center" data-label="Morning"><i
+                                                            class="fa fa-check" aria-hidden="true"></i></td>
+                                                    {%else%}
                                                     <td class="text-lg-center" data-label="Morning">-</td>
-                                                    {%endif%} 
+                                                    {%endif%}
 
-                                                    {%if medic.afternoon == True %} 
-                                                     <td class="text-lg-center" data-label="Afternoon"><i class="fa fa-check" aria-hidden="true"></i></td>
-                                                     {%else%}
+                                                    {%if medic.afternoon == True %}
+                                                    <td class="text-lg-center" data-label="Afternoon"><i
+                                                            class="fa fa-check" aria-hidden="true"></i></td>
+                                                    {%else%}
                                                     <td class="text-lg-center" data-label="Afternoon">-</td>
-                                                    {%endif%} 
+                                                    {%endif%}
 
 
                                                     {%if medic.evening == True %}
-                                                     <td class="text-lg-center" data-label="Evening"><i class="fa fa-check" aria-hidden="true"></i></td>
-                                                     {%else%}
+                                                    <td class="text-lg-center" data-label="Evening"><i
+                                                            class="fa fa-check" aria-hidden="true"></i></td>
+                                                    {%else%}
                                                     <td class="text-lg-center" data-label="Evening">-</td>
-                                                    {%endif%} 
+                                                    {%endif%}
                                                     {%if medic.night == True %}
-                                                     <td class="text-lg-center" data-label="Night"><i class="fa fa-check" aria-hidden="true"></i></td>
-                                                     {%else%}
+                                                    <td class="text-lg-center" data-label="Night"><i class="fa fa-check"
+                                                            aria-hidden="true"></i></td>
+                                                    {%else%}
                                                     <td class="text-lg-center" data-label="Night">-</td>
-                                                    {%endif%} 
-                                                    {% comment %} <td class="text-lg-center" data-label="morning"><input class="" type="checkbox"  disabled/></td>
-                                                    <td class="text-lg-center" data-label="Afternoon"><input class="" type="checkbox"  disabled/></td>
-                                                    <td class="text-lg-center" data-label="Evening"><input class="" type="checkbox" disabled/></td>
-                                                    <td class="text-lg-center" data-label="Night"><input class="" type="checkbox"  disabled/></td> {% endcomment %}
-                                                    {% comment %} <td class="text-lg-center" data-label="Date">16/11/2022</td> {% endcomment %}
-                                                    {% comment %} <td class="text-lg-center" data-label="Delete"><button class="br" onclick="deletefunc('{{medic.id}}')"><i class="fa fa-trash-o cursor "  style="font-size:21px; color:red" aria-hidden="true"></i></button></td> {% endcomment %}
+                                                    {%endif%}
+                                                    {% comment %} <td class="text-lg-center" data-label="morning"><input
+                                                            class="" type="checkbox" disabled /></td>
+                                                    <td class="text-lg-center" data-label="Afternoon"><input class=""
+                                                            type="checkbox" disabled /></td>
+                                                    <td class="text-lg-center" data-label="Evening"><input class=""
+                                                            type="checkbox" disabled /></td>
+                                                    <td class="text-lg-center" data-label="Night"><input class=""
+                                                            type="checkbox" disabled /></td> {% endcomment %}
+                                                    {% comment %} <td class="text-lg-center" data-label="Date">
+                                                        16/11/2022</td> {% endcomment %}
+                                                    {% comment %} <td class="text-lg-center" data-label="Delete"><button
+                                                            class="br" onclick="deletefunc('{{medic.id}}')"><i
+                                                                class="fa fa-trash-o cursor "
+                                                                style="font-size:21px; color:red"
+                                                                aria-hidden="true"></i></button></td> {% endcomment %}
 
-                                                    <td  data-label="Delete">
-                                                        <div class="text-lg-center d-flex justify-content-lg-center justify-content-end">
-                                                            <button class="br" style="background:none" onclick="medicoinfo('{{medic.id}}')"><i style="font-size:21px; color:#5c62ce" data-bs-toggle="modal" data-bs-target="#mediation_update_modal" class="fa fa-pencil cursor px-2" aria-hidden="true"></i></button>
-                                                            <button class="br"  style="background:none" onclick="deletefunc('{{medic.id}}')">  <i style="font-size:21px; color:red" class="fa fa-trash-o cursor px-2" aria-hidden="true"></i></button>
-                                                        <div>
+                                                    <td data-label="Delete">
+                                                        <div
+                                                            class="text-lg-center d-flex justify-content-lg-center justify-content-end">
+                                                            <button class="br" style="background:none"
+                                                                onclick="medicoinfo('{{medic.id}}')"><i
+                                                                    style="font-size:21px; color:#5c62ce"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#mediation_update_modal"
+                                                                    class="fa fa-pencil cursor px-2"
+                                                                    aria-hidden="true"></i></button>
+                                                            <button class="br" style="background:none"
+                                                                onclick="deletefunc('{{medic.id}}')"> <i
+                                                                    style="font-size:21px; color:red"
+                                                                    class="fa fa-trash-o cursor px-2"
+                                                                    aria-hidden="true"></i></button>
+                                                            <div>
                                                     </td>
                                                 </tr>
                                                 {%endfor%}
                                             </tbody>
                                         </table>
                                         {%else%}
-                                        <h1 class="text-center fs-30 font-bold cl-dark-blue mb-4" id="nodataa">No Record Found...</h1>
+                                        <h1 class="text-center fs-30 font-bold cl-dark-blue mb-4" id="nodataa">No Record
+                                            Found...</h1>
                                         {%endif%}
                                     </div>
                                 </div>
@@ -254,136 +299,256 @@
             </div>
         </div>
     </section>
-   
+    <section class="paymentinfo" id ="paymentinfo">
+        <div class="modal fade" id="paymentinfo1" tabindex="-1" aria-labelledby="paymentinfomodalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content  p-3 p-sm-4">
+                    <div class="modal-body">
+                        <button type="button" id="checkoutinfoclose" class="btn-close  close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                        {% comment %} <form method="post" id="checkoutinfoform">
+                           {%csrf_token%} {% endcomment %}
+                            <h3 class="fs-30 font-bold cl-dark-blue text-center">Checkout Information</h3>
+                            {% comment %} <div>
+                                <select class="w-100 mt-3 form-select " type="select" name="option1" id="option1">
+                                    <option selected="selected" class="opc-5" disabled>Select Test For</option>
+                                    <option value="m">My-Self</option>
+                                    <option value="o">Others</option>
+                                </select>
+                            </div>
+                            <div>
+                                <select class="w-100 mt-3 form-select " type="select" name="option" id="option">
+                                    <option selected="selected" class="opc-5" disabled>To Whom</option>
+                                    <option value="m">Mother</option>
+                                    <option value="f">Father</option>
+                                    <option value="w">Wife</option>
+                                    <option value="s">Son</option>
+                                    <option value="s">Daughter</option>
+                                    <option value="s">Others</option>
+                                </select>
+                            </div>
+                            <div>
+                                <input class="w-100  form_input mt-3 " placeholder="First Name" name="firstname" id="firstname"
+                                    type="text" maxlength="250" >
+                            </div>
+                            <div>
+                                <input class="w-100  form_input mt-3" placeholder="Last Name" name="lastname" id="lastname"
+                                    type="text" maxlength="250" >
+                            </div>
+                            <div>
+                                <input class="w-100  form_input mt-3" placeholder="Mobile Number" name="phone" id="phone"
+                                    type="number" maxlength="250">
+                            </div>
+                            <div>
+                                <input class="w-100  form_input mt-3" placeholder="Age" name="age" id="age" type="number" maxlength="250"/>
+                            </div>
+                            <div>
+                                <select class="w-100 mt-3 form-select myself_other" type="select" name="gender" id="gender">
+                                    <option selected="selected" class="opc-5" disabled>
+                                        Gender</option>
+                                        <option value="m">Male</option>
+                                        <option value="f">Female</option>
+                                        <option value="o">Others</option>
+                                </select>
+                            </div> {% endcomment %}
+                            <div class="bg-light-blue br-5 p-3 d-flex align-items-center">
+                                <label>Total Price:</label>
+                                <p class="m-0 ps-2 font-bold" id="totalprice"></p>
+                            </div>
+                            <div>
+                                <input class="w-100  form_input mt-3" placeholder="Date" name="Date" id="Date" type="Date" maxlength="250"/>
+                            </div>
+                            <div>
+                                <select class="w-100 mt-3 form-select myself_other" type="select" name="timeslot" id="timeslot">
+                                        <option selected="selected" class="opc-5" disabled>
+                                        Pickup Time Slot</option>
+                                        <option value="1">7:00AM-11:00AM</option>
+                                        <option value="2">11:00AM-3:00PM</option>
+                                        <option value="3">3:00PM-6:00PM</option>
+                                </select>
+                            </div>
+                            <div>
+                                <select class="w-100 mt-3 form-select myself_other" type="select" name="City" id="City">
+                                    <option selected="selected" class="opc-5" disabled>
+                                        City</option>
+                                        {%for i in city%}
+                                        <option value="{{i.id}}">{{i.cityname}}</option>
+                                        {%endfor%}
+                                </select>
+                            </div>
+                            <div>
+                                <textarea rows="2" class="w-100 myself_other form_input mt-3" placeholder="Address" name="address1" id="address1" type="text" ></textarea>
+                            </div>
+                            <div>
+                                <input class="w-100  form_input mt-3" placeholder="Pincode" name="pincode" id="pincode" type="number" pattern=".{6,6}"/>
+                                <p class="error pincodeerror"><p>
+                            </div>
+                            <div>
+                                <select class="w-100 mt-3 form-select myself_other" type="select" name="paymentmethod" id="paymentmethod" >
+                                    <option selected="selected" class="opc-5" disabled>
+                                        Payment Method</option>
+                                        <option value="1">Cash on Delivery</option>
+                                        <option value="2">Online</option>
+                                        {% comment %} <option value="3">3:00PM-6:00PM</option> {% endcomment %}
+                                </select>
+                            </div>
+                            <div class="row mt-3" id="cpndesc">
+                                <div class="col-8">
+                                    <input class="w-100  form_input " placeholder="Coupon"
+                                        id="coupon" name="coupon" type="search" onsearch="coupRemove()" maxlength="15"/>
+                                </div>
+                                <div class="col-4 ps-0">
+                                    <button
+                                        class="coupon_apply br br-5 text-center fs-14 font-regular w-100 h-100 bg-dark cl-dark-white" id="cpnbtnn" >APPLY</button>
+                                </div>
+                                {% comment %} <p class="error cpnerror"><p> {% endcomment %}
+                                {% comment %} <p class="text-success cpnsuccess"><p> {% endcomment %}
+                            </div>
+                            <input id="originprice" name="originprice" hidden />
+                            <input id="hiddenuni" name="hiddenuni" hidden />
+                                <button class="mx-lg-0 mx-3 mt-4 globalsubmitbutton"
+                                type="submit" name="submit" id="checkout" onclick='paymentFunction(document.getElementById("hiddenuni").value,"true")'>SUBMIT</button>
+                            {% comment %} </form> {% endcomment %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>  
     <section class="social_report_share">
         <div class="modal fade" id="social_report_share" tabindex="-1" aria-labelledby="social_report_shareLabel"
-        aria-hidden="true">
-        <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content p-2">
-                <div class="modal-body">
-                    <button type="button" class="btn-close  close" data-bs-dismiss="modal"
-                    aria-label="Close">
-                </button>
+            aria-hidden="true">
+            <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content p-2">
+                    <div class="modal-body">
+                        <button type="button" class="btn-close  close" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
                         <h2 class="cl-dark-blue text-center fs-40  font-bold">Share</h2>
                         <div class="icon-box">
                             <div class="box">
-                                <a style="padding: 14px 18px;" id="whatsappshare" href="" target="_blank"><i class="fa fa-whatsapp" aria-hidden="true"></i></a>
+                                <a style="padding: 14px 18px;" id="whatsappshare" href="" target="_blank"><i
+                                        class="fa fa-whatsapp" aria-hidden="true"></i></a>
                                 {% comment %} <i class="fa fa-whatsapp" aria-hidden="true"></i> {% endcomment %}
                             </div>
                             <div class="box">
-                                <a style="padding: 14px 18px;" id="gmailshare" href="" target="_blank"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+                                <a style="padding: 14px 18px;" id="gmailshare" href="" target="_blank"><i
+                                        class="fa fa-envelope-o" aria-hidden="true"></i></a>
                                 {% comment %} <i class="fa fa-envelope-o" aria-hidden="true"></i> {% endcomment %}
                             </div>
                             <div class="box">
-                                <a style="padding: 14px 18px;" id="smsshare" href="" target="_blank"><i class="fa fa-comments-o" aria-hidden="true"></i></a>
+                                <a style="padding: 14px 18px;" id="smsshare" href="" target="_blank"><i
+                                        class="fa fa-comments-o" aria-hidden="true"></i></a>
                                 {% comment %} <i class="fa fa-comments-o" aria-hidden="true"></i> {% endcomment %}
                             </div>
                             <div class="box">
-                                <a style="padding: 14px 18px;" id="copy" onclick="myFunction()" ><i class="fa fa-clone" aria-hidden="true"></i></a>
+                                <a style="padding: 14px 18px;" id="copy" onclick="myFunction()"><i class="fa fa-clone"
+                                        aria-hidden="true"></i></a>
                                 {% comment %} <i class="fa fa-clone" aria-hidden="true"></i> {% endcomment %}
                             </div>
                         </div>
                         <div class="pt-3">
-                            <input class="w-100  form_input" placeholder="Copy Link" name="" id="copyshare" type="text" maxlength="250" >
+                            <input class="w-100  form_input" placeholder="Copy Link" name="" id="copyshare" type="text"
+                                maxlength="250">
                         </div>
+                    </div>
+                    <span class="drop first evaporate" id="custom-tooltip">copied to clipboard</span>
                 </div>
-                <span  class="drop first evaporate" id="custom-tooltip">copied to clipboard</span>
             </div>
         </div>
-    </div>
     </section>
     <section class="section_mediation_modal">
         <div class="modal fade" id="mediation_modal" tabindex="-1" aria-labelledby="mediation_modal-Label"
-        aria-hidden="true">
-        <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content p-sm-2">
-                <div class="modal-body">
-                    <button type="button" class="btn-close  close" data-bs-dismiss="modal"
-                        aria-label="Close">
-                    </button>
-                    <form action="javascript:void(0)" method='post' id="medicofrom">
-                        {%csrf_token%}
-                      
-                       
-                    <h2 class="cl-dark-blue text-center fs-40  font-bold ">Medication</h2>
-                    <div>
-                        <label>Medicine Name</label>
-                        <input class="w-100  form_input" placeholder="Medicine Name" name="medico" id="medico" type="text" maxlength="250"  >
+            aria-hidden="true">
+            <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content p-sm-2">
+                    <div class="modal-body">
+                        <button type="button" class="btn-close  close" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
+                        <form action="javascript:void(0)" method='post' id="medicofrom">
+                            {%csrf_token%}
+                            <h2 class="cl-dark-blue text-center fs-40  font-bold ">Medication</h2>
+                            <div>
+                                <label>Medicine Name</label>
+                                <input class="w-100  form_input" placeholder="Medicine Name" name="medico" id="medico"
+                                    type="text" maxlength="250">
+                            </div>
+                            <div class="pt-2">
+                                <input class="cursor me-2" type="checkbox" name="tab_morning" id="tabmorning" />
+                                <label class="cursor" for="tabmorning">Morning</label>
+                            </div>
+                            <div class="pt-2">
+                                <input class="cursor me-2" type="checkbox" name="tab_afternoon" id="tabafternoon" />
+                                <label class="cursor" for="tabafternoon">Afternoon</label>
+                            </div>
+                            <div class="pt-2">
+                                <input class="cursor me-2" type="checkbox" name="tab_evening" id="tabevening" />
+                                <label class="cursor" for="tabevening">Evening</label>
+                            </div>
+                            <div class="pt-2">
+                                <input class="cursor me-2" type="checkbox" name="tab_night" id="tabnight" />
+                                <label class="cursor" for="tabnight">Night</label>
+                            </div>
+
+                            <p class="myCheckBox" id="myCheckBox" style="color:red"></p>
+                            <div class="text-center">
+                                <button class="px-5 py-2 bg-sky-blue br-5  fs-18  cl-dark-white br mt-2" type="submit"
+                                    id="medication" value="submit">Submit</button>
+                            </div>
+                        </form>
                     </div>
-                    <div  class="pt-2">
-                        <input class="cursor me-2" type="checkbox" name="tab_morning" id="tabmorning"/>
-                        <label class="cursor" for="tabmorning">Morning</label>
-                    </div>
-                    <div  class="pt-2">
-                        <input class="cursor me-2" type="checkbox" name="tab_afternoon" id="tabafternoon"/>
-                        <label class="cursor" for="tabafternoon">Afternoon</label>
-                    </div>
-                    <div  class="pt-2">
-                        <input class="cursor me-2" type="checkbox" name="tab_evening" id="tabevening"/>
-                        <label class="cursor" for="tabevening">Evening</label>
-                    </div>
-                    <div  class="pt-2">
-                        <input class="cursor me-2" type="checkbox" name="tab_night" id="tabnight"/>
-                        <label class="cursor" for="tabnight">Night</label>
-                    </div>
-                   
-                    <p class="myCheckBox" id="myCheckBox" style="color:red"></p>
-                    <div class="text-center">
-                    <button class="px-5 py-2 bg-sky-blue br-5  fs-18  cl-dark-white br mt-2" type="submit" id="medication"
-                    value="submit">Submit</button>
-                    </div>
-                </form>
                 </div>
             </div>
         </div>
-    </div>
     </section>
     <section class="section_update_mediation_modal">
         <div class="modal fade" id="mediation_update_modal" tabindex="-1" aria-labelledby="mediation_update_modal-Label"
-        aria-hidden="true">
-        <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content p-sm-2">
-                <div class="modal-body">
-                    <form id="update_med_Form">
-                        {%csrf_token%}
-                    <button type="button" class="btn-close  close" data-bs-dismiss="modal"
-                        aria-label="Close">
-                    </button>
-                    <h2 class="cl-dark-blue text-center fs-40  font-bold ">Update Medication</h2>
-                    {% comment %} {%for medic in medics%} {% endcomment %}
-                    <input class="w-100  form_input" placeholder="" name="medicid" type="hidden" maxlength="250" id="medicid"  />
-                    <div>
-                        <label >Medicine Name</label>
-                        <input class="w-100  form_input" placeholder="Medicine Name" name="update_name" type="text" maxlength="250" id="medicoupdate" />
+            aria-hidden="true">
+            <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content p-sm-2">
+                    <div class="modal-body">
+                        <form id="update_med_Form">
+                            {%csrf_token%}
+                            <button type="button" class="btn-close  close" data-bs-dismiss="modal" aria-label="Close">
+                            </button>
+                            <h2 class="cl-dark-blue text-center fs-40  font-bold ">Update Medication</h2>
+                            {% comment %} {%for medic in medics%} {% endcomment %}
+                            <input class="w-100  form_input" placeholder="" name="medicid" type="hidden" maxlength="250"
+                                id="medicid" />
+                            <div>
+                                <label>Medicine Name</label>
+                                <input class="w-100  form_input" placeholder="Medicine Name" name="update_name"
+                                    type="text" maxlength="250" id="medicoupdate" />
+                            </div>
+                            <div class="pt-2">
+                                <input class="cursor me-2" type="checkbox" name="tabmorningupdate"
+                                    id="tabmorningupdate" />
+                                <label class="cursor" for="tabmorningupdate">Morning</label>
+                            </div>
+                            <div class="pt-2">
+                                <input class="cursor me-2" type="checkbox" name="tabafternoonupdate"
+                                    id="tabafternoonupdate" />
+                                <label class="cursor" for="tabafternoonupdate">Afternoon</label>
+                            </div>
+                            <div class="pt-2">
+                                <input class="cursor me-2" type="checkbox" name="tabeveningupdate"
+                                    id="tabeveningupdate" />
+                                <label class="cursor" for="tabeveningupdate">Evening</label>
+                            </div>
+                            <div class="pt-2">
+                                <input class="cursor me-2" type="checkbox" name="tabnightupdate" id="tabnightupdate" />
+                                <label class="cursor" for="tabnightupdate">Night</label>
+                            </div>
+                            <p class="myCheckBoxUpdate" id="myCheckBoxUpdate" style="color:red"></p>
+                            <div class="text-center">
+                                <button class="px-5 py-2 bg-sky-blue br-5  fs-18  cl-dark-white br mt-2" type="submit"
+                                    value="submit" id="checkBtnUpdate">Update</button>
+                            </div>
+                        </form>
                     </div>
-                    <div  class="pt-2">
-                        <input class="cursor me-2" type="checkbox" name="tabmorningupdate" id="tabmorningupdate"/>
-                        <label class="cursor" for="tabmorningupdate">Morning</label>
-                    </div>
-                    <div  class="pt-2">
-                        <input class="cursor me-2" type="checkbox" name="tabafternoonupdate"id="tabafternoonupdate"/>
-                        <label class="cursor" for="tabafternoonupdate">Afternoon</label>
-                    </div>
-                    <div  class="pt-2">
-                        <input class="cursor me-2" type="checkbox" name="tabeveningupdate" id="tabeveningupdate"/>
-                        <label class="cursor" for="tabeveningupdate">Evening</label>
-                    </div>
-                    <div  class="pt-2">
-                        <input class="cursor me-2" type="checkbox" name="tabnightupdate" id="tabnightupdate"/>
-                        <label class="cursor" for="tabnightupdate">Night</label>
-                    </div>
-                    <p class="myCheckBoxUpdate" id="myCheckBoxUpdate" style="color:red"></p>
-                    <div class="text-center">
-                        <button class="px-5 py-2 bg-sky-blue br-5  fs-18  cl-dark-white br mt-2" type="submit"
-                    value="submit" id="checkBtnUpdate">Update</button>
-                    </div>
-                </form>
                 </div>
             </div>
         </div>
-    </div>
     </section>
-
     <section class="otherspop" id ="otherspop1">
         <div class="modal fade" id="otherspop" tabindex="-1" aria-labelledby="otherspopLabel"
             aria-hidden="true">
@@ -400,7 +565,6 @@
             </div>
         </div>
     </section>
-
     <section class="testdetail" id ="testdetails">
         <div class="modal fade" id="testdetaill" tabindex="-1" aria-labelledby="otherspopLabel"
             aria-hidden="true">
@@ -409,16 +573,13 @@
                     <div class="modal-body">
                         <button type="button" class="btn-close  close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
-                        
-                            <div id="testdetaills" >
-                                
+                            <div id="testdetaills">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
     <section class="prescriptionbreak" id ="prescriptionbreak">
         <div class="modal fade" id="prescriptionbreaks" tabindex="-1" aria-labelledby="otherspopLabel"
             aria-hidden="true">
@@ -470,6 +631,7 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
     $(document).ready(function(){
+        
         var historycount =parseInt("{{bookinghistorylength}}");
         var paymentcount =parseInt("{{paymentcount}}");
         if(historycount!=0){
@@ -494,64 +656,119 @@
     function paymentFunction(ids, status){
         if (status=="false"){
             swal('Hello','You booking under review progress by our experts. Please try after sometime.If you have any queries related to booking please contact our support team +91 9769 351 301','info')
-            
+            //alert("Please wait till your prescription is viewed by our doctors.");
         }else{
-            $.ajax({
-                type:"POST",
-                data: {
-                    action:"retreive_data",
-                    id : ids,
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                   },
-                   dataType: "json",
-                   success: function(resp){
-                    
-                    if(resp['valid']){
-                    }
-                    var amount = parseInt(resp['amount']);
-                    var options = {
-                            key: resp['razorKey'],
-                            amount: amount, 
-                            currency: "INR",
-                            description: "Diagnostica Span",
-                            //image: "{% static 'img/invoice_logo.png' %}",
-                            order_id: resp["order_id"],
-                            callback_url: resp['callbackUrl'],
-                            redirect: true,
-                            theme: {
-                                "color": "#005aeb"
-                            },
-                            modal: { 
-                                escape: false,
-                                ondismiss: function()
-                                { 
-                                    $.ajax({
-                                    type: 'post',
-                                    headers: {
-                                        'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
-                                    },
-                                    data: {
-                                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                                    action:"payment_canceled",
-                                    obj_id:ids,
-                                    order_id:resp["order_id"],
-                                    },
-                                    dataType: 'json',
-                                    success: function (response) {
-                                    }
-                                    });
+            var timeslot=$("#timeslot").val();
+            var date=$("#Date").val();
+            var city=$("#City").val();
+            var address=$("#address1").val();
+            var pincode=$("#pincode").val();
+            var paymentmethod=$("#paymentmethod").val();
+            var coupon=$("#coupon").val();
+            var amount=$("#totalprice").html();
+            //console.log(paymentmethod)
+            if (timeslot==null || date=='' || city==null || address=='' || pincode=='' || paymentmethod==null){
+                $(".pincodeerror").html("")
+                swal("", "Please update every field", "warning");
+            }
+            else if(pincode.length<6 || pincode.length>6){
+                $(".pincodeerror").html("Enter valid pincode")
+                //swal("", "Enter Valid pincode", "warning");
+                }
+            else{
+                $(".pincodeerror").html("")
+                $("#paymentinfo").hide()
+                    if (paymentmethod=="2"){
+                        $.ajax({
+                            type:"POST",
+                            data: {
+                                action:"retreive_data",
+                                id : ids,
+                                timeslot:timeslot,
+                                date:date,
+                                city:city,
+                                address:address,
+                                pincode:pincode,
+                                paymentmethod:paymentmethod,
+                                coupon:coupon,
+                                amount:amount,
+                                csrfmiddlewaretoken: '{{ csrf_token }}',
+                               },
+                               dataType: "json",
+                               success: function(resp){
+                                if(resp['valid']){
                                 }
-                            },
-                        };
-                        var rzp1 = new Razorpay(options);
-                        rzp1.open();
-                   }
-            });
-        }
-    };
-
+                                var amount = parseInt(resp['amount']);
+                                var options = {
+                                        key: resp['razorKey'],
+                                        amount: amount, 
+                                        currency: "INR",
+                                        description: "Diagnostica Span",
+                                        //image: "{% static 'img/invoice_logo.png' %}",
+                                        order_id: resp["order_id"],
+                                        callback_url: resp['callbackUrl'],
+                                        redirect: true,
+                                        theme: {
+                                            "color": "#005aeb"
+                                        },
+                                        modal: { 
+                                            escape: false,
+                                            ondismiss: function()
+                                            { 
+                                                $.ajax({
+                                                type: 'post',
+                                                headers: {
+                                                    'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
+                                                },
+                                                data: {
+                                                csrfmiddlewaretoken: '{{ csrf_token }}',
+                                                action:"payment_canceled",
+                                                obj_id:ids,
+                                                order_id:resp["order_id"],
+                                                },
+                                                dataType: 'json',
+                                                success: function (response) {
+                                                    window.location.reload()
+                                                    }
+                                                });
+                                            }
+                                        },
+                                    };
+                                    var rzp1 = new Razorpay(options);
+                                    rzp1.open();
+                               }
+                        });
+                }
+                else{
+            $(".preload").css("display","block");
+                    $.ajax({
+                        type:"POST",
+                        data:{
+                            action:"COD",
+                            id : ids,
+                            timeslot:timeslot,
+                            date:date,
+                            city:city,
+                            address:address,
+                            pincode:pincode,
+                            paymentmethod:paymentmethod,
+                            amount:amount,
+                            coupon:coupon,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        dataType:"json",
+                        success:function(resp){
+                            $(".preload").css("display","none");
+                            swal("","Thank you for booking","success").then(function(){
+                                window.location.reload()
+                            })
+                        }
+                    })
+                    }
+                }
+            }
+        };
         function othersfunc(e){
-      
         $.ajax({
             url: "{% url 'othersdetail' %}",
             type: "POST",
@@ -562,7 +779,6 @@
             },
             success: function(resp){
              $("#othersspop").empty();
-             
                var detail=` <h3 class="fs-20 font-bold cl-dark-blue text-center" id="choice">To Whom : ${resp['otherschoice']}</h3>
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="fistname">First Name : ${resp['firstname']}</h3>
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="lastname">Last Name : ${resp['lastname']}</h3>
@@ -571,7 +787,6 @@
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="age">Age : ${resp['age']}</h3>
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="phone">Mobile No : ${resp['phone']}</h3>`
                $("#othersspop").append(detail);
-               
             }
         });
 }
@@ -585,6 +800,7 @@
             'csrfmiddlewaretoken':'{{ csrf_token }}',
         },
         success: function(resp){
+            console.log(resp['message'])
         var msg = resp['message'];
         var splitted_str = msg.split("/");
          $("#testdetaills").empty();
@@ -596,8 +812,8 @@
     });
 }
 
-function prescrbreak(e){
-   
+function prescrbreak(e,totalpric){
+    console.log(e)
     $.ajax({
         url: "{% url 'prescriptionbreak' %}",
         type: "POST",
@@ -607,98 +823,235 @@ function prescrbreak(e){
             'csrfmiddlewaretoken':'{{ csrf_token }}',
         },
         success: function(resp){
+        if(!resp['coupon']){
+        console.log(resp['message'])
         var msg = resp['message'];
+        console.log(msg.length)
          $("#prescr").empty();
+         var totall=`<h5 class="fs-20 font-bold cl-dark mb-3">Total Price - ${totalpric}</h5>`
+        var sample=`Sample Collection Charges - ₹ 199.00`
+        $("#prescr").append(totall)
         for (let i = 0; i < msg.length; i++) {
-           var a= `<p>${msg[i].test}-₹ ${msg[i].pricel1}</p>  `
-          
+           var a= `<p>${msg[i].test} - ₹ ${msg[i].pricel1}</p>  `
+           console.log(a)
            $("#prescr").append(a)
           }
+          $("#prescr").append(sample)
+        }
+        else{
+                var msg = resp['message'];
+                console.log(msg.length)
+                 $("#prescr").empty();
+                 var totall=`<h5 class="fs-20 font-bold cl-dark mb-3">Total Price - ${totalpric}</h5>`
+                var sample=`<p>Sample Collection Charges - ₹ 199.00</p>`
+                
+                var couponc=`<h5 class="fs-20 font-bold cl-dark mb-3">Coupon Code - ${resp['couponcode']}</h5>
+                <div class="col-8" id="">
+                    <h4 class="fs-20 font-bold cl-dark mb-3">Discount Percentage - ${resp["coupondiscount"]}%</h4>
+                </div>
+                <div class="col-8" id="cleardetail">
+                    <h4 class="fs-20 font-bold cl-dark mb-3">Discount Price - Rs. ${resp["discountamount"]}</h4>
+                </div>`
+                $("#prescr").append(totall)
+                for (let i = 0; i < msg.length; i++) {
+                   var a= `<p>${msg[i].test} - ₹ ${msg[i].pricel1}</p>  `
+                   console.log(a)
+                   $("#prescr").append(a)
+                  }
+                  $("#prescr").append(sample)
+                  if(resp["coupondiscount"]!=undefined){
+                    $("#prescr").append(couponc)
+                }
+                 // $("#prescr").append(couponc)
+        }
         }
     });
 }
+function reportsharee(e, bookingid) {
 
-function reportsharee(e,bookingid){
-    
-    link=window.location.origin+e
-    whatsapplink=`https://web.whatsapp.com/send?text=Hello there,%0APlease click below link to View Report of Booking ID:${bookingid}%0A${link}`
-    gmaillink=`https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=&su=Diagnostica+Span+Report&body=+Hello there,%0APlease below link click to View Report of Booking ID:${bookingid}%0A${link}+&ui=2&tf=1&pli=1`
+    link = window.location.origin + e
+    whatsapplink = `https://web.whatsapp.com/send?text=Hello there,%0APlease click below link to View Report of Booking ID:${bookingid}%0A${link}`
+    gmaillink = `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=&su=Diagnostica+Span+Report&body=+Hello there,%0APlease below link click to View Report of Booking ID:${bookingid}%0A${link}+&ui=2&tf=1&pli=1`
     //sms=`sms:${link}`
-    sms=`sms:&body=Hello there Please click below link to View Report of Booking ID:${bookingid}%0A${link}`
+    sms = `sms:&body=Hello there Please click below link to View Report of Booking ID:${bookingid}%0A${link}`
     $("#copyshare").val(link)
-    $("#whatsappshare").attr("href",whatsapplink)
-    $("#gmailshare").attr("href",gmaillink)
-    $("#smsshare").attr("href",sms)
-    }
+    $("#whatsappshare").attr("href", whatsapplink)
+    $("#gmailshare").attr("href", gmaillink)
+    $("#smsshare").attr("href", sms)
+}
 function myFunction() {
-        /* Get the text field */
-        var copyText = document.getElementById("copyshare");
-        /* Select the text field */
-        copyText.select();
-        copyText.setSelectionRange(0, 99999); /* For mobile devices */
-         /* Copy the text inside the text field */
-        navigator.clipboard.writeText(copyText.value);
-        document.getElementById("custom-tooltip").style.display = "inline";
-        document.execCommand("copy");
-        setTimeout( function() {
-            document.getElementById("custom-tooltip").style.display = "none";
-        }, 2000);
-      }
-function deletefunc(e){
-                $.ajax({
-                    url: "{% url 'medicationdelete' %}",
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        'action':'forsession',
-                        'pk':e,
-                        'csrfmiddlewaretoken':'{{ csrf_token }}',
-                    },
-                    success: function(resp){
-                        if (resp["medicocount"] == 0){
-                            $(".medicationss").hide()
-                            $(`#${e}`).hide();
-                        }
-                        else{
-                            $(`#${e}`).hide();
-                        }
-                    }
-                });
-            return false;
+    /* Get the text field */
+    var copyText = document.getElementById("copyshare");
+    /* Select the text field */
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); /* For mobile devices */
+    /* Copy the text inside the text field */
+    navigator.clipboard.writeText(copyText.value);
+    document.getElementById("custom-tooltip").style.display = "inline";
+    document.execCommand("copy");
+    setTimeout(function () {
+        document.getElementById("custom-tooltip").style.display = "none";
+    }, 2000);
+}
+function unikey(e,price){
+    console.log(price)
+$("#hiddenuni").empty()
+$("#originprice").empty()
+$("#hiddenuni").val(e)
+$("#totalprice").html("₹ " +price)
+$("#originprice").val("₹ "+price)
+
+}
+function setAttr() {
+    var d = new Date();
+    var curr_date = d.getDate();
+    var curr_month = d.getMonth() + 1; //Months are zero based
+    if (curr_month < 10)
+        curr_month = '0' + curr_month;
+    if (curr_date < 10)
+        curr_date = '0' + curr_date;
+    var curr_year = d.getFullYear();
+    var d1 = curr_year + "-" + curr_month + "-" + curr_date;
+    $('#Date').attr('min', d1);
+};
+function couponshow(){
+    $("#paymentmethod").find("option:selected").each(function(){
+    var optionValue = $(this).attr("value");
+    //alert(optionValue)
+    if(optionValue=="2"){
+        $("#coupon").attr('style',  'display:block');
     }
-function medicoinfo(e){
-            $.ajax({
-                url: "{% url 'medicationinfo' %}",
-                type: "POST",
-                dataType: "json",
-                data: {
-                    'action':'forsession',
-                    'pk':e,
-                    'csrfmiddlewaretoken':'{{ csrf_token }}',
-                },
-                success: function(resp){
-                    $("#tabmorningupdate").prop("checked", false)
-                    $("#tabafternoonupdate").prop("checked", false)
-                    $("#tabeveningupdate").prop("checked", false)
-                    $("#tabnightupdate").prop("checked", false)
-                  $("#medicoupdate").val(resp['medic']); 
-                  $("#medicid").val(resp['id']);
-                    if (resp['morning']){
-                        $("#tabmorningupdate").prop("checked", true)
-                    }
-                    if (resp['afternoon']){
-                        $("#tabafternoonupdate").prop("checked", true)
-                    }
-                    if (resp['evening']){
-                        $("#tabeveningupdate").prop("checked", true)
-                    }
-                    if (resp['night']){
-                        $("#tabnightupdate").prop("checked", true)
-                    }
-                }
-            });
-        return false;
+    if(optionValue=="1"){
+        $("#coupon").attr('style',  'display:none');
+    }
+    })
+}
+
+//$("#coupon").focus(function(){
+ //   $("#currentPassword-errorr").remove();
+    
+//});
+    $("#cpnbtnn").click(function(){
+        var coupon=$("#coupon").val();
+        var total=$("#totalprice").html();
+        var total2=total.split("₹ ")[1]
+        var totalfloat=parseFloat(total2).toFixed(2)-199
+        var uni= $("#hiddenuni").val()
+      //alert()
+          $.ajax({
+               url: "{% url 'coupon' %}",
+               type : "POST", 
+               data: {
+                "action":"prescription",
+                "uni":uni,
+                "coupon" : coupon,
+                "total":totalfloat,
+                "csrfmiddlewaretoken": '{{ csrf_token }}',
+               },
+               dataType: "json",
+               success: function(resp){
+                $("#cpnbtnn").prop('disabled', true);
+                //alert()
+                //if(resp["message"]=="exists"){
+                //    $("#totalprice").html(total);
+                //    //var h4 =`<h4 class="fs-30 font-bold cl-dark-blue" id="total"> ${b}</h4>`;
+                //  swal("", "Coupon Already Applied", "info")
+                //}
+                if (!resp['message']){
+                    // alert("Invalid Coupon")
+                    $("#totalprice").html(total);
+                    //var h4 =`<h4 class="fs-30 font-bold cl-dark-blue" id="total"> ${b}</h4>`;
+                    var err=`<p class="error cpnerror">Please Enter valid Coupon Code<p>`
+                    $("#cpndesc").append(err)
+                        //$(".cpnerror").html("Please Enter valid Coupon Code")
+                    //swal("Invalid Coupon", "Please Enter valid Coupon Code", "error")
+               }
+               else if(resp["message"]=="exists"){
+                $("#totalprice").html(total);
+                //var h4 =`<h4 class="fs-30 font-bold cl-dark-blue" id="total"> ${b}</h4>`;
+                //$(".cpnerror").html("Coupon Already Applied")
+                var err=`<p class="error cpnerror">Coupon Already Applied<p>`
+                $("#cpndesc").append(err)
+                //swal("", "Coupon Already Applied", "info")
+               }
+               else{
+                //alert(resp['total'])
+                $("#totalprice").html("₹ "+resp['total']+".00");
+                var succe=`<p class="text-success cpnsuccess">Coupon Applied<p>
+                    <div id="cpnbreak">
+                    <div class="col-8" id="">
+                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Discount Percentage - ${resp["percent"]}%</h4>
+                    </div>
+                    <div class="col-8" id="cleardetail">
+                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Discount Price - Rs. ${resp["discount"]}</h4>
+                    </div>
+                    <div>
+                    `
+                    $("#cpndesc").append(succe)
+                //$(".cpnsuccess").html("Coupon Applied")
+               }
+            }
+           });
+      });
+function coupRemove(){
+    total=$("#originprice").val()
+ $.ajax({
+     url: "{% url 'couponsessiondelete' %}",
+     type: "GET",
+     dataType: "json",
+     success: function(resp){
+        $("#cpnbtnn").prop('disabled', false);
+        $(".cpnerror").html("")
+        $(".cpnsuccess").html("")
+        $("#cpnbreak").html("")
+        $("#totalprice").html(total);
+        //window.location.reload();
+     }
+ });
+ //window.location.reload()
+}
+$("#checkoutinfoclose").click(function(){
+ window.location.reload()
+    //$('#paymentinfo1').find('input:text').val('');   
+})
+$(document).ready(function(){
+    $("#paymentinfo1").modal({
+     backdrop: 'static',
+    keyboard: false
+ });
+})
+function medicoinfo(e) {
+    $.ajax({
+        url: "{% url 'medicationinfo' %}",
+        type: "POST",
+        dataType: "json",
+        data: {
+            'pk': e,
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+        },
+        success: function (resp) {
+            $("#tabmorningupdate").prop("checked", false)
+            $("#tabafternoonupdate").prop("checked", false)
+            $("#tabeveningupdate").prop("checked", false)
+            $("#tabnightupdate").prop("checked", false)
+            $("#medicoupdate").val(resp['medic']);
+            $("#medicid").val(resp['id']);
+            if (resp['morning']) {
+                $("#tabmorningupdate").prop("checked", true)
+            }
+            if (resp['afternoon']) {
+                $("#tabafternoonupdate").prop("checked", true)
+            }
+            if (resp['evening']) {
+                $("#tabeveningupdate").prop("checked", true)
+            }
+            if (resp['night']) {
+                $("#tabnightupdate").prop("checked", true)
+            }
         }
+    });
+    return false;
+}
 jQuery.validator.addMethod("name_regex", function (value, element) {
     return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);
 }, "Enter valid name");
@@ -714,7 +1067,6 @@ $("#medicofrom").validate({
         },
     },
     messages: {
-
         'medico': {
             required: "This field is required."
         },
@@ -729,40 +1081,40 @@ $("#medicofrom").validate({
             data: datafrom,
             success: function (resp) {
                 $("#medico").val('');
-                if (!resp["message"]){
+                if (!resp["message"]) {
                     swal("Something Went Wrong", "Try Again", "warning");
                     //alert("Already Subscribed Thank you!!")
                 }
-                else{
+                else {
                     window.location.reload()
                 }
             }
-        }); 
+        });
     }
 });
 
-$("#tabmorning").change(function() {
+$("#tabmorning").change(function () {
     $("#myCheckBox").text("");
 });
-$("#tabafternoon").change(function() {
+$("#tabafternoon").change(function () {
     $("#myCheckBox").text("");
 });
-$("#tabevening").change(function() {
+$("#tabevening").change(function () {
     $("#myCheckBox").text("");
 });
-$("#tabnight").change(function() {
+$("#tabnight").change(function () {
     $("#myCheckBox").text("");
 });
 
 $(document).ready(function () {
-    $('#medication').click(function() {
-      checked = $("input[type=checkbox]:checked").length;
-      if(!checked) {
-        $("#myCheckBox").text("You must check at least one checkbox.");
-        return false;
-      }else{
-        $("#myCheckBox").text("");
-      }
+    $('#medication').click(function () {
+        checked = $("input[type=checkbox]:checked").length;
+        if (!checked) {
+            $("#myCheckBox").text("You must check at least one checkbox.");
+            return false;
+        } else {
+            $("#myCheckBox").text("");
+        }
 
     });
 });
@@ -796,11 +1148,11 @@ $("#update_med_Form").validate({
             data: datafrom,
             success: function (resp) {
                 $("#medico").val('');
-                if (!resp["message"]){
+                if (!resp["message"]) {
                     swal("Something Went Wrong", "Try Again", "warning");
                     //alert("Already Subscribed Thank you!!")
                 }
-                else{
+                else {
                     window.location.reload()
                 }
             }
@@ -809,33 +1161,54 @@ $("#update_med_Form").validate({
     }
 });
 
-$("#tabmorningupdate").change(function() {
+$("#tabmorningupdate").change(function () {
     $("#myCheckBoxUpdate").text("");
 });
-$("#tabafternoonupdate").change(function() {
+$("#tabafternoonupdate").change(function () {
     $("#myCheckBoxUpdate").text("");
 });
-$("#tabeveningupdate").change(function() {
+$("#tabeveningupdate").change(function () {
     $("#myCheckBoxUpdate").text("");
 });
-$("#tabnightupdate").change(function() {
+$("#tabnightupdate").change(function () {
     $("#myCheckBoxUpdate").text("");
 });
-
+function deletefunc(e) {
+    $.ajax({
+        url: "{% url 'medicationdelete' %}",
+        type: "POST",
+        dataType: "json",
+        data: {
+            'pk': e,
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+        },
+        success: function (resp) {
+            if (resp["medicocount"] == 0) {
+                $(".medicationss").hide()
+                $(`#${e}`).hide();
+                nodata = `<h1 class="text-center fs-30 font-bold cl-dark-blue mb-4" id="nodataa">No Record Found...</h1>`
+                $("#pills-contact").append(nodata)
+            }
+            else {
+                $(`#${e}`).hide();
+            }
+        }
+    });
+    return false;
+}
 $(document).ready(function () {
-    $('#checkBtnUpdate').click(function() {
-      checked = $("input[type=checkbox]:checked").length;
+    $('#checkBtnUpdate').click(function () {
+        checked = $("input[type=checkbox]:checked").length;
 
-      if(!checked) {
-        $("#myCheckBoxUpdate").text("You must check at least one checkbox.");
-        return false;
-      }else{
-        $("#myCheckBoxUpdate").text("");
-      }
+        if (!checked) {
+            $("#myCheckBoxUpdate").text("You must check at least one checkbox.");
+            return false;
+        } else {
+            $("#myCheckBoxUpdate").text("");
+        }
 
     });
-   
-});
 
+});
 </script>
 {%endblock%}

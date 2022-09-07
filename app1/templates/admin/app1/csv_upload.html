@@ -48,7 +48,6 @@
                             <div class="{% if cl.has_filters %}col-md-10{% else %}col-md-12{% endif %}">
                                 <div>
                                     <form action="." method="POST" enctype="multipart/form-data">
-                                        
                                         <div class="custom-file-upload">
                                         {{ form.as_p }}
                                         </div>
@@ -56,7 +55,7 @@
                                         {{message}}
                                         <button class="btn btn-secondary" type="submit">Upload File</button>
                                     </form>
-                                    <a href="{% static "files/test bulk.csv"%}" download>Sample file</a>
+                                    {% comment %} <a href="{% static "files/test bulk.csv"%}" download>Sample file</a> {% endcomment %}
                                 </div> 
                                 <div>
                             </div>

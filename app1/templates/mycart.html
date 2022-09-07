@@ -2,7 +2,7 @@
 {% load static %}
 
 {%block content%}
-<body>
+<body onload="setAttr()">
     {%include 'header.html'%}
     <section class="sub_header py-xl-4 py-3">
         <div class="container">
@@ -92,8 +92,6 @@
                                         </div> 
                                         <div class="row py-4">
                                             <div class="col-lg-6">
-                                                {% comment %} <form method="post" id="couponForm">
-                                                    {%csrf_token%}  {% endcomment %}
                                                     <h3 class="fs-24 font-bold cl-dark-blue m-0 pb-lg-4 pb-3">Enter
                                                         Coupon
                                                         Code
@@ -101,7 +99,7 @@
                                                     <div class="row">
                                                         <div class="col-8 col-xl-7">
                                                             <input class="w-100 coupon_input" placeholder="Apply Coupon"
-                                                                id="coupon" name="coupon" type="search" onsearch="coupRemove()" maxlength="250"/>
+                                                                id="coupon" name="coupon" type="search" onsearch="coupRemove()" maxlength="15"/>
                                                                 
                                                         </div>
                                                         <div class="col-4 col-xl-5 ps-0">
@@ -109,7 +107,7 @@
                                                                 class="coupon_apply br br-5 text-center fs-18 font-regular" id="cpnbtn" >APPLY</button>
                                                         </div>
                                                     </div>
-                                                {% comment %} </form> {% endcomment %}
+                                                
                                             </div>
                                             <div class="col-lg-6 pt-4 pt-lg-0">
                                                 <div class="row text-center" id="details">
@@ -118,7 +116,16 @@
                                                         <h4 class="fs-20 font-bold cl-dark-blue mb-3">Sub Total</h4>
                                                     </div>
                                                     <div class="col-6">
-                                                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Rs. {{subtotal}}</h4>
+                                                        <h4 class="fs-20 font-bold cl-dark-blue mb-3" id="subtotal">Rs. {{subtotal}}</h4>
+                                                    </div>
+                                                </div>
+                                                <div class="row text-center" id="details">
+
+                                                    <div class="col-6">
+                                                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Sample Collection Charges</h4>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Rs. 199.00</h4>
                                                     </div>
                                                 </div>
                                                 <div class="row py-4 text-center bg-white sub_total">
@@ -126,7 +133,7 @@
                                                         <h4 class="fs-30 font-bold cl-dark-blue">Total</h4>
                                                     </div>
                                                     <div class="col-6 discount">
-                                                        <h4 class="fs-30 font-bold cl-dark-blue" id="total">Rs. {{subtotal}}</h4>
+                                                        <h4 class="fs-30 font-bold cl-dark-blue" id="total">Rs. {{total|floatformat:2}}</h4>
                                                     </div>
                                                 </div>
                                             </div>
@@ -158,6 +165,7 @@
             </div>
         </div>
     </section>
+
     <section class="cart_checkout_modal" id ="infomodal">
         <div class="modal fade" id="cart_checkout_modal" tabindex="-1" aria-labelledby="cart_checkout_modalLabel"
             aria-hidden="true">
@@ -212,7 +220,32 @@
                                 </select>
                             </div>
                             <div>
+                                <input class="w-100  form_input mt-3" placeholder="Date" name="Date" id="Date" type="Date" maxlength="250"/>
+                            </div>
+                            <div>
+                                <select class="w-100 mt-3 form-select myself_other" type="select" name="timeslot" id="timeslot">
+                                    <option selected="selected" class="opc-5" disabled>
+                                        Pickup Time Slot</option>
+                                        <option value="1">7:00AM-11:00AM</option>
+                                        <option value="2">11:00AM-3:00PM</option>
+                                        <option value="3">3:00PM-6:00PM</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <select class="w-100 mt-3 form-select myself_other" type="select" name="City" id="City">
+                                    <option selected="selected" class="opc-5" disabled>
+                                        City</option>
+                                        {%for i in city%}
+                                        <option value="{{i.id}}">{{i.cityname}}</option>
+                                        {%endfor%}
+                                </select>
+                            </div>
+                            <div>
                                 <textarea rows="2" class="w-100 myself_other form_input mt-3" placeholder="Address" name="address1" id="address" type="text" ></textarea>
+                            </div>
+                            <div>
+                                <input class="w-100  form_input mt-3" placeholder="Pincode" name="pincode" id="pincode" type="number" maxlength="250"/>
                             </div>
                             <button class="mx-lg-0 mx-3 mt-4 globalsubmitbutton"
                                 type="submit" name="submit" id="checkout">SUBMIT</button>
@@ -268,17 +301,21 @@
             form.submit();
         }
     });
-
     $("#checkout11").click(function() {
         if("{{ user.is_authenticated }}"==="False"){
-            window.location.replace("{% url 'user-login' %}?next={% url 'cart' %}");
+            swal({
+                title:"Please Login to Checkout",
+                icon:"info",
+                button:"ok"
+            }).then(function() {
+                window.location.replace("{% url 'user-login' %}?next={% url 'cart' %}")})
+            //window.setTimeout(function(){window.location.replace("{% url 'user-login' %}?next={% url 'cart' %}")},10000)
+           // window.location.replace("{% url 'user-login' %}?next={% url 'cart' %}");
+            
         }
       })
     $("#delete1").on("click", function(e){
-        
         var idd = $(this).attr('name');
-        
-        
             $.ajax({
                 url: "{% url 'destroy' %}",
                 type: "POST",
@@ -316,19 +353,24 @@ function deletefunc(e){
             });
 
         return false;
- 
 }
     $('#cpnbtn').on('click', function(e){
-        var a=$("#total").text();
+        var a=$("#subtotal").text();
+        var b=$("#total").text()
         var coupon=$("#coupon").val()
-        if (coupon== ''){
-            swal("", "Please Enter Coupon", "error")
-        }
+        var re=/^.{1,15}$/
+        if (!re.test(coupon)){
+            swal("", "Coupon code should be less than 15 characters", "error")
+            if (coupon== ''){
+                swal("", "Please Enter Coupon", "error")
+            }
+         }
         else{
           $.ajax({
                url: "{% url 'coupon' %}",
                type : "POST", 
                data: {
+                "action":"cart",
                 "coupon" : coupon,
                 "total":a.split("Rs.")[1],
                 csrfmiddlewaretoken: '{{ csrf_token }}',
@@ -338,7 +380,7 @@ function deletefunc(e){
                 $(".discount").empty();
                 if (!resp['message']){
                    // alert("Invalid Coupon")
-                   var h4 =`<h4 class="fs-30 font-bold cl-dark-blue" id="total"> ${a}</h4>`;
+                   var h4 =`<h4 class="fs-30 font-bold cl-dark-blue" id="total"> ${b}</h4>`;
                  swal("Invalid Coupon", "Please Enter valid Coupon Code", "error")
                   // alert("Invalid Coupon");
                    /* $('#output').html(data.msg) response message */
@@ -353,7 +395,7 @@ function deletefunc(e){
                         <h4 class="fs-20 font-bold cl-dark-blue mb-3">Discount Price(${resp['percent']}%)</h4>
                     </div>
                     <div class="col-6" id="cleardetail">
-                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">Rs. ${resp['discount']}</h4>
+                        <h4 class="fs-20 font-bold cl-dark-blue mb-3">- Rs. ${resp['discount']}</h4>
                     </div>
                 `
                 var h4 =`<h4 class="fs-30 font-bold cl-dark-blue" id="total">Rs. ${resp['total']}.00</h4>`;
@@ -403,7 +445,6 @@ $("#option1").change(function(e){
         $("address").val('');
         $("#option").show();
     }
-
 });
 
 function coupRemove(){
@@ -426,6 +467,9 @@ $(document).ready(function(){
     jQuery.validator.addMethod("phone_regex", function (value, element) {
         return this.optional(element) || /^[0-9\.\-_]{10,30}$/i.test(value);
     }, "Enter valid phone number");
+    jQuery.validator.addMethod("pincode_regex", function (value, element) {
+        return this.optional(element) || /^[0-9]*$/i.test(value);
+    }, "Enter valid pincode");
     jQuery.validator.addMethod("age_regex", function (value, element) {
         return this.optional(element) || /^[0-9\.\-_]{1,2}$/i.test(value);
     }, "Enter valid age");
@@ -476,6 +520,21 @@ $(document).ready(function(){
             'option': {
                 required: true,
             },
+            'timeslot':{
+                required: true,
+            },
+            'City':{
+                required: true,
+            },
+            'pincode':{
+                required: true,
+                minlength: 6,
+                maxlength: 6,
+                pincode_regex: true,
+            },
+            'Date':{
+                required: true,
+            }
         },
     
         messages: {
@@ -504,6 +563,15 @@ $(document).ready(function(){
             },
             'address': {
                 required: "This field is required."
+            },
+            'City':{
+                required: "This field is required.",
+            },
+            'pincode':{
+                required: "This field is required.",
+            },
+            'Date':{
+                required: "This field is required.",
             }
     
         },
@@ -517,6 +585,10 @@ $(document).ready(function(){
                     var option1=$("#option1").val();
                     var option=$("#option").val();
                     var address=$("#address").val();
+                    var timeslot=$("#timeslot").val();
+                    var date=$("#Date").val();
+                    var location=$("#City").val();
+                    var pincode=$("#pincode").val();
                     var total;
                     if(AMOUNT==0){
                         
@@ -540,6 +612,10 @@ $(document).ready(function(){
                             "option1":option1,
                             "option":option,
                             "address":address,
+                            "timeslot":timeslot,
+                            "date":date,
+                            "location":location,
+                            "pincode":pincode,
                             csrfmiddlewaretoken:'{{ csrf_token }}',
                            },
                            dataType: "json",
@@ -588,6 +664,20 @@ $(document).ready(function(){
         }
     });
 }); 
+function setAttr() {
+    var d = new Date();
+    var curr_date = d.getDate();
+    var curr_month = d.getMonth() + 1; //Months are zero based
+    if (curr_month < 10)
+        curr_month = '0' + curr_month;
+
+    if (curr_date < 10)
+        curr_date = '0' + curr_date;
+
+    var curr_year = d.getFullYear();
+    var d1 = curr_year + "-" + curr_month + "-" + curr_date;
+    $('#Date').attr('min', d1);
+};
     </script>
 {%endblock%}
 
