@@ -615,7 +615,7 @@ class invoicee(models.Model):
     packages=models.ForeignKey(healthpackages,null=True,blank=True,on_delete=models.CASCADE)
     healthsymptoms = models.ForeignKey(healthsymptoms, verbose_name=_("Health Symptoms"), on_delete=models.CASCADE, null=True, blank=True)
     price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True)
-    file=models.FileField(upload_to='invoice',max_length=500, verbose_name="Invoice File", null=True, blank=True)
+    file=models.FileField(upload_to='invoice/',max_length=500, verbose_name="Invoice File", null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
     

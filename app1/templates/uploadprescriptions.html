@@ -2,7 +2,10 @@
 {% load static %}
 {%block content%}
 <body>
+    <div class="preload" style="display:none"><img src="http://i.imgur.com/KUJoe.gif">
+    </div>
     {%include "header.html"%}
+    {% comment %} <div id="loaderr" class="center"></div> {% endcomment %}
     <section class="sub_header py-xl-4 py-3">
         <div class="container">
             <div class="row">
@@ -266,7 +269,11 @@
 
         },
         submitHandler: function (form) {
+           // $(".preload").css("display","block");
             form.submit();
+           // alert()
+          
+
         }
     });
 

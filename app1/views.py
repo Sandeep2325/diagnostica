@@ -120,22 +120,23 @@ def Registration(request):
             otp = random.randint(1000,9999)
             request.session['otp'] = otp
             
-                # f"Hi {f},\nThere was a request to change your password!\nIf you did not make this request then please ignore this email.\nOtherwise, please click this link to change your password: [link]"
+            # f"Hi {f},\nThere was a request to change your password!\nIf you did not make this request then please ignore this email.\nOtherwise, please click this link to change your password: [link]"
             # message=f"Hi {f},\n\nGreetings!\nYou are just a step away from accessing your Diagnostica Span account.\nWe are sharing a verification code to access your account. Once you have verified the code, you'll be prompted to access our portal immediately.\n\nYour OTP: {otp}\n\nThank You,\nDiagnostica Span"
             # message = f'Welcome your otp is {otp} '
             message=f"{otp}- is your one time password for Spandiagno user registration. Please do not share this OTP with anyone. Spandiagno."
+            message1=f"{otp}- is your one time password for Spandiagno user registration. Please do not share this OTP with anyone.\nThanks You\nDiagnostica Span."
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [e]
             message = message
             subject = "DIGNOSTICA SPAN OTP Confirmation" 
             a=sms(message,p_number)
-            # send_mail(
-            #         subject,
-            #         message,
-            #         email_from,
-            #         recipient_list,
-            #         fail_silently=False,
-            # )
+            send_mail(
+                    subject,
+                    message1,
+                    email_from,
+                    recipient_list,
+                    fail_silently=False,
+            )
             messages.info(request,a)
             return redirect('/registration/otp/')
     return render(request,'register.html')
@@ -174,6 +175,7 @@ def otpRegistration(request):
                     # f"Hi {f},\nThere was a request to change your password!\nIf you did not make this request then please ignore this email.\nOtherwise, please click this link to change your password: [link]"
             # message=f"Hi {f},\n\nGreetings!\nYou are just a step away from accessing your Diagnostica Span account.\nWe are sharing a verification code to access your account. Once you have verified the code, you'll be prompted to access our portal immediately.\n\nYour OTP: {otp}\n\nThank You,\nDiagnostica Span"
             # message = f'Welcome your otp is {otp} '
+                
                 message=f"Hi {firstname} {lastname},Thank you for registering with us.,\nYour one-stop solution for all diagnostic services.\nDiagnostica Span"
                 email_from = settings.EMAIL_HOST_USER
                 recipient_list = [email_address]
@@ -201,6 +203,7 @@ def resendotp(request):
     otp = random.randint(1000,9999)
     request.session['otp'] = otp
     message=f"{otp}- is your OTP for Spandiagno for password to be resent. Please do not share this OTP with anyone. Spandiagno."
+    message1=f"{otp}- is your OTP for Spandiagno for password to be resent. Please do not share this OTP with anyone.\nThank You\n Diagnostica Span."
     # message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDignostica Span"
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [email_address]
@@ -209,13 +212,13 @@ def resendotp(request):
     try: 
         userr=User.objects.get(email=email_address) 
         a=sms(message,userr.phone_no)
-        # send_mail(
-        #         subject,
-        #         message,
-        #         email_from,
-        #         recipient_list,
-        #         fail_silently=False,
-        # )
+        send_mail(
+                subject,
+                message1,
+                email_from,
+                recipient_list,
+                fail_silently=False,
+        )
         messages.success(request,a)
     except:
         messages.warning(request,"Something went wrong")
@@ -236,6 +239,7 @@ def changepassword(request):
         request.session["conpassword"]=conpassword
         request.session['otp'] = otp
         message=f"{otp}- is your OTP for Spandiagno to change password. Please do not share this OTP with anyone. Spandiagno."
+        message1=f"{otp}- is your OTP for Spandiagno to change password. Please do not share this OTP with anyone.\nThanks You\nDiagnostica Span."
         # message=f"Hi {request.user.first_name},\nYou have requested to change your password credentials to login, please use below OTP to do the same\n\nOTP: {otp}\nIf the wish to keep your old password, kindly ignore the mail.\nThank you,\nDignostica Span"
         # message = f'Hello,\nWelcome your Change Password OTP is {otp} '
         email_from = settings.EMAIL_HOST_USER
@@ -244,13 +248,13 @@ def changepassword(request):
         subject = "DIGNOSTICA SPAN" 
         p_number=request.user.phone_no
         a=sms(message,p_number)
-        # send_mail(
-        #         subject,
-        #         message,
-        #         email_from,
-        #         recipient_list,
-        #         fail_silently=False,
-        #     )
+        send_mail(
+                subject,
+                message1,
+                email_from,
+                recipient_list,
+                fail_silently=False,
+            )
         messages.info(request,a)
         return redirect('/changepasswordotp/')
     return render (request,"changepassword.html")
@@ -273,6 +277,7 @@ def forgotpassword(request):
                 # message = f'your otp is {otp}'
                 # send_otp(p_number,message)
             message=f"{otp}- is your OTP for Spandiagno if you have forgotten password. Please do not share this OTP with anyone. Spandiagno. "
+            message1=f"{otp}- is your OTP for Spandiagno if you have forgotten password. Please do not share this OTP with anyone\nThank You\nDiagnostica Span"
             # message = f"Hi Dear Customer,\nThere was a request to Forgot password! Password change\nIf you did not make this request then please ignore this email.\nOtherwise, Please enter the OTP {otp}"
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [e]
@@ -281,13 +286,13 @@ def forgotpassword(request):
             p_number=userr.phone_no
             templateid=1507166152065523633
             a=sms(message,p_number)
-            # send_mail(
-            #         subject,
-            #         message,
-            #         email_from,
-            #         recipient_list,
-            #         fail_silently=False,
-            # )
+            send_mail(
+                    subject,
+                    message1,
+                    email_from,
+                    recipient_list,
+                    fail_silently=False,
+            )
             messages.info(request,a)
             return redirect('/forgotpassword/otp/')
         else:
@@ -300,6 +305,7 @@ def resendotpforgot(request):
     otp = random.randint(1000,9999)
     request.session['otp'] = otp
     message=f"{otp}- is your OTP for Spandiagno for passwaord to be resent. Please do not share this OTP with anyone. Spandiagno."
+    message1=f"{otp}- is your OTP for Spandiagno for passwaord to be resent. Please do not share this OTP with anyone.\nThank You\nDiagnostica Span"
     # message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDignostica Span"
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [email_address]
@@ -308,13 +314,13 @@ def resendotpforgot(request):
     try:
         userr=User.objects.get(email=email_address) 
         a=sms(message,userr.phone_no)
-        # send_mail(
-        #         subject,
-        #         message,
-        #         email_from,
-        #         recipient_list,
-        #         fail_silently=False,
-        # )
+        send_mail(
+                subject,
+                message1,
+                email_from,
+                recipient_list,
+                fail_silently=False,
+        )
         messages.success(request,a)
     except:
         messages.warning(request,"Something went wrong")
@@ -325,6 +331,7 @@ def changeresend(request):
     otp = random.randint(1000,9999)
     request.session['otp'] = otp
     message=f"{otp}- is your OTP for Spandiagno for passwaord to be resent. Please do not share this OTP with anyone. Spandiagno."
+    message1=f"{otp}- is your OTP for Spandiagno for passwaord to be resent. Please do not share this OTP with anyone.\nThank You\nDiagnostica Span."
     # message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDignostica Span"
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [email_address]
@@ -333,13 +340,13 @@ def changeresend(request):
     try:
         userr=User.objects.get(email=email_address) 
         a=sms(message,userr.phone_no)
-        # send_mail(
-        #         subject,
-        #         message,
-        #         email_from,
-        #         recipient_list,
-        #         fail_silently=False,
-        # )
+        send_mail(
+                subject,
+                message1,
+                email_from,
+                recipient_list,
+                fail_silently=False,
+        )
         messages.success(request,a)
     except:
         messages.success(request,"Something went wrong")
@@ -439,13 +446,13 @@ def forgotresendotp(request):
     recipient_list = [email_address]
     message = message
     subject = "OTP" 
-    # send_mail(
-    #         subject,
-    #         message,
-    #         email_from,
-    #         recipient_list,
-    #         fail_silently=False,
-    # )
+    send_mail(
+            subject,
+            message,
+            email_from,
+            recipient_list,
+            fail_silently=False,
+    )
     messages.success(request,"resend otp sent")
     return redirect('/forgotpassword/otp/') 
 def userinfo(request):
@@ -649,11 +656,11 @@ def home(request):
         healthsymptom=healthsymptoms.objects.all()
         healthcareblog=healthcareblogs.objects.all()
         testimonial=testimonials.objects.all()
-        if request.user.is_anonymous:
-            d = cart.objects.filter(device = deviceCookie)
-        else:
-            d = cart.objects.filter(user = request.user)
-        request.session['cart_count'] = d.count()
+        # if request.user.is_anonymous:
+        #     d = cart.objects.filter(device = deviceCookie)
+        # else:
+        #     d = cart.objects.filter(user = request.user)
+        # request.session['cart_count'] = d.count()
         context={
             "healthcheckup":healthcheckup,
             "healthpackage":healthpackage,
@@ -667,6 +674,17 @@ def home(request):
             "blogcount":healthcareblog.count(),
             "testimonialcount":testimonial.count(),
         }
+        if not request.user.is_anonymous:
+            c = cart.objects.filter(user=request.user)
+        else:
+            c = cart.objects.filter(device=deviceCookie)    
+        if request.user.is_anonymous:
+            request.session['cart_count']= cart.objects.filter(device = deviceCookie).count()
+            # print("-----device-----",request.session.get('cart_count'))
+        else:
+            request.session['cart_count']= cart.objects.filter(user = request.user).count()
+            request.session['cart_count']= cart.objects.filter(device = deviceCookie).count()
+            # print("------cart-----",request.session.get('cart_count'))
         res = render(request,'home.html',context)
         return res
 
@@ -1161,7 +1179,6 @@ def cartt(request):
         # bookingid ="DP"+str(bid)
         book=book_history.objects.all().order_by("-created")[0:1]
         # book=book_history.objects.filter(bookingid=bookingid)
-        
         for i in book:
             temp = re.compile("([a-zA-Z]+)([0-9]+)")
             res = temp.match(i.bookingid).groups()
@@ -1213,11 +1230,11 @@ def cartt(request):
         scheme=request.scheme
         urll=request.get_host()
         # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,amount)
-        # callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
+        callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
         # print("----------------",callback_url)
         # print(call)
         # print(callback_url)
-        callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
+        # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
         context['razorpay_order_id'] = razorpay_order_id
         context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
         context['razorpay_amount'] = amount
@@ -2243,10 +2260,6 @@ def invoice(request,orderid):
         testbooking=testbook.objects.get(bookingid=order.uni)
     invoic=invoicee.objects.filter(order_id=orderid)
     amount=payments.amount
-    # couponamount=num2words(int(float(couponamount)), lang = 'en_IN')
-    # a=couponamount.replace(",","")
-    # amount=num2words(int(float(amount)), lang = 'en_IN')
-    # b=amount.replace(",","")
     amount1=num2words(int(float(amount)), lang = 'en_IN')
     c=amount1.replace(",","")
     try:
@@ -2280,10 +2293,10 @@ def invoice(request,orderid):
     template_name='invoice2.html'
     from django.core.files import File
     pdf = html_to_pdf(template_name,context_dict)
-    # receipt_file = BytesIO(pdf.content)
-    # print("-------",receipt_file)
-    # filee = invoicee.objects.get(order_id=orderid)
-    # # print(File(receipt_file, "invoice2.pdf"))
+    receipt_file = BytesIO(pdf.content)
+    a=File(receipt_file, "invoice2.pdf")
+    print(a)
+    filee = invoicee.objects.filter(order_id=orderid).update(file=File(receipt_file, "invoice/invoice2.pdf"))
     # filee.file = File(receipt_file, "invoice2.pdf")
     # filee.save()
     return FileResponse(pdf,as_attachment=True,filename="invoice2.pdf",content_type='application/pdf') 
@@ -2295,7 +2308,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
         # medics=medications.objects.filter(user=request.user)
         his = []
         cit=city.objects.filter(active=True)
-        bookhistories=book_history.objects.filter(user=request.user).order_by('-created')
+        bookhistories=book_history.objects.filter(user=request.user,booking_type__in=["Prescription","Selected Test/Packages"]).order_by('-created')
         # testbooking=Prescriptionbook1.objects.filter(user=request.user)
         payments=payment.objects.filter(user=request.user).order_by('-date')
         for i in bookhistories:
@@ -2403,8 +2416,8 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 scheme=request.scheme
                 urll=request.get_host()
                 # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100)
-                # callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
-                callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100) 
+                callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
+                # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100) 
                 to_return = {
                     "razorKey":settings.RAZOR_KEY_ID,
                     "valid":True,
@@ -2777,6 +2790,7 @@ def sms(message,mobile):
         if deliveryconnection.status_code!=200:
             return "Your OTP is not delivered Please try again!"
         else:
+            print("----------")
             return "Your OTP sent your registered mobile number"
     except Exception as e:
         # print(e)

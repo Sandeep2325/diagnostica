@@ -737,7 +737,7 @@ class invoiceeadmin(admin.ModelAdmin):
         return False
     
     
-    def has_delete_permission(self, request):
+    def has_delete_permission(self, request,obj=None):
         return False
 admin.site.register(User,UserAdmin)
 admin.site.register(faq,faqadmin)

@@ -91,7 +91,6 @@
                                                     <td data-label="Patient Info">{{bookhistory.patient_info}}</td>
                                                     {%endif%}
                                                     <td data-label="Booking Type">{{bookhistory.booking_type}}</td>
-                                                    
                                                     {% if bookhistory.prescription %}
                                                     <td data-label="Booking Details"><a  target="blank" href="{{ bookhistory.prescription.url}}">{{bookhistory.bookingdetails|truncatechars:10}}</a></td>
                                                     {% else %}
@@ -498,8 +497,8 @@
                                     rzp1.open();
                                }
                         });
-                }
-                else{
+                    }
+        else{
             $(".preload").css("display","block");
                     $.ajax({
                         type:"POST",
@@ -543,13 +542,12 @@
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="fistname">First Name : ${resp['firstname']}</h3>
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="lastname">Last Name : ${resp['lastname']}</h3>
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="gender">Gender : ${resp['gender']}</h3>
-
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="age">Age : ${resp['age']}</h3>
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="phone">Mobile No : ${resp['phone']}</h3>`
                $("#othersspop").append(detail);
             }
         });
-}
+    }
     function testfunc(e){
     $.ajax({
         url: "{% url 'testdetails' %}",
