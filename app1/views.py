@@ -37,6 +37,7 @@ import shortuuid
 from num2words import num2words
 import re
 from datetime import datetime,timezone 
+from django.core import serializers
 env = environ.Env()
 global OBJ_COUNT
 OBJ_COUNT = 0
@@ -51,7 +52,8 @@ Pune=env("Pune")
 Barshi=env("Barshi")
 Aurangabad=env("Aurangabad")
 shipping_charges=199
-from django.core import serializers
+# reachus=["reachus@spanhealth.com"]
+reachus=["sandeep.nexevo@gmail.com"],
 def indextable1(request):
     precriptionb = serializers.serialize("json", Prescriptionbook1.objects.all().order_by('-created'))
     return HttpResponse(precriptionb)
@@ -128,7 +130,7 @@ def Registration(request):
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [e]
             message = message
-            subject = "DIGNOSTICA SPAN OTP Confirmation" 
+            subject = "DIAGNOSTICA SPAN OTP Confirmation" 
             a=sms(message,p_number)
             send_mail(
                     subject,
@@ -179,7 +181,7 @@ def otpRegistration(request):
                 email_from = settings.EMAIL_HOST_USER
                 recipient_list = [email_address]
                 message = message
-                subject = "DIGNOSTICA SPAN OTP Confirmation" 
+                subject = "DIAGNOSTICA SPAN OTP Confirmation" 
                 a=sms(message,p_number)
                 send_mail(
                         subject,
@@ -203,11 +205,11 @@ def resendotp(request):
     request.session['otp'] = otp
     message=f"{otp}- is your OTP for Spandiagno for password to be resent. Please do not share this OTP with anyone. Spandiagno."
     message1=f"{otp}- is your OTP for Spandiagno for password to be resent. Please do not share this OTP with anyone.\nThank You\n Diagnostica Span."
-    # message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDignostica Span"
+    # message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDIAGNOSTICA Span"
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [email_address]
     message = message
-    subject = "OTP Verification | Dignostica Span"
+    subject = "OTP Verification | DIAGNOSTICA SPAN"
     try: 
         userr=User.objects.get(email=email_address) 
         a=sms(message,userr.phone_no)
@@ -239,12 +241,12 @@ def changepassword(request):
         request.session['otp'] = otp
         message=f"{otp}- is your OTP for Spandiagno to change password. Please do not share this OTP with anyone. Spandiagno."
         message1=f"{otp}- is your OTP for Spandiagno to change password. Please do not share this OTP with anyone.\nThanks You\nDiagnostica Span."
-        # message=f"Hi {request.user.first_name},\nYou have requested to change your password credentials to login, please use below OTP to do the same\n\nOTP: {otp}\nIf the wish to keep your old password, kindly ignore the mail.\nThank you,\nDignostica Span"
+        # message=f"Hi {request.user.first_name},\nYou have requested to change your password credentials to login, please use below OTP to do the same\n\nOTP: {otp}\nIf the wish to keep your old password, kindly ignore the mail.\nThank you,\nDIAGNOSTICA Span"
         # message = f'Hello,\nWelcome your Change Password OTP is {otp} '
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [email_address]
         message = message
-        subject = "DIGNOSTICA SPAN" 
+        subject = "DIAGNOSTICA SPAN" 
         p_number=request.user.phone_no
         a=sms(message,p_number)
         send_mail(
@@ -305,11 +307,11 @@ def resendotpforgot(request):
     request.session['otp'] = otp
     message=f"{otp}- is your OTP for Spandiagno for passwaord to be resent. Please do not share this OTP with anyone. Spandiagno."
     message1=f"{otp}- is your OTP for Spandiagno for passwaord to be resent. Please do not share this OTP with anyone.\nThank You\nDiagnostica Span"
-    # message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDignostica Span"
+    # message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDIAGNOSTICA Span"
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [email_address]
     message = message
-    subject = "OTP Verification | Dignostica Span"
+    subject = "OTP Verification | DIAGNOSTICA SPAN"
     try:
         userr=User.objects.get(email=email_address) 
         a=sms(message,userr.phone_no)
@@ -331,11 +333,11 @@ def changeresend(request):
     request.session['otp'] = otp
     message=f"{otp}- is your OTP for Spandiagno for passwaord to be resent. Please do not share this OTP with anyone. Spandiagno."
     message1=f"{otp}- is your OTP for Spandiagno for passwaord to be resent. Please do not share this OTP with anyone.\nThank You\nDiagnostica Span."
-    # message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDignostica Span"
+    # message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDIAGNOSTICA Span"
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [email_address]
     message = message
-    subject = "OTP Verification | Dignostica Span" 
+    subject = "OTP Verification | DIAGNOSTICA SPAN" 
     try:
         userr=User.objects.get(email=email_address) 
         a=sms(message,userr.phone_no)
@@ -835,9 +837,7 @@ def prescriptionbreak(request):
     if request.method=="POST":
         city=request.session.get("city")
         id=request.POST["id"]
-        print(id)
         a=Prescriptionbook1.objects.get(bookingid=id)
-        print(a)
         if a.coupon == None:
             strr=[]
             for i in a.test_name.all():
@@ -884,7 +884,8 @@ def prescriptionbreak(request):
                     strr.append(di)
                 # listToStr = '/'.join(map(str, strr))
                 return JsonResponse({"message":strr,"couponcode":a.coupon.couponcode,"coupon":True,"coupondiscount":redeem.discountpercen,"discountamount":redeem.discountamount})
-            except:
+            except Exception as e:
+                print(e)
                 # redeem=couponredeem.objects.get(booking_id=id)
                 strr=[]
                 for i in a.test_name.all():
@@ -1023,11 +1024,11 @@ def prescriptionbookview(request):
         messages.success(
             request, "Thankyou for your booking!, Our admin team will get back to you shortly.")
         link=request.build_absolute_uri('/booking-history')
-        message=f'Hello {request.user.first_name},\n You have successfully uploaded your prescription on our website, our internal team will review it and get back to you shortly for further steps.\nYou can always track your bookings/uploads (link: {link})\n\nWe appreciate your patience\nThank You,\nDignostica Span'
+        message=f'Hello {request.user.first_name},\n You have successfully uploaded your prescription on our website, our internal team will review it and get back to you shortly for further steps.\nYou can always track your bookings/uploads (link: {link})\n\nWe appreciate your patience\nThank You,\nDIAGNOSTICA SPAN'
             # message = f'Welcome your otp is {otp} '
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [request.user.email]
-        subject = "Prescription Upload Successfull | Dignostica Span" 
+        subject = "Prescription Upload Successfull | DIAGNOSTICA SPAN" 
         send_mail(
                 subject,
                 message,
@@ -1035,10 +1036,17 @@ def prescriptionbookview(request):
                 recipient_list,
                 fail_silently=False,
         )
-        
         msg=f"Hi\nThere is an Upload Prescription order booked with following details\nBookingID:{bookingid}\nFullname:{firstname}{lastname}\nLocation={c}\nPhone Number:{contact}"
-        number=8105486993
-        sms(msg,number)
+        send_mail(
+            subject,
+            msg,
+            email_from,
+            reachus,
+            fail_silently=False,
+                  )
+        # msg=f"Hi\nThere is an Upload Prescription order booked with following details\nBookingID:{bookingid}\nFullname:{firstname}{lastname}\nLocation={c}\nPhone Number:{contact}"
+        # number=8105486993
+        # sms(msg,number)
         return HttpResponseRedirect(reverse("booking-history"))
         # return render(request,"uploadprescriptions.html",{"fm":fm})
     else:
@@ -1154,7 +1162,6 @@ def cartt(request):
         date=request.POST.get('date')
         location=request.POST.get('location')
         pincode=request.POST.get('pincode')
-        # print("----------------------------",timeslot)
         global uniquee
         uniquee = uuid.uuid4()
         data=cart.objects.filter(user=request.user)
@@ -1602,9 +1609,7 @@ def othersdetail(request):
         return JsonResponse({"message":True,"firstname":detail.firstname,"lastname":detail.lastname,"gender":gender,"otherschoice":choice,"age":detail.age,"phone":detail.contact})
 @csrf_exempt
 def paymenthandler(request,str,amount):
-    # print("---------------",request)
     def verify_signature(response_data):
-        # print("----------------",response_data)
         client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
         b = client.utility.verify_payment_signature(response_data)
         request.session['signatureid']=response_data['razorpay_signature']
@@ -1616,7 +1621,6 @@ def paymenthandler(request,str,amount):
             paymentid=request.POST.get("razorpay_payment_id")
             if paymentid:
                 if verify_signature(request.POST):
-                    # print("-------------",request.POST)
                     transid=request.POST["razorpay_order_id"]
                     cart.objects.filter(user=usr).delete()
                     history=book_history.objects.get(payment_id=transid)
@@ -1632,13 +1636,13 @@ def paymenthandler(request,str,amount):
                     # print("=====",signatureid)
                     request.session.delete("amount")
                     link=request.build_absolute_uri('/booking-history')
-                    # message1 = f"Hi there,\nWe have successfully received your payment for booking id: {history.bookingid}.\nOur Medical team will get in touch with you for your mentioned tests.\nClick (link: {link}) to track your bookings.\nThank you\nDignostica Span"
+                    # message1 = f"Hi there,\nWe have successfully received your payment for booking id: {history.bookingid}.\nOur Medical team will get in touch with you for your mentioned tests.\nClick (link: {link}) to track your bookings.\nThank you\nDIAGNOSTICA Span"
                     email_from = settings.EMAIL_HOST_USER
-                    message1=f"""Hi there,We have successfully received your payment for booking id: {history.bookingid}..\nClick ({link}) to track your bookings.\nThank you\nDignostica Span"""
+                    message1=f"""Hi there,We have successfully received your payment for booking id: {history.bookingid}..\nClick ({link}) to track your bookings.\nThank you\nDIAGNOSTICA SPAN"""
                     recipient_list = [history.user.email]
                     subject = "DIAGNOSTICA SPAN" 
                     send_mail(
-                            f"Payment Successfull| Dignostica Span | Booking Id:{history.bookingid}",
+                            f"Payment Successfull| DIAGNOSTICA SPAN | Booking Id:{history.bookingid}",
                             message1,
                             email_from,
                             recipient_list,
@@ -1646,11 +1650,10 @@ def paymenthandler(request,str,amount):
                     )
                     mes=f"Payment is Done for Booking ID:{history.bookingid}\nPlease Checkit"
                     send_mail(
-                        f"Payment Successfull| Dignostica Span | Booking Id:{history.bookingid}",
+                        f"Payment Successfull| DIAGNOSTICA SPAN | Booking Id:{history.bookingid}",
                         mes,
                         email_from,
-                        # ["reachus@spanhealth.com"],
-                        ["sandeep.nexevo@gmail.com"],
+                        reachus,
                         fail_silently=False,
                     )
                     messages.info(request, "Thankyou for making payment our team will come and collect the sample soon.")
@@ -1666,7 +1669,7 @@ def paymenthandler(request,str,amount):
                 link=request.build_absolute_uri('/booking-history')
                 email_from = settings.EMAIL_HOST_USER
                 recipient_list = [history.user.email]
-                # subject=f"Subject: Payment Failed| Dignostica Span | Booking Id:{history.bookingid}"
+                # subject=f"Subject: Payment Failed| DIAGNOSTICA Span | Booking Id:{history.bookingid}"
                 message=f"""Hi there,
 
                             The payment initiated for booking id:{history.bookingid} has been failed.
@@ -1675,7 +1678,7 @@ def paymenthandler(request,str,amount):
 
                             Click (link : {link}) to retry your payment."""
                 send_mail(
-                            f"Payment Failed| Dignostica Span | Booking Id:{history.bookingid}",
+                            f"Payment Failed| DIAGNOSTICA SPAN | Booking Id:{history.bookingid}",
                             message,
                             email_from,
                             recipient_list,
@@ -2048,13 +2051,13 @@ def contactuss(request):
         subject=request.POST["subject"]
         message=request.POST["message"]
         contactus.objects.create(fullname=name,email=email,phone=phone,subject=subject,message=message).save()
-        message1 = f"Hi {name},\nThank you for contacting us.\nWe have received your query, our internal team will get in touch with you in no time.\nWe welcome you to checkout our top packages in your region till we get back you.\nThank You,\nDignostica Span"
+        message1 = f"Hi {name},\nThank you for contacting us.\nWe have received your query, our internal team will get in touch with you in no time.\nWe welcome you to checkout our top packages in your region till we get back you.\nThank You,\nDIAGNOSTICA SPAN"
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [email]
         message = message
         subject = "DIAGNOSTICA SPAN" 
         send_mail(
-                "Enquiry | Dignostica Span",
+                "Enquiry | DIAGNOSTICA SPAN",
                 message1,
                 email_from,
                 recipient_list,
@@ -2297,7 +2300,6 @@ class BookingHistoryPay(LoginRequiredMixin,View):
         # bookhistories=book_history.objects.exclude(user=request.user,booking_type="Aggregator").order_by('-created')
         payments=payment.objects.filter(user=request.user).order_by('-date')
         for i in bookhistories:
-            print("-----------",i.uni)
             try:
                 # try:
                 testbooking=Prescriptionbook1.objects.get(bookingid=i.uni)
@@ -2404,8 +2406,8 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 scheme=request.scheme
                 urll=request.get_host()
                 # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100)
-                # callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
-                callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100) 
+                callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
+                # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100) 
                 to_return = {
                     "razorKey":settings.RAZOR_KEY_ID,
                     "valid":True,
@@ -2428,8 +2430,8 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 scheme=request.scheme
                 urll=request.get_host()
                 # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100)
-                # callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
-                callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100) 
+                callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
+                # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100) 
                 to_return = {
                     "razorKey":settings.RAZOR_KEY_ID,
                     "valid":True,
@@ -2481,7 +2483,6 @@ class BookingHistoryPay(LoginRequiredMixin,View):
             mod.save()
             to_return = {"valid":True}
         if request.POST.get("action") == "COD":
-            print("-------",request.POST)
             id=request.POST["id"]
             date=request.POST["date"]
             citid=request.POST["city"]
@@ -2501,6 +2502,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 discountamount=request.session.get("discountamount")
                 couponpercent=request.session.get("couponpercent")
                 actualamount= request.session.get("actualamount")
+                # print("----",coupon,discountamount,couponpercent,actualamount)
                 if coupon!= None and discountamount!=None and couponpercent!=None and actualamount!=None:
                      couponredeem.objects.create(user=request.user,booking_id=id,order_id=history.payment_id,coupon=request.session.get("coupon"),discountpercen=request.session.get("couponpercent"),discountamount=request.session.get("discountamount"),actualamount=request.session.get('actualamount')).save()
                 if coupon!=None:
@@ -2514,30 +2516,26 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 email_from = settings.EMAIL_HOST_USER
                 mes=f"Cash On Delivery Booking for Booking ID:{id}\nPlease Checkit"
                 send_mail(
-                    f"Cash On delivery | Dignostica Span | Booking Id:{id}",
+                    f"Cash On delivery | DIAGNOSTICA SPAN | Booking Id:{id}",
                     mes,
                     email_from,
-                    # ["reachus@spanhealth.com"],
-                    ["sandeep.nexevo@gmail.com"],
+                    reachus,
                     fail_silently=False,
                 )
             except:
                 citi=city.objects.get(id=int(citid))
                 Prescriptionbook1.objects.filter(bookingid=id).update(date=date,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod)
                 email_from = settings.EMAIL_HOST_USER
-                mes=f"Cash On Delivery Booking for Booking ID:{id}\nPlease Checkit"
+                mes=f"Cash On Collection Booking for Booking ID:{id}\nPlease Checkit"
                 send_mail(
-                    f"Cash On delivery | Dignostica Span | Booking Id:{id}",
+                    f"Cash On Collection | DIAGNOSTICA SPAN | Booking Id:{id}",
                     mes,
                     email_from,
-                    # ["reachus@spanhealth.com"],
-                    ["sandeep.nexevo@gmail.com"],
+                    reachus,
                     fail_silently=False,
                 )
             to_return = {"valid":True}
         return HttpResponse(json.dumps(to_return), content_type="application/json")
-
-
 class HealthSymptoms(View):
     def get(self, request, *args,**kwargs):
         c=request.session.get("city")
@@ -2752,7 +2750,6 @@ def lifestyletests(request):
         return JsonResponse({"message":test1})
 def medicationsview(request):
     if request.method=="POST":
-        print("-----------",request.POST)
         try:
             medic=request.POST["medico"]
         except:
@@ -2852,7 +2849,7 @@ def sendreport(request,phone,bookingid):
     email=User.objects.get(phone_no=phone)
     message=f"{otp}- is your one time password for Spandiagno Report. Please do not share this OTP with anyone. Spandiagno."
     email_from = settings.EMAIL_HOST_USER
-    subject = "DIGNOSTICA SPAN" 
+    subject = "DIAGNOSTICA SPAN" 
     recipient_list = [email.email]
     send_mail(
             subject,

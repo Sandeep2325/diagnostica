@@ -1,4 +1,7 @@
-{%extends "indexx.html"%} {% load static%} {%block content%} {% comment %} <a href={% url "aggregator-logout" %}>Logout</a> {% endcomment %}
+{%extends "indexx.html"%} 
+{% load static%} 
+{% block title %}Aggregator Profile - Diagnostica Span{% endblock %}
+{%block content%} {% comment %} <a href={% url "aggregator-logout" %}>Logout</a> {% endcomment %}
 <div id="wrapper">
     {%include "sidebarr.html"%}
     <div id="page-content-wrapper">

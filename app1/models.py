@@ -317,7 +317,9 @@ def testbookings(sender, instance, **kwargs):
     # print("qwertyu")
     if instance.price==None:
         a=[]
+        
         for i in instance.test_name.all():
+            print("------",i)
             if instance.location=="Bangalore":
                 a.append(i.Banglore_price)
 
@@ -338,7 +340,7 @@ def testbookings(sender, instance, **kwargs):
 
             elif instance.location=="Aurangabad":
                 a.append(i.aurangabad_price)
-
+        # print(sum(a))
         if sum(a)!=0:
             book_history.objects.filter(uni=instance.bookingid).update(amount=sum(a)+shipping_charges)
             Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=sum(a)+shipping_charges)
@@ -955,13 +957,18 @@ class aggregatorbookings(models.Model):
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
     
-    @property
-    def paymentupdate(self):
-        if self.payment_status==True:
-            book_history.objects.filter(bookingid=self.bookingid).update(payment_status=True) 
-        # return self.test_name.all().count() 
-    if payment_status==True:
-        paymentupdate()
+    # @property
+    # def paymentupdate(self):
+    #     if self.payment_status==True:
+    #         print("---------------------")
+    #         book_history.objects.filter(bookingid=self.bookingid).update(payment_status=True)
+    #     else:
+    #         print("+++++++++++++++++++")
+    #         book_history.objects.filter(bookingid=self.bookingid).update(payment_status=False)
+    #     # return self.test_name.all().count() 
+    # if payment_status==True or payment_status==False:
+    #     print("called")
+    #     paymentupdate()
     def __str__(self):
         return str(self.user)
     class Meta:
@@ -1001,7 +1008,7 @@ def aggregatortests(sender, instance, **kwargs):
                             payment_status=True).save()
     else:
         if instance.payment_status == False:
-            book_history.objects.filter(bookingid=instance.bookingid).update(amount=instance.price)
+            book_history.objects.filter(bookingid=instance.bookingid).update(amount=instance.price,payment_status=False)
         else:
             book_history.objects.filter(bookingid=instance.bookingid).update(amount=instance.price,payment_status=True) 
         

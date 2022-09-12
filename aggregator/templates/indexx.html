@@ -18,7 +18,8 @@
        <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js"></script>
-       <title>Diagnostica Span</title>
+       {% comment %} <title>Diagnostica Span</title> {% endcomment %}
+       <title>{% block title %}{% endblock %}</title>
    </head>
    <body>
     {%block content%}

@@ -181,8 +181,8 @@ class prescriptionbookadmin(admin.ModelAdmin):
         for i in queryset:
             link=request.build_absolute_uri('/send-report/{}/{}'.format(i.user.phone_no,i.bookingid))
             if (i.payment_status== True) and (bool(i.report) == True):
-                send_mail(str("Tests Report | Dignostica Span"),
-                (f"Hi {i.user.first_name} {i.user.last_name},\nThank for using our Services.\nThis mail is regarding the booking id: {i.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please click {link} to view your report\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"),
+                send_mail(str("Tests Report | DIAGNOSTICA SPAN"),
+                (f"Hi {i.user.first_name} {i.user.last_name},\nThank for using our Services.\nThis mail is regarding the booking id: {i.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please click {link} to view your report\nHope you liked our service. Have a healthy recovery.\nThank You,\nDIAGNOSTICA SPAN"),
                   settings.EMAIL_HOST_USER,
                   [i.user.email],
                   fail_silently=False)
@@ -199,7 +199,7 @@ class prescriptionbookadmin(admin.ModelAdmin):
         for i in queryset:
             link=request.build_absolute_uri('/send-report/{}/{}'.format(i.user.phone_no,i.bookingid))
             if (i.payment_status== True) and (bool(i.report) == True):
-                message=f"Hi {i.user.first_name} {i.user.last_name},\nThank for using our Services.\nThis mail is regarding the booking id: {i.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please click {link} to view your report\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"
+                message=f"Hi {i.user.first_name} {i.user.last_name},\nThank for using our Services.\nThis mail is regarding the booking id: {i.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please click {link} to view your report\nHope you liked our service. Have a healthy recovery.\nThank You,\nDIAGNOSTICA SPAN"
                 sms(message,i.user.phone_no)
                 return messages.success(request, 'Report Sent Successfully')
             elif(i.payment_status== False) and (bool(i.report) == True):
@@ -257,8 +257,8 @@ class testbookadmin(admin.ModelAdmin):
         for i in queryset:
             link=request.build_absolute_uri('/send-report/{}/{}'.format(i.user.phone_no,i.bookingid))
             if (i.payment_status== True) and (bool(i.report) == True):
-                send_mail(str("Tests Report | Dignostica Span"),
-                (f"Hi {i.user.first_name} {i.user.last_name},\nThank for using our Services.\nThis mail is regarding the booking id: {i.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please click {link} to view your report\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"),
+                send_mail(str("Tests Report | DIAGNOSTICA SPAN"),
+                (f"Hi {i.user.first_name} {i.user.last_name},\nThank for using our Services.\nThis mail is regarding the booking id: {i.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please click {link} to view your report\nHope you liked our service. Have a healthy recovery.\nThank You,\nDIAGNOSTICA SPAN"),
                   settings.EMAIL_HOST_USER,
                   [i.user.email],
                   fail_silently=False)
@@ -274,7 +274,7 @@ class testbookadmin(admin.ModelAdmin):
         for i in queryset:
             link=request.build_absolute_uri('/send-report/{}/{}'.format(i.user.phone_no,i.bookingid))
             if (i.payment_status== True) and (bool(i.report) == True):
-                message=f"Hi {i.user.first_name} {i.user.last_name},\nThank for using our Services.\nThis mail is regarding the booking id: {i.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please click {link} to view your report\nHope you liked our service. Have a healthy recovery.\nThank You,\nDignostica Span"
+                message=f"Hi {i.user.first_name} {i.user.last_name},\nThank for using our Services.\nThis mail is regarding the booking id: {i.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please click {link} to view your report\nHope you liked our service. Have a healthy recovery.\nThank You,\nDIAGNOSTICA SPAN"
                 sms(message,i.user.phone_no)
                 return messages.success(request, 'Report Sent Successfully')
             elif(i.payment_status== False) and (bool(i.report) == True):
@@ -549,7 +549,7 @@ class subscriptionadmin(admin.ModelAdmin):
 class bookhistoryadmin(admin.ModelAdmin):
     list_display=["bookingid","users","patient_infoo","booking_type","bookingdetails","amount","status","payment_status","created","updated","action_btn"]    
     readonly_fields=["created","updated",'bookingid','payment_id']
-    list_filter = ("user","booking_type")
+    list_filter = ("payment_status","booking_type")
     search_fields = ('bookingid','payment_id')
     def get_form(self, request, obj=None, **kwargs):
         # if obj.type == "1":

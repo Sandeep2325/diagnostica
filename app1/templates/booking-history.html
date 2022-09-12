@@ -1,5 +1,6 @@
 {% extends "index.html" %}
 {% load static %}
+{% block title %}Booking History - Diagnostica Span{% endblock %}
 {%block content%}
 
 <body onload="setAttr()">
@@ -600,7 +601,6 @@
 <script>
   $(document).ready(function(){
    // swal('{{message}}');
-
     swal({
 	title:'{{message}}',
 	//text: "You clicked the button!",
@@ -613,7 +613,6 @@
 <script>
   $(document).ready(function(){
    // swal('{{message}}');
-
     swal({
 	title:'{{message}}',
 	//text: "You clicked the button!",
@@ -628,7 +627,6 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
     $(document).ready(function(){
-        
         var historycount =parseInt("{{bookinghistorylength}}");
         var paymentcount =parseInt("{{paymentcount}}");
         if(historycount!=0){
@@ -836,18 +834,17 @@ function prescrbreak(e,totalpric){
           $("#prescr").append(sample)
         }
         else{
+            var discountt=parseFloat(resp["discountamount"]).toFixed(2);
                 var msg = resp['message'];
-                console.log(msg.length)
                  $("#prescr").empty();
                  var totall=`<h5 class="fs-20 font-bold cl-dark mb-3">Total Price - ${totalpric}</h5>`
                 var sample=`<p>Sample Collection Charges - ₹ 199.00</p>`
-                
                 var couponc=`<h5 class="fs-20 font-bold cl-dark mb-3">Coupon Code - ${resp['couponcode']}</h5>
                 <div class="col-8" id="">
                     <h4 class="fs-20 font-bold cl-dark mb-3">Discount Percentage - ${resp["coupondiscount"]}%</h4>
                 </div>
                 <div class="col-8" id="cleardetail">
-                    <h4 class="fs-20 font-bold cl-dark mb-3">Discount Price - Rs. ${resp["discountamount"]}</h4>
+                    <h4 class="fs-20 font-bold cl-dark mb-3">Discount Price - Rs. ${discountt}</h4>
                 </div>`
                 $("#prescr").append(totall)
                 for (let i = 0; i < msg.length; i++) {

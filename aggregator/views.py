@@ -12,9 +12,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
 def loginn(request):
-    
     if request.method=="POST":
-        print(request.POST)
         username=request.POST.get("email")
         password=request.POST.get("password")
         try:
@@ -57,7 +55,6 @@ class dashboardd(LoginRequiredMixin,View):
                     data=aggregatorbookings.objects.filter(user=request.user,created__range=[fromdate, todate]).order_by("-created")
                 except:
                     data=aggregatorbookings.objects.filter(user=request.user).order_by("-created")
-
             return render(request, self.template_name,{"data":data,"count":data.count()})
 class detailtest(LoginRequiredMixin,View):
     login_url = '/aggregator/login'
@@ -105,9 +102,9 @@ class addform(LoginRequiredMixin,View):
         for i in ids:
             a=test.objects.get(id=int(i))
             price.append(int(a.Banglore_price))
-            print(aggr)
+            # print(aggr)
             aggr.test_name.add(a)
-            print(i,aggr)
+            # print(i,aggr)
         aggr.location=location
         aggr.price=sum(price)
         aggr.save()
@@ -159,23 +156,20 @@ class changepassword(LoginRequiredMixin,View):
     def get(self,request,*args,**kwargs):
         return render(request,self.template_name)
     def post(self,request,*args,**kargs):
-        print(request.POST)
         curpassword=request.POST["oldpassword"]
         newpassword=request.POST["newpassword"]
         connewpassword=request.POST["confirmnewpassword"]
         try:
             a=authenticate(request,username=request.user.email,password=curpassword)
-            print(a)
+            # print(a)
             if newpassword==newpassword:
                 a.password=make_password(connewpassword)
                 a.save()
-                # print("----------success")
                 messages.success(request,"Password Changed Successfully! Please Login Again")
                 return render(request,self.template_name)
             else:
                 messages.warning(request,"Confirm Password didn't match with new password")
                 return render(request,self.template_name)
         except:
-            # print("----------fail")
             messages.warning(request,"Invalid Password")
         return render(request,self.template_name)
