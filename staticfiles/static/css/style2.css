@@ -1,17 +1,19 @@
-body {
-    padding: 0;
-    margin: 0;
-    height: 100vh;
-    font-family: "Nunito Sans";
-}
-
 .form-control {
     line-height: 2;
+}
+
+body {
+    background-color: #f5f5f5
 }
 
 .bg-custom {
     background-color: #f1f3f4;
     border-radius: 15px
+}
+
+.container-agg2 {
+    max-width: 1230px;
+    width: 100%;
 }
 
 .btn-custom {
@@ -30,7 +32,7 @@ label {
 
 a,
 a:hover {
-    color: #fff;
+    /* color: #fff; */
     text-decoration: none;
 }
 
@@ -65,4 +67,202 @@ html {
 
 nav {
     display: block;
+}
+
+
+/*!
+ * Start Bootstrap - Simple Sidebar (https://startbootstrap.com/)
+ * Copyright 2013-2016 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
+ */
+
+body {
+    overflow-x: hidden;
+}
+
+
+/* Toggle Styles */
+
+#wrapper {
+    padding-left: 0;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled {
+    padding-left: 250px;
+}
+
+#sidebar-wrapper {
+    z-index: 1000;
+    position: fixed;
+    left: 250px;
+    width: 0;
+    height: 100%;
+    margin-left: -250px;
+    overflow-y: auto;
+    background: #0000001a;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    width: 250px;
+}
+
+#page-content-wrapper {
+    width: 100%;
+    position: absolute;
+    padding: 15px;
+}
+
+#wrapper.toggled #page-content-wrapper {
+    position: absolute;
+    margin-right: -250px;
+}
+
+
+/* Sidebar Styles */
+
+.sidebar-nav {
+    position: absolute;
+    top: 0;
+    width: 250px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sidebar-nav li {
+    text-indent: 20px;
+    line-height: 40px;
+}
+
+.sidebar-nav li a {
+    display: block;
+    text-decoration: none;
+    color: #000000;
+}
+
+.sidebar-nav li a:hover {
+    text-decoration: none;
+    color: #f0f3f8;
+    background: #17235a;
+}
+
+.sidebar-nav li a:active,
+.sidebar-nav li a:focus {
+    text-decoration: none;
+}
+
+.sidebar-nav>.sidebar-brand {
+    height: 65px;
+    font-size: 18px;
+    line-height: 60px;
+}
+
+div#sidebar-wrapper {
+    background: #f0f3f8;
+}
+
+
+/* .sidebar-nav>.sidebar-brand a {
+    color: #000000;
+} */
+
+
+/* .sidebar-nav>.sidebar-brand a:hover {
+    color: rgb(233, 224, 224);
+    background: #000000;
+} */
+
+@media(min-width:768px) {
+    #wrapper {
+        padding-left: 250px;
+    }
+    #wrapper.toggled {
+        padding-left: 0;
+    }
+    #sidebar-wrapper {
+        width: 250px;
+    }
+    #wrapper.toggled #sidebar-wrapper {
+        width: 0;
+    }
+    #page-content-wrapper {
+        padding: 20px;
+        position: relative;
+    }
+    #wrapper.toggled #page-content-wrapper {
+        position: relative;
+        margin-right: 0;
+    }
+}
+
+.userr {
+    font-size: 14;
+}
+
+label.error {
+    color: red;
+}
+
+.aggregator-profile .card {
+    border-radius: 10px;
+}
+
+.aggregator-profile .card .card-header .profile_img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin: 10px auto;
+    border: 10px solid #ccc;
+    border-radius: 50%;
+}
+
+.aggregator-profile .card h3 {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.aggregator-profile .card p {
+    font-size: 16px;
+    color: #000;
+}
+
+.aggregator-profile .table th,
+.aggregator-profile .table td {
+    font-size: 14px;
+    padding: 5px 10px;
+    color: #000;
+}
+
+
+/* .profile-card {
+    background: repeating-radial-gradient(black, transparent 100px);
+} */
+
+.pers-info {
+    background: #f0f3f8;
+}
+
+.card-header {
+    background: #f0f3f8!important;
+}
+
+.changee {
+    background: #f0f3f8;
+}
+
+.aggregator-profile .table th,
+.aggregator-profile .table td {
+    padding: 18px 10px;
+}
+
+.aggregator-profile .card h3 {
+    line-height: 50px;
 }

@@ -124,18 +124,19 @@ def Registration(request):
             # message=f"Hi {f},\n\nGreetings!\nYou are just a step away from accessing your Diagnostica Span account.\nWe are sharing a verification code to access your account. Once you have verified the code, you'll be prompted to access our portal immediately.\n\nYour OTP: {otp}\n\nThank You,\nDiagnostica Span"
             # message = f'Welcome your otp is {otp} '
             message=f"{otp}- is your one time password for Spandiagno user registration. Please do not share this OTP with anyone. Spandiagno."
+            message1=f"{otp}- is your one time password for Spandiagno user registration. Please do not share this OTP with anyone.\nThanks You\nDiagnostica Span."
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [e]
             message = message
             subject = "DIGNOSTICA SPAN OTP Confirmation" 
             a=sms(message,p_number)
-            # send_mail(
-            #         subject,
-            #         message,
-            #         email_from,
-            #         recipient_list,
-            #         fail_silently=False,
-            # )
+            send_mail(
+                    subject,
+                    message1,
+                    email_from,
+                    recipient_list,
+                    fail_silently=False,
+            )
             messages.info(request,a)
             return redirect('/registration/otp/')
     return render(request,'register.html')
@@ -201,6 +202,7 @@ def resendotp(request):
     otp = random.randint(1000,9999)
     request.session['otp'] = otp
     message=f"{otp}- is your OTP for Spandiagno for password to be resent. Please do not share this OTP with anyone. Spandiagno."
+    message1=f"{otp}- is your OTP for Spandiagno for password to be resent. Please do not share this OTP with anyone.\nThank You\n Diagnostica Span."
     # message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDignostica Span"
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [email_address]
@@ -209,13 +211,13 @@ def resendotp(request):
     try: 
         userr=User.objects.get(email=email_address) 
         a=sms(message,userr.phone_no)
-        # send_mail(
-        #         subject,
-        #         message,
-        #         email_from,
-        #         recipient_list,
-        #         fail_silently=False,
-        # )
+        send_mail(
+                subject,
+                message1,
+                email_from,
+                recipient_list,
+                fail_silently=False,
+        )
         messages.success(request,a)
     except:
         messages.warning(request,"Something went wrong")
@@ -236,6 +238,7 @@ def changepassword(request):
         request.session["conpassword"]=conpassword
         request.session['otp'] = otp
         message=f"{otp}- is your OTP for Spandiagno to change password. Please do not share this OTP with anyone. Spandiagno."
+        message1=f"{otp}- is your OTP for Spandiagno to change password. Please do not share this OTP with anyone.\nThanks You\nDiagnostica Span."
         # message=f"Hi {request.user.first_name},\nYou have requested to change your password credentials to login, please use below OTP to do the same\n\nOTP: {otp}\nIf the wish to keep your old password, kindly ignore the mail.\nThank you,\nDignostica Span"
         # message = f'Hello,\nWelcome your Change Password OTP is {otp} '
         email_from = settings.EMAIL_HOST_USER
@@ -244,13 +247,13 @@ def changepassword(request):
         subject = "DIGNOSTICA SPAN" 
         p_number=request.user.phone_no
         a=sms(message,p_number)
-        # send_mail(
-        #         subject,
-        #         message,
-        #         email_from,
-        #         recipient_list,
-        #         fail_silently=False,
-        #     )
+        send_mail(
+                subject,
+                message1,
+                email_from,
+                recipient_list,
+                fail_silently=False,
+            )
         messages.info(request,a)
         return redirect('/changepasswordotp/')
     return render (request,"changepassword.html")
@@ -273,6 +276,7 @@ def forgotpassword(request):
                 # message = f'your otp is {otp}'
                 # send_otp(p_number,message)
             message=f"{otp}- is your OTP for Spandiagno if you have forgotten password. Please do not share this OTP with anyone. Spandiagno. "
+            message1=f"{otp}- is your OTP for Spandiagno if you have forgotten password. Please do not share this OTP with anyone\nThank You\nDiagnostica Span"
             # message = f"Hi Dear Customer,\nThere was a request to Forgot password! Password change\nIf you did not make this request then please ignore this email.\nOtherwise, Please enter the OTP {otp}"
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [e]
@@ -281,13 +285,13 @@ def forgotpassword(request):
             p_number=userr.phone_no
             templateid=1507166152065523633
             a=sms(message,p_number)
-            # send_mail(
-            #         subject,
-            #         message,
-            #         email_from,
-            #         recipient_list,
-            #         fail_silently=False,
-            # )
+            send_mail(
+                    subject,
+                    message1,
+                    email_from,
+                    recipient_list,
+                    fail_silently=False,
+            )
             messages.info(request,a)
             return redirect('/forgotpassword/otp/')
         else:
@@ -300,6 +304,7 @@ def resendotpforgot(request):
     otp = random.randint(1000,9999)
     request.session['otp'] = otp
     message=f"{otp}- is your OTP for Spandiagno for passwaord to be resent. Please do not share this OTP with anyone. Spandiagno."
+    message1=f"{otp}- is your OTP for Spandiagno for passwaord to be resent. Please do not share this OTP with anyone.\nThank You\nDiagnostica Span"
     # message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDignostica Span"
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [email_address]
@@ -308,13 +313,13 @@ def resendotpforgot(request):
     try:
         userr=User.objects.get(email=email_address) 
         a=sms(message,userr.phone_no)
-        # send_mail(
-        #         subject,
-        #         message,
-        #         email_from,
-        #         recipient_list,
-        #         fail_silently=False,
-        # )
+        send_mail(
+                subject,
+                message1,
+                email_from,
+                recipient_list,
+                fail_silently=False,
+        )
         messages.success(request,a)
     except:
         messages.warning(request,"Something went wrong")
@@ -325,6 +330,7 @@ def changeresend(request):
     otp = random.randint(1000,9999)
     request.session['otp'] = otp
     message=f"{otp}- is your OTP for Spandiagno for passwaord to be resent. Please do not share this OTP with anyone. Spandiagno."
+    message1=f"{otp}- is your OTP for Spandiagno for passwaord to be resent. Please do not share this OTP with anyone.\nThank You\nDiagnostica Span."
     # message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDignostica Span"
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [email_address]
@@ -333,13 +339,13 @@ def changeresend(request):
     try:
         userr=User.objects.get(email=email_address) 
         a=sms(message,userr.phone_no)
-        # send_mail(
-        #         subject,
-        #         message,
-        #         email_from,
-        #         recipient_list,
-        #         fail_silently=False,
-        # )
+        send_mail(
+                subject,
+                message1,
+                email_from,
+                recipient_list,
+                fail_silently=False,
+        )
         messages.success(request,a)
     except:
         messages.success(request,"Something went wrong")
@@ -395,7 +401,7 @@ def passwordcheck(request):
                 return JsonResponse({"message":False})
             else:
                 return JsonResponse({"message":True})
-        except Exception as e: 
+        except Exception as e:
             return JsonResponse({"message":False})
 def otpforgotpassword(request):
     if request.session.get("email") == None:
@@ -649,11 +655,6 @@ def home(request):
         healthsymptom=healthsymptoms.objects.all()
         healthcareblog=healthcareblogs.objects.all()
         testimonial=testimonials.objects.all()
-        if request.user.is_anonymous:
-            d = cart.objects.filter(device = deviceCookie)
-        else:
-            d = cart.objects.filter(user = request.user)
-        request.session['cart_count'] = d.count()
         context={
             "healthcheckup":healthcheckup,
             "healthpackage":healthpackage,
@@ -667,18 +668,26 @@ def home(request):
             "blogcount":healthcareblog.count(),
             "testimonialcount":testimonial.count(),
         }
+        if not request.user.is_anonymous:
+          c = cart.objects.filter(user=request.user)
+        else:
+            c = cart.objects.filter(device=deviceCookie)    
+        if request.user.is_anonymous:
+            request.session['cart_count']= cart.objects.filter(device = deviceCookie).count()
+        else:
+            request.session['cart_count']= cart.objects.filter(user = request.user).count()
+            request.session['cart_count']= cart.objects.filter(device = deviceCookie).count()
         res = render(request,'home.html',context)
         return res
 
     if request.method=="POST":
-        testt=request.POST["selectbookhelp"]
-        tes=test.objects.get(id=testt)
         firtname=request.POST["firstname"]
         lastname=request.POST["lastname"]
         phone=request.POST["phone"]
         email=request.POST["email"]
-        requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,tests=tes).save()
-        message = 'Hi\nYou have Call back request for below test.\n{} from {} category from {}'.format(tes.testt,tes.categoryy,c)
+        message1=request.POST["message"]
+        requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,message=message1).save()
+        message = f'Hi\nYou have Call back request for below test from\nName:{firtname} {lastname}\nMobile:{phone}\nEmail:{email}\nMessage:{message1}'
         email_from = settings.EMAIL_HOST_USER
         recipient_list = ["enquiry@spanhealth.com"]
         message = message
@@ -1625,10 +1634,7 @@ def paymenthandler(request,str,amount):
                     link=request.build_absolute_uri('/booking-history')
                     # message1 = f"Hi there,\nWe have successfully received your payment for booking id: {history.bookingid}.\nOur Medical team will get in touch with you for your mentioned tests.\nClick (link: {link}) to track your bookings.\nThank you\nDignostica Span"
                     email_from = settings.EMAIL_HOST_USER
-                    message1=f"""Hi there,We have successfully received your payment for booking id: {history.bookingid}..\nClick ({link}) to track your bookings.\n 
-                            
-                            Thank you\n
-                            Dignostica Span"""
+                    message1=f"""Hi there,We have successfully received your payment for booking id: {history.bookingid}..\nClick ({link}) to track your bookings.\nThank you\nDignostica Span"""
                     recipient_list = [history.user.email]
                     subject = "DIAGNOSTICA SPAN" 
                     send_mail(
@@ -2274,12 +2280,9 @@ def invoice(request,orderid):
     template_name='invoice2.html'
     from django.core.files import File
     pdf = html_to_pdf(template_name,context_dict)
-    # receipt_file = BytesIO(pdf.content)
-    # print("-------",receipt_file)
-    # filee = invoicee.objects.get(order_id=orderid)
-    # # print(File(receipt_file, "invoice2.pdf"))
-    # filee.file = File(receipt_file, "invoice2.pdf")
-    # filee.save()
+    receipt_file = BytesIO(pdf.content)
+    a=File(receipt_file, "invoice2.pdf")
+    filee = invoicee.objects.filter(order_id=orderid).update(file=File(receipt_file, "invoice/invoice2.pdf"))
     return FileResponse(pdf,as_attachment=True,filename="invoice2.pdf",content_type='application/pdf') 
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -2290,15 +2293,16 @@ class BookingHistoryPay(LoginRequiredMixin,View):
         medics=medications.objects.filter(user=request.user).order_by("-created")
         his = []
         cit=city.objects.filter(active=True)
-        bookhistories=book_history.objects.filter(user=request.user).order_by('-created')
-        # testbooking=Prescriptionbook1.objects.filter(user=request.user)
+        bookhistories=book_history.objects.filter(user=request.user,booking_type__in=["Prescription","Selected Test/Packages"]).order_by('-created')
+        # bookhistories=book_history.objects.exclude(user=request.user,booking_type="Aggregator").order_by('-created')
         payments=payment.objects.filter(user=request.user).order_by('-date')
         for i in bookhistories:
+            print("-----------",i.uni)
             try:
-                try:
-                    testbooking=Prescriptionbook1.objects.get(bookingid=i.uni)
-                except:
-                    pass
+                # try:
+                testbooking=Prescriptionbook1.objects.get(bookingid=i.uni)
+                # except:
+                #     pass
                 hi = {}
                 hi["id"] = i.id
                 hi["created"] = i.created
@@ -2322,10 +2326,10 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 hi['amount'] = i.amount
                 his.append(hi)
             except:
-                try:
-                    testbooking=testbook.objects.get(bookingid=i.uni)
-                except:
-                    pass
+                # try:
+                testbooking=testbook.objects.get(bookingid=i.uni)
+                # except:
+                #     pass
                 hi = {}
                 hi["id"] = i.id
                 hi["created"] = i.created
@@ -2699,29 +2703,33 @@ def uploadcsv(request):
         return render(request, "csv.html")
 def requestcallheader(request):
     if request.method=="POST":
-        firtname=request.POST["firstname"]
-        lastname=request.POST["lastname"]
-        phone=request.POST["phone"]
-        email=request.POST["email"]
-        tests=request.POST["tests"]
         try:
-            t=test.objects.get(id=int(tests))
+            firtname=request.POST["firstname"]
+            lastname=request.POST["lastname"]
+            phone=request.POST["phone"]
+            email=request.POST["email"]
+            message1=request.POST["message"]
+            print(request.POST)
+            # try:
+            #     t=test.objects.get(id=int(tests))
+            # except:
+            #     return JsonResponse({"message":"error"})
+            requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,message=message1).save()
+            message = f'Hi\nYou have Call back request for below test from\nName:{firtname} {lastname}\nMobile:{phone}\nEmail:{email}\nMessage:{message1}'
+            email_from = settings.EMAIL_HOST_USER
+            recipient_list = ["enquiry@spanhealth.com"]
+            message = message
+            subject = "Request Call back" 
+            send_mail(
+                        subject,
+                        message,
+                        email_from,
+                        recipient_list,
+                        fail_silently=False,
+                )
+            return JsonResponse({"message":True})
         except:
             return JsonResponse({"message":"error"})
-        requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,tests=t).save()
-        message = 'Hi\nYou have Call back request for below test.\n{}\n'.format(t.testt)
-        email_from = settings.EMAIL_HOST_USER
-        recipient_list = ["enquiry@spanhealth.com"]
-        message = message
-        subject = "Request Call back" 
-        send_mail(
-                    subject,
-                    message,
-                    email_from,
-                    recipient_list,
-                    fail_silently=False,
-            )
-        return JsonResponse({"message":True})
 def lifestyleassessment(request):
     healthsymptom=healthsymptoms.objects.all()
     context={

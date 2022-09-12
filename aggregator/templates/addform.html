@@ -1,0 +1,73 @@
+{%extends "indexx.html"%}
+{%block content%}
+{% comment %} <a href={% url "aggregator-logout"%}>Logout</a> {% endcomment %}
+<div id="wrapper">
+{%include "sidebarr.html"%}
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <form method="POST" id="aggregatorform">
+                        {%csrf_token%}
+                        <!-- 2 column grid layout with text inputs for the first and last names -->
+                        <div class="row mb-4">
+                            <div class="col">
+                              <div class="form-outline">
+                                <select name="cityy" id="choices-multiple-remove-button" class="form-control" placeholder="Select upto 5 tags" multiple>
+                                    {%for i in city%}
+                                    <option value="{{i.id}}">{{i.cityname}}</option>
+                                    {%endfor%}
+                                </select>
+                              </div>
+                              <div class="form-outline">
+                                <select name="selected" class="form-control selectpicker" placeholder="Select upto 5 tags" multiple>
+                                    {%for i in data%}
+                                    <option value="{{i.id}}">{{i.testt}} - Rs {{i.Banglore_price}}</option>
+                                    {%endfor%}
+                                </select>
+                              </div>
+                            </div>
+                            {% comment %} <select class="selectpicker" multiple data-live-search="true">
+                              <option>Mustard</option>
+                              <option>Ketchup</option>
+                              <option>Relish</option>
+                            </select> {% endcomment %}
+                        <button type="submit" class="btn btn-primary btn-block mb-4">Submit</button>
+                      </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /#page-content-wrapper -->
+</div>
+<script>
+    $(document).ready(function(){
+      //$('select').selectpicker();
+      $("#aggregatorform").validate({
+        rules: {
+
+            'cityy': {
+                required: true,
+            },
+            'selected': {
+                required: true,
+            },
+            
+        },
+        messages: {
+            'cityy': {
+                required: "This field is required."
+            },
+
+            'selected': {
+                required: "This field is required."
+            },
+        },
+        submitHandler: function (form) {
+            $("#callbackbtn").prop("disabled",true);
+            form.submit();
+        }
+    });
+    });
+</script>
+{%endblock%}

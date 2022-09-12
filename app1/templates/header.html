@@ -1,5 +1,4 @@
 {% load static %}
-
 <body>
     <section class="section_nav_bar bg-light-grey py-1 py-sm-2 py-lg-3 py-xl-4">
         <div class="container">
@@ -133,7 +132,10 @@
                                 <input class="w-100  form_input mt-3" placeholder="Email Address" name="email" id="emai" type="text" maxlength="250"/>
                             </div>
                             <div >
-                              <select class="w-100 mt-2  form-select" type="select" id ="selectt"
+                              <textarea class="w-100 form_input mt-3" rows="1" cols="50"
+                                    placeholder="Message" name="message" id="message" maxlength="250"></textarea>
+
+                              {% comment %} <select class="w-100 mt-2  form-select" type="select" id ="selectt"
                       name="selectbookhelp">
                       <option selected="selected" class="opc-5" disabled>Select
                         Test<span
@@ -141,19 +143,8 @@
                       {%for test in tests%}
                       <option  value={{test.id}}>{{test.testt}}</option>
                       {%endfor%}
-                    </select>
-                                {% comment %} <select class="w-100 mt-3  form-select" type="select"
-                                  name="selectbookhelp">
-                                  <option selected="selected" class="opc-5" disabled>Select
-                                    Test<span
-                                    class="cl-red ps-1">*</span></option>
-                                  <option>test</option>
-                                  <option>test</option>
-                                  <option>test</option>
-                                  <option>test</option>
-                                  <option>test</option>
-                                  <option>test</option>
-                                </select> {% endcomment %}
+                    </select> {% endcomment %}
+                                
                               </div>
                             <button class="mx-lg-0 mx-3 mt-4 globalsubmitbutton"
                                 type="submit" name="submit" id="request_call_back">SUBMIT</button>
@@ -223,6 +214,7 @@
     },
     submitHandler: function (form) {
       form.submit();
+
     }
   });
 
@@ -237,7 +229,6 @@
     }    
     else{ 
       $('#request_call_back').prop('disabled', true);
-      //$("#request_call_back").("disabled",true)
       $.ajax({
         url: "{% url 'requestcall' %}",
         type: "POST",
@@ -252,13 +243,13 @@
         },
         success: function (resp) {
           $('#request_call_back').prop('disabled', false);
-            $("#emaill").val('');
+          $("#emaill").val('');
             if (!resp["message"]){
                 swal("Something Went Wrong", "Try Again", "warning");
                 //alert("Already Subscribed Thank you!!")
             }
             else if(resp["message"]=="error"){
-              swal("", "Please select test", "warning");
+              swal("Oops!", "Something went wrong", "warning");
             }
             else{
                 swal("Thank You","Our Team Will Contact You soon","success")
@@ -268,7 +259,6 @@
   }            
 });
 function userinfoo(){
-
   $.ajax({
       url:"{% url 'userinfo' %}",
       method:"get",

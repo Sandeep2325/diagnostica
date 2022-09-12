@@ -99,7 +99,7 @@
                                 </div>
                                 <div class="mt-4">
                                     <button class="globalsubmitbutton"
-                                        type="submit" value="submit">REGISTER
+                                        type="submit" id="register" value="submit">REGISTER
                                         NOW</button>
                                 </div>
                                 <div class="d-flex py-3 ">
@@ -229,6 +229,7 @@
 
         },
         submitHandler: function (form) {
+            $("#register").prop("disabled",true)
             form.submit();
         }
     });

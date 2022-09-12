@@ -1,6 +1,5 @@
-
-from distutils.command.upload import upload
-from functools import wraps
+import shortuuid
+import re
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import PermissionsMixin
@@ -883,7 +882,8 @@ class requestcall(models.Model):
     lastname=models.CharField(max_length=100,null=True,blank=True,verbose_name="First Name")
     phone=models.CharField(max_length=14,null=True,blank=True,verbose_name="First Name")
     email=models.EmailField(max_length=255,null=True,blank=True)
-    tests=models.ForeignKey(test,null=True,blank=True,on_delete=models.CASCADE)
+    message=models.TextField(null=True,blank=True)
+    # tests=models.ForeignKey(test,null=True,blank=True,on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
     def __str__(self):
@@ -942,4 +942,70 @@ class careersopenings(models.Model):
         return self.designations
     class Meta:
         verbose_name_plural="Career Designations"
+        
+class aggregatorbookings(models.Model):
+    bookingid=models.CharField(max_length=20,null=True,blank=True)
+    user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE,verbose_name="Aggregator")
+    test_name=models.ManyToManyField(test,blank=True)
+    payment_status=models.BooleanField(default=False)
+    location=models.ForeignKey(city,null=True,blank=True,on_delete=models.CASCADE,verbose_name="Location")
+    price=models.CharField(max_length=20,null=True,blank=True,verbose_name="Price(Rs)")
+    comments=models.TextField(null=True,blank=True,verbose_name="Comments")
+    paymentdate = models.DateTimeField(null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
+    updated = models.DateTimeField(auto_now=True,null=True, blank=True)
+    
+    @property
+    def paymentupdate(self):
+        if self.payment_status==True:
+            book_history.objects.filter(bookingid=self.bookingid).update(payment_status=True) 
+        # return self.test_name.all().count() 
+    if payment_status==True:
+        paymentupdate()
+    def __str__(self):
+        return str(self.user)
+    class Meta:
+        verbose_name_plural="Aggregator Bookings"
+    
+@receiver(post_save, sender=aggregatorbookings)
+def aggregatortests(sender, instance, **kwargs):
+    s = shortuuid.ShortUUID(alphabet="0123456789")
+    bid = s.random(length=5)
+    book=book_history.objects.all().order_by("-created")[0:1]
+    for i in book:
+        temp = re.compile("([a-zA-Z]+)([0-9]+)")
+        res = temp.match(i.bookingid).groups()
+    try: 
+        booking=int(res[1])+1
+        if str(booking)==str(bid):
+            bookingid="DP"+str(bid)
+        else:    
+            bookingid="DP"+str(booking)
+    except:
+        bookingid="DP"+str(bid)
+    if instance.bookingid == None:
+        aggregatorbookings.objects.filter(id=instance.id).update(bookingid=bookingid)
+        if instance.payment_status == False:
+            book_history(
+                    user=instance.user,
+                    uni=bookingid,
+                    bookingid=bookingid,
+                            booking_type="Aggregator",
+                            payment_status=False).save()
+        else:
+            book_history(
+                    user=instance.user,
+                    uni=bookingid,
+                    bookingid=bookingid,
+                            booking_type="Aggregator",
+                            payment_status=True).save()
+    else:
+        if instance.payment_status == False:
+            book_history.objects.filter(bookingid=instance.bookingid).update(amount=instance.price)
+        else:
+            book_history.objects.filter(bookingid=instance.bookingid).update(amount=instance.price,payment_status=True) 
+        
+    
+
+        
     

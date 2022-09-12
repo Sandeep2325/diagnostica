@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.contrib.admin import ModelAdmin, SimpleListFilter
+from django.forms import ModelChoiceField
 from app1.models import *
 from django.urls import path
 from django.contrib import messages
@@ -730,7 +732,7 @@ class couponredeemadmin(admin.ModelAdmin):
         return response
     actions = [export]
 class requestadmin(admin.ModelAdmin):
-    list_display=['firstname','lastname','phone','email','tests','created','updated']
+    list_display=['firstname','lastname','phone','email','message','created','updated']
 class invoiceeadmin(admin.ModelAdmin):
     list_display=['user','order_id','file','created','updated']
     
@@ -753,6 +755,46 @@ class careersadmin(admin.ModelAdmin):
     list_display=['fullname','phoneno','email','cv','message','created','updated']
 class careersopeningsadmin(admin.ModelAdmin):
     list_display=['designations','created','updated']
+# from django.contrib.admin import DateFieldListFilter
+from rangefilter.filters import DateRangeFilter, DateTimeRangeFilter
+class aggregatorfilter(SimpleListFilter):
+    title = "Aggregator List"  # a label for our filter
+    parameter_name = "pages"  # you can put anything here
+    def lookups(self, request, model_admin):
+        # This is where you create filter options; we have two:
+        aggregat=User.objects.filter(aggregator=True)
+        newlist = [(x.first_name,x.first_name) for x in aggregat]
+        return newlist
+    def queryset(self, request, queryset):
+            return queryset.filter(user__aggregator=True)
+class aggregatorbookingsadmin(admin.ModelAdmin):
+    # form = aggregatorForm
+    list_display=["user","bookingid","location","payment_status","price","paymentdate"]
+    list_editable=["payment_status"]
+    filter_horizontal = ('test_name',)
+    list_filter = (aggregatorfilter,"payment_status","location",
+        ('created', DateRangeFilter),
+    )
+    # list_filter=[DateFieldListFilter]
+    autocomplete_fields=["user"]
+    readonly_fields=["bookingid"]
+    # def get_form(self, request, obj=None, **kwargs):
+    #     self.exclude = ["beacon"]
+    #     if not request.user.is_superuser:
+    #         self.exclude.append('user') #here!
+    #     form = super(aggregatorbookingsadmin, self).get_form(request, obj, **kwargs)
+    #     #print(vars(form))
+    #     # print("------------",form.base_fields['user'].queryset)
+    #     form.base_fields['user'].queryset = User.objects.filter(aggregator=True)
+    #     print("-----",form)
+    #     return form
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'user':
+            return ModelChoiceField(queryset=User.objects.filter(aggregator=True))
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def has_add_permission(self, request):
+        return True
 admin.site.register(User,UserAdmin)
 admin.site.register(faq,faqadmin)
 admin.site.register(contactus,contactusadmin)
@@ -782,6 +824,7 @@ admin.site.register(franchisee,franchiseadmin)
 admin.site.register(requestcall,requestadmin)
 admin.site.register(careersopenings,careersopeningsadmin)
 admin.site.register(careers,careersadmin)
+admin.site.register(aggregatorbookings,aggregatorbookingsadmin)
 admin.site.unregister(get_attachment_model())
 admin.site.register(invoicee,invoiceeadmin)
 class MyGroupAdminForm(forms.ModelForm):

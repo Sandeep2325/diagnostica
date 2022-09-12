@@ -1,0 +1,132 @@
+{%extends "indexx.html"%} {% load static%} {%block content%} {% comment %} <a href={% url "aggregator-logout" %}>Logout</a> {% endcomment %}
+<div id="wrapper">
+    {%include "sidebarr.html"%}
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="float-end">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-user"></i>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                {% comment %}
+                                <li><a class="dropdown-item" href="">Profile</a></li> {% endcomment %}
+                                <li><a class="dropdown-item" href={% url "aggregator-logout" %}>Logout</a></li>
+                                <li><a class="dropdown-item" href={% url "aggregator-changepassword" %}>Change
+                                        Password</a></li>
+                                {% comment %}
+                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li><a class="dropdown-item" href="#">Something else here</a></li> {% endcomment %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="aggregator-profile py-5 mt-5">
+                        <div class="container">
+                          <div class="row">
+                            <div class="col-xl-4 profile-card">
+                              <div class="card shadow-sm h-100">
+                                <div class="card-header bg-transparent text-center">
+                                  <img class="profile_img" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png" alt="">
+                                  <h3>{{request.user.first_name}} {{request.user.last_name}}</h3>
+                                </div>
+                                <div class="card-body pers-info">
+                                  {% comment %} <p class="mb-0"><strong class="pr-1">Full Name:</strong>{{request.user.first_name}} {{request.user.last_name}}</p> {% endcomment %}
+                                  <p class="mb-0"><strong class="pr-1">Email:</strong>{{request.user.email}}</p>
+                                  <p class="mb-0"><strong class="pr-1">Phone:</strong>{{request.user.phone_no}}</p>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xl-8 mt-xl-0 mt-2">
+                              <div class="card shadow-sm h-100">
+                                <div class="card-header bg-transparent border-0">
+                                  <h3 class="mb-0"><i class="fa fa-clone pr-1"></i>General Information</h3>
+                                </div>
+                                <div class="card-body pt-0">
+                                  <table class="table table-bordered">
+                                    <tr>
+                                      <th width="30%">Total Orders</th>
+                                      <td width="2%">:</td>
+                                      <td>{{totalorders}}</td>
+                                    </tr>
+                                    <tr>
+                                      <th width="30%">Paid</th>
+                                      <td width="2%">:</td>
+                                      <td>{{paid}}</td>
+                                    </tr>
+                                    <tr>
+                                      <th width="30%">Pending Payment(s)</th>
+                                      <td width="2%">:</td>
+                                      <td>{{pending_no}}</td>
+                                    </tr>
+                                    <tr>
+                                      <th width="30%">Pending Amount</th>
+                                      <td width="2%">:</td>
+                                      <td>Rs {{pending}}</td>
+                                    </tr>
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    <!-- <div id="user">
+                        <div class="row">
+                            <div class="col mt-3">
+                                {% comment %} <img alt="picture" v-bind:src="user.picture" class="img-lg rounded-circle border shadow" /> {% endcomment %}
+                                <h2 class="mt-3">Hello!</h2>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                            <div class="col">
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">Profile</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="myTabContent" style="border:1px solid #e2e2e2;">
+                                    <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                        <table class="table table-hover table-sm table-properties m-0">
+                                            <tr>
+                                                <th>Full Name</th>
+                                                <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 20rem;">
+                                                    {{request.user.first_name}} {{request.user.last_name}}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Email</th>
+                                                <td>{{request.user.email}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Total Orders</th>
+                                                <td>{{totalorders}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Paid</th>
+                                                <td>{{paid}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pending Payment(s)</th>
+                                                <td>{{pending_no}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pending Amount</th>
+                                                <td>Rs {{pending}}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <!-- /#page-content-wrapper -->
+        </div>
+        </section>
+        <script>
+        </script>
+        {%endblock%}

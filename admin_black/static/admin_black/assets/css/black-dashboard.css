@@ -19591,7 +19591,26 @@ select#id_groups_from {
     background-color: #ffffff!important;
 }
 
+input#id_created__range__gte {
+    margin-bottom: 10px!important;
+}
+
+span.date-icon {
+    /* left: 211px!important;
+    top: -41px!important; */
+}
+
 
 /* select#id_user_permissions_from option {
     display: none;
 } */
+
+#id_created__range__gte,
+#id_created__range__lte {
+    width: 100%;
+}
+
+#created-form .datetimeshortcuts .date-icon {
+    top: -41px!important;
+    right: 27px!important;
+}

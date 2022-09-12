@@ -1,0 +1,26 @@
+{%block content%}
+     <section class="section-aggregate-sidebar">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div id="sidebar-wrapper">
+                        <ul class="sidebar-nav">
+                            <li class="sidebar-brand">
+                                <p class="fw-bold">
+                                    <img src="/static/images/image_logo.png" alt="" class="img-fluid logo-img">
+                                    {% comment %} DIAGNOSTICA SPAN {% endcomment %}
+                                </p>
+                            </li>
+                            <li>
+                                <a class="fw-bold" href={% url "aggregator-profile" %}>PROFILE</a>
+                            </li>
+                            <li>
+                                <a class="fw-bold" href={% url "aggregator-dashboardd" %}>DASHBOARD</a>
+                            </li>
+                        </ul>
+                    </div> 
+                </div>
+            </div>
+        </div>
+     </section>
+{%endblock%}

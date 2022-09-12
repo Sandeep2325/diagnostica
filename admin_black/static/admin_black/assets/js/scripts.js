@@ -214,6 +214,9 @@ for (i = 0; i < dropdown.length; i++) {
 }
 //$('.field-prescription_file a').click(function() {
 $('.field-prescription_file a').attr("target", "_blank")
+    // $("#id_created__range__gte").attr("type", "date")
+    // $("#id_created__range__lte").attr("type", "date")
+
 $("#id_user_permissions_from  option").each(function() {
     a = $(this).html().replace("app1 | ", "")
     console.log(a)
