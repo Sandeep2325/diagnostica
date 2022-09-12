@@ -98,11 +98,6 @@ def get_app_list(context, order=True):
                         model_dict['add_url'] = reverse('admin:%s_%s_add' % info, current_app=admin_site.name)
                     except NoReverseMatch:
                         pass
-                # if perms.get('delete', False):
-                #     try:
-                #         model_dict['admin_url'] = reverse('admin:%s_%s_changelist' % info, current_app=admin_site.name)
-                #     except NoReverseMatch:
-                #         pass
                 if perms.get('view', False):
                     try:
                         model_dict['admin_url'] = reverse('admin:%s_%s_changelist' % info, current_app=admin_site.name)

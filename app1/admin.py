@@ -546,7 +546,7 @@ class subscriptionadmin(admin.ModelAdmin):
 class bookhistoryadmin(admin.ModelAdmin):
     list_display=["bookingid","users","patient_infoo","booking_type","bookingdetails","amount","status","payment_status","created","updated","action_btn"]    
     readonly_fields=["created","updated",'bookingid','payment_id']
-    list_filter = ("user","booking_type")
+    list_filter = ("payment_status","booking_type")
     search_fields = ('bookingid','payment_id')
     def get_form(self, request, obj=None, **kwargs):
         # if obj.type == "1":

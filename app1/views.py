@@ -128,7 +128,7 @@ def Registration(request):
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [e]
             message = message
-            subject = "DIGNOSTICA SPAN OTP Confirmation" 
+            subject = "DIAGNOSTICA SPAN OTP Confirmation" 
             a=sms(message,p_number)
             send_mail(
                     subject,
@@ -180,7 +180,7 @@ def otpRegistration(request):
                 email_from = settings.EMAIL_HOST_USER
                 recipient_list = [email_address]
                 message = message
-                subject = "DIGNOSTICA SPAN OTP Confirmation" 
+                subject = "DIAGNOSTICA SPAN OTP Confirmation" 
                 a=sms(message,p_number)
                 send_mail(
                         subject,
@@ -204,11 +204,11 @@ def resendotp(request):
     request.session['otp'] = otp
     message=f"{otp}- is your OTP for Spandiagno for password to be resent. Please do not share this OTP with anyone. Spandiagno."
     message1=f"{otp}- is your OTP for Spandiagno for password to be resent. Please do not share this OTP with anyone.\nThank You\n Diagnostica Span."
-    # message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDignostica Span"
+    # message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDIAGNOSTICA Span"
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [email_address]
     message = message
-    subject = "OTP Verification | Dignostica Span"
+    subject = "OTP Verification | DIAGNOSTICA Span"
     try: 
         userr=User.objects.get(email=email_address) 
         a=sms(message,userr.phone_no)
@@ -240,12 +240,12 @@ def changepassword(request):
         request.session['otp'] = otp
         message=f"{otp}- is your OTP for Spandiagno to change password. Please do not share this OTP with anyone. Spandiagno."
         message1=f"{otp}- is your OTP for Spandiagno to change password. Please do not share this OTP with anyone.\nThanks You\nDiagnostica Span."
-        # message=f"Hi {request.user.first_name},\nYou have requested to change your password credentials to login, please use below OTP to do the same\n\nOTP: {otp}\nIf the wish to keep your old password, kindly ignore the mail.\nThank you,\nDignostica Span"
+        # message=f"Hi {request.user.first_name},\nYou have requested to change your password credentials to login, please use below OTP to do the same\n\nOTP: {otp}\nIf the wish to keep your old password, kindly ignore the mail.\nThank you,\nDIAGNOSTICA Span"
         # message = f'Hello,\nWelcome your Change Password OTP is {otp} '
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [email_address]
         message = message
-        subject = "DIGNOSTICA SPAN" 
+        subject = "DIAGNOSTICA SPAN" 
         p_number=request.user.phone_no
         a=sms(message,p_number)
         send_mail(
@@ -306,11 +306,11 @@ def resendotpforgot(request):
     request.session['otp'] = otp
     message=f"{otp}- is your OTP for Spandiagno for passwaord to be resent. Please do not share this OTP with anyone. Spandiagno."
     message1=f"{otp}- is your OTP for Spandiagno for passwaord to be resent. Please do not share this OTP with anyone.\nThank You\nDiagnostica Span"
-    # message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDignostica Span"
+    # message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDIAGNOSTICA Span"
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [email_address]
     message = message
-    subject = "OTP Verification | Dignostica Span"
+    subject = "OTP Verification | DIAGNOSTICA SPAN"
     try:
         userr=User.objects.get(email=email_address) 
         a=sms(message,userr.phone_no)
@@ -332,11 +332,11 @@ def changeresend(request):
     request.session['otp'] = otp
     message=f"{otp}- is your OTP for Spandiagno for passwaord to be resent. Please do not share this OTP with anyone. Spandiagno."
     message1=f"{otp}- is your OTP for Spandiagno for passwaord to be resent. Please do not share this OTP with anyone.\nThank You\nDiagnostica Span."
-    # message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDignostica Span"
+    # message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDIAGNOSTICA Span"
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [email_address]
     message = message
-    subject = "OTP Verification | Dignostica Span" 
+    subject = "OTP Verification | DIAGNOSTICA SPAN" 
     try:
         userr=User.objects.get(email=email_address) 
         a=sms(message,userr.phone_no)
@@ -504,12 +504,6 @@ def profilee(request):
         return redirect("profile")  
              
 def userLogin(request):
-    # try :
-    #     if request.session.get('failed') > 2:
-    #         return HttpResponse('<h1> You have to wait for 5 minutes to login again</h1>')
-    # except:
-    #     request.session['failed'] = 0
-    #     request.session.set_expiry(100)
     if request.method == "POST":
         username = request.POST['email']
         request.session["emaill"]=username
@@ -1032,11 +1026,11 @@ def prescriptionbookview(request):
         messages.success(
             request, "Thankyou for your booking!, Our admin team will get back to you shortly.")
         link=request.build_absolute_uri('/booking-history')
-        message=f'Hello {request.user.first_name},\n You have successfully uploaded your prescription on our website, our internal team will review it and get back to you shortly for further steps.\nYou can always track your bookings/uploads (link: {link})\n\nWe appreciate your patience\nThank You,\nDignostica Span'
+        message=f'Hello {request.user.first_name},\n You have successfully uploaded your prescription on our website, our internal team will review it and get back to you shortly for further steps.\nYou can always track your bookings/uploads (link: {link})\n\nWe appreciate your patience\nThank You,\nDIAGNOSTICA Span'
             # message = f'Welcome your otp is {otp} '
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [request.user.email]
-        subject = "Prescription Upload Successfull | Dignostica Span" 
+        subject = "Prescription Upload Successfull | DIAGNOSTICA SPAN" 
         send_mail(
                 subject,
                 message,
@@ -1050,6 +1044,7 @@ def prescriptionbookview(request):
             msg,
             email_from,
             ["reachus@spanhealth.com"],
+            # ["sandeep.nexevo@gmail.com"],
             fail_silently=False,
                   )
         # msg=f"Hi\nThere is an Prescription Upload order booked with below details\nBookingID:{bookingid}\nFirstname:{firstname}\nLastname:{lastname}\n"
@@ -1647,16 +1642,16 @@ def paymenthandler(request,str,amount):
                     # print("=====",signatureid)
                     request.session.delete("amount")
                     link=request.build_absolute_uri('/booking-history')
-                    # message1 = f"Hi there,\nWe have successfully received your payment for booking id: {history.bookingid}.\nOur Medical team will get in touch with you for your mentioned tests.\nClick (link: {link}) to track your bookings.\nThank you\nDignostica Span"
+                    # message1 = f"Hi there,\nWe have successfully received your payment for booking id: {history.bookingid}.\nOur Medical team will get in touch with you for your mentioned tests.\nClick (link: {link}) to track your bookings.\nThank you\nDIAGNOSTICA Span"
                     email_from = settings.EMAIL_HOST_USER
                     message1=f"""Hi there,We have successfully received your payment for booking id: {history.bookingid}..\nClick ({link}) to track your bookings.\n 
                             
                             Thank you\n
-                            Dignostica Span"""
+                            DIAGNOSTICA SPAN"""
                     recipient_list = [history.user.email]
                     subject = "DIAGNOSTICA SPAN" 
                     send_mail(
-                            f"Payment Successfull| Dignostica Span | Booking Id:{history.bookingid}",
+                            f"Payment Successfull| DIAGNOSTICA Span | Booking Id:{history.bookingid}",
                             message1,
                             email_from,
                             recipient_list,
@@ -1664,10 +1659,11 @@ def paymenthandler(request,str,amount):
                     )
                     mes=f"Payment is Done for Booking ID:{history.bookingid}\nPlease Checkit"
                     send_mail(
-                        f"Payment Successfull| Dignostica Span | Booking Id:{history.bookingid}",
+                        f"Payment Successfull| DIAGNOSTICA SPAN | Booking Id:{history.bookingid}",
                         mes,
                         email_from,
                         ["reachus@spanhealth.com"],
+                        # ["sandeep.nexevo@gmail.com"],
                         fail_silently=False,
                     )
                     messages.info(request, "Thankyou for making payment our team will come and collect the sample soon.")
@@ -1683,7 +1679,7 @@ def paymenthandler(request,str,amount):
                 link=request.build_absolute_uri('/booking-history')
                 email_from = settings.EMAIL_HOST_USER
                 recipient_list = [history.user.email]
-                # subject=f"Subject: Payment Failed| Dignostica Span | Booking Id:{history.bookingid}"
+                # subject=f"Subject: Payment Failed| DIAGNOSTICA Span | Booking Id:{history.bookingid}"
                 message=f"""Hi there,
 
                             The payment initiated for booking id:{history.bookingid} has been failed.
@@ -1692,7 +1688,7 @@ def paymenthandler(request,str,amount):
 
                             Click (link : {link}) to retry your payment."""
                 send_mail(
-                            f"Payment Failed| Dignostica Span | Booking Id:{history.bookingid}",
+                            f"Payment Failed| DIAGNOSTICA Span | Booking Id:{history.bookingid}",
                             message,
                             email_from,
                             recipient_list,
@@ -2065,13 +2061,13 @@ def contactuss(request):
         subject=request.POST["subject"]
         message=request.POST["message"]
         contactus.objects.create(fullname=name,email=email,phone=phone,subject=subject,message=message).save()
-        message1 = f"Hi {name},\nThank you for contacting us.\nWe have received your query, our internal team will get in touch with you in no time.\nWe welcome you to checkout our top packages in your region till we get back you.\nThank You,\nDignostica Span"
+        message1 = f"Hi {name},\nThank you for contacting us.\nWe have received your query, our internal team will get in touch with you in no time.\nWe welcome you to checkout our top packages in your region till we get back you.\nThank You,\nDIAGNOSTICA Span"
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [email]
         message = message
         subject = "DIAGNOSTICA SPAN" 
         send_mail(
-                "Enquiry | Dignostica Span",
+                "Enquiry | DIAGNOSTICA SPAN",
                 message1,
                 email_from,
                 recipient_list,
@@ -2526,7 +2522,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 email_from = settings.EMAIL_HOST_USER
                 mes=f"Cash On Delivery Booking for Booking ID:{id}\nPlease Checkit"
                 send_mail(
-                    f"Cash On delivery | Dignostica Span | Booking Id:{id}",
+                    f"Cash On delivery | DIAGNOSTICA SPAN | Booking Id:{id}",
                     mes,
                     email_from,
                     ["reachus@spanhealth.com"],
@@ -2539,7 +2535,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 email_from = settings.EMAIL_HOST_USER
                 mes=f"Cash On Delivery Booking for Booking ID:{id}\nPlease Checkit"
                 send_mail(
-                    f"Cash On delivery | Dignostica Span | Booking Id:{id}",
+                    f"Cash On delivery | DIAGNOSTICA SPAN | Booking Id:{id}",
                     mes,
                     email_from,
                     ["reachus@spanhealth.com"],
