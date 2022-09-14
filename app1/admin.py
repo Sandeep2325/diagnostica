@@ -307,7 +307,6 @@ class healthcheckup_admin(SummernoteModelAdmin):
         form = super(healthcheckup_admin, self).get_form(request, obj, **kwargs)
         return form
     def testname(self, obj):
-        
         return ", ".join([
             test.testt for test in obj.test_name.all()
         ])
@@ -737,8 +736,8 @@ class invoiceeadmin(admin.ModelAdmin):
         return False
     
     
-    def has_delete_permission(self, request,obj=None):
-        return False
+    # def has_delete_permission(self, request,obj=None):
+    #     return False
 admin.site.register(User,UserAdmin)
 admin.site.register(faq,faqadmin)
 admin.site.register(contactus,contactusadmin)
