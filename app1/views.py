@@ -734,7 +734,7 @@ def home(request):
         lastname=request.POST["lastname"]
         phone=request.POST["phone"]
         email=request.POST["email"]
-        message1=request.POST["message"]
+        message1=request.POST.get("message")
         requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,message=message1).save()
         message = f'Hi\nYou have Call back request for below test from\nName:{firtname} {lastname}\nMobile:{phone}\nEmail:{email}\nMessage:{message1}'
         email_from = settings.EMAIL_HOST_USER
@@ -2773,7 +2773,7 @@ def requestcallheader(request):
         lastname=request.POST["lastname"]
         phone=request.POST["phone"]
         email=request.POST["email"]
-        message1=request.POST["message"]
+        message1=request.POST.get("message")
         # tests=request.POST["tests"]
         # try:
         #     t=test.objects.get(id=int(tests))
@@ -2781,7 +2781,7 @@ def requestcallheader(request):
         #     return JsonResponse({"message":"error"})
         requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,message=message1).save()
         # requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,message=t).save()
-        message = 'Hi\nYou have Call back request for below test.\n{}\n'.format(t.testt)
+        message = f'Hi\nYou have Call back request for below test from\nName:{firtname} {lastname}\nMobile:{phone}\nEmail:{email}\nMessage:{message1}'
         email_from = settings.EMAIL_HOST_USER
         recipient_list = ["enquiry@spanhealth.com"]
         message = message
