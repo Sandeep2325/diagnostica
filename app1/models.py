@@ -883,7 +883,8 @@ class requestcall(models.Model):
     lastname=models.CharField(max_length=100,null=True,blank=True,verbose_name="First Name")
     phone=models.CharField(max_length=14,null=True,blank=True,verbose_name="First Name")
     email=models.EmailField(max_length=255,null=True,blank=True)
-    tests=models.ForeignKey(test,null=True,blank=True,on_delete=models.CASCADE)
+    message=models.TextField(null=True,blank=True)
+    # tests=models.ForeignKey(test,null=True,blank=True,on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
     def __str__(self):

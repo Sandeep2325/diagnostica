@@ -2773,12 +2773,14 @@ def requestcallheader(request):
         lastname=request.POST["lastname"]
         phone=request.POST["phone"]
         email=request.POST["email"]
-        tests=request.POST["tests"]
-        try:
-            t=test.objects.get(id=int(tests))
-        except:
-            return JsonResponse({"message":"error"})
-        requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,tests=t).save()
+        message1=request.POST["message"]
+        # tests=request.POST["tests"]
+        # try:
+        #     t=test.objects.get(id=int(tests))
+        # except:
+        #     return JsonResponse({"message":"error"})
+        requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,message=message1).save()
+        # requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,message=t).save()
         message = 'Hi\nYou have Call back request for below test.\n{}\n'.format(t.testt)
         email_from = settings.EMAIL_HOST_USER
         recipient_list = ["enquiry@spanhealth.com"]

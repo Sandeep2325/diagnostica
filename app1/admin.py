@@ -728,7 +728,7 @@ class couponredeemadmin(admin.ModelAdmin):
         return response
     actions = [export]
 class requestadmin(admin.ModelAdmin):
-    list_display=['firstname','lastname','phone','email','tests','created','updated']
+    list_display=['firstname','lastname','phone','email','message','created','updated']
 class invoiceeadmin(admin.ModelAdmin):
     list_display=['user','order_id','file','created','updated']
     
