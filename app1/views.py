@@ -736,7 +736,7 @@ def home(request):
         email=request.POST["email"]
         message1=request.POST.get("message")
         requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,message=message1).save()
-        message = f'Hi\nYou have Call back request for below test from\nName:{firtname} {lastname}\nMobile:{phone}\nEmail:{email}\nMessage:{message1}'
+        message = f'Hi\nYou have Call back request\nFull Name:{firtname} {lastname}\nMobile:{phone}\nEmail:{email}\nMessage:{message1}'
         email_from = settings.EMAIL_HOST_USER
         message = message
         subject = "Request Call back"
@@ -747,7 +747,7 @@ def home(request):
         #             recipient_list,
         #             fail_silently=False,
         #     )
-        customerEmailThread(subject, message, reachus).start()
+        AdminEmailThread(subject, message, reachus).start()
         cit=city.objects.all()
         tests=test.objects.all()
         healthcheckup=healthcheckuppackages.objects.all()[0:4]
@@ -2781,7 +2781,7 @@ def requestcallheader(request):
         #     return JsonResponse({"message":"error"})
         requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,message=message1).save()
         # requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,message=t).save()
-        message = f'Hi\nYou have Call back request for below test from\nName:{firtname} {lastname}\nMobile:{phone}\nEmail:{email}\nMessage:{message1}'
+        message = f'Hi\nYou have Call back request\nFull Name:{firtname} {lastname}\nMobile:{phone}\nEmail:{email}\nMessage:{message1}'
         email_from = settings.EMAIL_HOST_USER
         recipient_list = ["enquiry@spanhealth.com"]
         message = message
@@ -2793,7 +2793,7 @@ def requestcallheader(request):
         #             recipient_list,
         #             fail_silently=False,
         #     )
-        customerEmailThread(subject, message, reachus).start()
+        AdminEmailThread(subject, message, reachus).start()
         return JsonResponse({"message":True})
 def lifestyleassessment(request):
     healthsymptom=healthsymptoms.objects.all()
