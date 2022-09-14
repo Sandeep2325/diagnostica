@@ -718,7 +718,10 @@ def home(request):
             request.session['cart_count']= cart.objects.filter(device = deviceCookie).count()
             # print("-----device-----",request.session.get('cart_count'))
         else:
-            request.session['cart_count']= cart.objects.filter(user = request.user).count()
+            if cart.objects.filter(user = request.user).count()==0:
+                request.session['cart_count']= cart.objects.filter(device = deviceCookie).count()
+            else:
+                request.session['cart_count']= cart.objects.filter(user = request.user).count()
             # request.session['cart_count']= cart.objects.filter(device = deviceCookie).count()
             # print("------cart-----",request.session.get('cart_count'))
         res = render(request,'home.html',context)
