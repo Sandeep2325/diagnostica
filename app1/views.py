@@ -1,6 +1,5 @@
 import itertools
 import re
-
 import os
 # import sweetify
 from django.shortcuts import render,redirect
@@ -726,16 +725,16 @@ def home(request):
         return res
 
     if request.method=="POST":
-        testt=request.POST["selectbookhelp"]
-        tes=test.objects.get(id=testt)
+        # testt=request.POST["selectbookhelp"]
+        # tes=test.objects.get(id=testt)
         firtname=request.POST["firstname"]
         lastname=request.POST["lastname"]
         phone=request.POST["phone"]
         email=request.POST["email"]
-        requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,tests=tes).save()
-        message = 'Hi\nYou have Call back request for below test.\n{} from {} category from {}'.format(tes.testt,tes.categoryy,c)
+        message1=request.POST["message"]
+        requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,message=message1).save()
+        message = f'Hi\nYou have Call back request for below test from\nName:{firtname} {lastname}\nMobile:{phone}\nEmail:{email}\nMessage:{message1}'
         email_from = settings.EMAIL_HOST_USER
-        recipient_list = ["enquiry@spanhealth.com"]
         message = message
         subject = "Request Call back"
         # send_mail(

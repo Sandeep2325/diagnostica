@@ -132,8 +132,10 @@
                             <div>
                                 <input class="w-100  form_input mt-3" placeholder="Email Address" name="email" id="emai" type="text" maxlength="250"/>
                             </div>
-                            <div >
-                              <select class="w-100 mt-2  form-select" type="select" id ="selectt"
+                            <div>
+                              <textarea class="w-100 form_input mt-3" rows="1" cols="50"
+                                    placeholder="Message" name="message" id="message" maxlength="250"></textarea>
+                              {% comment %} <select class="w-100 mt-2  form-select" type="select" id ="selectt"
                       name="selectbookhelp">
                       <option selected="selected" class="opc-5" disabled>Select
                         Test<span
@@ -141,19 +143,7 @@
                       {%for test in tests%}
                       <option  value={{test.id}}>{{test.testt}}</option>
                       {%endfor%}
-                    </select>
-                                {% comment %} <select class="w-100 mt-3  form-select" type="select"
-                                  name="selectbookhelp">
-                                  <option selected="selected" class="opc-5" disabled>Select
-                                    Test<span
-                                    class="cl-red ps-1">*</span></option>
-                                  <option>test</option>
-                                  <option>test</option>
-                                  <option>test</option>
-                                  <option>test</option>
-                                  <option>test</option>
-                                  <option>test</option>
-                                </select> {% endcomment %}
+                    </select> {% endcomment %}
                               </div>
                             <button class="mx-lg-0 mx-3 mt-4 globalsubmitbutton"
                                 type="submit" name="submit" id="request_call_back">SUBMIT</button>
@@ -231,8 +221,8 @@
     var firstname = $("#fname").val();
     var phone = $("#ph").val();
     var lastname = $("#lname").val();
-    var tests=$("#selectt").val();
-    if (email=='' || firstname=='' || phone=='' || lastname==''){
+    var tests=$("#message").val();
+    if (email=='' || firstname=='' || phone=='' || lastname=='' || tests==''){
       swal("", "Please update every field", "warning");
     }    
     else{ 
