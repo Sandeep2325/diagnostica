@@ -404,7 +404,7 @@
                         class="cl-red ps-1">*</span></label>
                     <input class="w-100 form_input mt-2" type="email" name="email" id="email" maxlength="250" />
                   </div>
-                  <div class="col-12 pt-4">
+                  
                     {% comment %} <label class="fs-20 font-regular cl-dark-blue">Select Test Name<span
                       class="cl-red ps-1">*</span></label> {% endcomment %}
                     {% comment %} <select class="w-100 mt-2  form-select" type="select"
@@ -422,7 +422,7 @@
                       <textarea class="w-100 form_input" rows="2" cols="50"
                           placeholder="Message" name="message" maxlength="250"></textarea>
                   </div>
-                  </div>
+                 
                   <div class="col-12 py-3 mt-4"><button
                       class="globalsubmitbutton" type="submit" id="requestbtn">Submit</button>
                   </div>
@@ -665,7 +665,7 @@ $(document).ready(function(){
         minlength: 10,
         maxlength: 10
       },
-      'selectbookhelp': {
+      'message': {
         required: true,
       },
 
@@ -686,7 +686,7 @@ $(document).ready(function(){
       'phone': {
         required: "This field is required."
       },
-      'selectbookhelp': {
+      'message': {
         required: "This field is required."
       },
     },

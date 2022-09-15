@@ -67,6 +67,7 @@ GENDER_CHOICES = (
     )
 
 class User(AbstractUser,PermissionsMixin):
+    aggrid=models.CharField(max_length=10,null=True,blank=True,verbose_name="Aggregator Id",help_text=("Aggregator Id will Be Auto Generated"))
     photo=models.ImageField(upload_to='profile',verbose_name="Profile photo", null=True, blank=True)
     username = models.CharField(
         max_length=50, blank=False, null=True,verbose_name="user name")
@@ -90,6 +91,25 @@ class User(AbstractUser,PermissionsMixin):
         return "{}".format(str(self.first_name))
     class Meta:
         verbose_name_plural = "Registered Users"
+@receiver(post_save, sender=User)
+def aggregatoridgenerator(sender, instance, **kwargs):
+    if instance.aggrid==None and instance.aggregator==True:
+        s = shortuuid.ShortUUID(alphabet="0123456789")
+        bid = s.random(length=4)
+        for i in User.objects.filter(aggrid__isnull=False)[0:1]:
+            temp = re.compile("([a-zA-Z]+)([0-9]+)")
+            res = temp.match(i.aggrid).groups()
+        try: 
+            aggre=int(res[1])+1
+            if str(aggre)==str(bid):
+                aggreid="SPANAG"+str(bid)
+            else:    
+                aggreid="SPANAG"+str(aggre)
+        except Exception as e:
+            print("---",e)
+            aggreid="SPANAG"+str(bid)
+        User.objects.filter(id=instance.id).update(aggrid=aggreid)
+            
 class category(models.Model):
     categoryy=models.CharField(max_length=200,null=True,blank=True,verbose_name="Category")
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
@@ -611,7 +631,6 @@ def html_to_pdf(template_src, context_dict={}):
 class invoicee(models.Model):
     user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
     order_id=models.CharField(max_length=200,null=True,blank=True)
-    
     items=models.ForeignKey(test,null=True,blank=True,on_delete=models.CASCADE)
     labtest=models.ForeignKey(healthcheckuppackages,null=True,blank=True,on_delete=models.CASCADE)
     packages=models.ForeignKey(healthpackages,null=True,blank=True,on_delete=models.CASCADE)
@@ -896,7 +915,7 @@ class requestcall(models.Model):
     
 
 class medications(models.Model):
-    user=models.ForeignKey(User,null=True,blank=True,on_delete=models.PROTECT)
+    user=models.ForeignKey(User,null=True,blank=True,on_delete=models.CASCADE)
     medic=models.TextField(null=True,blank=True,verbose_name="Medicine Name")
     morning=models.BooleanField(default=True)
     afternoon=models.BooleanField(default=True)

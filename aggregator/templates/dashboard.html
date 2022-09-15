@@ -1,7 +1,6 @@
 {%extends "indexx.html"%}
 {% block title %}Aggregator Dashboard - Diagnostica Span{% endblock %}
 {%block content%}
-{% comment %} <a href={% url "aggregator-logout"%}>Logout</a> {% endcomment %}
 <div id="wrapper">
 {%include "sidebarr.html"%}
     <div id="page-content-wrapper">
@@ -41,12 +40,12 @@
                                 <button type="submit" class="btn-primary form-control w-50 ms-2">Search</button> 
                             </div>
                         </form>
-                        <form method="post">
+                        <form method="post" id="datefilterr">
                             {%csrf_token%}
                             <div class="d-flex">
                                 <div>
                                     <label for="fromdate">From Date</label>
-                                <input type="date" id="fromdate" name="fromdate" placeholder="From date" class="form-control"/>
+                                    <input type="date" id="fromdate" name="fromdate" placeholder="From date" class="form-control"/>
                                 </div>
                                 <div class="ms-2">
                                     <label for="todate">To Date</label>
@@ -62,11 +61,12 @@
                         <thead>
                           <tr>
                             <th>Booking Id</th>
-                            <th>Tests</th>
+                            {% comment %} <th>Tests</th> {% endcomment %}
                             <th>Payment Status</th>
                             <th>Price</th>
-                            <th>Date</th>
-                            <th>Payment Date</th>
+                            <th>Ordered Date</th>
+                            <th>Paid Date</th>
+                            <th></th>
                           </tr>
                         </thead>
                         <tbody>
@@ -74,7 +74,7 @@
                           <tr>
                             <td>{{i.bookingid}}</td>
                             {% comment %} <td><a  target="blank" href="{{ bookhistory.prescription.url}}">{{bookhistory.bookingdetails|truncatechars:10}}</a></td> {% endcomment %}
-                            <td data-label="Booking Details"><a href="{% url 'test-detailss' i.bookingid %}"><button class="br btn-secondary">Show Info</button></a></th>
+                            {% comment %} <td data-label="Booking Details"><a href="{% url 'test-detailss' i.bookingid %}"><button class="br btn-secondary">Show Info</button></a></th> {% endcomment %}
                                 {% comment %} <td data-label="Booking Details"><a href={% url "test-detailss" value={{i.bookingid}}%}><button class="br btn-secondary" id="{{i.bookingid}}" onclick="func('{{i.bookingid}}')">Show Info</button></a></th> {% endcomment %}
                             
                             {%if i.payment_status == True%}
@@ -97,7 +97,7 @@
                                 {%else%}
                                 <td> - </td>
                             {%endif%}
-
+                            <td data-label="Booking Details"><a href="{% url 'test-detailss' i.bookingid %}"><button class="br btn-secondary">Show Info</button></a></th>
                           </tr>
                           {%endfor%}
                         </tbody>
@@ -109,28 +109,10 @@
             </div>
         </div>
     </div>
-    <!-- /#page-content-wrapper -->
 </div>
-{% comment %} <section class="prescriptionbreak" id ="prescriptionbreak">
-    <div class="modal fade" id="prescriptionbreaks" tabindex="-1" aria-labelledby="otherspopLabel"
-        aria-hidden="true">
-        <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content p-sm-4">
-                <div class="modal-body">
-                    <button type="button" class="btn-close  close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                        <div id="prescr" >
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section> {% endcomment %}
-<script>
+{% comment %} <script>
     function func(ids){
-        //alert(ids);
         $.ajax({
-            //url:"{% url 'aggregatortest' %}",
             type:"POST",
             data:{
                 "action":"testdetails",
@@ -139,22 +121,27 @@
             },
             datatype:"json",
             success:function(resp){
-               //var msg = resp['message'];
-               //console.log(resp)
-               //console.log(resp["message"])
-               //console.log(msg.length)
-               // $("#prescr").empty();
-               //// var totall=`<h5 class="fs-20 font-bold cl-dark mb-3">Total Price - ${totalpric}</h5>`
-               ////var sample=`Sample Collection Charges - ₹ 199.00`
-               ////$("#prescr").append(totall)
-               //for (let i = 0; i < msg.length; i++) {
-               //   //var a= `<p>${msg[i].test} - ₹ ${msg[i].pricel1}</p>  `
-               //   var a= `<p>${msg[i].test}</p>  `
-               //   //console.log(a)
-               //   $("#prescr").append(a)
-               //  }
+                console.log()
             }
         })
     }
+</script> {% endcomment %}
+<script>
+    jQuery.validator.addMethod("greaterThan", 
+    function(value, element, params) {
+    if (!/Invalid|NaN/.test(new Date(value))) {
+        a=Date($(params).val())
+        console.log(Date(value),a)
+        return new Date(value) > new Date($(params).val());
+    }
+    return isNaN(value) && isNaN($(params).val()) 
+        || (Number(value) > Number($(params).val())); 
+},'Must be greater than From Date.');
+
+$("#datefilterr").validate({
+    rules: {
+        todate: { greaterThan: "#fromdate" }
+    }
+});
 </script>
 {%endblock%}

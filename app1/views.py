@@ -38,6 +38,8 @@ from num2words import num2words
 import re
 from datetime import datetime,timezone 
 from django.core import serializers
+import threading
+# from threading import Thread
 env = environ.Env()
 global OBJ_COUNT
 OBJ_COUNT = 0
@@ -53,7 +55,41 @@ Barshi=env("Barshi")
 Aurangabad=env("Aurangabad")
 shipping_charges=199
 # reachus=["reachus@spanhealth.com"]
-reachus=["sandeep.nexevo@gmail.com"],
+reachus=["sandeep.nexevo@gmail.com"]
+class customerEmailThread(threading.Thread):
+    def __init__(self, subject, message, recipient_list):
+        self.subject = subject
+        self.message = message
+        self.emailfrom=settings.EMAIL_HOST_USER
+        self.recipient_list = recipient_list
+        # self.html_content = html_content
+        threading.Thread.__init__(self)
+    def run (self):
+        send_mail(
+                self.subject,
+                self.message,
+                self.emailfrom,
+                self.recipient_list,
+                fail_silently=False,
+                )
+class AdminEmailThread(threading.Thread):
+    def __init__(self, subject, message, recipient_list):
+        self.subject = subject
+        self.message = message
+        self.emailfrom=settings.EMAIL_HOST_USER
+        self.recipient_list = recipient_list
+        # self.html_content = html_content
+        threading.Thread.__init__(self)
+    def run (self):
+        # print("----------",self.recipient_list)
+        send_mail(
+                self.subject,
+                self.message,
+                self.emailfrom,
+                self.recipient_list,
+                fail_silently=False,
+                )
+        
 def indextable1(request):
     precriptionb = serializers.serialize("json", Prescriptionbook1.objects.all().order_by('-created'))
     return HttpResponse(precriptionb)
@@ -132,13 +168,14 @@ def Registration(request):
             message = message
             subject = "DIAGNOSTICA SPAN OTP Confirmation" 
             a=sms(message,p_number)
-            send_mail(
-                    subject,
-                    message1,
-                    email_from,
-                    recipient_list,
-                    fail_silently=False,
-            )
+            # send_mail(
+            #         subject,
+            #         message1,
+            #         email_from,
+            #         recipient_list,
+            #         fail_silently=False,
+            # )
+            customerEmailThread(subject, message1, recipient_list).start()
             messages.info(request,a)
             return redirect('/registration/otp/')
     return render(request,'register.html')
@@ -183,13 +220,14 @@ def otpRegistration(request):
                 message = message
                 subject = "DIAGNOSTICA SPAN OTP Confirmation" 
                 a=sms(message,p_number)
-                send_mail(
-                        subject,
-                        message,
-                        email_from,
-                        recipient_list,
-                        fail_silently=False,
-                )
+                # send_mail(
+                #         subject,
+                #         message,
+                #         email_from,
+                #         recipient_list,
+                #         fail_silently=False,
+                # )
+                customerEmailThread(subject, message, recipient_list).start()
                 messages.success(request,'Registration Successfully Done !!')
                 return redirect('/login/')
             else:
@@ -213,13 +251,14 @@ def resendotp(request):
     try: 
         userr=User.objects.get(email=email_address) 
         a=sms(message,userr.phone_no)
-        send_mail(
-                subject,
-                message1,
-                email_from,
-                recipient_list,
-                fail_silently=False,
-        )
+        # send_mail(
+        #         subject,
+        #         message1,
+        #         email_from,
+        #         recipient_list,
+        #         fail_silently=False,
+        # )
+        customerEmailThread(subject, message1, recipient_list).start()
         messages.success(request,a)
     except:
         messages.warning(request,"Something went wrong")
@@ -249,13 +288,14 @@ def changepassword(request):
         subject = "DIAGNOSTICA SPAN" 
         p_number=request.user.phone_no
         a=sms(message,p_number)
-        send_mail(
-                subject,
-                message1,
-                email_from,
-                recipient_list,
-                fail_silently=False,
-            )
+        # send_mail(
+        #         subject,
+        #         message1,
+        #         email_from,
+        #         recipient_list,
+        #         fail_silently=False,
+        #     )
+        customerEmailThread(subject, message1, recipient_list).start()
         messages.info(request,a)
         return redirect('/changepasswordotp/')
     return render (request,"changepassword.html")
@@ -287,13 +327,14 @@ def forgotpassword(request):
             p_number=userr.phone_no
             templateid=1507166152065523633
             a=sms(message,p_number)
-            send_mail(
-                    subject,
-                    message1,
-                    email_from,
-                    recipient_list,
-                    fail_silently=False,
-            )
+            # send_mail(
+            #         subject,
+            #         message1,
+            #         email_from,
+            #         recipient_list,
+            #         fail_silently=False,
+            # )
+            customerEmailThread(subject, message1, recipient_list).start()
             messages.info(request,a)
             return redirect('/forgotpassword/otp/')
         else:
@@ -315,13 +356,14 @@ def resendotpforgot(request):
     try:
         userr=User.objects.get(email=email_address) 
         a=sms(message,userr.phone_no)
-        send_mail(
-                subject,
-                message1,
-                email_from,
-                recipient_list,
-                fail_silently=False,
-        )
+        # send_mail(
+        #         subject,
+        #         message1,
+        #         email_from,
+        #         recipient_list,
+        #         fail_silently=False,
+        # )
+        customerEmailThread(subject, message1, recipient_list).start()
         messages.success(request,a)
     except:
         messages.warning(request,"Something went wrong")
@@ -341,13 +383,14 @@ def changeresend(request):
     try:
         userr=User.objects.get(email=email_address) 
         a=sms(message,userr.phone_no)
-        send_mail(
-                subject,
-                message1,
-                email_from,
-                recipient_list,
-                fail_silently=False,
-        )
+        # send_mail(
+        #         subject,
+        #         message1,
+        #         email_from,
+        #         recipient_list,
+        #         fail_silently=False,
+        # )
+        customerEmailThread(subject, message1, recipient_list).start()
         messages.success(request,a)
     except:
         messages.success(request,"Something went wrong")
@@ -671,14 +714,16 @@ def home(request):
             "testimonialcount":testimonial.count(),
         }
         if not request.user.is_anonymous:
-          c = cart.objects.filter(user=request.user)
+            c = cart.objects.filter(user=request.user)
         else:
             c = cart.objects.filter(device=deviceCookie)    
         if request.user.is_anonymous:
             request.session['cart_count']= cart.objects.filter(device = deviceCookie).count()
         else:
-            request.session['cart_count']= cart.objects.filter(user = request.user).count()
-            request.session['cart_count']= cart.objects.filter(device = deviceCookie).count()
+            if cart.objects.filter(user = request.user).count()==0:
+                request.session['cart_count']= cart.objects.filter(device = deviceCookie).count()
+            else:
+                request.session['cart_count']= cart.objects.filter(user = request.user).count()
         res = render(request,'home.html',context)
         return res
 
@@ -689,18 +734,19 @@ def home(request):
         email=request.POST["email"]
         message1=request.POST["message"]
         requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,message=message1).save()
-        message = f'Hi\nYou have Call back request for below test from\nName:{firtname} {lastname}\nMobile:{phone}\nEmail:{email}\nMessage:{message1}'
+        message = f'Hi\nYou have Call back request\nFull Name:{firtname} {lastname}\nMobile:{phone}\nEmail:{email}\nMessage:{message1}'
         email_from = settings.EMAIL_HOST_USER
         recipient_list = ["enquiry@spanhealth.com"]
         message = message
         subject = "Request Call back"
-        send_mail(
-                    subject,
-                    message,
-                    email_from,
-                    recipient_list,
-                    fail_silently=False,
-            )
+        # send_mail(
+        #             subject,
+        #             message,
+        #             email_from,
+        #             recipient_list,
+        #             fail_silently=False,
+        #     )
+        AdminEmailThread(subject, message, reachus).start()
         cit=city.objects.all()
         tests=test.objects.all()
         healthcheckup=healthcheckuppackages.objects.all()[0:4]
@@ -948,7 +994,6 @@ def prescriptionbookview(request):
     c=request.session.get("city")
     if request.user.is_anonymous:
         return HttpResponseRedirect(reverse("user-login"))
-   
     if request.method=="POST":
         prescription_file=request.FILES.get("file")
         myself=request.POST.get("radio_self")
@@ -970,7 +1015,6 @@ def prescriptionbookview(request):
             res = temp.match(i.bookingid).groups()
         try: 
             booking=int(res[1])+1
-        
             if str(booking)==str(bid):
                 bookingid="DP"+str(bid)
             else:    
@@ -1029,26 +1073,27 @@ def prescriptionbookview(request):
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [request.user.email]
         subject = "Prescription Upload Successfull | DIAGNOSTICA SPAN" 
-        send_mail(
-                subject,
-                message,
-                email_from,
-                recipient_list,
-                fail_silently=False,
-        )
-        msg=f"Hi\nThere is an Upload Prescription order booked with following details\nBookingID:{bookingid}\nFullname:{firstname}{lastname}\nLocation={c}\nPhone Number:{contact}"
-        send_mail(
-            subject,
-            msg,
-            email_from,
-            reachus,
-            fail_silently=False,
-                  )
+        # send_mail(
+        #         subject,
+        #         message,
+        #         email_from,
+        #         recipient_list,
+        #         fail_silently=False,
+        # )
+        msg=f"Hi\nThere is an Upload Prescription order booked with following details\nBookingID:{bookingid}\nFullname:{firstname}{lastname}\nLocation:{c}\nPhone Number:{contact}"
+        # send_mail(
+        #     subject,
+        #     msg,
+        #     email_from,
+        #     reachus,
+        #     fail_silently=False,
+        #           )
         # msg=f"Hi\nThere is an Upload Prescription order booked with following details\nBookingID:{bookingid}\nFullname:{firstname}{lastname}\nLocation={c}\nPhone Number:{contact}"
         # number=8105486993
         # sms(msg,number)
+        customerEmailThread(subject, message, recipient_list).start()
+        AdminEmailThread(subject, msg, reachus).start()
         return HttpResponseRedirect(reverse("booking-history"))
-        # return render(request,"uploadprescriptions.html",{"fm":fm})
     else:
         return render(request,"uploadprescriptions.html")
         
@@ -1090,21 +1135,6 @@ def testselect(request):
         s = shortuuid.ShortUUID(alphabet="0123456789")
         bid = s.random(length=5)
         bookingid="DP"+str(bid)
-        # a=prescription_book.objects.create(
-        #     unique=unique,
-        #     user=request.user,
-        #     myself=True if myself == "on" else False,
-        #     others=True if others == "on" else False,
-        #     others_choice=others_choice,
-        #     firstname=firstname,
-        #     lastname=lastname,
-        #     contact=contact,
-        #     age=age,
-        #     gender=gender,
-        #     location=c)
-        # for j in test_name:
-        #     item=test.objects.get(id=j)
-        #     a.test_name.add(item)   
         for i in test_name:
             item=test.objects.get(id=i)
             if c==Bangalore:
@@ -1640,22 +1670,24 @@ def paymenthandler(request,str,amount):
                     email_from = settings.EMAIL_HOST_USER
                     message1=f"""Hi there,We have successfully received your payment for booking id: {history.bookingid}..\nClick ({link}) to track your bookings.\nThank you\nDIAGNOSTICA SPAN"""
                     recipient_list = [history.user.email]
-                    subject = "DIAGNOSTICA SPAN" 
-                    send_mail(
-                            f"Payment Successfull| DIAGNOSTICA SPAN | Booking Id:{history.bookingid}",
-                            message1,
-                            email_from,
-                            recipient_list,
-                            fail_silently=False,
-                    )
+                    subject = f"Booking Id:{history.bookingid} | Payment Successfull| DIAGNOSTICA Span" 
+                    # send_mail(
+                    #         f"Payment Successfull| DIAGNOSTICA SPAN | Booking Id:{history.bookingid}",
+                    #         message1,
+                    #         email_from,
+                    #         recipient_list,
+                    #         fail_silently=False,
+                    # )
                     mes=f"Payment is Done for Booking ID:{history.bookingid}\nPlease Checkit"
-                    send_mail(
-                        f"Payment Successfull| DIAGNOSTICA SPAN | Booking Id:{history.bookingid}",
-                        mes,
-                        email_from,
-                        reachus,
-                        fail_silently=False,
-                    )
+                    # send_mail(
+                    #     f"Payment Successfull| DIAGNOSTICA SPAN | Booking Id:{history.bookingid}",
+                    #     mes,
+                    #     email_from,
+                    #     reachus,
+                    #     fail_silently=False,
+                    # )
+                    customerEmailThread(subject, message1, [request.user.email]).start()
+                    AdminEmailThread(subject, mes, reachus).start()
                     messages.info(request, "Thankyou for making payment our team will come and collect the sample soon.")
                     # return HttpResponseRedirect(reverse("booking-history"))
                     return redirect("booking-history")
@@ -1670,20 +1702,19 @@ def paymenthandler(request,str,amount):
                 email_from = settings.EMAIL_HOST_USER
                 recipient_list = [history.user.email]
                 # subject=f"Subject: Payment Failed| DIAGNOSTICA Span | Booking Id:{history.bookingid}"
-                message=f"""Hi there,
-
-                            The payment initiated for booking id:{history.bookingid} has been failed.
-
-                            Payment success is required to proceed further steps:
-
-                            Click (link : {link}) to retry your payment."""
-                send_mail(
-                            f"Payment Failed| DIAGNOSTICA SPAN | Booking Id:{history.bookingid}",
-                            message,
-                            email_from,
-                            recipient_list,
-                            fail_silently=False,
-                    )
+                subject=f"Payment Failed| DIAGNOSTICA SPAN | Booking Id:{history.bookingid}"
+                message=f"""Hi there,\n
+                            The payment initiated for booking id:{history.bookingid} has been failed.\n
+                            
+                            """
+                # send_mail(
+                #             f"Payment Failed| DIAGNOSTICA SPAN | Booking Id:{history.bookingid}",
+                #             message,
+                #             email_from,
+                #             recipient_list,
+                #             fail_silently=False,
+                #     )
+                customerEmailThread(subject, message, [history.user.email]).start()
                 b=request.POST.get('error[metadata]')
                 c=json.loads(b)
                 a=book_history.objects.filter(payment_id=c["order_id"])
@@ -2002,7 +2033,6 @@ def coupon(request):
                                         request.session['actualamount']=total
                                         return JsonResponse({"message":True,"total":float(totall),"percent":c.discount,"discount":"{:.2f}".format(discount)})
                                     else:
-                                        print("---------")
                                         return JsonResponse({"message":False})
                                 except:
                                     c.discount
@@ -2055,14 +2085,15 @@ def contactuss(request):
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [email]
         message = message
-        subject = "DIAGNOSTICA SPAN" 
-        send_mail(
-                "Enquiry | DIAGNOSTICA SPAN",
-                message1,
-                email_from,
-                recipient_list,
-                fail_silently=False,
-        )
+        subject = "Contact us Enquiry | DIAGNOSTICA SPAN" 
+        # send_mail(
+        #         "Enquiry | DIAGNOSTICA SPAN",
+        #         message1,
+        #         email_from,
+        #         recipient_list,
+        #         fail_silently=False,
+        # )
+        customerEmailThread(subject, message1, recipient_list).start()
         messages.success(request,"Your response submitted successfully")
         return render(request,"contactus.html")
     return render(request,"contactus.html") 
@@ -2514,26 +2545,34 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 if actualamount!=None:
                     del request.session['actualamount']
                 email_from = settings.EMAIL_HOST_USER
-                mes=f"Cash On Delivery Booking for Booking ID:{id}\nPlease Checkit"
-                send_mail(
-                    f"Cash On delivery | DIAGNOSTICA SPAN | Booking Id:{id}",
-                    mes,
-                    email_from,
-                    reachus,
-                    fail_silently=False,
-                )
+                mes=f"Cash On Collection Booking for Booking ID:{id}\nPlease Checkit"
+                subject=f"Cash On Collection | DIAGNOSTICA SPAN | Booking Id:{id}"
+                mess=f"Hi {request.user.first_name}\nYou Have Selected Cash On Collection for Booking Id: {id}\nThank You\nDIAGNOSTICA SPAN "
+                # send_mail(
+                #     f"Cash On Collection | DIAGNOSTICA SPAN | Booking Id:{id}",
+                #     mes,
+                #     email_from,
+                #     reachus,
+                #     fail_silently=False,
+                # )
+                customerEmailThread(subject, mess, [request.user.email]).start()
+                AdminEmailThread(subject, mes, reachus).start()
             except:
                 citi=city.objects.get(id=int(citid))
                 Prescriptionbook1.objects.filter(bookingid=id).update(date=date,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod)
                 email_from = settings.EMAIL_HOST_USER
+                subject=f"Cash On Collection | DIAGNOSTICA SPAN | Booking Id:{id}"
                 mes=f"Cash On Collection Booking for Booking ID:{id}\nPlease Checkit"
-                send_mail(
-                    f"Cash On Collection | DIAGNOSTICA SPAN | Booking Id:{id}",
-                    mes,
-                    email_from,
-                    reachus,
-                    fail_silently=False,
-                )
+                mess=f"Hi {request.user.first_name}\nYou Have Selected Cash On Collection for Booking Id: {id}\nThank You\nDIAGNOSTICA SPAN "
+                # send_mail(
+                #     f"Cash On Collection | DIAGNOSTICA SPAN | Booking Id:{id}",
+                #     mes,
+                #     email_from,
+                #     reachus,
+                #     fail_silently=False,
+                # )
+                customerEmailThread(subject, mess, [request.user.email]).start()
+                AdminEmailThread(subject, mes, reachus).start()
             to_return = {"valid":True}
         return HttpResponse(json.dumps(to_return), content_type="application/json")
 class HealthSymptoms(View):
@@ -2623,7 +2662,7 @@ class HealthSymptoms(View):
             request.session['cart_count']= cart.objects.filter(device = deviceCookie).count()
         else:
             request.session['cart_count']= cart.objects.filter(user = request.user).count()
-        print(RES)
+        # print(RES)
         return JsonResponse(RES)
 def privacypolicy(request):
     return render(request,"privacypolicy.html")
@@ -2713,18 +2752,19 @@ def requestcallheader(request):
             # except:
             #     return JsonResponse({"message":"error"})
             requestcall.objects.create(firstname=firtname,lastname=lastname,phone=phone,email=email,message=message1).save()
-            message = f'Hi\nYou have Call back request for below test from\nName:{firtname} {lastname}\nMobile:{phone}\nEmail:{email}\nMessage:{message1}'
+            message = f'Hi\nYou have Call back request\nFull Name:{firtname} {lastname}\nMobile:{phone}\nEmail:{email}\nMessage:{message1}'
             email_from = settings.EMAIL_HOST_USER
-            recipient_list = ["enquiry@spanhealth.com"]
+            # recipient_list = ["enquiry@spanhealth.com"]
             message = message
             subject = "Request Call back" 
-            send_mail(
-                        subject,
-                        message,
-                        email_from,
-                        recipient_list,
-                        fail_silently=False,
-                )
+            # send_mail(
+            #             subject,
+            #             message,
+            #             email_from,
+            #             recipient_list,
+            #             fail_silently=False,
+            #     )
+            AdminEmailThread(subject, message, reachus).start()
             return JsonResponse({"message":True})
         except:
             return JsonResponse({"message":"error"})
@@ -2916,3 +2956,9 @@ def sms(message,mobile):
     except Exception as e:
         # print(e)
         return "Your OTP is not delivered Please try again!"
+    
+
+        # msg = EmailMessage(self.subject, self.html_content, EMAIL_HOST_USER, self.recipient_list)
+        # msg.content_subtype = "html"
+        # msg.send()
+

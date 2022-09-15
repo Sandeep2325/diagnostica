@@ -512,7 +512,7 @@ class UserAdmin(OriginalUserAdmin):
     list_display = ['id','first_name','last_name','email',"phone_no",'age','gender','location','address','date_joined','action_btn']
     # list_editable=['is_confirmed']
     fieldsets = (
-        (None, {'fields': ('email', 'password','aggregator')}),
+        (None, {'fields': ('email', 'password','aggregator',"aggrid")}),
         (_('Personal info'), {'fields': ('photo','first_name','last_name', "phone_no",'age','gender','location','address',)}),
         (
             _("Permissions"),
@@ -527,6 +527,7 @@ class UserAdmin(OriginalUserAdmin):
             },
         ),
     )
+    readonly_fields=["aggrid"]
     # def has_delete_permission(self, request,obj=None):
     #     return False
     def get_form(self, request, obj=None, **kwargs):
@@ -739,8 +740,8 @@ class invoiceeadmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
     
-    def has_delete_permission(self, request):
-        return False
+    # def has_delete_permission(self, request):
+    #     return False
 class medicationsadmin(admin.ModelAdmin):
     list_display=['users','medic','morning','afternoon','evening','night','created','updated']
     def users(self,obj):

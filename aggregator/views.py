@@ -62,7 +62,10 @@ class detailtest(LoginRequiredMixin,View):
     
     def get(self,request,bookingid,*args, **kwargs):
         data=aggregatorbookings.objects.get(bookingid=bookingid)
-        return render(request,"testdetails.html",{"data":data})
+        total=[]
+        for i in data.test_name.all():
+            total.append(float(i.Banglore_price))
+        return render(request,"testdetails.html",{"data":data,"total":sum(total)})
 class addform(LoginRequiredMixin,View):
     login_url = '/aggregator/login'
     template_name = 'addform.html'

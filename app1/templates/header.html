@@ -78,7 +78,6 @@
                                 <li><a class="dropdown-item" href="{% url 'user-login' %}">Login</a></li>
                                 <li><a class="dropdown-item" href="{% url 'Registration' %}">Register</a></li>
                                 {% endif%}
-
                             </ul>
                         </li>
                         <li class="nav-item d-lg-block d-none">
@@ -223,8 +222,8 @@
     var firstname = $("#fname").val();
     var phone = $("#ph").val();
     var lastname = $("#lname").val();
-    var tests=$("#selectt").val();
-    if (email=='' || firstname=='' || phone=='' || lastname==''){
+    var tests=$("#message").val();
+    if (email=='' || firstname=='' || phone=='' || lastname=='' || tests==''){
       swal("", "Please update every field", "warning");
     }    
     else{ 
