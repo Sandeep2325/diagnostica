@@ -237,6 +237,7 @@ def otpRegistration(request):
 def resendotp(request):
     # if request.method=="POST":
     email_address = request.session.get('email')
+    p_number = request.session.get('number')
     otp = random.randint(1000,9999)
     request.session['otp'] = otp
     message=f"{otp}- is your OTP for Spandiagno for password to be resent. Please do not share this OTP with anyone. Spandiagno."
@@ -248,7 +249,7 @@ def resendotp(request):
     subject = "OTP Verification | DIAGNOSTICA Span"
     try: 
         userr=User.objects.get(email=email_address) 
-        a=sms(message,userr.phone_no)
+        a=sms(message,p_number)
         # send_mail(
         #         subject,
         #         message1,
@@ -344,8 +345,8 @@ def resendotpforgot(request):
     email_address = request.session.get('email')
     otp = random.randint(1000,9999)
     request.session['otp'] = otp
-    message=f"{otp}- is your OTP for Spandiagno for passwaord to be resent. Please do not share this OTP with anyone. Spandiagno."
-    message1=f"{otp}- is your OTP for Spandiagno for passwaord to be resent. Please do not share this OTP with anyone.\nThank You\nDiagnostica Span"
+    message=f"{otp}- is your OTP for Spandiagno for password to be resent. Please do not share this OTP with anyone. Spandiagno."
+    message1=f"{otp}- is your OTP for Spandiagno for password to be resent. Please do not share this OTP with anyone.\nThank You\nDiagnostica Span"
     # message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDIAGNOSTICA Span"
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [email_address]
@@ -371,8 +372,8 @@ def changeresend(request):
     email_address = request.session.get('email')
     otp = random.randint(1000,9999)
     request.session['otp'] = otp
-    message=f"{otp}- is your OTP for Spandiagno for passwaord to be resent. Please do not share this OTP with anyone. Spandiagno."
-    message1=f"{otp}- is your OTP for Spandiagno for passwaord to be resent. Please do not share this OTP with anyone.\nThank You\nDiagnostica Span."
+    message=f"{otp}- is your OTP for Spandiagno for password to be resent. Please do not share this OTP with anyone. Spandiagno."
+    message1=f"{otp}- is your OTP for Spandiagno for password to be resent. Please do not share this OTP with anyone.\nThank You\nDiagnostica Span."
     # message=f"Hi There,\nYou have requested a new One-Time-Password for verifying your account.\nKindly use the below OTP to proceed further steps.\nOTP: {otp}\nIf the request doesn't concern you, kindly ignore this mail.\nThank You,\nDIAGNOSTICA Span"
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [email_address]
