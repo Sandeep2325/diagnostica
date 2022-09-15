@@ -248,7 +248,7 @@ def resendotp(request):
     message = message
     subject = "OTP Verification | DIAGNOSTICA Span"
     try: 
-        userr=User.objects.get(email=email_address) 
+        # userr=User.objects.get(email=email_address) 
         a=sms(message,p_number)
         # send_mail(
         #         subject,
