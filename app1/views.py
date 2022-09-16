@@ -37,6 +37,7 @@ from num2words import num2words
 import re
 from datetime import datetime,timezone 
 from django.core import serializers
+import time
 import threading
 env = environ.Env()
 global OBJ_COUNT
@@ -87,6 +88,16 @@ class AdminEmailThread(threading.Thread):
                 self.recipient_list,
                 fail_silently=False,
                 )
+# def countdown(t):
+#     while t:
+#         mins, secs = divmod(t, 60)
+#         timer = '{:02d}:{:02d}'.format(mins, secs)
+#         print(timer, end="\r")
+#         if timer==0:
+#             print("------------",timer,end="\r")
+#         time.sleep(1)
+#         t -= 1
+    # print('Fire in the hole!!')
 def indextable1(request):
     precriptionb = serializers.serialize("json", Prescriptionbook1.objects.all().order_by('-created'))
     return HttpResponse(precriptionb)
@@ -158,13 +169,15 @@ def Registration(request):
             # f"Hi {f},\nThere was a request to change your password!\nIf you did not make this request then please ignore this email.\nOtherwise, please click this link to change your password: [link]"
             # message=f"Hi {f},\n\nGreetings!\nYou are just a step away from accessing your Diagnostica Span account.\nWe are sharing a verification code to access your account. Once you have verified the code, you'll be prompted to access our portal immediately.\n\nYour OTP: {otp}\n\nThank You,\nDiagnostica Span"
             # message = f'Welcome your otp is {otp} '
-            message=f"{otp}- is your one time password for Spandiagno user registration. Please do not share this OTP with anyone. Spandiagno."
+            message=f"{otp}- is your OTP for Spandiagno user registration. Please do not share this OTP with anyone. Spandiagno."
             message1=f"{otp}- is your one time password for Spandiagno user registration. Please do not share this OTP with anyone.\nThanks You\nDiagnostica Span."
+            #  - is your OTP for Spandiagno user registration. Please do not share this OTP with anyone. Spandiagno.
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [e]
             message = message
             subject = "DIAGNOSTICA SPAN OTP Confirmation" 
             a=sms(message,p_number)
+            # countdown(int(10))
             # send_mail(
             #         subject,
             #         message1,
@@ -202,17 +215,22 @@ def otpRegistration(request):
                                 phone_no=p_number,
                                 password=hash_pwd
                 )
-                request.session.delete('otp')
-                request.session.delete('firstname')
-                request.session.delete('lastname')
-                request.session.delete('email')
-                request.session.delete('password')
-                request.session.delete('phone_number')
+                if request.session.get('otp')!=None:
+                    del request.session['otp']
+                if request.session.get('firstname')!=None:
+                    del request.session['firstname']
+                if request.session.get('lastname')!=None:
+                    del request.session['lastname']
+                if request.session.get('email')!=None:
+                    del request.session['email']
+                if request.session.get('password')!=None:
+                    del request.session['password']
+                if request.session.get('phone_number')!=None:
+                    del request.session['phone_number']
                     # f"Hi {f},\nThere was a request to change your password!\nIf you did not make this request then please ignore this email.\nOtherwise, please click this link to change your password: [link]"
             # message=f"Hi {f},\n\nGreetings!\nYou are just a step away from accessing your Diagnostica Span account.\nWe are sharing a verification code to access your account. Once you have verified the code, you'll be prompted to access our portal immediately.\n\nYour OTP: {otp}\n\nThank You,\nDiagnostica Span"
             # message = f'Welcome your otp is {otp} '
-                
-                message=f"Hi {firstname} {lastname},Thank you for registering with us.,\nYour one-stop solution for all diagnostic services.\nDiagnostica Span"
+                message=f"Hi {firstname} {lastname},Thank you for registering with us.\nYour one-stop solution for all diagnostic services.\nDiagnostica Span"
                 email_from = settings.EMAIL_HOST_USER
                 recipient_list = [email_address]
                 message = message
@@ -2849,7 +2867,7 @@ def sms(message,mobile):
             return "Your OTP is not delivered Please try again!"
         else:
             print("----------")
-            return "Your OTP sent your registered mobile number"
+            return "Your OTP sent your registered mobile number and Email Id"
     except Exception as e:
         # print(e)
         return "Your OTP is not delivered Please try again!"
