@@ -357,21 +357,13 @@
                             <div>
                                 <input class="w-100  form_input mt-3" placeholder="Date" name="Date" id="Date" type="Date" maxlength="250"/>
                             </div>
-                            <div>
-                                <select class="w-100 mt-3 form-select myself_other" type="select" name="timeslot" id="timeslot">
-                                        <option selected="selected" class="opc-5" disabled>
-                                        Pickup Time Slot</option>
-                                        <option value="1">7:00AM-11:00AM</option>
-                                        <option value="2">11:00AM-3:00PM</option>
-                                        <option value="3">3:00PM-6:00PM</option>
-                                </select>
-                            </div>
+                          
                             <div>
                                 <select class="w-100 mt-3 form-select myself_other" type="select" name="City" id="City">
                                     <option selected="selected" class="opc-5" disabled>
                                         City</option>
                                         {%for i in city%}
-                                        <option value="{{i.id}}">{{i.cityname}}</option>
+                                        <option value="{{i.id}},{{i.citycode}}">{{i.cityname}}</option>
                                         {%endfor%}
                                 </select>
                             </div>
@@ -383,6 +375,16 @@
                                 <p class="error pincodeerror"><p>
                             </div>
                             <div>
+                                <p class="error mt-3" id="sloterror" hidden>Please select Date,City and Pincode to select timeslot<p>
+                                <select onFocus="slots()" class="w-100 mt-3 form-select myself_other" type="select" name="timeslot" id="timeslot">
+                                        <option selected="selected" class="opc-5" disabled>
+                                        Pickup Time Slot</option>
+                                        {% comment %} <option value="1">7:00AM-11:00AM</option>
+                                        <option value="2">11:00AM-3:00PM</option>
+                                        <option value="3">3:00PM-6:00PM</option> {% endcomment %}
+                                </select>
+                            </div>
+                            <div>
                                 <select class="w-100 mt-3 form-select myself_other" type="select" name="paymentmethod" id="paymentmethod" >
                                     <option selected="selected" class="opc-5" disabled>
                                         Payment Method</option>
@@ -391,6 +393,7 @@
                                         {% comment %} <option value="3">3:00PM-6:00PM</option> {% endcomment %}
                                 </select>
                             </div>
+                           
                             <div class="row mt-3" id="cpndesc">
                                 <div class="col-8">
                                     <input class="w-100  form_input " placeholder="Coupon"
@@ -691,7 +694,12 @@
                                },
                                dataType: "json",
                                success: function(resp){
-                                if(resp['valid']){
+                                if (!resp["valid"]){
+                                    swal("","Someting went wrong Please try again after sometime","error").then(function(){
+                                        window.location.reload()
+                                    })
+                                }
+                                else{
                                 }
                                 var amount = parseInt(resp['amount']);
                                 var options = {
@@ -753,10 +761,18 @@
                         },
                         dataType:"json",
                         success:function(resp){
+                            console.log(resp["valid"])
                             $(".preload").css("display","none");
+                            if(!resp["valid"]){
+                                swal("","Someting went wrong Please try again after sometime","error").then(function(){
+                                    window.location.reload()
+                                })
+                            }
+                            else{
                             swal("","Thank you for booking","success").then(function(){
                                 window.location.reload()
                             })
+                        }
                         }
                     })
                     }
@@ -1204,5 +1220,60 @@ $(document).ready(function () {
     });
 
 });
+$("#timeslot").focusout(function(){
+    $('#sloterror').prop('hidden',true);
+  });
+function slots(){
+    var op =`<option selected="selected" class="opc-5" disabled>Pickup Time Slot</option>`
+   $("#timeslot").empty();
+    $("#timeslot").append(op);
+    var date=$("#Date").val();
+    var city=$("#City").val();
+    var pincode=$("#pincode").val();
+    console.log(date)
+    console.log(city)
+    console.log(pincode)
+    if (date =="" || city ==null || pincode ==""){
+        //$("#sloterror").show();
+        $('#sloterror').prop('hidden',false);
+        console.log("Please select date city pincode to select timeslot")
+    }
+    else{
+        a=city.split(",")
+    var settings = {
+    "url": "https://mtqn0qowxc.execute-api.us-east-1.amazonaws.com/get-customer-available-slot",
+    "method": "POST",
+    "timeout": 0,
+    "headers": {
+      "api-key": "8517db-ff9614-42c7c9-512743-18780d",
+      "customer-code": "DIS",
+      "Content-Type": "application/json"
+    },
+    "data": JSON.stringify({
+      "date": date,
+      "pincode": pincode,
+      "city_code": a[1]
+    }),
+  };
+  $.ajax(settings).done(function (response) {
+    console.log(response);
+    if (!response["success"]){
+        $("#timeslot").append(`<option value=''>No Slots Availabe</option>`);
+        alert("No slots Availabe")
+    }
+    else{
+    for (i in response){
+        if (i=="data"){
+            for (j in response[i]){
+                a=response[i][j].slot
+                $("#timeslot").append('<option value=' + a + '>' + a + '</option>');
+            }
+        }
+    } 
+    }
+  });
+  
+}
+}
 </script>
 {%endblock%}

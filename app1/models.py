@@ -35,7 +35,8 @@ shipping_charges=199
 #     email_verified = models.BooleanField(default=False)
 #     uuid = models.UUIDField(default=uuid.uuid4,editable=False)
 class city(models.Model):
-    cityname=models.CharField(max_length=200,null=True,blank=True)
+    citycode=models.CharField(max_length=20,null=True,blank=True,verbose_name="City Code")
+    cityname=models.CharField(max_length=200,null=True,blank=True,verbose_name="City Name")
     city_icon= models.ImageField(upload_to = "photos/icons/", null=True, blank=True)
     active=models.BooleanField(default=True,verbose_name="Is Active")
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
@@ -216,7 +217,6 @@ class testbook(models.Model):
         default="", null=True,blank=True
     )
     timeslot = models.CharField(
-        choices=TIME_CHOICES,
         max_length=20,
         default="", null=True,blank=True,verbose_name="Time Slot"
     )
@@ -279,9 +279,8 @@ class Prescriptionbook1(models.Model):
         max_length=8,
         default="", null=True,blank=True
     )
-    date=models.DateField(null=True,blank=True)
+    date=models.DateField(null=True,blank=True,verbose_name="Slot Date")
     timeslot = models.CharField(
-        choices=TIME_CHOICES,
         max_length=20,
         default="", null=True,blank=True,verbose_name="Time Slot"
     )
@@ -458,6 +457,7 @@ m2m_changed.connect(testbookings, sender=Prescriptionbook1.test_name.through)
 # post_save.disconnect(testbookings, sender=Prescriptionbook1) 
 class healthcheckuppackages(models.Model):
     package_title=models.CharField(max_length=200,null=True,blank=True,verbose_name="Test Name")
+    code=models.CharField(max_length=30,null=True,blank=True,verbose_name="Test Code")
     test_name=models.ManyToManyField(test,blank=True)
     Banglore_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Banglore Price")
     Mumbai_price=models.DecimalField(max_digits = 10,decimal_places = 2,null=True,blank=True,verbose_name="Mumbai Price")
@@ -927,6 +927,7 @@ class medications(models.Model):
         return self.medic
     class Meta:
         verbose_name_plural="User Medications"
+        verbose_name="User Medications"
 class franchisee(models.Model):
     fullname=models.CharField(max_length=100,null=True,blank=True,verbose_name="Full Name")
     phoneno=models.CharField(max_length=15,null=True,blank=True,verbose_name="Phone No")
@@ -943,6 +944,7 @@ class franchisee(models.Model):
         return self.fullname
     class Meta:
         verbose_name_plural="Franchise"
+        verbose_name="Franchise"
 class careers(models.Model):
     fullname=models.CharField(max_length=100,null=True,blank=True,verbose_name="Full Name")
     phoneno=models.CharField(max_length=15,null=True,blank=True,verbose_name="Phone No")
@@ -955,6 +957,7 @@ class careers(models.Model):
         return self.fullname
     class Meta:
         verbose_name_plural="Careers Form"
+        verbose_name="Careers Form"
 class careersopenings(models.Model):
     designations=models.CharField(max_length=100,null=True,blank=True,verbose_name="Designations")
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
@@ -992,6 +995,7 @@ class aggregatorbookings(models.Model):
         return str(self.user)
     class Meta:
         verbose_name_plural="Aggregator Bookings"
+        verbose_name="Aggregator Bookings"
     
 @receiver(post_save, sender=aggregatorbookings)
 def aggregatortests(sender, instance, **kwargs):
@@ -1030,7 +1034,30 @@ def aggregatortests(sender, instance, **kwargs):
             book_history.objects.filter(bookingid=instance.bookingid).update(amount=instance.price,payment_status=False)
         else:
             book_history.objects.filter(bookingid=instance.bookingid).update(amount=instance.price,payment_status=True) 
-        
+class gosamplify(models.Model):
+    goordernumber=models.CharField(max_length=50,null=True,blank=True,verbose_name="Go samplify Order No")  
+    taskid=models.CharField(max_length=70,null=True,blank=True,verbose_name="Task Id")
+    orderref=models.CharField(max_length=20,null=True,blank=True,verbose_name="Booking Id/Order ref No")
+    slotdate=models.CharField(max_length=30,null=True,blank=True,verbose_name="Slot Date")
+    slottime=models.CharField(max_length=30,null=True,blank=True,verbose_name="Slot Time")
+    amountt=models.CharField(max_length=20,null=True,blank=True,verbose_name="Amount to collect")
+    patientname=models.CharField(max_length=200,null=True,blank=True,verbose_name="Patient Name")
+    email=models.EmailField(max_length=256,null=True,blank=True,verbose_name="Email")
+    phone=models.CharField(max_length=13,null=True,blank=True,verbose_name="Phone")
+    address=models.TextField(null=True,blank=True,verbose_name="Address")
+    pincode=models.CharField(max_length=10,null=True,blank=True,verbose_name="Pincode")
+    status=models.CharField(max_length=50,null=True,blank=True,verbose_name="Status")
+    created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
+    updated = models.DateTimeField(auto_now=True,null=True, blank=True)
+    
+    def __str__(self):
+        return self.goordernumber
+    class Meta:
+        verbose_name_plural="Go Samplify"
+        verbose_name="Go Samplify"
+    
+    
+          
     
 
         

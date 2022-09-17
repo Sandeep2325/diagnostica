@@ -219,25 +219,13 @@
                                         <option value="o">Others</option>
                                 </select>
                             </div>
-                            <div>
-                                <input class="w-100  form_input mt-3" placeholder="Date" name="Date" id="Date" type="Date" maxlength="250"/>
-                            </div>
-                            <div>
-                                <select class="w-100 mt-3 form-select myself_other" type="select" name="timeslot" id="timeslot">
-                                    <option selected="selected" class="opc-5" disabled>
-                                        Pickup Time Slot</option>
-                                        <option value="1">7:00AM-11:00AM</option>
-                                        <option value="2">11:00AM-3:00PM</option>
-                                        <option value="3">3:00PM-6:00PM</option>
-                                </select>
-                            </div>
-                            
+                          
                             <div>
                                 <select class="w-100 mt-3 form-select myself_other" type="select" name="City" id="City">
                                     <option selected="selected" class="opc-5" disabled>
                                         City</option>
                                         {%for i in city%}
-                                        <option value="{{i.id}}">{{i.cityname}}</option>
+                                        <option value="{{i.id}},{{i.citycode}}">{{i.cityname}}</option>
                                         {%endfor%}
                                 </select>
                             </div>
@@ -246,6 +234,20 @@
                             </div>
                             <div>
                                 <input class="w-100  form_input mt-3" placeholder="Pincode" name="pincode" id="pincode" type="number" maxlength="250"/>
+                            </div>
+                            <div>
+                                <input class="w-100  form_input mt-3" placeholder="Date" name="Date" id="Date" type="Date" maxlength="250"/>
+                            </div>
+                            <div>
+                                <p class="error mt-3" id="sloterror" hidden>Please select Date,City and Pincode to select timeslot<p>
+                                <select onFocus="slots()" class="w-100 mt-3 form-select myself_other" type="select" name="timeslot" id="timeslot">
+                                    <option selected="selected" class="opc-5" disabled>
+                                        Pickup Time Slot</option>
+                                        {% comment %} <option value="1">7:00AM-11:00AM</option>
+                                        <option value="2">11:00AM-3:00PM</option>
+                                        <option value="3">3:00PM-6:00PM</option> {% endcomment %}
+                                </select>
+                                
                             </div>
                             <button class="mx-lg-0 mx-3 mt-4 globalsubmitbutton"
                                 type="submit" name="submit" id="checkout">SUBMIT</button>
@@ -335,7 +337,6 @@
 
 function deletefunc(e){
 //  $("#delete").on("click", function(e){ 
-        
         var idd = $(this).attr('name');
        a=$("#delete").attr("name");
             $.ajax({
@@ -576,6 +577,7 @@ $(document).ready(function(){
     
         },
         submitHandler: function (form) {
+            $("#checkout").prop("disabled",true);
             a=$("#total").text();
             var firstname=$("#firstname").val();
                     var lastname=$("#lastname").val();
@@ -620,7 +622,12 @@ $(document).ready(function(){
                            },
                            dataType: "json",
                            success: function(resp){
+                            console.log(resp["message"])
                             $("#infomodal").hide();
+                            if (!resp["message"]){
+                                alert("something went wrong Please try Again after sometime")
+                            }
+                            else{
                             var options = {
                                 key: resp["razorpay_key"],
                                // amount:AMOUNT ? AMOUNT :100,
@@ -658,6 +665,7 @@ $(document).ready(function(){
                               };
                               var rzp1 = new Razorpay(options);
                             rzp1.open();  
+                           }
                            },
                     
                        });
@@ -678,6 +686,64 @@ function setAttr() {
     var d1 = curr_year + "-" + curr_month + "-" + curr_date;
     $('#Date').attr('min', d1);
 };
+
+$("#timeslot").focusout(function(){
+    $('#sloterror').prop('hidden',true);
+  });
+function slots(){
+    var op =`<option selected="selected" class="opc-5" disabled>Pickup Time Slot</option>`
+   $("#timeslot").empty();
+    $("#timeslot").append(op);
+    var date=$("#Date").val();
+    var city=$("#City").val();
+    var pincode=$("#pincode").val();
+    console.log(date)
+    console.log(city)
+    console.log(pincode)
+    if (date =="" || city ==null || pincode ==""){
+        //$("#sloterror").show();
+        $('#sloterror').prop('hidden',false);
+        console.log("Please select date city pincode to select timeslot")
+        //alert("Please select date city pincode to select timeslot")
+    }
+    else{
+        a=city.split(",")
+    var settings = {
+    "url": "https://mtqn0qowxc.execute-api.us-east-1.amazonaws.com/get-customer-available-slot",
+    "method": "POST",
+    "timeout": 0,
+    "headers": {
+      "api-key": "8517db-ff9614-42c7c9-512743-18780d",
+      "customer-code": "DIS",
+      "Content-Type": "application/json"
+    },
+    "data": JSON.stringify({
+      "date": date,
+      "pincode": pincode,
+      "city_code": a[1]
+    }),
+  };
+  $.ajax(settings).done(function (response) {
+    console.log(response["success"])
+    if (!response["success"]){
+        $("#timeslot").append(`<option value=''>No Slots Availabe</option>`);
+        alert("No slots Availabe")
+    }
+    else{
+    for (i in response){
+        if (i=="data"){
+            for (j in response[i]){
+                console.log(response[i][j].slot)
+                a=response[i][j].slot
+                console.log(a)
+                $("#timeslot").append('<option value=' + a + '>' + a + '</option>');
+            }
+        }
+    } 
+}
+  });
+}
+}
     </script>
 {%endblock%}
 

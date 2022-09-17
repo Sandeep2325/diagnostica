@@ -25,7 +25,7 @@ import datetime
 from django.contrib.auth.models import Permission
 # Register your models here.
 class cityadmin(admin.ModelAdmin):
-    list_display=["id","cityname","imagee","active","created","updated"]
+    list_display=["id","citycode","cityname","imagee","active","created","updated"]
     list_editable=["active"]
     def imagee(self, obj):
         # a=obj.image.first()
@@ -123,6 +123,7 @@ class prescriptionbookadmin(admin.ModelAdmin):
         (_('Prescription'), {'fields': ('user','prescription_file', 'test_name','price')}),
         (_('Coupon'),{'fields':('coupon',)}),
         (_('Patient Details'), {'fields': ("bookingid","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address","pincode","location","paymentmethod")}),
+        (_('Slot'),{'fields':("date","timeslot")}),
         (_('Report'),{'fields':("report",)}),
         (_('Comments'),{'fields':("comments",)})
     )
@@ -298,7 +299,7 @@ class categoryadmin(admin.ModelAdmin):
         return format_html(html)
     action_btn.short_description = "Action"
 class healthcheckup_admin(SummernoteModelAdmin):
-    list_display=["package_title","dBanglore_price","created","updated","action_btn"]    
+    list_display=["code","package_title","dBanglore_price","created","updated","action_btn"]    
     readonly_fields=["created","updated"]
     filter_horizontal = ('test_name',)
     # list_editable=["location"]
@@ -756,6 +757,9 @@ class careersadmin(admin.ModelAdmin):
     list_display=['fullname','phoneno','email','cv','message','created','updated']
 class careersopeningsadmin(admin.ModelAdmin):
     list_display=['designations','created','updated']
+class gosamplifyadmin(admin.ModelAdmin):
+    list_display=["goordernumber","taskid","orderref","slotdate","slottime","patientname","email","phone","pincode","status"]
+    readonly_fields=["goordernumber","amountt","taskid","orderref","slotdate","slottime","patientname","email","status","phone","pincode","created","updated","address"]
 # from django.contrib.admin import DateFieldListFilter
 from rangefilter.filters import DateRangeFilter, DateTimeRangeFilter
 class aggregatorfilter(SimpleListFilter):
@@ -828,6 +832,7 @@ admin.site.register(careers,careersadmin)
 admin.site.register(aggregatorbookings,aggregatorbookingsadmin)
 admin.site.unregister(get_attachment_model())
 admin.site.register(invoicee,invoiceeadmin)
+admin.site.register(gosamplify,gosamplifyadmin)
 class MyGroupAdminForm(forms.ModelForm):
     class Meta:
         model = Group

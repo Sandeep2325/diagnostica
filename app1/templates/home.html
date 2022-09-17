@@ -446,7 +446,7 @@
                   {%for i in city%}
                   <div class="col-4 col-sm-3 py-2 py-sm-3">
                     <button class="cursor h-100 w-100 br" id="city" name="{{i.cityname}}"
-                      onclick='myfunction("{{i.cityname}}")'>
+                      onclick='myfunction("{{i.cityname}}","{{i.citycode}}")'>
                       {% if i.city_icon %}
                       <img src="{{i.city_icon.url}}" alt="" class="img-fluid">
                       {% else %}
@@ -696,13 +696,14 @@ $(document).ready(function(){
     }
   });
 
-        function myfunction(city){
-          
+        function myfunction(city,code){
+          console.log(code)
           $.ajax({
             url: "{% url 'city' %}",
             type : "POST", 
             data: {
              "city":city,
+             "code":code,
              csrfmiddlewaretoken: '{{ csrf_token }}',
             },
             dataType: "json",

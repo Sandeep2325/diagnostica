@@ -65,6 +65,20 @@
                                                 <li>{{ model.label }}</li>
                                             {% endif %}
 
+                                            {%elif model.label == "Go Samplify"%}
+                                       
+                                            {% if model.url %}
+                                                <li class="{{ direction.panel }}">
+                                                    {% comment %} <i class="tim-icons icon-paper"></i> {% endcomment %}
+                                                    <a href="{{ model.url }}">
+                                                        <span class="tim-icons icon-minimal-{{ direction.notify }}"></span>
+                                                        <span>{{ model.label }}</span>
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>{{ model.label }}</li>
+                                            {% endif %}
+
                                             {%elif model.label == "Test Bookings"%}
                                             {% if model.url %}
                                                 <li class="{{ direction.panel }}">
