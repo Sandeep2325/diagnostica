@@ -116,11 +116,11 @@ class countdownThread(threading.Thread):
             time.sleep(1)
             self.timer -= 1  
 def indextable1(request):
-    precriptionb = serializers.serialize("json", Prescriptionbook1.objects.all().order_by('-created'))
+    precriptionb = serializers.serialize("json", Prescriptionbook1.objects.all().order_by('-created')[0:10])
     return HttpResponse(precriptionb)
     # return HttpResponse(json.dumps(prescription_bookings),content_type="application/json")
 def indextable2(request):
-    precriptionb = serializers.serialize("json", testbook.objects.all().order_by('-created'))
+    precriptionb = serializers.serialize("json", testbook.objects.all().order_by('-created')[0:10])
     return HttpResponse(precriptionb)    
 def dashboard(request):
     # test_bookings=prescription_book.objects.filter(test_name__isnull=True, prescription_file='').count()
@@ -1267,13 +1267,23 @@ def cartt(request):
                     a=dic["tests_code"]=j.testcode
                     tes.append(dic)
                     # print(i.testcode)
-        print(tes)
+        # print(tes)
         if gender=="m":
             genderr="Male"
         elif gender == "f":
             genderr="Female"
         else:
             genderr="Other"
+        coup=request.session.get("coupon")
+        couponper=request.session.get("couponpercent")
+        if couponper!=None:
+            perc=str(couponper)
+        else:
+            perc="0"
+        if coup!=None:
+            coupo=str(coup)
+        else:
+            coupo="-"
         url = "https://mtqn0qowxc.execute-api.us-east-1.amazonaws.com/create-customer-order"
         payload = json.dumps({
           "order_ref_id": bookingid,
@@ -1289,7 +1299,7 @@ def cartt(request):
           "payment_type": "Prepaid",
           "total_amount": amount,
           "discount_type": "Percentage",
-          "discount_value": "0",
+          "discount_value": perc,
           "payment_amount":amount,
           "advance_paid": amount,
           "payment_to_collect": "0",
@@ -1312,9 +1322,9 @@ def cartt(request):
           'Content-Type': 'application/json'
         }
         response = requests.request("POST", url, headers=headers, data=payload)
-        print(json.loads(response.text))
+        # print(json.loads(response.text))
         res=json.loads(response.text)
-        print("----",response.status_code)
+        # print("----",response.status_code)
         if response.status_code==201:
             goordernumber=res["data"][0]["order_number"]
             taskid=res["data"][0]["task_id"]
@@ -1328,9 +1338,11 @@ def cartt(request):
             addres=res["data"][0]["patient_address"]
             pincodee=res["data"][0]["patient_pincode"]
             status=res["data"][0]["status"]
+            payment_type=res["data"][0]["payment_type"]
+            price_=res["data"][0]["amount_to_collect"]
             gosamplify.objects.create(
-                goordernumber=goordernumber,taskid=taskid,orderref=orderref,slotdate=slotdate,slottime=slottime,amountt=amountt,patientname=patientname,email=email,phone=phone,address=addres,pincode=pincodee,status=status
-            ).save()
+                    goordernumber=goordernumber,taskid=taskid,orderref=orderref,paymenttype=payment_type,price=amount,couponval=perc,couponcode=coupo,slotdate=slotdate,slottime=slottime,amountt=amountt,patientname=patientname,email=email,phone=phone,address=addres,pincode=pincodee,status=status
+                ).save()
             if others=="m":
                 User.objects.filter(email=request.user.email).update(first_name=firstname,last_name=lastname,phone_no=contact,age=age,address=address,gender=gender)
             # data1=cart.objects.filter(user=request.user)
@@ -2185,7 +2197,8 @@ def contactuss(request):
         subject = "Contact us Enquiry | DIAGNOSTICA SPAN"
         customerEmailThread(subject, message1, recipient_list).start()
         messages.success(request,"Your response submitted successfully")
-        return render(request,"contactus.html")
+        return redirect('contactus')
+        # return render(request,"contactus.html")
     return render(request,"contactus.html") 
 def healthcheckupadd(request):
     cityy=request.session.get("city")
@@ -2485,6 +2498,16 @@ class BookingHistoryPay(LoginRequiredMixin,View):
         return render(request,"booking-history.html",context)
     
     def post(self, request, *args, **kwargs):
+        coup=request.session.get("coupon")
+        couponper=request.session.get("couponpercent")
+        if couponper!=None:
+            perc=str(couponper)
+        else:
+            perc="0"
+        if coup!=None:
+            coupo=str(coup)
+        else:
+            coupo="-"
         if request.POST.get("action") == "retreive_data":
             id=request.POST.get('id')
             date=request.POST["date"]
@@ -2525,7 +2548,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                   "payment_type": "Prepaid",
                   "total_amount": price,
                   "discount_type": "Percentage",
-                  "discount_value": "0",
+                  "discount_value": perc,
                   "payment_amount":price,
                   "advance_paid": price,
                   "payment_to_collect": "0",
@@ -2548,9 +2571,9 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                   'Content-Type': 'application/json'
                 }
             response = requests.request("POST", url, headers=headers, data=payload)
-            print(json.loads(response.text))
+            # print(json.loads(response.text))
             res=json.loads(response.text)
-            print("----",response.status_code)
+            # print("----",response.status_code)
             if response.status_code==201:
                 goordernumber=res["data"][0]["order_number"]
                 taskid=res["data"][0]["task_id"]
@@ -2564,8 +2587,10 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 addres=res["data"][0]["patient_address"]
                 pincodee=res["data"][0]["patient_pincode"]
                 status=res["data"][0]["status"]
+                payment_type=res["data"][0]["payment_type"]
+                price_=res["data"][0]["amount_to_collect"]
                 gosamplify.objects.create(
-                    goordernumber=goordernumber,taskid=taskid,orderref=orderref,slotdate=slotdate,slottime=slottime,amountt=amountt,patientname=patientname,email=email,phone=phone,address=addres,pincode=pincodee,status=status
+                    goordernumber=goordernumber,taskid=taskid,orderref=orderref,couponcode=coupo,paymenttype=payment_type,price=price,couponval=perc,slotdate=slotdate,slottime=slottime,amountt=amountt,patientname=patientname,email=email,phone=phone,address=addres,pincode=pincodee,status=status
                 ).save()
                 try:
                     coup=coupons.objects.get(couponcode=coupon)
@@ -2681,8 +2706,8 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                     'Content-Type': 'application/json'
                 }
                 response = requests.request("GET", url, headers=headers, data=payload)
-                print("------------",response.text)
-                print("------------",response.status_code)
+                # print("------------",response.text)
+                # print("------------",response.status_code)
             gos.delete()
             to_return = {"valid":True}
         if request.POST.get("action") == "COD":
@@ -2724,7 +2749,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                   "payment_type": "Postpaid",
                   "total_amount": price,
                   "discount_type": "Percentage",
-                  "discount_value": "0",
+                  "discount_value": perc,
                   "payment_amount":price,
                   "advance_paid": "0",
                   "payment_to_collect": price,
@@ -2747,9 +2772,9 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                   'Content-Type': 'application/json'
                 }
             response = requests.request("POST", url, headers=headers, data=payload)
-            print(json.loads(response.text))
+            # print(json.loads(response.text))
             res=json.loads(response.text)
-            print("----",response.status_code)
+            # print("----",response.status_code)
             if response.status_code==201:
                 goordernumber=res["data"][0]["order_number"]
                 taskid=res["data"][0]["task_id"]
@@ -2763,8 +2788,10 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 addres=res["data"][0]["patient_address"]
                 pincodee=res["data"][0]["patient_pincode"]
                 status=res["data"][0]["status"]
+                payment_type=res["data"][0]["payment_type"]
+                price_=res["data"][0]["amount_to_collect"]
                 gosamplify.objects.create(
-                    goordernumber=goordernumber,taskid=taskid,orderref=orderref,slotdate=slotdate,slottime=slottime,amountt=amountt,patientname=patientname,email=email,phone=phone,address=addres,pincode=pincodee,status=status
+                    goordernumber=goordernumber,taskid=taskid,orderref=orderref,couponcode=coupo,paymenttype=payment_type,price=price_,couponval=perc,slotdate=slotdate,slottime=slottime,amountt=amountt,patientname=patientname,email=email,phone=phone,address=addres,pincode=pincodee,status=status
                 ).save()
                 try:
                     a=coupons.objects.get(couponcode=coupon)
@@ -3096,10 +3123,12 @@ def franchise(request):
             message=request.POST["message"]
             franchisee.objects.create(fullname=fullname,phoneno=phoneno,email=email,taluka=taluka,district=district,state=state,address=address,message=message).save()
             messages.success(request,"Submitted Successfully")
-            return render (request,"franchisee.html")
+            return redirect("franchise")
+            # return render (request,"franchisee.html")
         except:
             messages.error(request,"Something went wrong")
-            return render (request,"franchisee.html")
+            return redirect("franchise")
+            # return render (request,"franchisee.html")
     return render (request,"franchisee.html")
 def ourcenters(request):
     return render (request,"ourcenters.html")
@@ -3113,7 +3142,8 @@ def career(request):
         message=request.POST["message"]
         careers.objects.create(fullname=fullname,phoneno=phoneno,email=email,cv=cv,message=message).save()
         messages.success(request,"Submitted Successfully")
-        return render (request,"career.html",{"designations":designations})
+        return redirect("career")
+        # return render (request,"career.html",{"designations":designations})
     return render (request,"career.html",{"designations":designations})
 def sendreport(request,phone,bookingid):
     otp = random.randint(1000,9999)
@@ -3233,5 +3263,5 @@ def creategosamplifyorder():
       'Content-Type': 'application/json'
     }
     response = requests.request("POST", url, headers=headers, data=payload)
-    print(response.text)
-    print(json.loads(response.text))
+    # print(response.text)
+    # print(json.loads(response.text))

@@ -1230,17 +1230,17 @@ function slots(){
     var date=$("#Date").val();
     var city=$("#City").val();
     var pincode=$("#pincode").val();
-    console.log(date)
-    console.log(city)
-    console.log(pincode)
+    //console.log(date)
+    //console.log(city)
+    //console.log(pincode)
     if (date =="" || city ==null || pincode ==""){
         //$("#sloterror").show();
         $('#sloterror').prop('hidden',false);
-        console.log("Please select date city pincode to select timeslot")
+        //console.log("Please select date city pincode to select timeslot")
     }
     else{
         a=city.split(",")
-    var settings = {
+    /*var settings = {
     "url": "https://mtqn0qowxc.execute-api.us-east-1.amazonaws.com/get-customer-available-slot",
     "method": "POST",
     "timeout": 0,
@@ -1254,8 +1254,40 @@ function slots(){
       "pincode": pincode,
       "city_code": a[1]
     }),
-  };
-  $.ajax(settings).done(function (response) {
+  };*/
+  $.ajax({
+    "url": "https://mtqn0qowxc.execute-api.us-east-1.amazonaws.com/get-customer-available-slot",
+    "method": "POST",
+    "timeout": 0,
+    "headers": {
+      "api-key": "8517db-ff9614-42c7c9-512743-18780d",
+      "customer-code": "DIS",
+      "Content-Type": "application/json"
+    },
+    "data": JSON.stringify({
+      "date": date,
+      "pincode": pincode,
+      "city_code": a[1]
+    }),
+    success:function(response){
+        console.log(response);
+        if (!response["success"]){
+            $("#timeslot").append(`<option value=''>No Slots Availabe</option>`);
+            alert("No slots Availabe")
+        }
+        else{
+        for (i in response){
+        if (i=="data"){
+            for (j in response[i]){
+                a=response[i][j].slot
+                $("#timeslot").append('<option value=' + a + '>' + a + '</option>');
+                    }
+                }   
+            } 
+        }
+     }
+  })
+  /*.done(function (response) {
     console.log(response);
     if (!response["success"]){
         $("#timeslot").append(`<option value=''>No Slots Availabe</option>`);
@@ -1271,8 +1303,7 @@ function slots(){
         }
     } 
     }
-  });
-  
+  });*/
 }
 }
 </script>

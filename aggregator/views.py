@@ -38,28 +38,48 @@ class dashboardd(LoginRequiredMixin,View):
     template_name = 'dashboard.html'
     
     def get(self, request, *args, **kwargs):
-        data=aggregatorbookings.objects.filter(user=request.user).order_by("-created")
-        return render(request, self.template_name,{"data":data})
-
-    def post(self, request, *args, **kwargs):
-        if request.POST.get("action")=="testdetails":
-            return render(request,"testdetails.html")
+        # print("----",request.GET.get("searched"))
+        # data=aggregatorbookings.objects.filter(user=request.user).order_by("-created")
+        searched_name = request.GET.get("searched")
+        fromdate=request.GET.get("fromdate")
+        todate=request.GET.get("todate")
+        if searched_name != None:
+            # from django.core import serializers
+            # data=serializers.serialize("json", aggregatorbookings.objects.filter(user=request.user,bookingid__icontains=searched_name).order_by("-created"))
+            data=aggregatorbookings.objects.filter(user=request.user,bookingid__icontains=searched_name).order_by("-created")
+            # return JsonResponse({"message":True,"data":data,"count":dataa.count()})
+        elif fromdate != None and todate != None:
+            try:
+                data=aggregatorbookings.objects.filter(user=request.user,created__range=[fromdate, todate]).order_by("-created")
+            except:
+                data=aggregatorbookings.objects.filter(user=request.user).order_by("-created")
+            # return JsonResponse({"message":True,"data":data,"count":data.count()})
         else:
-            searched_name = request.POST.get("searched")
-            fromdate=request.POST.get("fromdate")
-            todate=request.POST.get("todate")
-            if searched_name != None:
-                data=aggregatorbookings.objects.filter(user=request.user,bookingid__icontains=searched_name).order_by("-created")
-            elif fromdate != None and todate != None:
-                try:
-                    data=aggregatorbookings.objects.filter(user=request.user,created__range=[fromdate, todate]).order_by("-created")
-                except:
-                    data=aggregatorbookings.objects.filter(user=request.user).order_by("-created")
-            return render(request, self.template_name,{"data":data,"count":data.count()})
+            data=aggregatorbookings.objects.filter(user=request.user).order_by("-created")
+        # return JsonResponse({"message":True,"data":data,"count":data.count()})
+        return render(request, self.template_name,{"data":data,"count":data.count()})
+
+    # def post(self, request, *args, **kwargs):
+    #     if request.POST.get("action")=="testdetails":
+    #         return render(request,"testdetails.html")
+    #     else:
+    #         searched_name = request.POST.get("searched")
+    #         fromdate=request.POST.get("fromdate")
+    #         todate=request.POST.get("todate")
+    #         if searched_name != None:
+    #             data=aggregatorbookings.objects.filter(user=request.user,bookingid__icontains=searched_name).order_by("-created")
+    #         elif fromdate != None and todate != None:
+    #             try:
+    #                 data=aggregatorbookings.objects.filter(user=request.user,created__range=[fromdate, todate]).order_by("-created")
+    #             except:
+    #                 data=aggregatorbookings.objects.filter(user=request.user).order_by("-created")
+    #         # return redirect(data)
+    #         # return reverse("aggregator-dashboardd")
+    #         # return HttpResponseRedirect(reverse('aggregator-dashboardd'))
+    #         return render(request, self.template_name,{"data":data,"count":data.count()})
 class detailtest(LoginRequiredMixin,View):
     login_url = '/aggregator/login'
     template_name = 'testdetails.html'
-    
     def get(self,request,bookingid,*args, **kwargs):
         data=aggregatorbookings.objects.get(bookingid=bookingid)
         total=[]

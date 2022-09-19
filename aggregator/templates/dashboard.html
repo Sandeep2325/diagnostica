@@ -33,15 +33,15 @@
                           </div>
                     </div>
                     <div class="col-12 d-flex justify-content-between align-items-center py-3">
-                        <form method="post">
-                            {%csrf_token%}
+                        <form method="get" iid="searchform">
+                            {% comment %} {%csrf_token%} {% endcomment %}
                             <div class="d-flex">
                                 <input type="text" name="searched" placeholder="search" class="form-control"/>
                                 <button type="submit" class="btn-primary form-control w-50 ms-2">Search</button> 
                             </div>
                         </form>
-                        <form method="post" id="datefilterr">
-                            {%csrf_token%}
+                        <form method="get" id="datefilterr">
+                            {% comment %} {%csrf_token%} {% endcomment %}
                             <div class="d-flex">
                                 <div>
                                     <label for="fromdate">From Date</label>
@@ -57,6 +57,7 @@
                     {% comment %} <div class="float-end"> <a  href={% url "addform" %}><button class="btn-secondary form-control py-2 px-5 br-10"><i class="fa fa-plus"></i>Add</button></a></div> {% endcomment %}
                     </div> 
                     {%if count != 0%}
+                    
                     <table class="table table-striped">
                         <thead>
                           <tr>
@@ -99,7 +100,7 @@
                         </tbody>
                       </table>
                       {%else%}
-                      <h1>No Records Found..</h1>
+                      <h1>Oops!! No Records Found</h1>
                       {%endif%}
                 </div>
             </div>
@@ -139,5 +140,20 @@ $("#datefilterr").validate({
         todate: { greaterThan: "#fromdate" }
     }
 });
+/*$( "#searchform" ).on( "submit", function(e) {
+    var datafrom = $('#searchform').serialize();
+    $.ajax({
+        //url: "{% url 'medicationpost' %}",
+        type: "GET",
+        dataType: "json",
+        data: datafrom,
+        success: function (resp) {
+            console.log(resp)
+        }
+    });
+});
+*/
+
+
 </script>
 {%endblock%}

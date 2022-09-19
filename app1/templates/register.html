@@ -164,6 +164,9 @@
     jQuery.validator.addMethod("name_regex", function (value, element) {
         return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);
     }, "Enter valid name");
+    jQuery.validator.addMethod("lastname_regex", function (value, element) {
+        return this.optional(element) || /^[a-zA-z\.\- _]{1,30}$/i.test(value);
+    }, "Enter valid name");
     jQuery.validator.addMethod("password_regex", function (value, element) {
         return this.optional(element) || /^[a-z0-9!@#$%^&*()_\.\-_]{8,30}$/i.test(value);
     }, "Password should be minimum 8 characters.");
@@ -184,7 +187,7 @@
             'lastname': {
                 required: true,
                 minlength: 1,
-                name_regex: true,
+                lastname_regex: true,
             },
             'email': {
                 required: true,

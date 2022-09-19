@@ -23,6 +23,7 @@ from app1.views import sms
 # from django_admin_listfilter_dropdown.filters import DropdownFilter, RelatedDropdownFilter
 import datetime
 from django.contrib.auth.models import Permission
+from rangefilter.filters import DateRangeFilter, DateTimeRangeFilter
 # Register your models here.
 class cityadmin(admin.ModelAdmin):
     list_display=["id","citycode","cityname","imagee","active","created","updated"]
@@ -758,10 +759,24 @@ class careersadmin(admin.ModelAdmin):
 class careersopeningsadmin(admin.ModelAdmin):
     list_display=['designations','created','updated']
 class gosamplifyadmin(admin.ModelAdmin):
-    list_display=["goordernumber","taskid","orderref","slotdate","slottime","patientname","email","phone","pincode","status"]
-    readonly_fields=["goordernumber","amountt","taskid","orderref","slotdate","slottime","patientname","email","status","phone","pincode","created","updated","address"]
+    list_display=["goordernumber","taskid","orderref","slotdate","slottime","patientname","couponcode","couponval","price","paymenttype","email","phone","pincode"]
+    readonly_fields=["goordernumber","amountt","taskid","orderref","slotdate","slottime","patientname","couponcode","couponval","price","paymenttype","email","status","phone","pincode","created","updated","address"]
+    list_filter=["paymenttype",('slotdate', DateRangeFilter)]
+    search_fields=["goordernumber","taskid","orderref"]
+    
+    def export(self,request,queryset):
+        response = HttpResponse(
+        content_type='text/csv',
+        headers={'Content-Disposition': 'attachment; filename="Gosamplifydata.csv"'},)
+        writer = csv.writer(response)
+        writer.writerow(["Go samplify Order No","Go samplify Task id","Order reference/Booking Id","Slotdate","Slottime","Patientname","Coupon code","Couponval","Price","Payment Type","Email","Phone Number","Address","Pincode"])
+        for i in queryset:
+            writer.writerow([i.goordernumber,i.taskid,i.orderref,i.slotdate,i.slottime,i.patientname,i.couponcode,i.couponval,i.price,i.paymenttype,i.email,i.phone,i.address,i.pincode])
+        return response
+    
+    actions = [export]
 # from django.contrib.admin import DateFieldListFilter
-from rangefilter.filters import DateRangeFilter, DateTimeRangeFilter
+
 class aggregatorfilter(SimpleListFilter):
     title = "Aggregator List"  # a label for our filter
     parameter_name = "pages"  # you can put anything here

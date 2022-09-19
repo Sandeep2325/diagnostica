@@ -19614,3 +19614,13 @@ span.date-icon {
     top: -41px!important;
     right: 27px!important;
 }
+
+#slot-date-form .datetimeshortcuts .date-icon {
+    top: -41px!important;
+    right: 27px!important;
+}
+
+#id_slotdate__range__gte,
+#id_slotdate__range__lte {
+    width: 100%;
+}
