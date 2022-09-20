@@ -81,7 +81,7 @@
                                         {%for test in tests%}
                                         
                                         <div class="bg-white br-5 px-4 py-3 mt-2">
-                                            <h5 class="fs-20 font-regular cl-dark-blue overflow-hidden">{{test.testt}}</h5>
+                                            <h5 class="fs-20 font-regular cl-dark-blue overflow-hidden" id="tests">{{test.testt}}</h5>
                                             <div class="row">
                                                 <div class="col-xl-6 col-md-6 test-list">
                                                     <p class="overflow-hidden"> {{test.description}} </p>
@@ -182,7 +182,7 @@
                     $("#main-test-div").empty();
                     for(var i=0; i<resp.length ; i++){
                     var divs = `<div class="bg-white br-5 px-4 py-3 mt-2">
-                        <h5 class="fs-20 font-regular cl-dark-blue ">${resp[i]['testt']}</h5>
+                        <h5 class="fs-20 font-regular cl-dark-blue " id="tests">${resp[i]['testt']}</h5>
                         <div class="row">
                             <div class="col-xl-6 col-md-6 test-list">
                                 <p>${resp[i]['description']} </p>
@@ -200,7 +200,7 @@
                 }else{
                     $("#main-test-div").empty();
                     var divs = `<div class="bg-white br-5 px-4 py-3 mt-2">
-                        <center><h5 class="fs-20 font-regular cl-dark-blue ">No Test Result Found....</h5></center>
+                        <center><h5 class="fs-20 font-regular cl-dark-blue ">Oops! No Test Result Found....</h5></center>
                     
                     </div>`;
                     $("#main-test-div").append(divs);
@@ -227,7 +227,7 @@
                     $("#main-test-div").empty();
                    for(var i=0; i<resp.length ; i++){
                     var divs = `<div class="bg-white br-5 px-4 py-3 mt-2">
-                        <h5 class="fs-20 font-regular cl-dark-blue ">${resp[i]['testt']}</h5>
+                        <h5 class="fs-20 font-regular cl-dark-blue " id="tests">${resp[i]['testt']}</h5>
                         <div class="row">
                             <div class="col-xl-6 col-md-6 test-list">
                                 <p>${resp[i]['description']} </p>
@@ -245,7 +245,7 @@
                 }else{
                     $("#main-test-div").empty();
                     var divs = `<div class="bg-white br-5 px-4 py-3 mt-2">
-                        <center><h5 class="fs-20 font-regular cl-dark-blue ">No Test Result Found....</h5></center>
+                        <center><h5 class="fs-20 font-regular cl-dark-blue ">Oops! No Test Result Found....</h5></center>
                     
                     </div>`;
                     $("#main-test-div").append(divs);
@@ -307,5 +307,6 @@
 }
   }
 });*/
+
 </script>
 {%endblock%}

@@ -790,11 +790,10 @@
             },
             success: function(resp){
              $("#othersspop").empty();
-               var detail=` <h3 class="fs-20 font-bold cl-dark-blue text-center" id="choice">To Whom : ${resp['otherschoice']}</h3>
+               var detail=`<h3 class="fs-20 font-bold cl-dark-blue text-center" id="choice">To Whom : ${resp['otherschoice']}</h3>
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="fistname">First Name : ${resp['firstname']}</h3>
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="lastname">Last Name : ${resp['lastname']}</h3>
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="gender">Gender : ${resp['gender']}</h3>
-
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="age">Age : ${resp['age']}</h3>
                <h3 class="fs-20 font-bold cl-dark-blue text-center" id="phone">Mobile No : ${resp['phone']}</h3>`
                $("#othersspop").append(detail);
@@ -1230,9 +1229,6 @@ function slots(){
     var date=$("#Date").val();
     var city=$("#City").val();
     var pincode=$("#pincode").val();
-    //console.log(date)
-    //console.log(city)
-    //console.log(pincode)
     if (date =="" || city ==null || pincode ==""){
         //$("#sloterror").show();
         $('#sloterror').prop('hidden',false);
@@ -1240,6 +1236,10 @@ function slots(){
     }
     else{
         a=city.split(",")
+        //console.log(date)
+        //console.log(a[1])
+        //console.log(pincode)
+      
     /*var settings = {
     "url": "https://mtqn0qowxc.execute-api.us-east-1.amazonaws.com/get-customer-available-slot",
     "method": "POST",
@@ -1270,7 +1270,7 @@ function slots(){
       "city_code": a[1]
     }),
     success:function(response){
-        console.log(response);
+        //console.log(response);
         if (!response["success"]){
             $("#timeslot").append(`<option value=''>No Slots Availabe</option>`);
             alert("No slots Availabe")
@@ -1278,15 +1278,27 @@ function slots(){
         else{
         for (i in response){
         if (i=="data"){
-            for (j in response[i]){
-                a=response[i][j].slot
-                $("#timeslot").append('<option value=' + a + '>' + a + '</option>');
+            if(response[i].length!=0){
+                for (j in response[i]){
+                    a=response[i][j].slot
+                    $("#timeslot").append('<option value=' + a + '>' + a + '</option>');
+                        }
+                    }
+            else{
+                $("#timeslot").append(`<option value=''>No Slots Availabe</option>`);
                     }
                 }   
             } 
         }
-     }
-  })
+     },
+     error:function(response){
+        console.log(response["status"])
+        if (response["status"]==404){
+            $("#timeslot").append(`<option value=''>No Slots Availabe</option>`);
+                }
+            }   
+        })
+
   /*.done(function (response) {
     console.log(response);
     if (!response["success"]){
@@ -1304,7 +1316,8 @@ function slots(){
     } 
     }
   });*/
+    }
 }
-}
+
 </script>
 {%endblock%}

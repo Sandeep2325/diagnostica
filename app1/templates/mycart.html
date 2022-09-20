@@ -697,13 +697,13 @@ function slots(){
     var date=$("#Date").val();
     var city=$("#City").val();
     var pincode=$("#pincode").val();
-    console.log(date)
-    console.log(city)
-    console.log(pincode)
+    //console.log(date)
+    //console.log(city)
+    //console.log(pincode)
     if (date =="" || city ==null || pincode ==""){
         //$("#sloterror").show();
         $('#sloterror').prop('hidden',false);
-        console.log("Please select date city pincode to select timeslot")
+        //console.log("Please select date city pincode to select timeslot")
         //alert("Please select date city pincode to select timeslot")
     }
     else{
@@ -722,27 +722,35 @@ function slots(){
       "pincode": pincode,
       "city_code": a[1]
     }),
+    error:function(response){
+        $("#timeslot").append(`<option value=''>No Slots Availabe</option>`);
+     }
   };
   $.ajax(settings).done(function (response) {
-    console.log(response["success"])
     if (!response["success"]){
         $("#timeslot").append(`<option value=''>No Slots Availabe</option>`);
         alert("No slots Availabe")
     }
     else{
     for (i in response){
-        if (i=="data"){
+    if (i=="data"){
+        if(response[i].length!=0){
             for (j in response[i]){
-                console.log(response[i][j].slot)
                 a=response[i][j].slot
-                console.log(a)
                 $("#timeslot").append('<option value=' + a + '>' + a + '</option>');
+                }
             }
+        else{
+            if (response["status"]){
+            
+            $("#timeslot").append(`<option value=''>No Slots Availabe</option>`);
+                        }
+                    }
+                }   
+            } 
         }
-    } 
-}
-  });
-}
+      });
+    }
 }
     </script>
 {%endblock%}

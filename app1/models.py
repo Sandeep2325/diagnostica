@@ -1033,7 +1033,7 @@ def aggregatortests(sender, instance, **kwargs):
         if instance.payment_status == False:
             book_history.objects.filter(bookingid=instance.bookingid).update(amount=instance.price,payment_status=False)
         else:
-            book_history.objects.filter(bookingid=instance.bookingid).update(amount=instance.price,payment_status=True) 
+            book_history.objects.filter(bookingid=instance.bookingid).update(amount=instance.price,payment_status=True)
 class gosamplify(models.Model):
     goordernumber=models.CharField(max_length=50,null=True,blank=True,verbose_name="Go samplify Order No")  
     taskid=models.CharField(max_length=70,null=True,blank=True,verbose_name="Task Id")

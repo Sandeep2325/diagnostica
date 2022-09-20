@@ -1,13 +1,16 @@
 # from django.contrib.auth import get_user_model
 from celery import shared_task
 from django.core.mail import send_mail
+from diagnostic.celery import app
 # from diagnostic import settings
 # from django.utils import timezone
 # from datetime import timedelta
 from .models import *
 from django.conf import settings
 from time import sleep
-@shared_task(bind=True)
+# @shared_task(bind=True)
+app.autodiscover_tasks()
+@app.task(bind=True)
 def send_mail_func(self):
     print("----------------")
     send_mail(str("Payment Remainder | Dignostica Span" ),
