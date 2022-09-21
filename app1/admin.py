@@ -706,6 +706,7 @@ class priceadmin(admin.ModelAdmin):
     list_display=["testt","city","price"]
 class paymentadmin(admin.ModelAdmin):
     list_display=["user","paymentid","transid","amount","date"]
+    search_fields=["user__first_name","paymentid","transid"]
     def has_add_permission(self, request):
         return False
 class contactusadmin(admin.ModelAdmin):

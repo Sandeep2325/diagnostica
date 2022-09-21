@@ -1763,7 +1763,10 @@ def paymenthandler(request,str,amount):
                 customerEmailThread(subject, message, [history.user.email]).start()
                 b=request.POST.get('error[metadata]')
                 c=json.loads(b)
-                a=book_history.objects.filter(payment_id=c["order_id"])
+                history=book_history.objects.filter(payment_id=c["order_id"])
+                Prescriptionbook1.objects.filter(bookingid=history.bookingid).delete()
+                testbook.objects.filter(bookingid=history.bookingid).delete()
+                history.delete()
                 error = request.POST.get('error[description]')
                 messages.error(request, error)
                 # return HttpResponseRedirect(reverse("booking-history"))
@@ -2871,3 +2874,5 @@ def sms(message,mobile):
     except Exception as e:
         # print(e)
         return "Your OTP is not delivered Please try again!"
+    
+
