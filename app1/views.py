@@ -1813,7 +1813,11 @@ def paymenthandler(request,str,amount):
                 customerEmailThread(subject, message, [history.user.email]).start()
                 b=request.POST.get('error[metadata]')
                 c=json.loads(b)
-                a=book_history.objects.filter(payment_id=c["order_id"])
+                # a=book_history.objects.filter(payment_id=c["order_id"])
+                history=book_history.objects.filter(payment_id=c["order_id"])
+                Prescriptionbook1.objects.filter(bookingid=history.bookingid).delete()
+                testbook.objects.filter(bookingid=history.bookingid).delete()
+                history.delete()
                 error = request.POST.get('error[description]')
                 messages.error(request, error)
                 # return HttpResponseRedirect(reverse("booking-history"))
@@ -3220,48 +3224,48 @@ def sms(message,mobile):
         # print(e)
         return "Your OTP is not delivered Please try again!"
 
-def creategosamplifyorder():
-    url = "https://mtqn0qowxc.execute-api.us-east-1.amazonaws.com/create-customer-order"
-    payload = json.dumps({
-      "order_ref_id": "cvbcvbncvbn",
-      "lab_code": "DIASPAN",
-      "patient_address": "A-Wing, Flat No-406, Survodya Anand CHS, Beside Demart, Manpada Road, Dombivli east",
-      "patient_pincode": "412207",
-      "patient_phone": "8112271155",
-      "altphone": "8112271155",
-      "date": "17-09-2022",
-      "slot": "20:00-21:00",
-      "patient_email": "test@gmail.com",
-      "patient_landmark": "",
-      "payment_type": "Postpaid",
-      "total_amount": "399",
-      "discount_type": "Flat",
-      "discount_value": "0",
-      "payment_amount": "399",
-      "advance_paid": "100",
-      "payment_to_collect": "299",
-      "is_test": 1,
-      "patients": [
-        {
-          "patient_ref_id": "null",
-          "first_name": "padam",
-          "last_name": "singh",
-          "gender": "Female",
-          "age": "61",
-          "remark": "MEDITEST",
-          "tests": [
-            {
-              "tests_code": "BI205"
-            }
-          ]
-        }
-      ]
-    })
-    headers = {
-      'api-key': '8517db-ff9614-42c7c9-512743-18780d',
-      'customer-code': 'DIS',
-      'Content-Type': 'application/json'
-    }
-    response = requests.request("POST", url, headers=headers, data=payload)
-    # print(response.text)
-    # print(json.loads(response.text))
+# def creategosamplifyorder():
+#     url = "https://mtqn0qowxc.execute-api.us-east-1.amazonaws.com/create-customer-order"
+#     payload = json.dumps({
+#       "order_ref_id": "cvbcvbncvbn",
+#       "lab_code": "DIASPAN",
+#       "patient_address": "A-Wing, Flat No-406, Survodya Anand CHS, Beside Demart, Manpada Road, Dombivli east",
+#       "patient_pincode": "412207",
+#       "patient_phone": "8112271155",
+#       "altphone": "8112271155",
+#       "date": "17-09-2022",
+#       "slot": "20:00-21:00",
+#       "patient_email": "test@gmail.com",
+#       "patient_landmark": "",
+#       "payment_type": "Postpaid",
+#       "total_amount": "399",
+#       "discount_type": "Flat",
+#       "discount_value": "0",
+#       "payment_amount": "399",
+#       "advance_paid": "100",
+#       "payment_to_collect": "299",
+#       "is_test": 1,
+#       "patients": [
+#         {
+#           "patient_ref_id": "null",
+#           "first_name": "padam",
+#           "last_name": "singh",
+#           "gender": "Female",
+#           "age": "61",
+#           "remark": "MEDITEST",
+#           "tests": [
+#             {
+#               "tests_code": "BI205"
+#             }
+#           ]
+#         }
+#       ]
+#     })
+#     headers = {
+#       'api-key': '8517db-ff9614-42c7c9-512743-18780d',
+#       'customer-code': 'DIS',
+#       'Content-Type': 'application/json'
+#     }
+#     response = requests.request("POST", url, headers=headers, data=payload)
+#     # print(response.text)
+#     # print(json.loads(response.text))

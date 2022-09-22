@@ -109,6 +109,7 @@
                                                         <td data-label="Payment Status">Paid</td>
                                                     {%endif%}
                                                     {% comment %} <td data-label="Status">On Process</td> {% endcomment %}
+                                                    
                                                     {%if  bookhistory.payment_status == False%}
                                                     <td data-label="Report">
                                                         {% comment %}<button
@@ -117,6 +118,10 @@
                                                             onclick='paymentFunction("{{bookhistory.uni}}", "false")';
                                                             {% else %}onclick='paymentFunction("{{bookhistory.uni}}", "true")';{% endif %}id="testbooking{{bookhistory.testbooking_id}}">Pay Now</button>
                                                             <br><br> {% endcomment %}
+                                                            {% comment %} {%if bookhistory.booking_type == "Selected Test/Packages"%}
+                                                            <a href="#"
+                                                            class=""><button class="download br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue">Payment Failed</button></a>
+                                                            {%endif%} {% endcomment %}
                                                             {%if bookhistory.paymentmethod == "1"%}
                                                             <a href="#"
                                                             class=""><button class="download br br-5 fs-16 font-bold bg-sky-blue cl-dark-white  text-center accent-blue">COD</button></a>
@@ -396,7 +401,7 @@
                            
                             <div class="row mt-3" id="cpndesc">
                                 <div class="col-8">
-                                    <input class="w-100  form_input " placeholder="Coupon"
+                                    <input class="w-100 form_input" placeholder="Coupon"
                                         id="coupon" name="coupon" type="search" onsearch="coupRemove()" maxlength="15"/>
                                 </div>
                                 <div class="col-4 ps-0">
@@ -1318,6 +1323,17 @@ function slots(){
   });*/
     }
 }
-
+/*$(function() {
+  
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+      localStorage.setItem('lastTab', $(this).attr('href'));
+    });
+    var lastTab = localStorage.getItem('lastTab');
+    
+    if (lastTab) {
+      $('[href="' + lastTab + '"]').tab('show');
+    }
+    
+  });*/
 </script>
 {%endblock%}

@@ -713,17 +713,21 @@ class priceadmin(admin.ModelAdmin):
     list_display=["testt","city","price"]
 class paymentadmin(admin.ModelAdmin):
     list_display=["user","paymentid","transid","amount","date"]
+    search_fields=["user__first_name","paymentid","transid"]
     def has_add_permission(self, request):
         return False
 class contactusadmin(admin.ModelAdmin):
     list_display=["fullname","email","phone","subject","message",'created','updated']
+    search_fields=["fullname","email","phone"]
 class faqadmin(admin.ModelAdmin):
     list_display=["question","answer"]
+    search_fields=["question","answer"]
 class invoiceadmin(admin.ModelAdmin):
     list_display=['order_id',"items","labtest","packages","healthsymptoms","price"]
+    search_fields=["order_id"]
 class couponredeemadmin(admin.ModelAdmin):
     list_display=["user","booking_id",'order_id',"coupon","discountpercen","discountamount","created",]
-    search_fields=["booking_id","coupon","order_id","user"]
+    search_fields=["user__first_name","booking_id","coupon","order_id","user"]
     def export(self,request,queryset):
         response = HttpResponse(
         content_type='text/csv',
