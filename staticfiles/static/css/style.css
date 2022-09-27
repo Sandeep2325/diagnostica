@@ -2002,3 +2002,43 @@ textarea {
         transform: rotate(360deg);
     }
 }
+
+.scrollDown {
+    width: 50px;
+    height: 50px;
+    background-color: #5c62ce;
+    color: white;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    transition: background-color 0.5s ease;
+    z-index: 6000;
+    /* margin-right: 4em;
+    margin-bottom: 2em; */
+    border-radius: 4px;
+    margin-bottom: 31px;
+    margin-right: 95px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+    transition: margin-bottom 0.2s;
+}
+
+.scrollDown i {
+    font-size: 2rem;
+    font-weight: normal;
+    font-style: normal;
+    line-height: 50px;
+    color: #fff;
+}
+
+.scrollDown:hover {
+    cursor: pointer;
+    background-color: #333;
+}
+
+.scrollDown:active {
+    margin-bottom: 1.5rem;
+}

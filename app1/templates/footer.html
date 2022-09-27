@@ -1,8 +1,9 @@
 
 {% load static %}
 <body>
+    
     <a id="button" class="scroll_top"></a>
-
+    
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <a    href= "https://api.whatsapp.com/send/?phone=+919888799994&text=Hello"
       
@@ -224,5 +225,13 @@
           }
          });
        };
+       $(document).ready(function() {
+        //   Create a function
+        $(".scrollDown").click(function(event) {
+          //       Select the body of the page and scroll down by 650 pixels worth
+          $("html, body").animate({ scrollTop: "+=650px" }, 800);
+        });
+      });
+      
 </script>
 

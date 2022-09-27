@@ -112,7 +112,7 @@ class testadmin(admin.ModelAdmin):
             return render(request, "admin/app1/csv_upload.html", data)
 from django.forms.widgets import SelectMultiple,MultiWidget
 class prescriptionbookadmin(admin.ModelAdmin):
-    list_display=["users","bookingid","testname","payment_status","paymentmethod","myself","others","others_choice","firstname","lastname","contact","age","gender","address","timeslot","prescription_file","report","created","updated","action_btn"]        
+    list_display=["users","bookingid","testname","payment_status","paymentmethod","myself","others","others_choice","firstname","lastname","contact","age","gender","landmark","address","timeslot","prescription_file","report","created","updated","action_btn"]        
     readonly_fields=["user","myself","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location","bookingid",'price']
     exclude = ('unique',)
     list_filter = ("myself","others",'paymentmethod','payment_status')
@@ -219,7 +219,7 @@ class prescriptionbookadmin(admin.ModelAdmin):
         return False
 
 class testbookadmin(admin.ModelAdmin):
-    list_display=["users","bookingid","tests","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address","pincode","date","timeslot","report","created","updated","action_btn"]        
+    list_display=["users","bookingid","tests","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","landmark","address","pincode","date","timeslot","report","created","updated","action_btn"]        
     readonly_fields=["user","myself","payment_status","others","others_choice","firstname","lastname","contact","age","gender","created","updated","locationn",'bookingid']
     exclude = ('unique',)
     list_filter = ("myself","others","gender","payment_status")

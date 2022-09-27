@@ -216,6 +216,7 @@ class testbook(models.Model):
     locationn=models.ForeignKey(city,null=True,blank=True,on_delete=models.CASCADE,verbose_name="Location")
     pincode=models.CharField(max_length=100,null=True,blank=True,verbose_name="Pincode")
     address=models.TextField(null=True,blank=True)
+    landmark=models.TextField(null=True,blank=True)
     report=models.FileField(upload_to="report",null=True,blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated = models.DateTimeField(auto_now=True,null=True, blank=True)
@@ -280,6 +281,7 @@ class Prescriptionbook1(models.Model):
     price=models.CharField(max_length=20,null=True,blank=True,verbose_name="Price(Rs)",help_text=mark_safe(_('<p style="color:green">Rs 199 Will be Added As Sample Collection charges</p>')))
     location=models.CharField(max_length=100,null=True,blank=True)
     address=models.TextField(null=True,blank=True)
+    landmark=models.TextField(null=True,blank=True)
     pincode=models.CharField(max_length=100,null=True,blank=True,verbose_name="Pincode")
     paymentmethod=models.CharField(
         choices=PAYMENT_METHOD,
@@ -339,7 +341,7 @@ def testbookings(sender, instance, **kwargs):
 
             elif instance.location=="Aurangabad":
                 a.append(i.aurangabad_price)
-
+        # print("----",a)
         if sum(a)!=0:
             book_history.objects.filter(uni=instance.bookingid).update(amount=sum(a)+shipping_charges)
             Prescriptionbook1.objects.filter(bookingid=instance.bookingid).update(price=sum(a)+shipping_charges)

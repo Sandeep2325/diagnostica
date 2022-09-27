@@ -7,8 +7,12 @@
                 <a class="navbar-brand"  href="{%url "home"%}"><img src="{%static "images/image_logo.png"%}" alt="" class="img-fluid logo-img" /></a>
                 <ul class="mb-0 ps-0 ms-auto d-flex d-lg-none align-items-center">
                     <li class="nav-item dropdown">
+                      
                         <a class="pe-2 dropdown-toggle " href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="{%static 'images/bg-user.png' %}" alt="" class="w-20" />
+                            {% comment %} {% if user.is_authenticated %}  
+                               Hello {{request.user.first_name}}
+                                {%endif%} {% endcomment %}
                         </a>
                         <ul class="dropdown-menu " aria-labelledby="navbarScrollingDropdown">
                              {% if user.is_authenticated %}  
@@ -65,10 +69,18 @@
                         <a class="nav-link nav_button book" href="{%url "testselect"%}"><i class="fa fa-search pe-2"
                             aria-hidden="true"></i>Lab Tests</a>
                         </li>
+                        {% comment %} <li class="nav-item">
+                          <a>Hello {{request.user.first_name}}</a>
+                          </li> {% endcomment %}
+                      </li>
                         <li class="nav-item dropdown d-lg-block d-none">
                             <a class="nav-link dropdown-toggle DropDownToggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src="{%static 'images/bg-user.png' %}" alt="" class="w-20" />
-                            </a>
+                                {% comment %} {% if user.is_authenticated %}  
+                               Hello {{request.user.first_name}}
+                                {%endif%} {% endcomment %}
+                              </a>
+                            
                             <ul class="dropdown-menu" id="ulDropDown" aria-labelledby="navbarScrollingDropdown">
                               {% if user.is_authenticated %} 
                                 <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>

@@ -54,7 +54,7 @@ Barshi=env("Barshi")
 Aurangabad=env("Aurangabad")
 shipping_charges=199
 reachus=["reachus@spanhealth.com"]
-# reachus=["sandeep@gmail.com"]
+# reachus=["testing@gmail.com"]
 class customerEmailThread(threading.Thread):
     def __init__(self, subject, message, recipient_list):
         self.subject = subject
@@ -141,6 +141,7 @@ def cityy(request):
     return JsonResponse({"message":True,"city":city})
 
 def Registration(request):
+    request.session["city"]="Bangalore"
     if request.method == "POST":
         fm = UserRegistrationForm(request.POST)
         up = UserProfileForm(request.POST)
@@ -191,6 +192,7 @@ def Registration(request):
     return render(request,'register.html')
 
 def otpRegistration(request):
+    
     if request.session.get("email") == None:
         return HttpResponseRedirect(reverse("Registration"))
     if request.method == "POST":
@@ -700,6 +702,7 @@ def newsletter(request):
 def home(request):
     # request.session["city"]="Bangalore"
     # request.session["city"]="Bangalore"
+    request.session["city"]="Bangalore"
     deviceCookie = request.COOKIES.get('device')
     c=request.session.get("city")
     envcity={"Bangalore":Bangalore,"Mumbai":Mumbai,"Bhophal":Bhophal,"Nanded":Nanded,"Pune":Pune,"Barshi":Barshi,"Aurangabad":Aurangabad}
@@ -1008,11 +1011,13 @@ def categoryblog(request,slug):
     return render(request,'blogdetail.html',context)
 @login_required(login_url="/login/")   
 def prescriptionbookview(request):
+    request.session["city"]="Bangalore"
     # if request.user.is_anonymous:
     #     # return redirect("user-login")
     #     return HttpResponseRedirect(reverse("user-login"))
     # else:
     c=request.session.get("city")
+    print("-------------",c)
     if request.user.is_anonymous:
         return HttpResponseRedirect(reverse("user-login"))
    
@@ -1037,7 +1042,6 @@ def prescriptionbookview(request):
             res = temp.match(i.bookingid).groups()
         try: 
             booking=int(res[1])+1
-        
             if str(booking)==str(bid):
                 bookingid="DP"+str(bid)
             else:    
@@ -1123,6 +1127,7 @@ def prescriptionbookview(request):
         
 # @login_required(login_url="login/")  
 def testselect(request):
+    request.session["city"]="Bangalore"
     deviceCookie = request.COOKIES['device']
     c=request.session.get("city")
     tcategories=category.objects.all()
@@ -1211,6 +1216,7 @@ def couponsessiondelete(request):
 razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
 
 def cartt(request):
+    request.session["city"]="Bangalore"
     deviceCookie = request.COOKIES.get('device')
     cit=city.objects.filter(active=True)
     if not request.user.is_anonymous:
@@ -1231,6 +1237,7 @@ def cartt(request):
         date=request.POST.get('date')
         location=request.POST.get('location')
         pincode=request.POST.get('pincode')
+        landmark=request.POST.get("landmark")
         # print("----------------------------",timeslot)
         global uniquee
         uniquee = uuid.uuid4()
@@ -1291,11 +1298,11 @@ def cartt(request):
         scheme=request.scheme
         urll=request.get_host()
         # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,amount)
-        # callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
+        callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
         # print("----------------",callback_url)
         # print(call)
         # print(callback_url)
-        callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
+        # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
         context['razorpay_order_id'] = razorpay_order_id
         context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
         context['razorpay_amount'] = amount
@@ -1333,6 +1340,7 @@ def cartt(request):
                 pincode=pincode,
                 date=date,
                 address=address,
+                landmark=landmark,
                 timeslot=timeslot,
                 bookingid=bookingid,)
         data=testbook.objects.get(unique=uniquee) 
@@ -2446,18 +2454,19 @@ class BookingHistoryPay(LoginRequiredMixin,View):
         if request.POST.get("action") == "retreive_data":
             # print("--------",request.POST)
             id=request.POST.get('id')
-            date=request.POST["date"]
-            citid=request.POST["city"]
-            address=request.POST["address"]
-            pincode=request.POST["pincode"]
-            paymentmethod=request.POST["paymentmethod"]
+            date=request.POST.get("date")
+            citid=request.POST.get("city")
+            address=request.POST.get("address")
+            pincode=request.POST.get("pincode")
+            paymentmethod=request.POST.get("paymentmethod")
             coupon=request.POST.get("coupon")
-            amount=request.POST["amount"]
+            amount=request.POST.get("amount")
+            landmark=request.POST.get("landmark")
             price=float(amount.split("₹ ")[1])
             try:
                 coup=coupons.objects.get(couponcode=coupon)
                 citi=city.objects.get(id=int(citid))
-                Prescriptionbook1.objects.filter(bookingid=id).update(date=date,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,coupon=coup,price=price)
+                Prescriptionbook1.objects.filter(bookingid=id).update(date=date,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,coupon=coup,price=price,landmark=landmark)
                 mod = book_history.objects.get(uni=id)
                 mod.amount=price
                 client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
@@ -2495,7 +2504,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 }
             except:
                 citi=city.objects.get(id=int(citid))
-                Prescriptionbook1.objects.filter(bookingid=id).update(date=date,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod)
+                Prescriptionbook1.objects.filter(bookingid=id).update(date=date,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,landmark=landmark)
                 mod = book_history.objects.get(uni=id)
                
                 client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
@@ -2561,20 +2570,22 @@ class BookingHistoryPay(LoginRequiredMixin,View):
             mod.save()
             to_return = {"valid":True}
         if request.POST.get("action") == "COD":
-            print("-------",request.POST)
-            id=request.POST["id"]
-            date=request.POST["date"]
-            citid=request.POST["city"]
-            address=request.POST["address"]
-            pincode=request.POST["pincode"]
-            paymentmethod=request.POST["paymentmethod"]
+            # print("-----------------------")
+            # print("-------",request.POST)
+            id=request.POST.get("id")
+            date=request.POST.get("date")
+            citid=request.POST.get("city")
+            address=request.POST.get("address")
+            pincode=request.POST.get("pincode")
+            paymentmethod=request.POST.get("paymentmethod")
             coupon=request.POST.get("coupon")
-            amount=request.POST["amount"]
+            amount=request.POST.get("amount")
+            landmark=request.POST.get("landmark")
             price=float(amount.split("₹ ")[1])
             try:
                 a=coupons.objects.get(couponcode=coupon)
                 citi=city.objects.get(id=int(citid))
-                Prescriptionbook1.objects.filter(bookingid=id).update(date=date,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,coupon=a,price=price)
+                Prescriptionbook1.objects.filter(bookingid=id).update(date=date,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,coupon=a,price=price,landmark=landmark)
                 book_history.objects.filter(uni=id).update(amount=price)
                 history=book_history.objects.get(uni=id)
                 coupon=request.session.get("coupon")
@@ -2607,7 +2618,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 AdminEmailThread(subject, mes, reachus).start()
             except:
                 citi=city.objects.get(id=int(citid))
-                Prescriptionbook1.objects.filter(bookingid=id).update(date=date,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod)
+                Prescriptionbook1.objects.filter(bookingid=id).update(date=date,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,landmark=landmark)
                 email_from = settings.EMAIL_HOST_USER
                 subject=f"Cash On Collection | DIAGNOSTICA SPAN | Booking Id:{id}"
                 mes=f"Cash On Delivery Booking for Booking ID:{id}\nPlease Checkit"

@@ -275,6 +275,9 @@
                                 <textarea rows="2" class="w-100 myself_other form_input mt-3" placeholder="Address" name="address1" id="address1" type="text" ></textarea>
                             </div>
                             <div>
+                                <textarea rows="2" class="w-100 myself_other form_input mt-3" placeholder="Landmark" name="landmark" id="landmark" type="text" ></textarea>
+                            </div>
+                            <div>
                                 <input class="w-100  form_input mt-3" placeholder="Pincode" name="pincode" id="pincode" type="number" pattern=".{6,6}"/>
                                 <p class="error pincodeerror"><p>
                             </div>
@@ -422,12 +425,13 @@
             var date=$("#Date").val();
             var city=$("#City").val();
             var address=$("#address1").val();
+            var landmark=$("#landmark").val();
             var pincode=$("#pincode").val();
             var paymentmethod=$("#paymentmethod").val();
             var coupon=$("#coupon").val();
             var amount=$("#totalprice").html();
             //console.log(paymentmethod)
-            if (timeslot==null || date=='' || city==null || address=='' || pincode=='' || paymentmethod==null){
+            if (timeslot==null || date=='' || city==null || address=='' || pincode=='' || paymentmethod==null || landmark==''){
                 $(".pincodeerror").html("")
                 swal("", "Please update every field", "warning");
             }
@@ -448,6 +452,7 @@
                                 date:date,
                                 city:city,
                                 address:address,
+                                landmark:landmark,
                                 pincode:pincode,
                                 paymentmethod:paymentmethod,
                                 coupon:coupon,
@@ -510,6 +515,7 @@
                             date:date,
                             city:city,
                             address:address,
+                            landmark:landmark,
                             pincode:pincode,
                             paymentmethod:paymentmethod,
                             amount:amount,
