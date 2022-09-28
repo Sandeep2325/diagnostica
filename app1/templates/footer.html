@@ -227,5 +227,12 @@
           }
          });
        };
+       $(document).ready(function() {
+        //   Create a function
+        $(".scrollDown").click(function(event) {
+          //       Select the body of the page and scroll down by 650 pixels worth
+          $("html, body").animate({ scrollTop: "+=650px" }, 800);
+        });
+      });
 </script>
 

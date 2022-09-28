@@ -1,6 +1,5 @@
 import itertools
 import re
-
 import os
 # import sweetify
 from django.shortcuts import render,redirect
@@ -1226,6 +1225,7 @@ def cartt(request):
         date=request.POST.get('date')
         location=request.POST.get('location')
         pincode=request.POST.get('pincode')
+        landmark=request.POST.get("landmark")
         amount=request.POST["amount"]
         global uniquee
         uniquee = uuid.uuid4()
@@ -1295,7 +1295,7 @@ def cartt(request):
           "date": date,
           "slot": timeslot,
           "patient_email": request.user.email,
-          "patient_landmark": "",
+          "patient_landmark": landmark,
           "payment_type": "Prepaid",
           "total_amount": amount,
           "discount_type": "Percentage",
@@ -1403,6 +1403,7 @@ def cartt(request):
                     pincode=pincode,
                     date=date,
                     address=address,
+                    landmark=landmark,
                     timeslot=timeslot,
                     bookingid=bookingid,)
             data=testbook.objects.get(unique=uniquee) 
@@ -2522,6 +2523,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
             paymentmethod=request.POST["paymentmethod"]
             coupon=request.POST.get("coupon")
             amount=request.POST["amount"]
+            landmark=request.POST.get("landmark")
             price=float(amount.split("₹ ")[1])
             cc=citid.split(',')
             presc=Prescriptionbook1.objects.get(bookingid=id)
@@ -2548,7 +2550,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                   "date": date,
                   "slot": timeslot,
                   "patient_email": request.user.email,
-                  "patient_landmark": "",
+                  "patient_landmark": landmark,
                   "payment_type": "Prepaid",
                   "total_amount": price,
                   "discount_type": "Percentage",
@@ -2599,7 +2601,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 try:
                     coup=coupons.objects.get(couponcode=coupon)
                     citi=city.objects.get(id=int(cc[0]))
-                    Prescriptionbook1.objects.filter(bookingid=id).update(date=date,timeslot=timeslot,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,coupon=coup,price=price)
+                    Prescriptionbook1.objects.filter(bookingid=id).update(date=date,timeslot=timeslot,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,coupon=coup,price=price,landmark=landmark)
                     mod = book_history.objects.get(uni=id)
                     mod.amount=price
                     client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
@@ -2635,7 +2637,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                     }
                 except:
                     citi=city.objects.get(id=int(cc[0]))
-                    Prescriptionbook1.objects.filter(bookingid=id).update(date=date,timeslot=timeslot,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod)
+                    Prescriptionbook1.objects.filter(bookingid=id).update(date=date,timeslot=timeslot,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,landmark=landmark)
                     mod = book_history.objects.get(uni=id)
 
                     client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
@@ -2715,15 +2717,16 @@ class BookingHistoryPay(LoginRequiredMixin,View):
             gos.delete()
             to_return = {"valid":True}
         if request.POST.get("action") == "COD":
-            id=request.POST["id"]
-            date=request.POST["date"]
+            id=request.POST.get("id")
+            date=request.POST.get("date")
             timeslot=request.POST.get("timeslot")
-            citid=request.POST["city"]
-            address=request.POST["address"]
-            pincode=request.POST["pincode"]
-            paymentmethod=request.POST["paymentmethod"]
+            citid=request.POST.get("city")
+            address=request.POST.get("address")
+            pincode=request.POST.get("pincode")
+            paymentmethod=request.POST.get("paymentmethod")
             coupon=request.POST.get("coupon")
-            amount=request.POST["amount"]
+            amount=request.POST.get("amount")
+            landmark=request.POST.get("landmark")
             price=float(amount.split("₹ ")[1])
             presc=Prescriptionbook1.objects.get(bookingid=id)
             cc=citid.split(',')
@@ -2749,7 +2752,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                   "date": date,
                   "slot": timeslot,
                   "patient_email": request.user.email,
-                  "patient_landmark": "",
+                  "patient_landmark": landmark,
                   "payment_type": "Postpaid",
                   "total_amount": price,
                   "discount_type": "Percentage",
@@ -2800,7 +2803,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 try:
                     a=coupons.objects.get(couponcode=coupon)
                     citi=city.objects.get(id=int(cc[0]))
-                    Prescriptionbook1.objects.filter(bookingid=id).update(date=date,timeslot=timeslot,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,coupon=a,price=price)
+                    Prescriptionbook1.objects.filter(bookingid=id).update(date=date,timeslot=timeslot,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,coupon=a,price=price,landmark=landmark)
                     book_history.objects.filter(uni=id).update(amount=price)
                     history=book_history.objects.get(uni=id)
                     coupon=request.session.get("coupon")
@@ -2827,7 +2830,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                     AdminEmailThread(subject, mes, reachus).start()
                 except:
                     citi=city.objects.get(id=int(cc[0]))
-                    Prescriptionbook1.objects.filter(bookingid=id).update(date=date,timeslot=timeslot,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod)
+                    Prescriptionbook1.objects.filter(bookingid=id).update(date=date,timeslot=timeslot,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,landmark=landmark)
                     email_from = settings.EMAIL_HOST_USER
                     subject=f"Cash On Collection | DIAGNOSTICA SPAN | Booking Id:{id}"
                     mes=f"Cash On Collection Booking for Booking ID:{id}\nPlease Checkit"
@@ -3213,6 +3216,9 @@ def sms(message,mobile):
         url=f"""https://www.smsidea.co.in/smsstatuswithid.aspx?mobile=9986788880&pass=Malatesh@78&senderid=SPANDS&to={mobile}&msg={message}"""
         # url=f"""https://www.smsidea.co.in/smsstatuswithid.aspx?mobile=9986788880&pass=Malatesh@78&senderid=SPANDS&to={mobile}&msg={message}&peid=1501615380000049113&templateid={templateid}"""
         connection=requests.get(url)
+        # b=json.loads(connection.text)
+        # print("----",connection.text)
+        # res=json.loads(response.text)
         a=connection.text.split(":")
         deliveryurl=f"""https://www.smsidea.co.in/sms/api/msgstatus.aspx?mobile=9986788880&pass=Malatesh@78&msgtempid={a[1].strip()}"""
         deliveryconnection=requests.get(deliveryurl)
@@ -3221,7 +3227,7 @@ def sms(message,mobile):
         else:
             return "Your OTP sent your registered mobile number and Email Id"
     except Exception as e:
-        # print(e)
+        print(e)
         return "Your OTP is not delivered Please try again!"
 
 # def creategosamplifyorder():

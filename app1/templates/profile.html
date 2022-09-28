@@ -33,7 +33,7 @@
                                     {% if request.user.photo %}
                                     <img id="profilePic" class="pic" src="{{request.user.photo.url}}">
                                     {% else %}
-                                    <img id="profilePic" class="pic" src="https://www.kindpng.com/picc/m/252-2524695_dummy-profile-image-jpg-hd-png-download.png">
+                                    <img id="profilePic" class="pic" src="{%static 'images/user.png' %}">
                                     {% endif %}
                                     <label for="newProfilePhoto" class="upload-file-block">
                                         <div class="text-center">

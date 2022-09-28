@@ -233,6 +233,9 @@
                                 <textarea rows="2" class="w-100 myself_other form_input mt-3" placeholder="Address" name="address1" id="address" type="text" ></textarea>
                             </div>
                             <div>
+                                <textarea rows="2" class="w-100 myself_other form_input mt-3" placeholder="Landmark" name="landmark" id="landmark" type="text" ></textarea>
+                            </div>
+                            <div>
                                 <input class="w-100  form_input mt-3" placeholder="Pincode" name="pincode" id="pincode" type="number" maxlength="250"/>
                             </div>
                             <div>
@@ -515,6 +518,10 @@ $(document).ready(function(){
                 required: true,
                 minlength: 1,
             },
+            'landmark':{
+                required: true,
+                minlength: 1,
+            },
             'option1': {
                 required: true,
             },
@@ -591,6 +598,7 @@ $(document).ready(function(){
                     var date=$("#Date").val();
                     var location=$("#City").val();
                     var pincode=$("#pincode").val();
+                    var landmark=$("#landmark").val();
                     var total;
                     if(AMOUNT==0){
                         
@@ -618,6 +626,7 @@ $(document).ready(function(){
                             "date":date,
                             "location":location,
                             "pincode":pincode,
+                            "landmark":landmark,
                             csrfmiddlewaretoken:'{{ csrf_token }}',
                            },
                            dataType: "json",
@@ -723,12 +732,12 @@ function slots(){
       "city_code": a[1]
     }),
     error:function(response){
-        $("#timeslot").append(`<option value=''>No Slots Availabe</option>`);
+        $("#timeslot").append(`<option value='' disabled>No Slots Availabe</option>`);
      }
   };
   $.ajax(settings).done(function (response) {
     if (!response["success"]){
-        $("#timeslot").append(`<option value=''>No Slots Availabe</option>`);
+        $("#timeslot").append(`<option value='' disabled>No Slots Availabe</option>`);
         alert("No slots Availabe")
     }
     else{
@@ -743,7 +752,7 @@ function slots(){
         else{
             if (response["status"]){
             
-            $("#timeslot").append(`<option value=''>No Slots Availabe</option>`);
+            $("#timeslot").append(`<option value='' disabled>No Slots Availabe</option>`);
                         }
                     }
                 }   

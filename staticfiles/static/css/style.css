@@ -445,7 +445,7 @@ textarea {
 }
 
 .banner2 {
-    background: url(../images/banner2.png) no-repeat;
+    background: url(../images/banner04.png) no-repeat;
     background-size: cover;
     min-height: 450px;
     border-radius: 15px;
@@ -1514,7 +1514,21 @@ textarea {
         min-height: 380px;
     }
     .section_nav_bar .logo-img {
-        width: 175px;
+        width: 140px;
+    }
+    .photoafterlogin {
+        width: 35px!important;
+        height: 35px!important;
+        border-radius: 50%!important;
+    }
+    .header_tgl_btn {
+        font-size: 20px!important;
+    }
+    .navbar-toggler {
+        padding: 0px!important;
+    }
+    .w-22 {
+        width: 19px;
     }
     h1,
     .fs-40 {
@@ -2092,4 +2106,44 @@ textarea {
 .drop.first {
     height: 35px;
     margin-bottom: -20px;
+}
+
+.scrollDown {
+    width: 50px;
+    height: 50px;
+    background-color: #5c62ce;
+    color: white;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    transition: background-color 0.5s ease;
+    z-index: 6000;
+    /* margin-right: 4em;
+    margin-bottom: 2em; */
+    border-radius: 4px;
+    margin-bottom: 31px;
+    margin-right: 95px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+    transition: margin-bottom 0.2s;
+}
+
+.scrollDown i {
+    font-size: 2rem;
+    font-weight: normal;
+    font-style: normal;
+    line-height: 50px;
+    color: #fff;
+}
+
+.scrollDown:hover {
+    cursor: pointer;
+    background-color: #333;
+}
+
+.scrollDown:active {
+    margin-bottom: 1.5rem;
 }

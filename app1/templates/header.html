@@ -5,22 +5,34 @@
             <nav class="navbar navbar-expand-lg">
                 <a class="navbar-brand"  href="{%url "home"%}"><img src="{%static "images/image_logo.png"%}" alt="" class="img-fluid logo-img" /></a>
                 <ul class="mb-0 ps-0 ms-auto d-flex d-lg-none align-items-center">
-                    <li class="nav-item dropdown">
+                  <li class="nav-item dropdown">
+                    {% if user.is_authenticated %} 
+                        {% if request.user.photo %}
                         <a class="pe-2 dropdown-toggle " href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="{%static 'images/bg-user.png' %}" alt="" class="w-20" />
-                        </a>
-                        <ul class="dropdown-menu " aria-labelledby="navbarScrollingDropdown">
-                             {% if user.is_authenticated %}  
-                            <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
-                            <li><a class="dropdown-item" href="{% url 'booking-history' %}">Booking History</a></li>
-                            <li><a class="dropdown-item" href="{% url 'changepassword' %}">Change password</a></li>
-                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
-                             {% else %} 
-                            <li><a class="dropdown-item" href="{% url 'user-login' %}">Login</a></li>
-                            <li><a class="dropdown-item" href="{% url 'Registration' %}">Register</a></li>
-                            {% endif%} 
-                        </ul>
-                    </li>
+                          <img src="{{request.user.photo.url}}" alt="" class="w-20 photoafterlogin" />
+                      </a>
+                      {%else%}
+                            <a class="nav-link dropdown-toggle DropDownToggle " href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              <img src="{%static 'images/user.png' %}" alt="" class="w-20 photoafterlogin" />
+                            </a>
+                            {%endif%}
+                            {%else%}
+                            <a class="pe-2 dropdown-toggle " href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              <img src="{%static 'images/bg-user.png' %}" alt="" class="w-20" />
+                          </a>
+                          {%endif%}
+                      <ul class="dropdown-menu " aria-labelledby="navbarScrollingDropdown">
+                           {% if user.is_authenticated %}  
+                          <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+                          <li><a class="dropdown-item" href="{% url 'booking-history' %}">Booking History</a></li>
+                          <li><a class="dropdown-item" href="{% url 'changepassword' %}">Change password</a></li>
+                          <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                           {% else %} 
+                          <li><a class="dropdown-item" href="{% url 'user-login' %}">Login</a></li>
+                          <li><a class="dropdown-item" href="{% url 'Registration' %}">Register</a></li>
+                          {% endif%} 
+                      </ul>
+                  </li>
                     <li class="nav-item">
                     <a class="px-1" href="{%url "cart"%}"><img src="{%static "images/bg-cart.png"%}" alt="" class="w-22" />
                      <sup>
@@ -65,9 +77,25 @@
                             aria-hidden="true"></i>Lab Tests</a>
                         </li>
                         <li class="nav-item dropdown d-lg-block d-none">
-                            <a class="nav-link dropdown-toggle DropDownToggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="{%static 'images/bg-user.png' %}" alt="" class="w-20" />
-                            </a>
+                          {% if user.is_authenticated %} 
+                          {% if request.user.photo %}
+                            <a class="nav-link dropdown-toggle DropDownToggle " href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="{{request.user.photo.url}}" alt="" class="w-20 photoafterlogin" />
+                                {% comment %} {% if user.is_authenticated %}  
+                               Hello {{request.user.first_name}}
+                                {%endif%} {% endcomment %}
+                              </a>
+                              {%else%}
+                              <a class="nav-link dropdown-toggle DropDownToggle " href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="{%static 'images/user.png' %}" alt="" class="w-20 photoafterlogin" />
+                              </a>
+                                {%endif%}
+                            {%else%}
+                            <a class="pe-2 dropdown-toggle " href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              <img src="{%static 'images/bg-user.png' %}" alt="" class="w-20" />
+                          </a>
+                           
+                            {%endif%}
                             <ul class="dropdown-menu" id="ulDropDown" aria-labelledby="navbarScrollingDropdown">
                               {% if user.is_authenticated %} 
                                 <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
@@ -78,6 +106,7 @@
                                 <li><a class="dropdown-item" href="{% url 'user-login' %}">Login</a></li>
                                 <li><a class="dropdown-item" href="{% url 'Registration' %}">Register</a></li>
                                 {% endif%}
+
                             </ul>
                         </li>
                         <li class="nav-item d-lg-block d-none">

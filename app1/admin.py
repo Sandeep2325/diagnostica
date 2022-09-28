@@ -115,7 +115,7 @@ class testadmin(admin.ModelAdmin):
             return render(request, "admin/app1/csv_upload.html", data)
 from django.forms.widgets import SelectMultiple,MultiWidget
 class prescriptionbookadmin(admin.ModelAdmin):
-    list_display=["users","bookingid","testname","payment_status","paymentmethod","myself","others","others_choice","firstname","lastname","contact","age","gender","address","timeslot","prescription_file","report","created","updated","action_btn"]        
+    list_display=["users","bookingid","testname","payment_status","paymentmethod","myself","others","others_choice","firstname","lastname","contact","age","gender","landmark","address","timeslot","prescription_file","report","created","updated","action_btn"]        
     readonly_fields=["user","myself","others","others_choice","firstname","lastname","contact","age","gender","created","updated","location","bookingid",'price']
     exclude = ('unique',)
     list_filter = ("myself","others",'paymentmethod','payment_status')
@@ -224,7 +224,7 @@ class prescriptionbookadmin(admin.ModelAdmin):
         return False
 
 class testbookadmin(admin.ModelAdmin):
-    list_display=["users","bookingid","tests","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","address","pincode","date","timeslot","report","created","updated","action_btn"]        
+    list_display=["users","bookingid","tests","payment_status","myself","others","others_choice","firstname","lastname","contact","age","gender","landmark","address","pincode","date","timeslot","report","created","updated","action_btn"]        
     readonly_fields=["user","myself","payment_status","others","others_choice","firstname","lastname","contact","age","gender","created","updated","locationn",'bookingid']
     exclude = ('unique',)
     list_filter = ("myself","others","gender","payment_status")
@@ -537,7 +537,7 @@ class UserAdmin(OriginalUserAdmin):
         form = super(UserAdmin, self).get_form(request, obj, **kwargs)
         if 'user_permissions' in form.base_fields:
             permissions = form.base_fields['user_permissions']
-            permissions.queryset = permissions.queryset.exclude(content_type__app_label__in=['admin', 'auth','sessions','django_summernote','contenttypes','admin_black','django_celery','django_celery_beat'])
+            permissions.queryset = permissions.queryset.exclude(content_type__app_label__in=['admin', 'auth','sessions','django_summernote','contenttypes','admin_black','django_celery','django_celery_beat','django_celery_results'])
         return form
     def action_btn(self, obj):
         html = "<div class='field-action_btn d-flex m-8'> <a class='fa fa-edit ml-2' href='/admin/app1/user/" + \
@@ -858,7 +858,7 @@ class MyGroupAdminForm(forms.ModelForm):
         fields = ('name', 'permissions')
 
     permissions = forms.ModelMultipleChoiceField(
-        Permission.objects.exclude(content_type__app_label__in=['admin', 'auth','sessions','django_summernote','contenttypes','admin_black','django_celery','django_celery_beat']),
+        Permission.objects.exclude(content_type__app_label__in=['admin', 'auth','sessions','django_summernote','contenttypes','admin_black','django_celery','django_celery_beat','django_celery_results']),
         widget=admin.widgets.FilteredSelectMultiple(_('permissions'), False))
 
 class MyGroupAdmin(admin.ModelAdmin):

@@ -40,7 +40,6 @@
                                                 class="cl-dark-white fs-14 font-bold lh-10">Upload Here</a>
                                         </div>
                                     </div>
-
                                     <div class="px-xl-4 col-lg-6 mx-auto  px-lg-5 px-4 py-4">
                                         <div class="bg-dark-green br-15 px-5 py-4 text-center ">
                                             <h2 class="cl-dark-white fs-40  font-bold mb-3 pb-2">Choose Test Lists
@@ -65,7 +64,6 @@
                                                     class="br-5 cl-dark-blue fs-18 form-select br select_option"
                                                     type="select" name="" id="category">
                                                     <option selected class="opc-5" value="all">All Category</option>
-                                                    
                                                     {%for category in categories%}
                                                     <option  value={{category.id}}>{{category.categoryy}}</option>
                                                     {%endfor%}
@@ -75,6 +73,23 @@
                                             <div class="col-lg-5 col-sm-6 position-relative py-lg-4 pb-3">
                                                 <input class="w-100 form_input" id="searched" placeholder="Search" name="searched" maxlength="250" />
                                                 {% comment %} <button  type="submit"class="br">  <i class="fa fa-search test-list-search" aria-hidden="true"></i></button> {% endcomment %}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-5 col-sm-6 position-relative py-lg-2 pb-1">
+                                               
+                                                    <div class="pb-1">  <a href="{% url 'packages' %}"><button
+                                                            class="bg-dark-orange px-4 py-2 fs-16 font-bold cl-dark-blue br-50 br mb-2">Health Packages
+                                                        </button></a></div>
+                                                
+                                            </div>
+
+                                            <div class="col-lg-5 col-sm-6 position-relative py-lg-2 pb-1">
+                                                
+                                                    <div class="pb-1"><a href="{%url "lifestyles"%}"><button
+                                                            class="bg-dark-orange px-4 py-2 fs-16 font-bold cl-dark-blue br-50 br mb-2">Life Style Assessments
+                                                        </button> </a></div>
+                                               
                                             </div>
                                         </div>
                                         <div id="main-test-div">
@@ -130,7 +145,6 @@
                                         {%endfor%}
                                     </div>
                                     </div>
-                                  
                                     </div>
                                 </div>
                             </div>
@@ -140,6 +154,9 @@
             </div>
         </div>
     </section>
+    <div class="scrollDown">
+        <i class="fa fa-arrow-circle-down" aria-hidden="true"></i>
+      </div>
     {%include "footer.html"%}
 </body>
 
