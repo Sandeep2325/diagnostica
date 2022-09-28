@@ -1787,6 +1787,10 @@ textarea {
     .health_symptoms_table_td {
         min-width: 400px;
     }
+    .scrollDown {
+        margin-bottom: 88px!important;
+        margin-right: 30px!important;
+    }
 }
 
 @media (min-width: 992px) and (max-width: 1199.98px) {
