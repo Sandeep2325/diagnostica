@@ -77,26 +77,30 @@
                                                 {% comment %} <button  type="submit"class="br">  <i class="fa fa-search test-list-search" aria-hidden="true"></i></button> {% endcomment %}
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-lg-5 col-sm-6 position-relative py-lg-2 pb-1">
-                                               
+                                        {% comment %} <div class="row"> {% endcomment %}
+                                            {% comment %} <div id="main-test-div d-flex"> {% endcomment %}
+                                            <div class="bg-white br-5 px-4 py-3 mt-2 d-md-flex justify-content-md-between">
+                                                <h5 class="fs-20 font-regular mt-3">Health Packages</h5>
                                                     <div class="pb-1">  <a href="{% url 'packages' %}"><button
-                                                            class="bg-dark-orange px-4 py-2 fs-16 font-bold cl-dark-blue br-50 br mb-2">Health Packages
+                                                            class="bg-dark-orange px-4 py-2 fs-16 font-bold cl-dark-blue br-50 br mt-2">Click Here
                                                         </button></a></div>
-                                                
+                                                        <div class="centerline"></div>
+                                                        <h5 class="fs-20 font-regular mt-3">Lifestyle Assessments</h5>
+                                                        <div class="pb-1"><a href="{%url "lifestyles"%}"><button
+                                                                class="bg-dark-orange px-4 py-2 fs-16 font-bold cl-dark-blue br-50 br mt-2">Click Here
+                                                            </button> </a></div>
                                             </div>
 
-                                            <div class="col-lg-5 col-sm-6 position-relative py-lg-2 pb-1">
-                                                
+                                            {% comment %} <div class="col-lg-5 col-md-6 position-relative py-lg-2 pb-1 d-flex justify-content-between">
+                                                <h5 class="fs-20 font-regular mt-2">Lifestyle Assessments</h5>
                                                     <div class="pb-1"><a href="{%url "lifestyles"%}"><button
-                                                            class="bg-dark-orange px-4 py-2 fs-16 font-bold cl-dark-blue br-50 br mb-2">Life Style Assessments
+                                                            class="bg-dark-orange px-4 py-2 fs-16 font-bold cl-dark-blue br-50 br mb-2">Click Here
                                                         </button> </a></div>
-                                               
-                                            </div>
-                                        </div>
+                                            </div> {% endcomment %}
+                                        {% comment %} </div> {% endcomment %}
+                                        {% comment %} </div> {% endcomment %}
                                         <div id="main-test-div">
                                         {%for test in tests%}
-                                        
                                         <div class="bg-white br-5 px-4 py-3 mt-2">
                                             <h5 class="fs-20 font-regular cl-dark-blue overflow-hidden">{{test.testt}}</h5>
                                             <div class="row">

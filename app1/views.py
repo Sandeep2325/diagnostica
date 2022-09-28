@@ -702,7 +702,7 @@ def newsletter(request):
 def home(request):
     # request.session["city"]="Bangalore"
     # request.session["city"]="Bangalore"
-    request.session["city"]="Bangalore"
+    # request.session["city"]="Bangalore"
     deviceCookie = request.COOKIES.get('device')
     c=request.session.get("city")
     envcity={"Bangalore":Bangalore,"Mumbai":Mumbai,"Bhophal":Bhophal,"Nanded":Nanded,"Pune":Pune,"Barshi":Barshi,"Aurangabad":Aurangabad}
@@ -1298,11 +1298,11 @@ def cartt(request):
         scheme=request.scheme
         urll=request.get_host()
         # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,amount)
-        callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
+        # callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
         # print("----------------",callback_url)
         # print(call)
         # print(callback_url)
-        # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
+        callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
         context['razorpay_order_id'] = razorpay_order_id
         context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
         context['razorpay_amount'] = amount

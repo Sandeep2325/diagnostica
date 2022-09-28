@@ -315,6 +315,12 @@ textarea {
     margin-top: 39px;
 }
 
+.photoafterlogin {
+    width: 40px!important;
+    height: 40px!important;
+    border-radius: 50%!important;
+}
+
 
 /*--------------- footer ----------------*/
 
@@ -1510,7 +1516,21 @@ textarea {
         min-height: 380px;
     }
     .section_nav_bar .logo-img {
-        width: 175px;
+        width: 140px;
+    }
+    .photoafterlogin {
+        width: 35px!important;
+        height: 35px!important;
+        border-radius: 50%!important;
+    }
+    .header_tgl_btn {
+        font-size: 20px!important;
+    }
+    .navbar-toggler {
+        padding: 0px!important;
+    }
+    .w-22 {
+        width: 19px;
     }
     h1,
     .fs-40 {
@@ -2041,4 +2061,8 @@ textarea {
 
 .scrollDown:active {
     margin-bottom: 1.5rem;
+}
+
+.centerline {
+    border-left: 2px solid rgb(0, 0, 0)
 }
