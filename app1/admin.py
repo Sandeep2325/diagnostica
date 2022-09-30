@@ -515,9 +515,8 @@ class UserAdmin(OriginalUserAdmin):
     # list_editable=['is_confirmed']
     fieldsets = (
         (None, {'fields': ('email', 'password','aggregator',"aggrid")}),
-        (_('Personal info'), {'fields': ('photo','first_name','last_name', "phone_no",'age','gender','location','address',)}),
-        (
-            _("Permissions"),
+        (_('Personal info'), {'fields': ('photo','first_name','last_name', "phone_no",'dob','age','gender','location','address',)}),
+        (_("Permissions"),
             {
                 "fields": (
                     # "is_active",
@@ -819,6 +818,8 @@ class aggregatorbookingsadmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return True
+class creliohealthdataAdmin(admin.ModelAdmin):
+    list_display=["organisationid","billid","spanbookingid","gosamplifyorderid","gosamplifytaskid","labtoken"]
 admin.site.register(User,UserAdmin)
 admin.site.register(faq,faqadmin)
 admin.site.register(contactus,contactusadmin)
@@ -852,6 +853,7 @@ admin.site.register(aggregatorbookings,aggregatorbookingsadmin)
 admin.site.unregister(get_attachment_model())
 admin.site.register(invoicee,invoiceeadmin)
 admin.site.register(gosamplify,gosamplifyadmin)
+admin.site.register(creliohealthdata,creliohealthdataAdmin)
 class MyGroupAdminForm(forms.ModelForm):
     class Meta:
         model = Group

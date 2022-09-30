@@ -109,7 +109,6 @@
                                                         <td data-label="Payment Status">Paid</td>
                                                     {%endif%}
                                                     {% comment %} <td data-label="Status">On Process</td> {% endcomment %}
-                                                    
                                                     {%if  bookhistory.payment_status == False%}
                                                     <td data-label="Report">
                                                         {% comment %}<button
@@ -360,9 +359,11 @@
                                 <p class="m-0 ps-2 font-bold" id="totalprice"></p>
                             </div>
                             <div>
-                                <input class="w-100  form_input mt-3" placeholder="Date" name="Date" id="Date" type="Date" maxlength="250"/>
+                                <input class="w-100  form_input mt-3" placeholder="Pickup Date" name="Date" id="Date" type="text"  onfocus="(this.type='date')" maxlength="250"/>
                             </div>
-                          
+                            <div>
+                                <input class="w-100  form_input mt-3" placeholder="DOB" name="dob" id="dob" type="text"  onfocus="(this.type='date')" maxlength="250"/>
+                            </div>
                             <div>
                                 <select class="w-100 mt-3 form-select myself_other" type="select" name="City" id="City">
                                     <option selected="selected" class="opc-5" disabled>
@@ -664,6 +665,17 @@
             swal('Hello','You booking under review progress by our experts. Please try after sometime.If you have any queries related to booking please contact our support team +91 9769 351 301','info')
             //alert("Please wait till your prescription is viewed by our doctors.");
         }else{
+            function checkDOB() {
+                var dateString = document.getElementById('dob').value;
+                var myDate = new Date(dateString);
+                var today = new Date();
+                if ( myDate > today ) { 
+                    $('#id_dateOfBirth').after('<p>You cannot enter a date in the future!.</p>');
+                    return false;
+                }
+                return true;
+            }
+            var dob=$("#dob").val();
             var timeslot=$("#timeslot").val();
             var date=$("#Date").val();
             var city=$("#City").val();
@@ -673,10 +685,15 @@
             var paymentmethod=$("#paymentmethod").val();
             var coupon=$("#coupon").val();
             var amount=$("#totalprice").html();
+            var dob=$("#dob").val();
             //console.log(paymentmethod)
-            if (timeslot==null || date=='' || city==null || address=='' || pincode=='' || paymentmethod==null || landmark==''){
+            if (timeslot==null || date=='' || city==null || address=='' || pincode=='' || paymentmethod==null || landmark=='' || dob== ''){
                 $(".pincodeerror").html("")
                 swal("", "Please update every field", "warning");
+            }
+            else if(!checkDOB()){
+                $(".pincodeerror").html("")
+                swal("", "Please Enter Valid DOB", "warning");
             }
             else if(pincode.length<6 || pincode.length>6){
                 $(".pincodeerror").html("Enter valid pincode")
@@ -694,6 +711,7 @@
                                 timeslot:timeslot,
                                 date:date,
                                 city:city,
+                                dob:dob,
                                 address:address,
                                 landmark:landmark,
                                 pincode:pincode,
@@ -762,6 +780,7 @@
                             timeslot:timeslot,
                             date:date,
                             city:city,
+                            dob:dob,
                             address:address,
                             landmark:landmark,
                             pincode:pincode,
@@ -1310,37 +1329,11 @@ function slots(){
                 }
             }   
         })
-
-  /*.done(function (response) {
-    console.log(response);
-    if (!response["success"]){
-        $("#timeslot").append(`<option value=''>No Slots Availabe</option>`);
-        alert("No slots Availabe")
-    }
-    else{
-    for (i in response){
-        if (i=="data"){
-            for (j in response[i]){
-                a=response[i][j].slot
-                $("#timeslot").append('<option value=' + a + '>' + a + '</option>');
-            }
-        }
-    } 
-    }
-  });*/
     }
 }
-/*$(function() {
-  
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-      localStorage.setItem('lastTab', $(this).attr('href'));
-    });
-    var lastTab = localStorage.getItem('lastTab');
-    
-    if (lastTab) {
-      $('[href="' + lastTab + '"]').tab('show');
-    }
-    
-  });*/
+//$(document).ready(function () {
+//    $( "#dob" ).datepicker({  maxDate: new Date(),dateFormat: 'dd-mm-yy' });
+// 
+// });
 </script>
 {%endblock%}

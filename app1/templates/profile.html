@@ -3,7 +3,7 @@
 {% block title %}Profile - Diagnostica Span{% endblock %}
 {%block content%}
 
-<body onload="setAttr()">
+<body>
     {%include "header.html"%}
     <section class="sub_header py-xl-4 py-3">
         <div class="container">
@@ -154,7 +154,25 @@
                                         value={{profile.age}} name="age" id="text" maxlength="3">
                                 </div>
                                 {%endif%}
-           
+                                {%if profile.dob == None%}
+                                <div class="col-lg-4 pt-3">
+                                    <label class="fs-18 cl-dark-blue font-regular" for="date">DOB</label>
+                                    <input class="w-100 mt-2 form_input " type="" 
+                                         name="dob" id="dob" maxlength="">
+                                </div>
+                                {% elif profile.dob == '' %}
+                                <div class="col-lg-4 pt-3">
+                                    <label class="fs-18 cl-dark-blue font-regular" for="date">DOB</label>
+                                    <input class="w-100 mt-2 form_input " type=""
+                                         name="dob" id="dob" maxlength="">
+                                </div>
+                                {%else%}
+                                <div class="col-lg-4 pt-3">
+                                    <label class="fs-18 cl-dark-blue font-regular" for="date">DOB</label>
+                                    <input class="w-100 mt-2 form_input " type=""
+                                        value="{{profile.dob}}" name="dob" id="dob" maxlength="">
+                                </div>
+                                {%endif%}
                                 {% if profile.address == None%}
                                 <div class="col-lg-12 pt-3 1">
                                     <label class="fs-18 cl-dark-blue font-regular" for="address">Address</label>
@@ -175,6 +193,7 @@
                                         value={{profile.address}} id="address" maxlength="250">
                                 </div>
                                 {% endif %}
+                                
                             </div>
                             <div class="col-lg-4 pt-3 px-3 px-xl-5 mt-xl-3 mt-5">
                                 <button class="px-5 py-2 mb-lg-5 mb-3 bg-sky-blue br-5  fs-18  cl-dark-white br" type="submit"
@@ -337,23 +356,6 @@
             form.submit();
         }
     });
-    function setAttr() {
-        var d = new Date();
-        var curr_date = d.getDate();
-        var curr_month = d.getMonth() + 1; //Months are zero based
-        if (curr_month < 10)
-            curr_month = '0' + curr_month;
-
-        if (curr_date < 10)
-            curr_date = '0' + curr_date;
-
-        var curr_year = d.getFullYear();
-        var d1 = curr_year + "-" + curr_month + "-" + curr_date;
-        //console.log(d1);
-        document.getElementById("date").setAttribute("max", d1);
-
-
-    };
     $(document).on("change", ".uploadProfileInput", function () {
         var triggerInput = this;
         var currentImg = $(this).closest(".pic-holder").find(".pic").attr("src");
@@ -394,7 +396,11 @@
             }, 3000);
         }
     });
-
+    $(document).ready(function () {
+        $( "#dob" ).datepicker({  maxDate: new Date(),dateFormat: 'dd-mm-yy' });
+        
+     });
+     
 </script>
 {% comment %} <script>
     $("#newsletter").on("click", function (e) {

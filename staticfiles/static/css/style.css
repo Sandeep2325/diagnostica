@@ -315,6 +315,12 @@ textarea {
     margin-top: 39px;
 }
 
+.photoafterlogin {
+    width: 40px!important;
+    height: 40px!important;
+    border-radius: 50%!important;
+}
+
 
 /*--------------- footer ----------------*/
 
@@ -461,7 +467,7 @@ textarea {
     border-radius: 15px;
     display: flex;
     align-items: center;
-    background-position: 100%;
+    background-position: unset;
 }
 
 .home-banner h1 {
@@ -1791,6 +1797,10 @@ textarea {
     .our_centermap {
         height: 250px!important
     }
+    .scrollDown {
+        margin-bottom: 88px!important;
+        margin-right: 30px!important;
+    }
 }
 
 @media (min-width: 992px) and (max-width: 1199.98px) {
@@ -2146,4 +2156,8 @@ textarea {
 
 .scrollDown:active {
     margin-bottom: 1.5rem;
+}
+
+.centerline {
+    border-left: 2px solid rgb(0, 0, 0)
 }

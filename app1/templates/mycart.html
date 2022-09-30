@@ -4,6 +4,7 @@
 {%block content%}
 <body onload="setAttr()">
     {%include 'header.html'%}
+    
     <section class="sub_header py-xl-4 py-3">
         <div class="container">
             <div class="row">
@@ -173,7 +174,7 @@
                 <div class="modal-content  p-3 p-sm-4">
                     <div class="modal-body">
                         <button type="button" class="btn-close  close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
+                            aria-label="Close" id="cart_modal_close"></button>
                         <form method="post" id="patientInformationForm">
                            {% comment %} {%csrf_token%} {% endcomment %}
                             <h3 class="fs-30 font-bold cl-dark-blue text-center">Patient Information</h3>
@@ -211,6 +212,9 @@
                                 <input class="w-100  form_input mt-3" placeholder="Age" name="age" id="age" type="number" maxlength="250"/>
                             </div>
                             <div>
+                                <input class="w-100  form_input mt-3" placeholder="DOB" name="dob" id="dob" type="text"  onfocus="(this.type='date')" maxlength=""/>
+                            </div>
+                            <div>
                                 <select class="w-100 mt-3 form-select myself_other" type="select" name="gender" id="gender">
                                     <option selected="selected" class="opc-5" disabled>
                                         Gender</option>
@@ -239,7 +243,7 @@
                                 <input class="w-100  form_input mt-3" placeholder="Pincode" name="pincode" id="pincode" type="number" maxlength="250"/>
                             </div>
                             <div>
-                                <input class="w-100  form_input mt-3" placeholder="Date" name="Date" id="Date" type="Date" maxlength="250"/>
+                                <input class="w-100  form_input mt-3" placeholder="Pickup Date" name="Date" id="Date" type="text"  onfocus="(this.type='date')" maxlength="250"/>
                             </div>
                             <div>
                                 <p class="error mt-3" id="sloterror" hidden>Please select Date,City and Pincode to select timeslot<p>
@@ -254,6 +258,8 @@
                             </div>
                             <button class="mx-lg-0 mx-3 mt-4 globalsubmitbutton"
                                 type="submit" name="submit" id="checkout">SUBMIT</button>
+                            <button class="mx-lg-0 mx-3 mt-4 globalsubmitbutton"
+                                type="submit" name="submit" id="checkoutloading" hidden> <i class="fa fa-spinner fa-spin"></i> Loading...</button>
                         {% comment %} </form> {% endcomment %}
                     </div>
                 </div>
@@ -465,6 +471,12 @@ function coupRemove(){
    }
 
 $(document).ready(function(){
+    jQuery.validator.addMethod(
+        "datenotgreaterthantoday",function(value, element) {var currentDate = new Date();var selectedDate = new Date(value);
+              return (currentDate >= selectedDate);
+        },
+        "You cannot select a date greater than today."
+    );
     jQuery.validator.addMethod("name_regex", function (value, element) {
         return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);
     }, "Enter valid name");
@@ -505,6 +517,9 @@ $(document).ready(function(){
                 minlength: 1,
                 maxlength: 3
             },
+            'date':{
+                required: true,
+            },
             'phone': {
                 required: true,
                 phone_regex: true,
@@ -541,6 +556,10 @@ $(document).ready(function(){
                 pincode_regex: true,
             },
             'Date':{
+                required: true,
+            },
+            'dob':{
+                datenotgreaterthantoday:true,
                 required: true,
             }
         },
@@ -580,11 +599,16 @@ $(document).ready(function(){
             },
             'Date':{
                 required: "This field is required.",
+            },
+            'dob':{
+                datenotgreaterthantoday:"Please Select Valid DOB",
+                required: "This field is required.",
             }
     
         },
         submitHandler: function (form) {
-            $("#checkout").prop("disabled",true);
+            $("#checkout").prop("hidden",true);
+            $("#checkoutloading").prop("hidden",false);
             a=$("#total").text();
             var firstname=$("#firstname").val();
                     var lastname=$("#lastname").val();
@@ -599,6 +623,7 @@ $(document).ready(function(){
                     var location=$("#City").val();
                     var pincode=$("#pincode").val();
                     var landmark=$("#landmark").val();
+                    var dob=$("#dob").val();
                     var total;
                     if(AMOUNT==0){
                         
@@ -609,6 +634,7 @@ $(document).ready(function(){
                         
                         total=AMOUNT;
                     }
+                    //$(".preload").css("display","block");
                       $.ajax({
                            url: "{% url 'cart' %}",
                            type : "POST", 
@@ -618,6 +644,7 @@ $(document).ready(function(){
                             "lastname":lastname,
                             "phone":phone,
                             "age" : age,
+                            "dob":dob,
                             "gender":gender,
                             "option1":option1,
                             "option":option,
@@ -631,10 +658,12 @@ $(document).ready(function(){
                            },
                            dataType: "json",
                            success: function(resp){
-                            console.log(resp["message"])
+                           // $(".preload").css("display","none");
+                            //console.log(resp["message"])
                             $("#infomodal").hide();
                             if (!resp["message"]){
                                 alert("something went wrong Please try Again after sometime")
+                                window.location.reload()
                             }
                             else{
                             var options = {
@@ -651,6 +680,7 @@ $(document).ready(function(){
                                     escape: false,
                                     ondismiss: function()
                                     { 
+                                       // $(".preload").css("display","block");
                                         $.ajax({
                                         url: "{% url 'razorpayclose' %}",
                                         type: 'post',
@@ -665,6 +695,7 @@ $(document).ready(function(){
                                         },
                                         dataType: 'json',
                                         success: function (response) {
+                                           // $(".preload").css("display","none");
                                             //confirm("Want to close!!");
                                             window.location.reload()
                                         }
@@ -761,6 +792,15 @@ function slots(){
       });
     }
 }
+$("#cart_modal_close").click(function(){
+    window.location.reload()
+})
+$(document).ready(function(){
+    $("#cart_checkout_modal").modal({
+     backdrop: 'static',
+    keyboard: false
+ });
+})
     </script>
 {%endblock%}
 

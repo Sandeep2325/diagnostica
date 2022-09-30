@@ -539,8 +539,11 @@ def userinfo(request):
    return JsonResponse({"message":True,"firstname":a.first_name,"lastname":a.last_name,"contact":a.phone_no,"gender":a.gender,"address":a.address,"age":a.age,"email":a.email}) 
 @login_required(login_url="/login/")
 def profilee(request):
+    import datetime
     cityy=city.objects.filter(active=True)
     profile=User.objects.get(email=request.user.email)
+    # dobstrp = datetime.datetime.strptime(profile.dob, '%y-%m-%d')
+    # print("-----",dobstrp)
     if request.method=="GET":
         context={
             "profile":profile,
@@ -557,6 +560,8 @@ def profilee(request):
         location=request.POST.get("location")
         age=request.POST.get("age",request.user.age)
         address=request.POST.get("address",request.user.address)
+        dob=request.POST.get("dob",request.user.address)
+        print("---------",dob)
         try:
             c=city.objects.get(id=int(location))
         except:
@@ -566,6 +571,7 @@ def profilee(request):
         else:
             a=User.objects.get(email=request.user.email)
             try:
+                dobstrp = datetime.datetime.strptime(dob, '%d-%m-%Y')
                 a.first_name=firstname
                 a.last_name=lastname
                 a.photo=profilepic
@@ -576,9 +582,11 @@ def profilee(request):
                 a.location=c
                 a.age=age
                 a.address=address
+                a.dob=dobstrp
                 a.save()
                 messages.success(request,"Profile updated Successfully")
-            except:
+            except Exception as e:
+                # print("-----------",e)
                 messages.error(request,"Please Update every field")
         return redirect("profile")  
              
@@ -1227,6 +1235,7 @@ def cartt(request):
         pincode=request.POST.get('pincode')
         landmark=request.POST.get("landmark")
         amount=request.POST["amount"]
+        dob=request.POST.get("dob")
         global uniquee
         uniquee = uuid.uuid4()
         data=cart.objects.filter(user=request.user)
@@ -1247,24 +1256,34 @@ def cartt(request):
             bookingid="DP"+str(bid)
         data1=cart.objects.filter(user=request.user)
         tes=[]
+        testli=[]
         for i in data1:
             dic={}
+            dicc={}
             if i.items:
                 a=dic["tests_code"]=i.items.testcode
+                dicc["testCode"]=i.items.testcode
+                testli.append(dicc)
                 tes.append(dic)
                 # print("-----------",i.items.testcode)
             if i.packages:
                 for j in i.packages.test_name.all():
                     a=dic["tests_code"]=j.testcode
+                    dicc["testCode"]=j.testcode
+                    testli.append(dicc)
                     tes.append(dic)
                     # print(i.testcode)
             if i.labtest:
                 a=dic["tests_code"]=i.labtest.code
+                dicc["testCode"]=i.labtest.code
+                testli.append(dicc)
                 tes.append(dic)
                 # print("---------",i.labtest.code)
             if i.healthsymptoms:
                 for j in i.healthsymptoms.test_name.all():
                     a=dic["tests_code"]=j.testcode
+                    dicc["testCode"]=j.testcode
+                    testli.append(dicc)
                     tes.append(dic)
                     # print(i.testcode)
         # print(tes)
@@ -1311,7 +1330,7 @@ def cartt(request):
               "last_name": lastname,
               "gender": genderr,
               "age": age,
-              "remark": "MEDITEST",
+              "remark": "",
               "tests":tes
             }
           ]
@@ -1326,321 +1345,343 @@ def cartt(request):
         res=json.loads(response.text)
         # print("----",response.status_code)
         if response.status_code==201:
-            goordernumber=res["data"][0]["order_number"]
-            taskid=res["data"][0]["task_id"]
-            orderref=res["data"][0]["order_ref_number"]
-            slotdate=res["data"][0]["slot_date"]
-            slottime=res["data"][0]["slot_time"]
-            amountt=res["data"][0]["amount_to_collect"]
-            patientname=res["data"][0]["main_patient_name"]
-            email=res["data"][0]["patient_email"]
-            phone=res["data"][0]["patient_phone"]
-            addres=res["data"][0]["patient_address"]
-            pincodee=res["data"][0]["patient_pincode"]
-            status=res["data"][0]["status"]
-            payment_type=res["data"][0]["payment_type"]
-            price_=res["data"][0]["amount_to_collect"]
-            gosamplify.objects.create(
-                    goordernumber=goordernumber,taskid=taskid,orderref=orderref,paymenttype=payment_type,price=amount,couponval=perc,couponcode=coupo,slotdate=slotdate,slottime=slottime,amountt=amountt,patientname=patientname,email=email,phone=phone,address=addres,pincode=pincodee,status=status
-                ).save()
-            if others=="m":
-                User.objects.filter(email=request.user.email).update(first_name=firstname,last_name=lastname,phone_no=contact,age=age,address=address,gender=gender)
-            # data1=cart.objects.filter(user=request.user)
-            request.session.delete("order_id")
-            context={}
-            currency = 'INR'
-            client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
-            try:
-                razorpay_order = client.order.create(
-                    {"amount": int(amount) * 100, "currency": "INR", "payment_capture": "1"}
-                )
-            except:
-                razorpay_order = client.order.create(
-                        {"amount": 1* 100, "currency": "INR", "payment_capture": "1"}
-                )
-            request.session["order_id"]=razorpay_order['id']
-            razorpay_order_id = razorpay_order['id']
-            callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
-            # print("----------------",callback_url)
-            # print(call)
-            # print(callback_url)
-            # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
-            context['razorpay_order_id'] = razorpay_order_id
-            context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
-            context['razorpay_amount'] = amount
-            context['currency'] = currency
-            context['callback_url'] = callback_url
-            strr=[]
-            for tesst in data1:
-                if tesst.packages:
-                    strr.append(tesst.packages.package_name)
-                    invoicee.objects.create(user=request.user,order_id=razorpay_order_id,packages=tesst.packages,price=tesst.price).save()
-                elif tesst.labtest:
-                    strr.append(tesst.labtest.package_title)
-                    invoicee.objects.create(user=request.user,order_id=razorpay_order_id,labtest=tesst.labtest,price=tesst.price).save()
-                elif tesst.healthsymptoms:
-                    strr.append(tesst.healthsymptoms.name)
-                    invoicee.objects.create(user=request.user,order_id=razorpay_order_id,healthsymptoms=tesst.healthsymptoms,price=tesst.price).save()
-                elif tesst.items: 
-                    strr.append(tesst.items.testt)
-                    invoicee.objects.create(user=request.user,order_id=razorpay_order_id,items=tesst.items,price=tesst.price).save()       
-            listToStr = '/'.join(map(str, strr))
-            listToline = '\n /'.join(map(str, strr))
             cc=location.split(',')
-            a=testbook.objects.create(
-                    unique=uniquee,
-                    user=request.user,
-                    tests=listToline,
-                    myself=True if others == "m" else False,
-                    others=True if others == "o" else False,
-                    others_choice=others_choice,
-                    firstname=firstname,
-                    lastname=lastname,
-                    contact=contact,
-                    age=age,
-                    gender=gender,
-                    locationn=city.objects.get(id=int(cc[0])),
-                    pincode=pincode,
-                    date=date,
-                    address=address,
-                    landmark=landmark,
-                    timeslot=timeslot,
-                    bookingid=bookingid,)
-            data=testbook.objects.get(unique=uniquee) 
-            bookhistory=book_history(
-                     user=request.user,
-                     testbooking_id=data.id,
-                     uni=data.bookingid,
-                     bookingid=bookingid,
-                     patient_info="Myself" if others == "m" else "others",
-                             booking_type="Selected Test/Packages",
-                             bookingdetails=listToStr,
-                             amount="{0:1.2f}".format(float(amount)),
-                             payment_id=razorpay_order_id,
-                             payment_status=False).save()
-            # msg=f"Hi\nThere is an Prescription Upload order booked with below details\nBookingID:{bookingid}\nFirstname:{firstname}\nLastname:{lastname}\n"
-            # number=###
-            # sms(msg,number)
-            # for i in data1:
-            #     print(i.items)
-            #     print(i.labtest)
-            #     print(i.packages)
-            #     print(i.healthsymptoms)
-            #     if i.items==None and i.labtest==None and i.packages==None and i.healthsymptoms!=None:
-            #         print(1)
-            #         bookhistory=book_history(
-            #             user=request.user,
-            #             testbooking_id=data2.id,
-            #             bookingid=bookingid,
-            #             patient_info="Myself" if others == "m" else "others",
-            #                     booking_type="Health Symptoms",
-            #                     bookingdetails=listToStr,
-            #                     amount="{0:1.2f}".format(float(amount)),
-            #                     payment_id=razorpay_order_id,
-            #                     payment_status=False).save()
-            #     elif i.items!=None and i.labtest==None and i.packages==None and i.healthsymptoms==None:
-            #         print(2)
-            #         bookhistory=book_history(
-            #             user=request.user,
-            #             testbooking_id=data2.id,
-            #             bookingid=bookingid,
-            #             patient_info="Myself" if others == "m" else "others",
-            #                     booking_type="Selected Test",
-            #                     bookingdetails=listToStr,
-            #                     amount="{0:1.2f}".format(float(amount)),
-            #                     payment_id=razorpay_order_id,
-            #                     payment_status=False).save()
-            #     elif i.items==None and i.labtest!=None and i.packages==None and i.healthsymptoms==None:
-            #         print(3)
-            #         bookhistory=book_history(
-            #             user=request.user,
-            #             testbooking_id=data2.id,
-            #             bookingid=bookingid,
-            #             patient_info="Myself" if others == "m" else "others",
-            #                     booking_type="Health checkups",
-            #                     bookingdetails=listToStr,
-            #                     amount="{0:1.2f}".format(float(amount)),
-            #                     payment_id=razorpay_order_id,
-            #                     payment_status=False).save()
-            #     elif i.items==None and i.labtest==None and i.packages!=None and i.healthsymptoms==None:
-            #         print(4)
-            #         bookhistory=book_history(
-            #             user=request.user,
-            #             testbooking_id=data2.id,
-            #             bookingid=bookingid,
-            #             patient_info="Myself" if others == "m" else "others",
-            #                     booking_type="Health Packages",
-            #                     bookingdetails=listToStr,
-            #                     amount="{0:1.2f}".format(float(amount)),
-            #                     payment_id=razorpay_order_id,
-            #                     payment_status=False).save()
-            #     elif i.items==None and i.labtest==None and i.packages!=None and i.healthsymptoms!=None:
-            #         print(5)
-            #         bookhistory=book_history(
-            #             user=request.user,
-            #             testbooking_id=data2.id,
-            #             bookingid=bookingid,
-            #             patient_info="Myself" if others == "m" else "others",
-            #                     booking_type="Health Packages/Symptoms",
-            #                     bookingdetails=listToStr,
-            #                     amount="{0:1.2f}".format(float(amount)),
-            #                     payment_id=razorpay_order_id,
-            #                     payment_status=False).save()
-            #     elif i.items==None and i.labtest!=None and i.packages==None and i.healthsymptoms!=None:
-            #         print(6)
-            #         bookhistory=book_history(
-            #             user=request.user,
-            #             testbooking_id=data2.id,
-            #             bookingid=bookingid,
-            #             patient_info="Myself" if others == "m" else "others",
-            #                     booking_type="Health Checkups/Symptoms",
-            #                     bookingdetails=listToStr,
-            #                     amount="{0:1.2f}".format(float(amount)),
-            #                     payment_id=razorpay_order_id,
-            #                     payment_status=False).save()
-            #     elif i.items!=None and i.labtest==None and i.packages==None and i.healthsymptoms!=None:
-            #         print(7)
-            #         bookhistory=book_history(
-            #             user=request.user,
-            #             testbooking_id=data2.id,
-            #             bookingid=bookingid,
-            #             patient_info="Myself" if others == "m" else "others",
-            #                     booking_type="Selected Test/Symptoms",
-            #                     bookingdetails=listToStr,
-            #                     amount="{0:1.2f}".format(float(amount)),
-            #                     payment_id=razorpay_order_id,
-            #                     payment_status=False).save()
-            #     elif i.items!=None and i.labtest==None and i.packages!=None and i.healthsymptoms==None:
-            #         print(8)
-            #         bookhistory=book_history(
-            #             user=request.user,
-            #             testbooking_id=data2.id,
-            #             bookingid=bookingid,
-            #             patient_info="Myself" if others == "m" else "others",
-            #                     booking_type="Selected Test/Packages",
-            #                     bookingdetails=listToStr,
-            #                     amount="{0:1.2f}".format(float(amount)),
-            #                     payment_id=razorpay_order_id,
-            #                     payment_status=False).save()
+            cit=city.objects.get(id=int(cc[0]))
+            citname=cit.cityname
+            gosamporderid=res["data"][0]["order_number"]
+            gosamtaskid=res["data"][0]["task_id"]
+            appointres=appointment(testli,firstname,lastname,age,genderr,gosamporderid,citname,dob)
+            print("------------",json.loads(appointres))
+            appointress=json.loads(appointres)
+            if appointress["code"]==200:
+                creliohealthdata.objects.create(organisationid=appointress["organisationid"],billid=appointress["billid"],spanbookingid=bookingid,gosamplifyorderid=gosamporderid,gosamplifytaskid=gosamtaskid,labtoken=appointress["labtoken"]).save()
+                goordernumber=res["data"][0]["order_number"]
+                taskid=res["data"][0]["task_id"]
+                orderref=res["data"][0]["order_ref_number"]
+                slotdate=res["data"][0]["slot_date"]
+                slottime=res["data"][0]["slot_time"]
+                amountt=res["data"][0]["amount_to_collect"]
+                patientname=res["data"][0]["main_patient_name"]
+                email=res["data"][0]["patient_email"]
+                phone=res["data"][0]["patient_phone"]
+                addres=res["data"][0]["patient_address"]
+                pincodee=res["data"][0]["patient_pincode"]
+                status=res["data"][0]["status"]
+                payment_type=res["data"][0]["payment_type"]
+                price_=res["data"][0]["amount_to_collect"]
+                gosamplify.objects.create(
+                        goordernumber=goordernumber,taskid=taskid,orderref=orderref,paymenttype=payment_type,price=amount,couponval=perc,couponcode=coupo,slotdate=slotdate,slottime=slottime,amountt=amountt,patientname=patientname,email=email,phone=phone,address=addres,pincode=pincodee,status=status
+                    ).save()
+                if others=="m":
+                    User.objects.filter(email=request.user.email).update(first_name=firstname,last_name=lastname,phone_no=contact,age=age,address=address,gender=gender)
+                # data1=cart.objects.filter(user=request.user)
+                request.session.delete("order_id")
+                context={}
+                currency = 'INR'
+                client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+                try:
+                    razorpay_order = client.order.create(
+                        {"amount": int(amount) * 100, "currency": "INR", "payment_capture": "1"}
+                    )
+                except:
+                    razorpay_order = client.order.create(
+                            {"amount": 1* 100, "currency": "INR", "payment_capture": "1"}
+                    )
+                request.session["order_id"]=razorpay_order['id']
+                razorpay_order_id = razorpay_order['id']
+                callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,amount))
+                # print("----------------",callback_url)
+                # print(call)
+                # print(callback_url)
+                # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,amount)
+                context['razorpay_order_id'] = razorpay_order_id
+                context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
+                context['razorpay_amount'] = amount
+                context['currency'] = currency
+                context['callback_url'] = callback_url
+                strr=[]
+                for tesst in data1:
+                    if tesst.packages:
+                        strr.append(tesst.packages.package_name)
+                        invoicee.objects.create(user=request.user,order_id=razorpay_order_id,packages=tesst.packages,price=tesst.price).save()
+                    elif tesst.labtest:
+                        strr.append(tesst.labtest.package_title)
+                        invoicee.objects.create(user=request.user,order_id=razorpay_order_id,labtest=tesst.labtest,price=tesst.price).save()
+                    elif tesst.healthsymptoms:
+                        strr.append(tesst.healthsymptoms.name)
+                        invoicee.objects.create(user=request.user,order_id=razorpay_order_id,healthsymptoms=tesst.healthsymptoms,price=tesst.price).save()
+                    elif tesst.items: 
+                        strr.append(tesst.items.testt)
+                        invoicee.objects.create(user=request.user,order_id=razorpay_order_id,items=tesst.items,price=tesst.price).save()       
+                listToStr = '/'.join(map(str, strr))
+                listToline = '\n /'.join(map(str, strr))
+                
+                a=testbook.objects.create(
+                        unique=uniquee,
+                        user=request.user,
+                        tests=listToline,
+                        myself=True if others == "m" else False,
+                        others=True if others == "o" else False,
+                        others_choice=others_choice,
+                        firstname=firstname,
+                        lastname=lastname,
+                        contact=contact,
+                        age=age,
+                        gender=gender,
+                        locationn=cit,
+                        pincode=pincode,
+                        date=date,
+                        address=address,
+                        landmark=landmark,
+                        timeslot=timeslot,
+                        bookingid=bookingid,)
+                data=testbook.objects.get(unique=uniquee) 
+                bookhistory=book_history(
+                         user=request.user,
+                         testbooking_id=data.id,
+                         uni=data.bookingid,
+                         bookingid=bookingid,
+                         patient_info="Myself" if others == "m" else "others",
+                                 booking_type="Selected Test/Packages",
+                                 bookingdetails=listToStr,
+                                 amount="{0:1.2f}".format(float(amount)),
+                                 payment_id=razorpay_order_id,
+                                 payment_status=False).save()
+                # msg=f"Hi\nThere is an Prescription Upload order booked with below details\nBookingID:{bookingid}\nFirstname:{firstname}\nLastname:{lastname}\n"
+                # number=###
+                # sms(msg,number)
+                # for i in data1:
+                #     print(i.items)
+                #     print(i.labtest)
+                #     print(i.packages)
+                #     print(i.healthsymptoms)
+                #     if i.items==None and i.labtest==None and i.packages==None and i.healthsymptoms!=None:
+                #         print(1)
+                #         bookhistory=book_history(
+                #             user=request.user,
+                #             testbooking_id=data2.id,
+                #             bookingid=bookingid,
+                #             patient_info="Myself" if others == "m" else "others",
+                #                     booking_type="Health Symptoms",
+                #                     bookingdetails=listToStr,
+                #                     amount="{0:1.2f}".format(float(amount)),
+                #                     payment_id=razorpay_order_id,
+                #                     payment_status=False).save()
+                #     elif i.items!=None and i.labtest==None and i.packages==None and i.healthsymptoms==None:
+                #         print(2)
+                #         bookhistory=book_history(
+                #             user=request.user,
+                #             testbooking_id=data2.id,
+                #             bookingid=bookingid,
+                #             patient_info="Myself" if others == "m" else "others",
+                #                     booking_type="Selected Test",
+                #                     bookingdetails=listToStr,
+                #                     amount="{0:1.2f}".format(float(amount)),
+                #                     payment_id=razorpay_order_id,
+                #                     payment_status=False).save()
+                #     elif i.items==None and i.labtest!=None and i.packages==None and i.healthsymptoms==None:
+                #         print(3)
+                #         bookhistory=book_history(
+                #             user=request.user,
+                #             testbooking_id=data2.id,
+                #             bookingid=bookingid,
+                #             patient_info="Myself" if others == "m" else "others",
+                #                     booking_type="Health checkups",
+                #                     bookingdetails=listToStr,
+                #                     amount="{0:1.2f}".format(float(amount)),
+                #                     payment_id=razorpay_order_id,
+                #                     payment_status=False).save()
+                #     elif i.items==None and i.labtest==None and i.packages!=None and i.healthsymptoms==None:
+                #         print(4)
+                #         bookhistory=book_history(
+                #             user=request.user,
+                #             testbooking_id=data2.id,
+                #             bookingid=bookingid,
+                #             patient_info="Myself" if others == "m" else "others",
+                #                     booking_type="Health Packages",
+                #                     bookingdetails=listToStr,
+                #                     amount="{0:1.2f}".format(float(amount)),
+                #                     payment_id=razorpay_order_id,
+                #                     payment_status=False).save()
+                #     elif i.items==None and i.labtest==None and i.packages!=None and i.healthsymptoms!=None:
+                #         print(5)
+                #         bookhistory=book_history(
+                #             user=request.user,
+                #             testbooking_id=data2.id,
+                #             bookingid=bookingid,
+                #             patient_info="Myself" if others == "m" else "others",
+                #                     booking_type="Health Packages/Symptoms",
+                #                     bookingdetails=listToStr,
+                #                     amount="{0:1.2f}".format(float(amount)),
+                #                     payment_id=razorpay_order_id,
+                #                     payment_status=False).save()
+                #     elif i.items==None and i.labtest!=None and i.packages==None and i.healthsymptoms!=None:
+                #         print(6)
+                #         bookhistory=book_history(
+                #             user=request.user,
+                #             testbooking_id=data2.id,
+                #             bookingid=bookingid,
+                #             patient_info="Myself" if others == "m" else "others",
+                #                     booking_type="Health Checkups/Symptoms",
+                #                     bookingdetails=listToStr,
+                #                     amount="{0:1.2f}".format(float(amount)),
+                #                     payment_id=razorpay_order_id,
+                #                     payment_status=False).save()
+                #     elif i.items!=None and i.labtest==None and i.packages==None and i.healthsymptoms!=None:
+                #         print(7)
+                #         bookhistory=book_history(
+                #             user=request.user,
+                #             testbooking_id=data2.id,
+                #             bookingid=bookingid,
+                #             patient_info="Myself" if others == "m" else "others",
+                #                     booking_type="Selected Test/Symptoms",
+                #                     bookingdetails=listToStr,
+                #                     amount="{0:1.2f}".format(float(amount)),
+                #                     payment_id=razorpay_order_id,
+                #                     payment_status=False).save()
+                #     elif i.items!=None and i.labtest==None and i.packages!=None and i.healthsymptoms==None:
+                #         print(8)
+                #         bookhistory=book_history(
+                #             user=request.user,
+                #             testbooking_id=data2.id,
+                #             bookingid=bookingid,
+                #             patient_info="Myself" if others == "m" else "others",
+                #                     booking_type="Selected Test/Packages",
+                #                     bookingdetails=listToStr,
+                #                     amount="{0:1.2f}".format(float(amount)),
+                #                     payment_id=razorpay_order_id,
+                #                     payment_status=False).save()
 
-            #     elif i.items!=None and i.labtest!=None and i.packages==None and i.healthsymptoms==None:
-            #         print(9)
-            #         bookhistory=book_history(
-            #             user=request.user,
-            #             testbooking_id=data2.id,
-            #             bookingid=bookingid,
-            #             patient_info="Myself" if others == "m" else "others",
-            #                     booking_type="Selected Test/Checkups",
-            #                     bookingdetails=listToStr,
-            #                     amount="{0:1.2f}".format(float(amount)),
-            #                     payment_id=razorpay_order_id,
-            #                     payment_status=False).save()
+                #     elif i.items!=None and i.labtest!=None and i.packages==None and i.healthsymptoms==None:
+                #         print(9)
+                #         bookhistory=book_history(
+                #             user=request.user,
+                #             testbooking_id=data2.id,
+                #             bookingid=bookingid,
+                #             patient_info="Myself" if others == "m" else "others",
+                #                     booking_type="Selected Test/Checkups",
+                #                     bookingdetails=listToStr,
+                #                     amount="{0:1.2f}".format(float(amount)),
+                #                     payment_id=razorpay_order_id,
+                #                     payment_status=False).save()
 
-            #     elif i.items==None and i.labtest!=None and i.packages!=None and i.healthsymptoms==None:
-            #         print(10)
-            #         bookhistory=book_history(
-            #             user=request.user,
-            #             testbooking_id=data2.id,
-            #             bookingid=bookingid,
-            #             patient_info="Myself" if others == "m" else "others",
-            #                     booking_type="Health Chekups/Packages",
-            #                     bookingdetails=listToStr,
-            #                     amount="{0:1.2f}".format(float(amount)),
-            #                     payment_id=razorpay_order_id,
-            #                     payment_status=False).save()
-            #     elif i.items!=None and i.labtest!=None and i.packages!=None and i.healthsymptoms!=None:
-            #         print(11)
-            #         bookhistory=book_history(
-            #             user=request.user,
-            #             testbooking_id=data2.id,
-            #             bookingid=bookingid,
-            #             patient_info="Myself" if others == "m" else "others",
-            #                     booking_type="Health Chekups/Packages",
-            #                     bookingdetails=listToStr,
-            #                     amount="{0:1.2f}".format(float(amount)),
-            #                     payment_id=razorpay_order_id,
-            #                     payment_status=False).save()
-            #     elif i.items==None and i.labtest!=None and i.packages!=None and i.healthsymptoms!=None:
-            #         print(12)
-            #         bookhistory=book_history(
-            #             user=request.user,
-            #             testbooking_id=data2.id,
-            #             bookingid=bookingid,
-            #             patient_info="Myself" if others == "m" else "others",
-            #                     booking_type="Health Chekups/Packages/Symptoms",
-            #                     bookingdetails=listToStr,
-            #                     amount="{0:1.2f}".format(float(amount)),
-            #                     payment_id=razorpay_order_id,
-            #                     payment_status=False).save()
-            #     elif i.items!=None and i.labtest==None and i.packages!=None and i.healthsymptoms!=None:
-            #         print(13)
-            #         bookhistory=book_history(
-            #             user=request.user,
-            #             testbooking_id=data2.id,
-            #             bookingid=bookingid,
-            #             patient_info="Myself" if others == "m" else "others",
-            #                     booking_type="Selected Test/Packages/Symptoms",
-            #                     bookingdetails=listToStr,
-            #                     amount="{0:1.2f}".format(float(amount)),
-            #                     payment_id=razorpay_order_id,
-            #                     payment_status=False).save()
+                #     elif i.items==None and i.labtest!=None and i.packages!=None and i.healthsymptoms==None:
+                #         print(10)
+                #         bookhistory=book_history(
+                #             user=request.user,
+                #             testbooking_id=data2.id,
+                #             bookingid=bookingid,
+                #             patient_info="Myself" if others == "m" else "others",
+                #                     booking_type="Health Chekups/Packages",
+                #                     bookingdetails=listToStr,
+                #                     amount="{0:1.2f}".format(float(amount)),
+                #                     payment_id=razorpay_order_id,
+                #                     payment_status=False).save()
+                #     elif i.items!=None and i.labtest!=None and i.packages!=None and i.healthsymptoms!=None:
+                #         print(11)
+                #         bookhistory=book_history(
+                #             user=request.user,
+                #             testbooking_id=data2.id,
+                #             bookingid=bookingid,
+                #             patient_info="Myself" if others == "m" else "others",
+                #                     booking_type="Health Chekups/Packages",
+                #                     bookingdetails=listToStr,
+                #                     amount="{0:1.2f}".format(float(amount)),
+                #                     payment_id=razorpay_order_id,
+                #                     payment_status=False).save()
+                #     elif i.items==None and i.labtest!=None and i.packages!=None and i.healthsymptoms!=None:
+                #         print(12)
+                #         bookhistory=book_history(
+                #             user=request.user,
+                #             testbooking_id=data2.id,
+                #             bookingid=bookingid,
+                #             patient_info="Myself" if others == "m" else "others",
+                #                     booking_type="Health Chekups/Packages/Symptoms",
+                #                     bookingdetails=listToStr,
+                #                     amount="{0:1.2f}".format(float(amount)),
+                #                     payment_id=razorpay_order_id,
+                #                     payment_status=False).save()
+                #     elif i.items!=None and i.labtest==None and i.packages!=None and i.healthsymptoms!=None:
+                #         print(13)
+                #         bookhistory=book_history(
+                #             user=request.user,
+                #             testbooking_id=data2.id,
+                #             bookingid=bookingid,
+                #             patient_info="Myself" if others == "m" else "others",
+                #                     booking_type="Selected Test/Packages/Symptoms",
+                #                     bookingdetails=listToStr,
+                #                     amount="{0:1.2f}".format(float(amount)),
+                #                     payment_id=razorpay_order_id,
+                #                     payment_status=False).save()
 
-            #     elif i.items!=None and i.labtest!=None and i.packages==None and i.healthsymptoms!=None:
-            #         print(14)
-            #         bookhistory=book_history(
-            #             user=request.user,
-            #             testbooking_id=data2.id,
-            #             bookingid=bookingid,
-            #             patient_info="Myself" if others == "m" else "others",
-            #                     booking_type="Selected Test/Symptoms/Health Checkups",
-            #                     bookingdetails=listToStr,
-            #                     amount="{0:1.2f}".format(float(amount)),
-            #                     payment_id=razorpay_order_id,
-            #                     payment_status=False).save()
+                #     elif i.items!=None and i.labtest!=None and i.packages==None and i.healthsymptoms!=None:
+                #         print(14)
+                #         bookhistory=book_history(
+                #             user=request.user,
+                #             testbooking_id=data2.id,
+                #             bookingid=bookingid,
+                #             patient_info="Myself" if others == "m" else "others",
+                #                     booking_type="Selected Test/Symptoms/Health Checkups",
+                #                     bookingdetails=listToStr,
+                #                     amount="{0:1.2f}".format(float(amount)),
+                #                     payment_id=razorpay_order_id,
+                #                     payment_status=False).save()
 
-            #     elif i.items!=None and i.labtest!=None and i.packages==None and i.healthsymptoms!=None:
-            #         print(15)
-            #         bookhistory=book_history(
-            #             user=request.user,
-            #             testbooking_id=data2.id,
-            #             bookingid=bookingid,
-            #             patient_info="Myself" if others == "m" else "others",
-            #                     booking_type="Selected Test/Symptoms/Health Checkups",
-            #                     bookingdetails=listToStr,
-            #                     amount="{0:1.2f}".format(float(amount)),
-            #                     payment_id=razorpay_order_id,
-            #                     payment_status=False).save()
-            #     else:
-            #         print(16)
-            #         bookhistory=book_history(
-            #          user=request.user,
-            #          testbooking_id=data2.id,
-            #          bookingid=bookingid,
-            #          patient_info="Myself" if others == "m" else "others",
-            #                  booking_type="Items",
-            #                  bookingdetails=listToStr,
-            #                  amount="{0:1.2f}".format(float(amount)),
-            #                  payment_id=razorpay_order_id,
-            #                  payment_status=False).save()
+                #     elif i.items!=None and i.labtest!=None and i.packages==None and i.healthsymptoms!=None:
+                #         print(15)
+                #         bookhistory=book_history(
+                #             user=request.user,
+                #             testbooking_id=data2.id,
+                #             bookingid=bookingid,
+                #             patient_info="Myself" if others == "m" else "others",
+                #                     booking_type="Selected Test/Symptoms/Health Checkups",
+                #                     bookingdetails=listToStr,
+                #                     amount="{0:1.2f}".format(float(amount)),
+                #                     payment_id=razorpay_order_id,
+                #                     payment_status=False).save()
+                #     else:
+                #         print(16)
+                #         bookhistory=book_history(
+                #          user=request.user,
+                #          testbooking_id=data2.id,
+                #          bookingid=bookingid,
+                #          patient_info="Myself" if others == "m" else "others",
+                #                  booking_type="Items",
+                #                  bookingdetails=listToStr,
+                #                  amount="{0:1.2f}".format(float(amount)),
+                #                  payment_id=razorpay_order_id,
+                #                  payment_status=False).save()
 
-            coupon=request.session.get("coupon")
-            discountamount=request.session.get("discountamount")
-            couponpercent=request.session.get("couponpercent")
-            actualamount= request.session.get("actualamount")
+                coupon=request.session.get("coupon")
+                discountamount=request.session.get("discountamount")
+                couponpercent=request.session.get("couponpercent")
+                actualamount= request.session.get("actualamount")
 
-            if coupon!= None and discountamount!=None and couponpercent!=None and actualamount!=None:
-                 couponredeem.objects.create(user=request.user,booking_id=data.bookingid,order_id=razorpay_order_id,coupon=request.session.get("coupon"),discountpercen=request.session.get("couponpercent"),discountamount=request.session.get("discountamount"),actualamount=request.session.get('actualamount')).save()
-            if coupon!=None:
-                del request.session['coupon']
-            if discountamount!=None:
-                del request.session['discountamount']
-            if couponpercent!=None:
-                del request.session['couponpercent']
-            if actualamount!=None:
-                del request.session['actualamount']
-            # print(razorpay_order)
-            # messages.info(request,"Please Login to checkout")
-            return JsonResponse({"message":True,"razorpay_key":settings.RAZOR_KEY_ID,"currency":currency,"razorpayorder":razorpay_order_id,"callback":callback_url})
+                if coupon!= None and discountamount!=None and couponpercent!=None and actualamount!=None:
+                     couponredeem.objects.create(user=request.user,booking_id=data.bookingid,order_id=razorpay_order_id,coupon=request.session.get("coupon"),discountpercen=request.session.get("couponpercent"),discountamount=request.session.get("discountamount"),actualamount=request.session.get('actualamount')).save()
+                if coupon!=None:
+                    del request.session['coupon']
+                if discountamount!=None:
+                    del request.session['discountamount']
+                if couponpercent!=None:
+                    del request.session['couponpercent']
+                if actualamount!=None:
+                    del request.session['actualamount']
+                # print(razorpay_order)
+                # messages.info(request,"Please Login to checkout")
+                return JsonResponse({"message":True,"razorpay_key":settings.RAZOR_KEY_ID,"currency":currency,"razorpayorder":razorpay_order_id,"callback":callback_url})
+            else:
+                tid=res["data"][0]["task_id"]
+                url = f"https://mtqn0qowxc.execute-api.us-east-1.amazonaws.com/delete-customer-visit/{tid}"
+                payload={}
+                headers = {
+                  'api-key': gosamplify_apikey,
+                  'customer-code': customer_code,
+                'Content-Type': 'application/json'
+                }
+                response = requests.request("GET", url, headers=headers, data=payload)
+                # gos=gosamplify.objects.filter(orderref=d.bookingid)
+                return JsonResponse({"message":False})
         else:
             return JsonResponse({"message":False})
     if not request.user.is_anonymous:
@@ -1779,6 +1820,7 @@ def paymenthandler(request,str,amount):
                     link=request.build_absolute_uri('/booking-history')
                     # message1 = f"Hi there,\nWe have successfully received your payment for booking id: {history.bookingid}.\nOur Medical team will get in touch with you for your mentioned tests.\nClick (link: {link}) to track your bookings.\nThank you\nDIAGNOSTICA Span"
                     email_from = settings.EMAIL_HOST_USER
+                    # taskid=gosamplify.objects.get()
                     message1=f"""Hi there,We have successfully received your payment for booking id: {history.bookingid}..\nClick ({link}) to track your bookings.\nThank you\nDIAGNOSTICA SPAN"""
                     recipient_list = [history.user.email]
                     subject = f"Booking Id:{history.bookingid} | Payment Successfull| DIAGNOSTICA Span" 
@@ -2168,11 +2210,13 @@ def razorpayclose(request):
         tes=testbook.objects.filter(bookingid=d.bookingid)
         pres=Prescriptionbook1.objects.filter(bookingid=d.bookingid)
         gos=gosamplify.objects.filter(orderref=d.bookingid)
+        crelio=creliohealthdata.objects.filter(spanbookingid=d.bookingid)
         tes.delete()
         pres.delete()
         b.delete()
         a.delete()
         c.delete()
+        crelio.delete()
         for i in gos:
             url = f"https://mtqn0qowxc.execute-api.us-east-1.amazonaws.com/delete-customer-visit/{i.taskid}"
             payload={}
@@ -2182,8 +2226,8 @@ def razorpayclose(request):
             'Content-Type': 'application/json'
             }
             response = requests.request("GET", url, headers=headers, data=payload)
-            print("------------",response.text)
-            print("------------",response.status_code)
+            # print("------------",response.text)
+            # print("------------",response.status_code)
         gos.delete()
         return JsonResponse({"message":True})
     
@@ -2524,6 +2568,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
             coupon=request.POST.get("coupon")
             amount=request.POST["amount"]
             landmark=request.POST.get("landmark")
+            dob=request.POST.get("dob")
             price=float(amount.split("₹ ")[1])
             cc=citid.split(',')
             presc=Prescriptionbook1.objects.get(bookingid=id)
@@ -2536,9 +2581,13 @@ class BookingHistoryPay(LoginRequiredMixin,View):
             else:
                 genderr="Other"
             tes=[]
+            testli=[]
             for i in presc.test_name.all():
                 dic={}
+                dicc={}
                 a=dic["tests_code"]=i.testcode
+                dicc["testCode"]=i.testcode
+                testli.append(dicc)
                 tes.append(dic)
             payload = json.dumps({
                   "order_ref_id": id,
@@ -2581,120 +2630,130 @@ class BookingHistoryPay(LoginRequiredMixin,View):
             res=json.loads(response.text)
             # print("----",response.status_code)
             if response.status_code==201:
-                goordernumber=res["data"][0]["order_number"]
-                taskid=res["data"][0]["task_id"]
-                orderref=res["data"][0]["order_ref_number"]
-                slotdate=res["data"][0]["slot_date"]
-                slottime=res["data"][0]["slot_time"]
-                amountt=res["data"][0]["amount_to_collect"]
-                patientname=res["data"][0]["main_patient_name"]
-                email=res["data"][0]["patient_email"]
-                phone=res["data"][0]["patient_phone"]
-                addres=res["data"][0]["patient_address"]
-                pincodee=res["data"][0]["patient_pincode"]
-                status=res["data"][0]["status"]
-                payment_type=res["data"][0]["payment_type"]
-                price_=res["data"][0]["amount_to_collect"]
-                gosamplify.objects.create(
-                    goordernumber=goordernumber,taskid=taskid,orderref=orderref,couponcode=coupo,paymenttype=payment_type,price=price,couponval=perc,slotdate=slotdate,slottime=slottime,amountt=amountt,patientname=patientname,email=email,phone=phone,address=addres,pincode=pincodee,status=status
-                ).save()
-                try:
-                    coup=coupons.objects.get(couponcode=coupon)
-                    citi=city.objects.get(id=int(cc[0]))
-                    Prescriptionbook1.objects.filter(bookingid=id).update(date=date,timeslot=timeslot,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,coupon=coup,price=price,landmark=landmark)
-                    mod = book_history.objects.get(uni=id)
-                    mod.amount=price
-                    client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
-                    tot_amt = float(mod.amount) * 100
-                    razorpay_order = client.order.create(
-                        {"amount": tot_amt, "currency": "INR", "payment_capture": "1"}
-                    )
-                    mod.payment_id = razorpay_order['id']
-                    mod.save()
-                    coupon=request.session.get("coupon")
-                    discountamount=request.session.get("discountamount")
-                    couponpercent=request.session.get("couponpercent")
-                    actualamount= request.session.get("actualamount")
-                    if coupon!= None and discountamount!=None and couponpercent!=None and actualamount!=None:
-                         couponredeem.objects.create(user=request.user,booking_id=id,order_id=history.payment_id,coupon=request.session.get("coupon"),discountpercen=request.session.get("couponpercent"),discountamount=request.session.get("discountamount"),actualamount=request.session.get('actualamount')).save()
-                    if coupon!=None:
-                        del request.session['coupon']
-                    if discountamount!=None:
-                        del request.session['discountamount']
-                    if couponpercent!=None:
-                        del request.session['couponpercent']
-                    if actualamount!=None:
-                        del request.session['actualamount']
+                gosamporderid=res["data"][0]["order_number"]
+                gosamtaskid=res["data"][0]["task_id"]
+                citi=city.objects.get(id=int(cc[0]))
+                appointres=appointment(testli,presc.firstname,presc.lastname,presc.age,genderr,gosamporderid,citi.cityname,dob)
+                # print("------------",json.loads(appointres))
+                appointress=json.loads(appointres)
+                if appointress["code"]==200:
+                    creliohealthdata.objects.create(organisationid=appointress["organisationid"],billid=appointress["billid"],spanbookingid=id,gosamplifyorderid=gosamporderid,gosamplifytaskid=gosamtaskid,labtoken=appointress["labtoken"]).save()
+                    goordernumber=res["data"][0]["order_number"]
+                    taskid=res["data"][0]["task_id"]
+                    orderref=res["data"][0]["order_ref_number"]
+                    slotdate=res["data"][0]["slot_date"]
+                    slottime=res["data"][0]["slot_time"]
+                    amountt=res["data"][0]["amount_to_collect"]
+                    patientname=res["data"][0]["main_patient_name"]
+                    email=res["data"][0]["patient_email"]
+                    phone=res["data"][0]["patient_phone"]
+                    addres=res["data"][0]["patient_address"]
+                    pincodee=res["data"][0]["patient_pincode"]
+                    status=res["data"][0]["status"]
+                    payment_type=res["data"][0]["payment_type"]
+                    price_=res["data"][0]["amount_to_collect"]
+                    gosamplify.objects.create(
+                        goordernumber=goordernumber,taskid=taskid,orderref=orderref,couponcode=coupo,paymenttype=payment_type,price=price,couponval=perc,slotdate=slotdate,slottime=slottime,amountt=amountt,patientname=patientname,email=email,phone=phone,address=addres,pincode=pincodee,status=status
+                    ).save()
+                    try:
+                        coup=coupons.objects.get(couponcode=coupon)
+                        citi=city.objects.get(id=int(cc[0]))
+                        Prescriptionbook1.objects.filter(bookingid=id).update(date=date,timeslot=timeslot,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,coupon=coup,price=price,landmark=landmark)
+                        mod = book_history.objects.get(uni=id)
+                        mod.amount=price
+                        client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+                        tot_amt = float(mod.amount) * 100
+                        razorpay_order = client.order.create(
+                            {"amount": tot_amt, "currency": "INR", "payment_capture": "1"}
+                        )
+                        mod.payment_id = razorpay_order['id']
+                        mod.save()
+                        coupon=request.session.get("coupon")
+                        discountamount=request.session.get("discountamount")
+                        couponpercent=request.session.get("couponpercent")
+                        actualamount= request.session.get("actualamount")
+                        if coupon!= None and discountamount!=None and couponpercent!=None and actualamount!=None:
+                             couponredeem.objects.create(user=request.user,booking_id=id,order_id=history.payment_id,coupon=request.session.get("coupon"),discountpercen=request.session.get("couponpercent"),discountamount=request.session.get("discountamount"),actualamount=request.session.get('actualamount')).save()
+                        if coupon!=None:
+                            del request.session['coupon']
+                        if discountamount!=None:
+                            del request.session['discountamount']
+                        if couponpercent!=None:
+                            del request.session['couponpercent']
+                        if actualamount!=None:
+                            del request.session['actualamount']
 
-                    callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
-                    # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100) 
-                    to_return = {
-                        "razorKey":settings.RAZOR_KEY_ID,
-                        "valid":True,
-                        "amount":tot_amt,
-                        "order_id":razorpay_order['id'],
-                        "callbackUrl":callback_url,
-                    }
-                except:
-                    citi=city.objects.get(id=int(cc[0]))
-                    Prescriptionbook1.objects.filter(bookingid=id).update(date=date,timeslot=timeslot,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,landmark=landmark)
-                    mod = book_history.objects.get(uni=id)
+                        callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
+                        # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100) 
+                        to_return = {
+                            "razorKey":settings.RAZOR_KEY_ID,
+                            "valid":True,
+                            "amount":tot_amt,
+                            "order_id":razorpay_order['id'],
+                            "callbackUrl":callback_url,
+                        }
+                    except:
+                        citi=city.objects.get(id=int(cc[0]))
+                        Prescriptionbook1.objects.filter(bookingid=id).update(date=date,timeslot=timeslot,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,landmark=landmark)
+                        mod = book_history.objects.get(uni=id)
 
-                    client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
-                    tot_amt = float(mod.amount) * 100
-                    razorpay_order = client.order.create(
-                        {"amount": tot_amt, "currency": "INR", "payment_capture": "1"}
-                    )
-                    mod.payment_id = razorpay_order['id']
-                    mod.save()
-                    scheme=request.scheme
-                    urll=request.get_host()
-                    # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100)
-                    callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
-                    # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100) 
-                    to_return = {
-                        "razorKey":settings.RAZOR_KEY_ID,
-                        "valid":True,
-                        "amount":tot_amt,
-                        "order_id":razorpay_order['id'],
-                        "callbackUrl":callback_url,
-                    }
-                try:
-                    items=Prescriptionbook1.objects.get(bookingid=id)
-                    for item in items.test_name.all():
-                        cityy=request.session.get("city")
-                        if cityy==Bangalore:
-                            invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.Banglore_price)
-                        elif cityy==Mumbai:
-                            invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.Mumbai_price)
-                        elif cityy==Bhophal:
-                            invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.bhopal_price)
-                        elif cityy==Nanded:
-                            invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.nanded_price)
-                        elif cityy==Pune:
-                            invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.pune_price)
-                        elif cityy==Barshi:
-                            invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.barshi_price)  
-                        elif cityy==Aurangabad:
-                            invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.aurangabad_price)
-                except:
-                    items=testbook.objects.get(bookingid=id)
-                # for item in items.test_name.all():
-                #     cityy=request.session.get("city")
-                #     if cityy==Bangalore:
-                #         invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.Banglore_price)
-                #     elif cityy==Mumbai:
-                #         invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.Mumbai_price)
-                #     elif cityy==Bhophal:
-                #         invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.bhopal_price)
-                #     elif cityy==Nanded:
-                #         invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.nanded_price)
-                #     elif cityy==Pune:
-                #         invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.pune_price)
-                #     elif cityy==Barshi:
-                #         invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.barshi_price)  
-                #     elif cityy==Aurangabad:
-                #         invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.aurangabad_price)   
+                        client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+                        tot_amt = float(mod.amount) * 100
+                        razorpay_order = client.order.create(
+                            {"amount": tot_amt, "currency": "INR", "payment_capture": "1"}
+                        )
+                        mod.payment_id = razorpay_order['id']
+                        mod.save()
+                        scheme=request.scheme
+                        urll=request.get_host()
+                        # callback_url=scheme+"://"+urll+'/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100)
+                        callback_url = request.build_absolute_uri('/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100))
+                        # callback_url = 'https://spandiagno.com/paymenthandler/{}/{}/'.format(request.user.email,tot_amt//100) 
+                        to_return = {
+                            "razorKey":settings.RAZOR_KEY_ID,
+                            "valid":True,
+                            "amount":tot_amt,
+                            "order_id":razorpay_order['id'],
+                            "callbackUrl":callback_url,
+                        }
+                    try:
+                        items=Prescriptionbook1.objects.get(bookingid=id)
+                        for item in items.test_name.all():
+                            cityy=request.session.get("city")
+                            if cityy==Bangalore:
+                                invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.Banglore_price)
+                            elif cityy==Mumbai:
+                                invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.Mumbai_price)
+                            elif cityy==Bhophal:
+                                invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.bhopal_price)
+                            elif cityy==Nanded:
+                                invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.nanded_price)
+                            elif cityy==Pune:
+                                invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.pune_price)
+                            elif cityy==Barshi:
+                                invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.barshi_price)  
+                            elif cityy==Aurangabad:
+                                invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.aurangabad_price)
+                    except:
+                        items=testbook.objects.get(bookingid=id)
+                    # for item in items.test_name.all():
+                    #     cityy=request.session.get("city")
+                    #     if cityy==Bangalore:
+                    #         invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.Banglore_price)
+                    #     elif cityy==Mumbai:
+                    #         invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.Mumbai_price)
+                    #     elif cityy==Bhophal:
+                    #         invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.bhopal_price)
+                    #     elif cityy==Nanded:
+                    #         invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.nanded_price)
+                    #     elif cityy==Pune:
+                    #         invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.pune_price)
+                    #     elif cityy==Barshi:
+                    #         invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.barshi_price)  
+                    #     elif cityy==Aurangabad:
+                    #         invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.aurangabad_price)   
+                else:
+                    to_return = {"valid":False}
             else:
                 to_return = {"valid":False}
         if request.POST.get("action") == "payment_canceled":
@@ -2727,6 +2786,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
             coupon=request.POST.get("coupon")
             amount=request.POST.get("amount")
             landmark=request.POST.get("landmark")
+            dob=request.POST.get("dob")
             price=float(amount.split("₹ ")[1])
             presc=Prescriptionbook1.objects.get(bookingid=id)
             cc=citid.split(',')
@@ -2738,9 +2798,13 @@ class BookingHistoryPay(LoginRequiredMixin,View):
             else:
                 genderr="Other"
             tes=[]
+            testli=[]
             for i in presc.test_name.all():
                 dic={}
+                dicc={}
                 a=dic["tests_code"]=i.testcode
+                dicc["testCode"]=i.testcode
+                testli.append(dicc)
                 tes.append(dic)
             payload = json.dumps({
                   "order_ref_id": id,
@@ -2783,62 +2847,72 @@ class BookingHistoryPay(LoginRequiredMixin,View):
             res=json.loads(response.text)
             # print("----",response.status_code)
             if response.status_code==201:
-                goordernumber=res["data"][0]["order_number"]
-                taskid=res["data"][0]["task_id"]
-                orderref=res["data"][0]["order_ref_number"]
-                slotdate=res["data"][0]["slot_date"]
-                slottime=res["data"][0]["slot_time"]
-                amountt=res["data"][0]["amount_to_collect"]
-                patientname=res["data"][0]["main_patient_name"]
-                email=res["data"][0]["patient_email"]
-                phone=res["data"][0]["patient_phone"]
-                addres=res["data"][0]["patient_address"]
-                pincodee=res["data"][0]["patient_pincode"]
-                status=res["data"][0]["status"]
-                payment_type=res["data"][0]["payment_type"]
-                price_=res["data"][0]["amount_to_collect"]
-                gosamplify.objects.create(
-                    goordernumber=goordernumber,taskid=taskid,orderref=orderref,couponcode=coupo,paymenttype=payment_type,price=price_,couponval=perc,slotdate=slotdate,slottime=slottime,amountt=amountt,patientname=patientname,email=email,phone=phone,address=addres,pincode=pincodee,status=status
-                ).save()
-                try:
-                    a=coupons.objects.get(couponcode=coupon)
-                    citi=city.objects.get(id=int(cc[0]))
-                    Prescriptionbook1.objects.filter(bookingid=id).update(date=date,timeslot=timeslot,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,coupon=a,price=price,landmark=landmark)
-                    book_history.objects.filter(uni=id).update(amount=price)
-                    history=book_history.objects.get(uni=id)
-                    coupon=request.session.get("coupon")
-                    discountamount=request.session.get("discountamount")
-                    couponpercent=request.session.get("couponpercent")
-                    actualamount= request.session.get("actualamount")
-                    # print("----",coupon,discountamount,couponpercent,actualamount)
-                    if coupon!= None and discountamount!=None and couponpercent!=None and actualamount!=None:
-                         couponredeem.objects.create(user=request.user,booking_id=id,order_id=history.payment_id,coupon=request.session.get("coupon"),discountpercen=request.session.get("couponpercent"),discountamount=request.session.get("discountamount"),actualamount=request.session.get('actualamount')).save()
-                    if coupon!=None:
-                        del request.session['coupon']
-                    if discountamount!=None:
-                        del request.session['discountamount']
-                    if couponpercent!=None:
-                        del request.session['couponpercent']
-                    if actualamount!=None:
-                        del request.session['actualamount']
-                    email_from = settings.EMAIL_HOST_USER
-                    mes=f"Cash On Collection Booking for Booking ID:{id}\nPlease Checkit"
-                    subject=f"Cash On Collection | DIAGNOSTICA SPAN | Booking Id:{id}"
-                    mess=f"Hi {request.user.first_name}\nYou Have Selected Cash On Collection for Booking Id: {id}\nThank You\nDIAGNOSTICA SPAN "
+                gosamporderid=res["data"][0]["order_number"]
+                gosamtaskid=res["data"][0]["task_id"]
+                citi=city.objects.get(id=int(cc[0]))
+                appointres=appointment(testli,presc.firstname,presc.lastname,presc.age,genderr,gosamporderid,citi.cityname,dob)
+                # print("------------",json.loads(appointres))
+                appointress=json.loads(appointres)
+                if appointress["code"]==200:
+                    creliohealthdata.objects.create(organisationid=appointress["organisationid"],billid=appointress["billid"],spanbookingid=id,gosamplifyorderid=gosamporderid,gosamplifytaskid=gosamtaskid,labtoken=appointress["labtoken"]).save()
+                    goordernumber=res["data"][0]["order_number"]
+                    taskid=res["data"][0]["task_id"]
+                    orderref=res["data"][0]["order_ref_number"]
+                    slotdate=res["data"][0]["slot_date"]
+                    slottime=res["data"][0]["slot_time"]
+                    amountt=res["data"][0]["amount_to_collect"]
+                    patientname=res["data"][0]["main_patient_name"]
+                    email=res["data"][0]["patient_email"]
+                    phone=res["data"][0]["patient_phone"]
+                    addres=res["data"][0]["patient_address"]
+                    pincodee=res["data"][0]["patient_pincode"]
+                    status=res["data"][0]["status"]
+                    payment_type=res["data"][0]["payment_type"]
+                    price_=res["data"][0]["amount_to_collect"]
+                    gosamplify.objects.create(
+                        goordernumber=goordernumber,taskid=taskid,orderref=orderref,couponcode=coupo,paymenttype=payment_type,price=price_,couponval=perc,slotdate=slotdate,slottime=slottime,amountt=amountt,patientname=patientname,email=email,phone=phone,address=addres,pincode=pincodee,status=status
+                    ).save()
+                    try:
+                        a=coupons.objects.get(couponcode=coupon)
+                        citi=city.objects.get(id=int(cc[0]))
+                        Prescriptionbook1.objects.filter(bookingid=id).update(date=date,timeslot=timeslot,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,coupon=a,price=price,landmark=landmark)
+                        book_history.objects.filter(uni=id).update(amount=price)
+                        history=book_history.objects.get(uni=id)
+                        coupon=request.session.get("coupon")
+                        discountamount=request.session.get("discountamount")
+                        couponpercent=request.session.get("couponpercent")
+                        actualamount= request.session.get("actualamount")
+                        # print("----",coupon,discountamount,couponpercent,actualamount)
+                        if coupon!= None and discountamount!=None and couponpercent!=None and actualamount!=None:
+                             couponredeem.objects.create(user=request.user,booking_id=id,order_id=history.payment_id,coupon=request.session.get("coupon"),discountpercen=request.session.get("couponpercent"),discountamount=request.session.get("discountamount"),actualamount=request.session.get('actualamount')).save()
+                        if coupon!=None:
+                            del request.session['coupon']
+                        if discountamount!=None:
+                            del request.session['discountamount']
+                        if couponpercent!=None:
+                            del request.session['couponpercent']
+                        if actualamount!=None:
+                            del request.session['actualamount']
+                        email_from = settings.EMAIL_HOST_USER
+                        mes=f"Cash On Collection Booking for Booking ID:{id}\nPlease Checkit"
+                        subject=f"Cash On Collection | DIAGNOSTICA SPAN | Booking Id:{id}"
+                        mess=f"Hi {request.user.first_name}\nYou Have Selected Cash On Collection for Booking Id: {id}\nThank You\nDIAGNOSTICA SPAN "
 
-                    customerEmailThread(subject, mess, [request.user.email]).start()
-                    AdminEmailThread(subject, mes, reachus).start()
-                except:
-                    citi=city.objects.get(id=int(cc[0]))
-                    Prescriptionbook1.objects.filter(bookingid=id).update(date=date,timeslot=timeslot,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,landmark=landmark)
-                    email_from = settings.EMAIL_HOST_USER
-                    subject=f"Cash On Collection | DIAGNOSTICA SPAN | Booking Id:{id}"
-                    mes=f"Cash On Collection Booking for Booking ID:{id}\nPlease Checkit"
-                    mess=f"Hi {request.user.first_name}\nYou Have Selected Cash On Collection for Booking Id: {id}\nThank You\nDIAGNOSTICA SPAN "
+                        customerEmailThread(subject, mess, [request.user.email]).start()
+                        AdminEmailThread(subject, mes, reachus).start()
+                    except:
+                        citi=city.objects.get(id=int(cc[0]))
+                        Prescriptionbook1.objects.filter(bookingid=id).update(date=date,timeslot=timeslot,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,landmark=landmark)
+                        email_from = settings.EMAIL_HOST_USER
+                        subject=f"Cash On Collection | DIAGNOSTICA SPAN | Booking Id:{id}"
+                        mes=f"Cash On Collection Booking for Booking ID:{id}\nPlease Checkit"
+                        mess=f"Hi {request.user.first_name}\nYou Have Selected Cash On Collection for Booking Id: {id}\nThank You\nDIAGNOSTICA SPAN "
 
-                    customerEmailThread(subject, mess, [request.user.email]).start()
-                    AdminEmailThread(subject, mes, reachus).start()
-                to_return = {"valid":True}
+                        customerEmailThread(subject, mess, [request.user.email]).start()
+                        AdminEmailThread(subject, mes, reachus).start()
+                    to_return = {"valid":True}
+                else:
+                    to_return = {"valid":False}
             else:
                 to_return = {"valid":False}
         return HttpResponse(json.dumps(to_return), content_type="application/json")
@@ -3229,7 +3303,103 @@ def sms(message,mobile):
     except Exception as e:
         print(e)
         return "Your OTP is not delivered Please try again!"
+    
+def appointment(testli,firstname,lastname,age,genderr,gosamorder,citname,dob):
+    import datetime
+    print("---------------",dob)
+    print(testli)
+    dt = datetime.datetime.now(timezone.utc)
+    today = dt.replace(tzinfo=timezone.utc)
+    next_2ndday=dt.replace(tzinfo=timezone.utc) + datetime.timedelta(days=4)
+    todayy=str(today)
+    next_2nddayy=str(next_2ndday)
+    token="c52066e6-3800-11ed-af41-02c92f98bf54"
+    organisationid=318018
+    # print(type(a))
+    # print("------------",a)
+    # print("----------",next_2ndday)
+    url=f"https://livehealth.solutions/LHRegisterBillAPI/{token}/"
+    payload = json.dumps({
+    "countryCode": "91",
+    "mobile": "",
+    "email": "",
+    "designation": "",
+    "fullName": f"{firstname} {lastname}",
+    "firstName": firstname,
+    "middleName": "",
+    "lastName": lastname,
+    "age": age,
+    "gender":genderr,
+    "area": "",
+    "city": "",
+    "patientType": "",
+    "labPatientId": "",
+    "pincode": "",
+    "patientId": "",
+    "dob": dob,
+    "passportNo": "",
+    "panNumber": "",
+    "aadharNumber": "",
+    "insuranceNo": "",
+    "nationality": "Indian",
+    "ethnicity": "",
+    "nationalIdentityNumber": "",
+    "workerCode": "",
+    "doctorCode": "",
+    "areaOfResidence": "",
+    "state": "Maharashtra",
+    "isAppointmentRequest": 0,
+    "startDate":todayy,
+    "endDate":next_2nddayy,
+    "billDetails": {
+      "emergencyFlag": "0",
+      "totalAmount": "0",
+      "advance": "0",
+      "billConcession": "0",
+      "additionalAmount": "",
+      "billDate": todayy,
+      "paymentType": "",
+      "referralName": "",
+      "otherReferral": "",
+      "sampleId": "",
+      "orderNumber":gosamorder,
+      "referralIdLH": "",
+      "organisationName": "",
+      "organizationIdLH": organisationid,
+      "comments": "New Patient Registration",
+      "testList":testli,
+      "paymentList": [
+        {
+          "paymentType": "",
+          "paymentAmount": "",
+          "issueBank": ""
+        }
+      ]
+      }
+      })
+    headers = {
+      'Content-Type': 'application/json'
+    }
+    response = requests.request("POST", url, headers=headers, data=payload)
+    # print("---------------",response.text)
+    # print(payload)
+    code=json.loads(response.text)["code"]
+    billid=json.loads(response.text)["billId"]
+    respp={"code":code,"billid":billid,"organisationid":organisationid,"labtoken":token}
+    a=json.dumps(respp)
+    return a
 
+# import base64
+# from django.core.files.base import ContentFile
+# def pdfconvert():
+#     a="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bWxuczpyZGY9J2h0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMnIHhtbG5zOmlYPSdodHRwOi8vbnMuYWRvYmUuY29tL2lYLzEuMC8nPgo8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0ndXVpZDo0YTIzZDZiNi1lZmE2LTExZTgtMDAwMC05ZmIzZWU2NTk2YjMnIHhtbG5zOnBkZj0naHR0cDovL25zLmFkb2JlLmNvbS9wZGYvMS4zLycgcGRmOlByb2R1Y2VyPSdHUEwgR2hvc3RzY3JpcHQgOS4yMCcvPgo8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0ndXVpZDo0YTIzZDZiNi1lZmE2LTExZTgtMDAwMC05ZmIzZWU2NTk2YjMnIHhtbG5zOnhtcD0naHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyc+PHhtcDpNb2RpZnlEYXRlPjIwMTgtMTEtMjFUMDc6MDM6MzErMDI6MDA8L3htcDpNb2RpZnlEYXRlPgo8eG1wOkNyZWF0ZURhdGU+MjAxOC0xMS0yMVQwNzowMzozMSswMjowMDwveG1wOkNyZWF0ZURhdGU+Cjx4bXA6Q3JlYXRvclRvb2w+VW5rbm93bkFwcGxpY2F0aW9uPC94bXA6Q3JlYXRvclRvb2w+PC9yZGY6RGVzY3JpcHRpb24+CjxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSd1dWlkOjRhMjNkNmI2LWVmYTYtMTFlOC0wMDAwLTlmYjNlZTY1OTZiMycgeG1sbnM6eGFwTU09J2h0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8nIHhhcE1NOkRvY3VtZW50SUQ9J3V1aWQ6NGEyM2Q2YjYtZWZhNi0xMWU4LTAwMDAtOWZiM2VlNjU5NmIzJy8+CjxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSd1dWlkOjRhMjNkNmI2LWVmYTYtMTFlOC0wMDAwLTlmYjNlZTY1OTZiMycgeG1sbnM6ZGM9J2h0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvJyBkYzpmb3JtYXQ9J2FwcGxpY2F0aW9uL3BkZic+PGRjOnRpdGxlPjxyZGY6QWx0PjxyZGY6bGkgeG1s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"
+#     a="JVBERi0xLjMKMSAwIG9iago8PAovS2lkcyBbIDQgMCBSIDUgMCBSIDYgMCBSIF0KL1R5cGUgL1BhZ2VzCi9Db3VudCAzCj4+CmVuZG9iagoyIDAgb2JqCjw8Ci9Qcm9kdWNlciAoUHl0aG9uIFBERiBMaWJyYXJ5IFwwNTUgaHR0cFwwNzJcMDU3XDA1N3B5YnJhcnlcMDU2bmV0XDA1N3B5UGRmXDA1NykKPj4KZW5kb2JqCjMgMCBvYmoKPDwKL1R5cGUgL0NhdGFsb2cKL1BhZ2VzIDEgMCBSCj4+CmVuZG9iago0IDAgb2JqCjw8Ci9Db250ZW50cyA3IDAgUgovUGFyZW50IDEgMCBSCi9SZXNvdXJjZXMgPDwKL1hPYmplY3QgPDwKL0Zvcm1Yb2IuMTI3ODVjOWQwNDk2Njk5YmFmNmFmY2RkZWQyMWJjNDIgOCAwIFIKPj4KL0ZvbnQgPDwKL0YyIDkgMCBSCi9GMyAxMCAwIFIKL0YxIDExIDAgUgo+PgovUHJvY1NldCBbIC9UZXh0IC9JbWFnZUMgL0ltYWdlQiAvUERGIC9JbWFnZUkgXQo+PgovVHJhbnMgPDwKPj4KL1JvdGF0ZSAwCi9NZWRpYUJveCBbIDAgMCA1OTUuMjc1NjAgODQxLjg4OTgwIF0KL1R5cGUgL1BhZ2UKPj4KZW5kb2JqCjUgMCBvYmoKPDwKL0NvbnRlbnRzIDEyIDAgUgovUGFyZW50IDEgMCBSCi9SZXNvdXJjZXMgPDwKL1hPYmplY3QgPDwKL0Zvcm1Yb2IuMTI3ODVjOWQwNDk2Njk5YmFmNmFmY2RkZWQyMWJjNDIgOCAwIFIKPj4KL0ZvbnQgPDwKL0YyIDkgMCBSCi9GMyAxMCAwIFIKL0YxIDExIDAgUgo+PgovUHJvY1NldCBbIC9UZXh0IC9JbWFnZUMgL0ltYWdlQiAvUERGIC9JbWFnZUkgXQo+PgovVHJhbnMgPDwKPj4KL1JvdGF0ZSAwCi9NZWRpYUJveCBbIDAgMCA1OTUuMjc1NjAgODQxLjg4OTgwIF0KL1R5cGUgL1BhZ2UKPj4KZW5kb2JqCjYgMCBvYmoKPDwKL0NvbnRlbnRzIDEzIDAgUgovUGFyZW50IDEgMCBSCi9SZXNvdXJjZXMgPDwKL1hPYmplY3QgPDwKL0Zvcm1Yb2IuMTI3ODVjOWQwNDk2Njk5YmFmNmFmY2RkZWQyMWJjNDIgOCAwIFIKPj4KL0ZvbnQgPDwKL0YyIDkgMCBSCi9GMyAxMCAwIFIKL0YxIDExIDAgUgo+PgovUHJvY1NldCBbIC9UZXh0IC9JbWFnZUMgL0ltYWdlQiAvUERGIC9JbWFnZUkgXQo+PgovVHJhbnMgPDwKPj4KL1JvdGF0ZSAwCi9NZWRpYUJveCBbIDAgMCA1OTUuMjc1NjAgODQxLjg4OTgwIF0KL1R5cGUgL1BhZ2UKPj4KZW5kb2JqCjcgMCBvYmoKPDwKL0xlbmd0aCA5OTc3Cj4+CnN0cmVhbQpxCjEgMCAwIDEgMCAwIGNtCkJUCi9GMSAxMiBUZgoxNC40MDAwMCBUTApFVApxCnEKMSAwIDAgMSAyOTcgMjIuODI2NzYgY20KcQoxIDAgMCAxIDEgLTEgY20KcQpxCjUyLjIwMDAwIDAgMCA0NSAwIDIuMDYzMDAgY20KL0Zvcm1Yb2IuMTI3ODVjOWQwNDk2Njk5YmFmNmFmY2RkZWQyMWJjNDIgRG8KUQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDMuODYzMDAgVG0KNDUuNDUwMDAgVEwKNTIuMjAwMDAgMCBUZAovRjEgOSBUZgoxMC44MDAwMCBUTApUKgotNTIuMjAwMDAgMCBUZApFVApRClEKcQpRClEKUQpxCjEgMCAwIDEgMTUgNjU2Ljg4OTgwIGNtCjAgMCAwIHJnCkJUCi9GMSAxMCBUZgoxMiBUTApFVApxCjEgMCAwIDEgMyA4Ny40OTk5OSBjbQpxCjEgMCAwIDEgMyAtMiBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOS4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooUGF0aWVudCBOYW1lIFwwNzIgKSBUagovRjIgOSBUZgooTVJcMDU2IEpBTkUgRE9FKSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDM5OC41MDAwMCA4Ny40OTk5OSBjbQpxCjEgMCAwIDEgMyAtMiBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOS4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooQWdlIFwwNzIgMjQgeWVhcnMgXDA1ME1hbGVcMDUxKSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDMgNzAgY20KcQoxIDAgMCAxIDMgLTIgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDkuMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKFJlZmVycmFsIFwwNzIgRHJcMDU2IFJlZmVycmFsKSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDM5OC41MDAwMCA3MCBjbQpxCjEgMCAwIDEgMyAtMiBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOS4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooUmVnXDA1NiBJRCBcMDcyIElQIFwwNTUgTGFiMTIzNCkgVGoKVCoKRVQKUQpRCnEKUQpRCnEKMSAwIDAgMSAzIDUyLjUwMDAwIGNtCnEKMSAwIDAgMSAzIC0yIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA5LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMSA5IFRmCjAgMCAwIHJnCihSZXBvcnQgRGF0ZSBcMDcyIDE0XDA1NzAzXDA1NzIwXDA1NCAxMVwwNzI0NiBBTSkgVGoKVCoKRVQKUQpRCnEKUQpRCnEKMSAwIDAgMSAzOTguNTAwMDAgNTIuNTAwMDAgY20KcQoxIDAgMCAxIDMgLTIgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDkuMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKFJlcG9ydCBJRCBcMDcyIDI2NzM4KSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDMgMzUgY20KcQoxIDAgMCAxIDMgLTIgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDkuMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKFNhbXBsZSBEYXRlIFwwNzIgMTRcMDU3MDNcMDU3MjBcMDU0IDExXDA3MjQ1IEFNKSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDM5OC41MDAwMCAzNSBjbQpxCjEgMCAwIDEgMyAtMiBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOS4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooU2FtcGxlIElEIFwwNzIgT1AxMjM0NU1SKSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDMgMTcuNTAwMDAgY20KcQoxIDAgMCAxIDMgLTIgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDkuMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKFByaW50IERhdGUgXDA3MiAxNVwwNTcwNFwwNTcyMFwwNTQgMDNcMDcyMTMgUE0pIFRqClQqCkVUClEKUQpxClEKUQpxCjEgMCAwIDEgMyAtMCBjbQpxCjEgMCAwIDEgMyAtMiBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOS4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooU291cmNlIFwwNzIgQWJoaW5hdlwxMzdPcmdcMTM3VGVzdDIpIFRqClQqCkVUClEKUQpxClEKUQpxClEKUQpxCjEgMCAwIDEgMTUgNjU1Ljg4OTgwIGNtCnEKMSB3CjEgSgowIDAgMCBSRwpuCjAgMCBtCjU2NSAwIGwKUwpRClEKcQoxIDAgMCAxIDE1IDYzMi4zMDk4MCBjbQpxCjEgMCAwIDEgMSAtMSBjbQpxCjAuOTExMjUgdwowIDAgMCBSRwpuCjE2My4yMjcwMCA3Ljc3ODU0IG0KMzk5Ljc3MzAwIDcuNzc4NTQgbApTCkJUCjEgMCAwIDEgMCA5LjYwMTA0IFRtCjE2My4yMjcwMCAwIFRkCjE0LjU4MDAwIFRMCi9GMiA5LjcyMDAwIFRmCjAgMCAwIHJnCihUSFlST0lEIFBBTkVMXDA1NUlJIFwwNTQgRlJFRSBcMDUwRlQzXDA1NCBGVDRcMDU0IFRTSFwwNTFcMDU0IFNFUlVNKSBUagpUKgotMTYzLjIyNzAwIDAgVGQKRVQKUQpRCnEKUQpRCnEKMSAwIDAgMSAxNSA2MTguODA5ODAgY20KMCAwIDAgcmcKQlQKL0YxIDEwIFRmCjEyIFRMCkVUCnEKMSAwIDAgMSAwIC0wIGNtCnEKMSAwIDAgMSAwIDAgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDcuMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YyIDkgVGYKMCAwIDAgcmcKKEludmVzdGlnYXRpb24pIFRqClQqCkVUClEKUQpxClEKUQpxCjEgMCAwIDEgMjI2IC0wIGNtCnEKMSAwIDAgMSAwIDAgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDcuMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YyIDkgVGYKMCAwIDAgcmcKKFZhbHVlXDA1MHNcMDUxKSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDMzOSAtMCBjbQpxCjEgMCAwIDEgMCAwIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA3LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMiA5IFRmCjAgMCAwIHJnCihVbml0XDA1MHNcMDUxKSBUagpUKgpFVApRClEKcQpRClEKcQpRClEKcQoxIDAgMCAxIDE1IDYxNy44MDk4MCBjbQpxCjEgdwoxIEoKMCAwIDAgUkcKbgowIDAgbQo1NjUgMCBsClMKUQpRCnEKMSAwIDAgMSAxNSA2MDIuMzA5ODAgY20KMCAwIDAgcmcKQlQKL0YxIDEwIFRmCjEyIFRMCkVUCnEKMSAwIDAgMSAwIC0wIGNtCnEKMSAwIDAgMSAwIC0xIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA4LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMSA5IFRmCjAgMCAwIHJnCihGUkVFIFQzKSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDIyNiAtMCBjbQpxCjEgMCAwIDEgMCAtMSBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOC4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooM1wwNTYxIHBnXDA1N21MKSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDMzOSAtMCBjbQpxCjEgMCAwIDEgMCAtMSBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOC4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooMlwwNTY1IFwwNTUgM1wwNTY5KSBUagpUKgpFVApRClEKcQpRClEKcQpRClEKcQoxIDAgMCAxIDE1IDU4Ni44MDk4MCBjbQowIDAgMCByZwpCVAovRjEgMTAgVGYKMTIgVEwKRVQKcQoxIDAgMCAxIDAgLTAgY20KcQoxIDAgMCAxIDAgLTEgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDguMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKEZSRUUgVDMgXDA1MENNSUFcMDUxKSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDIyNiAtMCBjbQpxCjEgMCAwIDEgMCAtMSBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOC4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooM1wwNTYyIHBnXDA1N21MKSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDMzOSAtMCBjbQpxCjEgMCAwIDEgMCAtMSBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOC4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooMVwwNTY3MSBcMDU1IDNcMDU2NzEpIFRqClQqCkVUClEKUQpxClEKUQpxClEKUQpxCjEgMCAwIDEgMTUgNTcxLjMwOTgwIGNtCjAgMCAwIHJnCkJUCi9GMSAxMCBUZgoxMiBUTApFVApxCjEgMCAwIDEgMCAtMCBjbQpxCjEgMCAwIDEgMCAtMSBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOC4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooRlJFRSBUNCBcMDUwQ01JQVwwNTEpIFRqClQqCkVUClEKUQpxClEKUQpxCjEgMCAwIDEgMjI2IC0wIGNtCnEKMSAwIDAgMSAwIC0xIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA4LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMSA5IFRmCjAgMCAwIHJnCigxXDA1NjIgbmdcMDU3ZEwpIFRqClQqCkVUClEKUQpxClEKUQpxCjEgMCAwIDEgMzM5IC0wIGNtCnEKMSAwIDAgMSAwIC0xIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA4LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMSA5IFRmCjAgMCAwIHJnCigwXDA1NjcwIFwwNTUxXDA1NjQ4KSBUagpUKgpFVApRClEKcQpRClEKcQpRClEKcQoxIDAgMCAxIDE1IDU0Mi4zMDk4MCBjbQowIDAgMCByZwpCVAovRjEgMTAgVGYKMTIgVEwKRVQKcQoxIDAgMCAxIDAgMTMuNTAwMDAgY20KcQoxIDAgMCAxIDAgLTEgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDguMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKEZSRUUgVDQgQnkgRUNMSUEpIFRqClQqCkVUClEKUQpxClEKUQpxCjEgMCAwIDEgMjI2IDEzLjUwMDAwIGNtCnEKMSAwIDAgMSAwIC0xIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA4LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMSA5IFRmCjAgMCAwIHJnCigxNCBQbW9sXDA1N0wpIFRqClQqCkVUClEKUQpxClEKUQpxCjEgMCAwIDEgMzM5IC0wIGNtCnEKMSAwIDAgMSAwIC0xIGNtCnEKMC44NDM3NSB3CjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgMjEuNTM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKENoaWxkcmVuIFwwNzIgMTMgXDA1NSAyNykgVGoKVCoKKEFkdWx0IFwwNzIgMTFcMDU2NSBcMDU1IDIyXDA1NjcpIFRqClQqCkVUClEKUQpxClEKUQpxClEKUQpxCjEgMCAwIDEgMTUgNTI2LjgwOTgwIGNtCjAgMCAwIHJnCkJUCi9GMSAxMCBUZgoxMiBUTApFVApxCjEgMCAwIDEgMCAtMCBjbQpxCjEgMCAwIDEgMCAtMSBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOC4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooRlJFRSBUNFwwNTQgQnkgQ01JQSkgVGoKVCoKRVQKUQpRCnEKUQpRCnEKMSAwIDAgMSAyMjYgLTAgY20KcQoxIDAgMCAxIDAgLTEgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDguMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKDEyIG5nXDA1N2RMKSBUagpUKgpFVApRClEKcQpRClEKcQpRClEKcQoxIDAgMCAxIDE1IDUxMS4zMDk4MCBjbQowIDAgMCByZwpCVAovRjEgMTAgVGYKMTIgVEwKRVQKcQoxIDAgMCAxIDAgLTAgY20KcQoxIDAgMCAxIDAgLTEgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDguMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKFVMVFJBIFRTSCkgVGoKVCoKRVQKUQpRCnEKUQpRCnEKMSAwIDAgMSAyMjYgLTAgY20KcQoxIDAgMCAxIDAgLTEgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDguMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKDRcMDU2NSApIFRqCi9GMyA5IFRmCjEzLjUwMDAwIFRMCihtKSBUagovRjEgOSBUZgoxMy41MDAwMCBUTAooSVVcMDU3bWwpIFRqClQqCkVUClEKUQpxClEKUQpxCjEgMCAwIDEgMzM5IC0wIGNtCnEKMSAwIDAgMSAwIC0xIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA4LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMSA5IFRmCjAgMCAwIHJnCigwXDA1NjM1IFwwNTUgNVwwNTY2MCkgVGoKVCoKRVQKUQpRCnEKUQpRCnEKUQpRCnEKMSAwIDAgMSAxNSA0OTUuODA5ODAgY20KMCAwIDAgcmcKQlQKL0YxIDEwIFRmCjEyIFRMCkVUCnEKMSAwIDAgMSAwIC0wIGNtCnEKMSAwIDAgMSAwIC0xIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA4LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMSA5IFRmCjAgMCAwIHJnCihVbHRyYSBUU0ggXDA1MENNSUFcMDUxKSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDIyNiAtMCBjbQpxCjEgMCAwIDEgMCAtMSBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOC4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooNFwwNTYxICkgVGoKL0YzIDkgVGYKMTMuNTAwMDAgVEwKKG0pIFRqCi9GMSA5IFRmCjEzLjUwMDAwIFRMCihJVVwwNTdtTCkgVGoKVCoKRVQKUQpRCnEKUQpRCnEKMSAwIDAgMSAzMzkgLTAgY20KcQoxIDAgMCAxIDAgLTEgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDguMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKDBcMDU2MzUgXDA1NSA0XDA1Njk0KSBUagpUKgpFVApRClEKcQpRClEKcQpRClEKcQoxIDAgMCAxIDE1IDQ4Mi4zMDk4MCBjbQowIDAgMCByZwpCVAovRjEgMTAgVGYKMTIgVEwKRVQKcQoxIDAgMCAxIDAgLTAgY20KcQoxIDAgMCAxIDAgMCBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgNy4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooICkgVGoKVCoKRVQKUQpRCnEKUQpRCnEKUQpRCnEKMSAwIDAgMSAxNSA0NjYuODA5ODAgY20KMCAwIDAgcmcKQlQKL0YxIDEwIFRmCjEyIFRMCkVUCnEKMSAwIDAgMSAwIC0wIGNtCnEKMSAwIDAgMSAwIC0xIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA4LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMSA5IFRmCjAgMCAwIHJnCihSZW1hcmspIFRqClQqCkVUClEKUQpxClEKUQpxCjEgMCAwIDEgMjI2IC0wIGNtCnEKMSAwIDAgMSAwIC0xIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA4LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMSA5IFRmCjAgMCAwIHJnCihLaW5kbHkgY29ycmVsYXRlIGNsaW5pY2FsbHlcMDU2KSBUagpUKgpFVApRClEKcQpRClEKcQpRClEKcQoxIDAgMCAxIDE1IDM5Ny4zMDk4MCBjbQowIDAgMCByZwpCVAovRjEgMTAgVGYKMTIgVEwKRVQKcQoxIDAgMCAxIDAgNTQgY20KcQoxIDAgMCAxIDAgLTEgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDguMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKFVzZSkgVGoKVCoKRVQKUQpRCnEKUQpRCnEKMSAwIDAgMSAyMjYgLTAgY20KcQoxIDAgMCAxIDAgLTEgY20KcQowLjg0Mzc1IHcKMC44NDM3NSB3CjAuODQzNzUgdwowLjg0Mzc1IHcKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA2Mi4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooRlQ0IGdpdmVzIGNvcnJlY3RlZCB2YWx1ZXMgaW4gcGF0aWVudHMgaW4gd2hvbSB0aGUgdG90YWwgcGVvcGxlIGlzIGFsdGVyZWQgb24gYWNjb3VudCkgVGoKVCoKKG9mIGNoYW5nZXMgaW4gc2VydW0gcHJvdGVpbnMgb3IgaW4gYmluZGluZyBzaWdodHNcMDUwZWdcMDU2IHByZWdlbmVuY3lcMDU0ZHJ1Z1wwNTQgYWx0ZXJlZCBsZXZlbCkgVGoKVCoKKG9mIHNlcnVtIHByb3RlaW5zXDA1MSBNb25pdG9yaW5nIHJlc3RvcmF0aW9uIHRvIG5vcm1hbCByYW5nZSBpcyB0aGUgb25seSBsYWJvcmF0b3J5KSBUagpUKgooY3JpdGVyaW9uIHRvIGVzdGltYXRlIGFwcHJvcHJpYXRlIHJlcGxhY2VtZW50IGRvc2Ugb2YgbGV2b3RoeXJveGluZSBiZWNhdXNlIDZcMDU1OCkgVGoKVCoKKHdlZWtzIGFyZSByZXF1aXJlZCBiZWZvcmUgVFNIIHJlZmxlY3RzIHRoZXNlIGNoYW5nZXNcMDU2KSBUagooICkgVGoKVCoKRVQKUQpRCnEKUQpRCnEKUQpRCnEKMSAwIDAgMSAxNSAyNjAuMzA5ODAgY20KMCAwIDAgcmcKQlQKL0YxIDEwIFRmCjEyIFRMCkVUCnEKMSAwIDAgMSAwIDEyMS41MDAwMCBjbQpxCjEgMCAwIDEgMCAtMSBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOC4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooSW50ZXJwcmV0YXRpb24pIFRqClQqCkVUClEKUQpxClEKUQpxCjEgMCAwIDEgMjI2IC0wIGNtCnEKMSAwIDAgMSAwIC0xIGNtCnEKMC44NDM3NSB3CjAuODQzNzUgdwowLjg0Mzc1IHcKMC44NDM3NSB3CjAuODQzNzUgdwowLjg0Mzc1IHcKMC44NDM3NSB3CjAuODQzNzUgdwowLjg0Mzc1IHcKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCAxMjkuNTM4MDAgVG0KMTMuNTAwMDAgVEwKL0YyIDkgVGYKMCAwIDAgcmcKKEluY3JlYXNlZCBpbikgVGoKL0YxIDkgVGYKVCoKKEh5cGVydGh5cm9pZGlzbSBIeXBvdGh5cm9pZGlzbSB0cmVhdGVkIHdpdGggdGh5cm94aW5lIEV1dGh5cm9pZCBzaWNrIHN5bmRyb21lKSBUagpUKgooT2NjYXNpb25hbCBwYXRpZW50cyB3aXRoIGh5ZGF0aWRpZm9ybSBtb2xlIG9yIGNob3Jpb2NhcmNpbm9tYSB3aXRoIG1ha2VkIGhDRykgVGoKVCoKKGVsZXZhdGlvbiBtYXkgc2hvdyBpbmNyZWFzZWQgRlQ0XDA1NCBzdXBwcmVzc2VkIFRTSCBhbmQgYmx1bnRlZCBUU0ggcmVzcG9uc2UgdG8pIFRqClQqCihUUkggc3RpbXVsYXRpb25cMDU0IHJldHVybnMgdG8gbm9ybWFsIHdpdGggZWZmZWN0aXZlIHRyZWF0bWVudCBvZiB0cm9waG9ibGFzdGljIGRpc2Vhc2VcMDU0KSBUagpUKgooc2V2ZXJlIGRlaHlhZHJhdGlvblwwNTAgbWF5IGJlIFwwNzYgNlwwNTYwIG5nXDA1N2RsXDA1MSkgVGoKVCoKL0YyIDkgVGYKKERlY3JlYXNlZCBpbikgVGoKL0YxIDkgVGYKVCoKKEh5cG90aHlyb2lkaXNtKSBUagpUKgooSHlwb3RoeXJvaWRpc20gdHJlYXRlZCB3aXRoIHRyaWlvZG90aHlyb25pbmUpIFRqClQqCihFdXRoeXJvaWQgc2ljayBzeW5kcm9tZSkgVGoKVCoKRVQKUQpRCnEKUQpRCnEKUQpRCnEKMSAwIDAgMSAxNSAyNDQuODA5ODAgY20KcQoxIDAgMCAxIDEgLTEgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDkuMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKFJlbWFya3MpIFRqClQqCkVUClEKUQpxClEKUQpxCjEgMCAwIDEgMTUgMjI5LjMwOTgwIGNtCnEKMSAwIDAgMSAxIC0xIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA5LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMSA5IFRmCjAgMCAwIHJnCihOb3RlIFwwNzIpIFRqClQqCkVUClEKUQpxClEKUQpxCjEgMCAwIDEgMTUgMjI4LjMwOTgwIGNtCnEKMSB3CjEgSgowIDAgMCBSRwpuCjAgMCBtCjU2NSAwIGwKUwpRClEKcQoxIDAgMCAxIDE1IDIwMi44MDk4MCBjbQpxCjEgMCAwIDEgMSAtMTEgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDE5LjAzODAwIFRtCjIzNy40OTQ1MCAwIFRkCjEzLjUwMDAwIFRMCi9GMSA5IFRmCjAgMCAwIHJnCihcMDUyXDA1MkVORCBPRiBSRVBPUlRcMDUyXDA1MikgVGoKVCoKLTIzNy40OTQ1MCAwIFRkCkVUClEKUQpxClEKUQpxCjEgMCAwIDEgMTUgMTUxLjgwOTgwIGNtCjAgMCAwIHJnCkJUCi9GMSAxMCBUZgoxMiBUTApFVApxCjEgMCAwIDEgMCAtMCBjbQpxCjEgMCAwIDEgMCAtMyBjbQpxCnEKNTIuMjAwMDAgMCAwIDQ1IDAgMyBjbQovRm9ybVhvYi4xMjc4NWM5ZDA0OTY2OTliYWY2YWZjZGRlZDIxYmM0MiBEbwpRCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgMjEuOTAwMDAgVG0KNDUgVEwKNTIuMjAwMDAgMCBUZAovRjEgOSBUZgoxMC44MDAwMCBUTApUKgotNTIuMjAwMDAgMCBUZApFVApRClEKcQpRClEKcQoxIDAgMCAxIDI4Mi41MDAwMCAyNC41MDAwMCBjbQpxCjEgMCAwIDEgMCAtMyBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgMTAuMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKFJlZ2lzdGVyZWQgYnkgXDA1NSBBYmhpbmF2KSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDI4Mi41MDAwMCA3IGNtCnEKMSAwIDAgMSAwIC0zIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCAxMC4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooUmVwb3J0IGJ5IFwwNTUgTGl2ZWhlYWx0aCkgVGoKVCoKRVQKUQpRCnEKUQpRCnEKUQpRClEKcQoxIDAgMCAxIDAgMCBjbQpCVAovRjEgMTIgVGYKMTQuNDAwMDAgVEwKRVQKQlQKL0YxIDkgVGYKMTQuNDAwMDAgVEwKRVQKQlQKMSAwIDAgMSA1MDAgNTAgVG0KKFBhZ2UgMSBvZiAzKSBUagpUKgpFVApRCgplbmRzdHJlYW0KZW5kb2JqCjggMCBvYmoKPDwKL0ZpbHRlciBbIC9BU0NJSTg1RGVjb2RlIC9EQ1REZWNvZGUgXQovTGVuZ3RoIDE0MzAKL0NvbG9yU3BhY2UgL0RldmljZVJHQgovVHlwZSAvWE9iamVjdAovQml0c1BlckNvbXBvbmVudCA4Ci9IZWlnaHQgMTAwCi9XaWR0aCAxMTYKL1N1YnR5cGUgL0ltYWdlCj4+CnN0cmVhbQpzNElBMCEiX2FsOE9gW1whPDwqIyEhKiciczRbTkAhIWljNSM2az47IzZ0Sj8jbV5rSCdGYkhZJE9kbWMnK1ljdClCVSJAKUI5Xz4sVkNHZSt0T3JZKiUzYHAvMi9lODFjLTolM0JdPlc0PiZFSDFCNikvNk5JSyIjbi4xTShfJG9rMSpJVlwxLDpVPzEsOlU/MSw6VT8xLDpVPzEsOlU/MSw6VT8xLDpVPzEsOlU/MSw6VT8xLDpVPzEsOlU/MSw6VT8xLEFtRiEiZko6QSxwXVIhP3FMRiZITXRHIVdVKDwqcmw5QSJUXFcpITxFMyR6ISEhISIhV3JRLyJwWUQ/JDRIbVAhNDxAPCFXYEIqIVgmVC8iVSJyLiEhLktLIVdyRSomSHJkajBnUSFXOy4wXFJFPjEwWk9lRSUqNkYiP0E7VU90WjFMYkJWI21xRmEoYD01PC03OjJqLlBzIkAyYE5mWTZVWEA0N24/M0Q7Y0hhdD0nL1UvQHE5Ll9CNHUhb0YqKVBKR0JlQ1pLN25yNUxQVWVFUCo7LHFRQyF1LFJcSFJRVjVDL2hXTio4MVsnZD9PXEBLMmZfbzBPNmEybEJGZGFRXnJmJThSLWc+ViZPalE1T2VraXFDJm8oMk1IcEBuQFhxWiJKNipydT9EITxFMyUhPEUzJSE8PCoiISEhISIhV3JRLyJwWUQ/JDRIbVAhNDxDPSFXYD8qIjlTYzMiVSJyLiE8UkhGITxOPzgiOWZyJyJxajQhI0BWVGMrdTRdVCdMSXFVWiwkX2sxSypdV0BXS2onKCprYHEtMU1jZykmYWhMLW4tVycyRSpUVTNeWjsoN1JwIUA4bEpcaDxgYEMrPiU7KVNBblBka0MzK0s+RydBMVZIQGdkJktuYkE9TTJJSVtQYS5RJFIkakQ7VVNPYGBWbDZTcFpFcHBHW15XY1ddIylBJ2BRI3M+YWlgJlxlQ0UuJWZcLCE8ajVmPWFrTk0wcW8oMk1IcEBuQFhxWiM3TCRqLU0xIVlHTUghJ15KWD1fPGdCP1MyUElUJCJpdTNnTCdqODxwITBgOGtJJitIY0oiQ1NKTzhEUj1iX1MqbS41cFouM2AzVywzYjxnQFZBXi9BcEYhIyhCNmUlYXAuKVJOT2BwNF5mUis1KGojb2Y1YzM+IUtBSDV1O1tYSms+LC9FIU91TyFNcjRdMnRMbGEyI0VHLC1RYWJXbFcsNnFVbGokQmtTKyg5WiVKWkVWI1g6WydNbmchJ01uZzVtPCpYbEAkVytJKy07PVwlUSFyJDxlWSdUYlxuZCwhL1hYX2YjWDImIU86TDMtJyV1bGo9NThuUFJcJz0nLGdgMzJ0dTVAcGxyb3IzVzg1Y3I5OjgpRUdrbig+JFFWRGk+J0I3WSIoImEtSDpiZ2o6L1daKSpQXi5KLiQoZ1E3XlA+XUojRisoJ2pMSDxKaTEsNTQqcWwpL0RmXSM0KXBEPFZQZlZWPFBIZilYNWpZKlxhOE0sOkIjWGpGLmlDNzAkMm1da2EjUj4wYzdBIyIpIlUiNCxUJD9EPDtXLiYpUyEuJilTIS4mKVMhLl9GQk8sRjJsYCpyQ3EhVTQ9L15XMWQwdSVLTkQoNzAiJCE3MCIkITcwIiQhNzAiJCE3MCIkITcwIiQhNzAiJCE3MCIkITcwIiQhNzAiJCE3MCIkITcwIiQhNzAiJCE3MCIkITcwIiQhNzAiJCE3MCIkITcwIiQhNzAiJCE3MCIkITcwIiQhNzAiJCE3MCIkITcwIiQhNzAiJCE3MCIkITcwIiQhNzAiJCE3MCIkITcwIiQhNzAiJCE3MCIkITcwIiQhNzAiJCE3MCIkITcwIiQhNzAiJCE3MCIkITcwIiQhNzAiJCE3MCIkITcwJWk7ZmB+PgplbmRzdHJlYW0KZW5kb2JqCjkgMCBvYmoKPDwKL0VuY29kaW5nIC9XaW5BbnNpRW5jb2RpbmcKL1R5cGUgL0ZvbnQKL05hbWUgL0YyCi9CYXNlRm9udCAvSGVsdmV0aWNhLUJvbGQKL1N1YnR5cGUgL1R5cGUxCj4+CmVuZG9iagoxMCAwIG9iago8PAovRW5jb2RpbmcgL1N5bWJvbEVuY29kaW5nCi9UeXBlIC9Gb250Ci9OYW1lIC9GMwovQmFzZUZvbnQgL1N5bWJvbAovU3VidHlwZSAvVHlwZTEKPj4KZW5kb2JqCjExIDAgb2JqCjw8Ci9FbmNvZGluZyAvV2luQW5zaUVuY29kaW5nCi9UeXBlIC9Gb250Ci9OYW1lIC9GMQovQmFzZUZvbnQgL0hlbHZldGljYQovU3VidHlwZSAvVHlwZTEKPj4KZW5kb2JqCjEyIDAgb2JqCjw8Ci9MZW5ndGggNDYxOQo+PgpzdHJlYW0KcQoxIDAgMCAxIDAgMCBjbQpCVAovRjEgMTIgVGYKMTQuNDAwMDAgVEwKRVQKcQpxCjEgMCAwIDEgMjk3IDIyLjgyNjc2IGNtCnEKMSAwIDAgMSAxIC0xIGNtCnEKcQo1Mi4yMDAwMCAwIDAgNDUgMCAyLjA2MzAwIGNtCi9Gb3JtWG9iLjEyNzg1YzlkMDQ5NjY5OWJhZjZhZmNkZGVkMjFiYzQyIERvClEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCAzLjg2MzAwIFRtCjQ1LjQ1MDAwIFRMCjUyLjIwMDAwIDAgVGQKL0YxIDkgVGYKMTAuODAwMDAgVEwKVCoKLTUyLjIwMDAwIDAgVGQKRVQKUQpRCnEKUQpRClEKcQoxIDAgMCAxIDE1IDY1Ni44ODk4MCBjbQowIDAgMCByZwpCVAovRjEgMTAgVGYKMTIgVEwKRVQKcQoxIDAgMCAxIDMgODcuNDk5OTkgY20KcQoxIDAgMCAxIDMgLTIgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDkuMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKFBhdGllbnQgTmFtZSBcMDcyICkgVGoKL0YyIDkgVGYKKE1SXDA1NiBKQU5FIERPRSkgVGoKVCoKRVQKUQpRCnEKUQpRCnEKMSAwIDAgMSAzOTguNTAwMDAgODcuNDk5OTkgY20KcQoxIDAgMCAxIDMgLTIgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDkuMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKEFnZSBcMDcyIDIzIFlycyAzIE0gXDA1ME1hbGVcMDUxKSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDMgNzAgY20KcQoxIDAgMCAxIDMgLTIgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDkuMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKFJlZmVycmFsIFwwNzIgRHJcMDU2IFJlZmVycmFsKSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDM5OC41MDAwMCA3MCBjbQpxCjEgMCAwIDEgMyAtMiBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOS4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooUmVnXDA1NiBJRCBcMDcyIElQIFwwNTUgTGFiMTIzNCkgVGoKVCoKRVQKUQpRCnEKUQpRCnEKMSAwIDAgMSAzIDUyLjUwMDAwIGNtCnEKMSAwIDAgMSAzIC0yIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA5LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMSA5IFRmCjAgMCAwIHJnCihSZXBvcnQgRGF0ZSBcMDcyIDE0XDA1NzAzXDA1NzIwXDA1NCAxMVwwNzI0NiBhXDA1Nm1cMDU2KSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDM5OC41MDAwMCA1Mi41MDAwMCBjbQpxCjEgMCAwIDEgMyAtMiBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOS4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooUmVwb3J0IElEIFwwNzIgMjY3MzkpIFRqClQqCkVUClEKUQpxClEKUQpxCjEgMCAwIDEgMyAzNSBjbQpxCjEgMCAwIDEgMyAtMiBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOS4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooU2FtcGxlIERhdGUgXDA3MiAxNFwwNTcwM1wwNTcyMFwwNTQgMTFcMDcyNDUgYVwwNTZtXDA1NikgVGoKVCoKRVQKUQpRCnEKUQpRCnEKMSAwIDAgMSAzOTguNTAwMDAgMzUgY20KcQoxIDAgMCAxIDMgLTIgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDkuMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKFNhbXBsZSBJRCBcMDcyIE9QMTIzNDVNUikgVGoKVCoKRVQKUQpRCnEKUQpRCnEKMSAwIDAgMSAzIDE3LjUwMDAwIGNtCnEKMSAwIDAgMSAzIC0yIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA5LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMSA5IFRmCjAgMCAwIHJnCihQcmludCBEYXRlIFwwNzIgMTVcMDU3MDRcMDU3MjBcMDU0IDAzXDA3MjEzIHBcMDU2bVwwNTYpIFRqClQqCkVUClEKUQpxClEKUQpxCjEgMCAwIDEgMzk4LjUwMDAwIDE3LjUwMDAwIGNtCnEKMSAwIDAgMSAzIC0yIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA5LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMSA5IFRmCjAgMCAwIHJnCihMb2NhdGlvbiBcMDcyIEJhbmVyKSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDMgLTAgY20KcQoxIDAgMCAxIDMgLTIgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDkuMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKFNvdXJjZSBcMDcyIEFiaGluYXZcMTM3T3JnXDEzN1Rlc3QyKSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDM5OC41MDAwMCAtMCBjbQpxCjEgMCAwIDEgMyAtMiBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOS4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooSFBFIE5vXDA1NiBcMDcyIEREXDA1NzI2NzM5XDA1NzIwKSBUagpUKgpFVApRClEKcQpRClEKcQpRClEKcQoxIDAgMCAxIDE1IDY1NS44ODk4MCBjbQpxCjEgdwoxIEoKMCAwIDAgUkcKbgowIDAgbQo1NjUgMCBsClMKUQpRCnEKMSAwIDAgMSAxNSA2MzIuMzA5ODAgY20KcQoxIDAgMCAxIDEgLTEgY20KcQowLjkxMTI1IHcKMCAwIDAgUkcKbgoyNjYuMTAzNTAgNy43Nzg1NCBtCjI5Ni44OTY1MCA3Ljc3ODU0IGwKUwpCVAoxIDAgMCAxIDAgOS42MDEwNCBUbQoyNjYuMTAzNTAgMCBUZAoxNC41ODAwMCBUTAovRjIgOS43MjAwMCBUZgowIDAgMCByZwooTGlwYXNlKSBUagpUKgotMjY2LjEwMzUwIDAgVGQKRVQKUQpRCnEKUQpRCnEKMSAwIDAgMSAxNSA2MTguODA5ODAgY20KMCAwIDAgcmcKQlQKL0YxIDEwIFRmCjEyIFRMCkVUCnEKMSAwIDAgMSAwIC0wIGNtCnEKMSAwIDAgMSAwIDAgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDcuMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YyIDkgVGYKMCAwIDAgcmcKKEludmVzdGlnYXRpb24pIFRqClQqCkVUClEKUQpxClEKUQpxCjEgMCAwIDEgMjI2IC0wIGNtCnEKMSAwIDAgMSAwIDAgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDcuMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YyIDkgVGYKMCAwIDAgcmcKKFZhbHVlXDA1MHNcMDUxKSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDMzOSAtMCBjbQpxCjEgMCAwIDEgMCAwIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA3LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMiA5IFRmCjAgMCAwIHJnCihVbml0XDA1MHNcMDUxKSBUagpUKgpFVApRClEKcQpRClEKcQpRClEKcQoxIDAgMCAxIDE1IDYxNy44MDk4MCBjbQpxCjEgdwoxIEoKMCAwIDAgUkcKbgowIDAgbQo1NjUgMCBsClMKUQpRCnEKMSAwIDAgMSAxNSA2MDIuMzA5ODAgY20KMCAwIDAgcmcKQlQKL0YxIDEwIFRmCjEyIFRMCkVUCnEKMSAwIDAgMSAwIC0wIGNtCnEKMSAwIDAgMSAwIC0xIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA4LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMSA5IFRmCjAgMCAwIHJnCihMaXBhc2UpIFRqClQqCkVUClEKUQpxClEKUQpxCjEgMCAwIDEgMjI2IC0wIGNtCnEKMSAwIDAgMSAwIC0xIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA4LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMSA5IFRmCjAgMCAwIHJnCigzMzMgVVwwNTdMKSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDMzOSAtMCBjbQpxCjEgMCAwIDEgMCAtMSBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOC4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooNzMgXDA1NSAzOTMpIFRqClQqCkVUClEKUQpxClEKUQpxClEKUQpxCjEgMCAwIDEgMTUgNTg2LjgwOTgwIGNtCnEKMSAwIDAgMSAxIC0xIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA5LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMiA5IFRmCjAgMCAwIHJnCihSZWZlcmVuY2VcMDcyKSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDE1IDU3MS4zMDk4MCBjbQpxCjEgMCAwIDEgMSAtMSBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOS4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooU2llbWVucyBraXQgbGl0ZXJhdHVyZSkgVGoKVCoKRVQKUQpRCnEKUQpRCnEKMSAwIDAgMSAxNSA1NTUuODA5ODAgY20KcQoxIDAgMCAxIDEgLTEgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDkuMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKFJlbWFya3MpIFRqClQqCkVUClEKUQpxClEKUQpxCjEgMCAwIDEgMTUgNTQwLjMwOTgwIGNtCnEKMSAwIDAgMSAxIC0xIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA5LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMSA5IFRmCjAgMCAwIHJnCihOb3RlIFwwNzIpIFRqClQqCkVUClEKUQpxClEKUQpxCjEgMCAwIDEgMTUgNTM5LjMwOTgwIGNtCnEKMSB3CjEgSgowIDAgMCBSRwpuCjAgMCBtCjU2NSAwIGwKUwpRClEKcQoxIDAgMCAxIDE1IDUxMy44MDk4MCBjbQpxCjEgMCAwIDEgMSAtMTEgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDE5LjAzODAwIFRtCjIzNy40OTQ1MCAwIFRkCjEzLjUwMDAwIFRMCi9GMSA5IFRmCjAgMCAwIHJnCihcMDUyXDA1MkVORCBPRiBSRVBPUlRcMDUyXDA1MikgVGoKVCoKLTIzNy40OTQ1MCAwIFRkCkVUClEKUQpxClEKUQpRCnEKMSAwIDAgMSAwIDAgY20KQlQKL0YxIDEyIFRmCjE0LjQwMDAwIFRMCkVUCkJUCi9GMSA5IFRmCjE0LjQwMDAwIFRMCkVUCkJUCjEgMCAwIDEgNTAwIDUwIFRtCihQYWdlIDIgb2YgMykgVGoKVCoKRVQKUQoKZW5kc3RyZWFtCmVuZG9iagoxMyAwIG9iago8PAovTGVuZ3RoIDQ2MTkKPj4Kc3RyZWFtCnEKMSAwIDAgMSAwIDAgY20KQlQKL0YxIDEyIFRmCjE0LjQwMDAwIFRMCkVUCnEKcQoxIDAgMCAxIDI5NyAyMi44MjY3NiBjbQpxCjEgMCAwIDEgMSAtMSBjbQpxCnEKNTIuMjAwMDAgMCAwIDQ1IDAgMi4wNjMwMCBjbQovRm9ybVhvYi4xMjc4NWM5ZDA0OTY2OTliYWY2YWZjZGRlZDIxYmM0MiBEbwpRCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgMy44NjMwMCBUbQo0NS40NTAwMCBUTAo1Mi4yMDAwMCAwIFRkCi9GMSA5IFRmCjEwLjgwMDAwIFRMClQqCi01Mi4yMDAwMCAwIFRkCkVUClEKUQpxClEKUQpRCnEKMSAwIDAgMSAxNSA2NTYuODg5ODAgY20KMCAwIDAgcmcKQlQKL0YxIDEwIFRmCjEyIFRMCkVUCnEKMSAwIDAgMSAzIDg3LjQ5OTk5IGNtCnEKMSAwIDAgMSAzIC0yIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA5LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMSA5IFRmCjAgMCAwIHJnCihQYXRpZW50IE5hbWUgXDA3MiApIFRqCi9GMiA5IFRmCihNUlwwNTYgSkFORSBET0UpIFRqClQqCkVUClEKUQpxClEKUQpxCjEgMCAwIDEgMzk4LjUwMDAwIDg3LjQ5OTk5IGNtCnEKMSAwIDAgMSAzIC0yIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA5LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMSA5IFRmCjAgMCAwIHJnCihBZ2UgXDA3MiAyMyBZcnMgMyBNIFwwNTBNYWxlXDA1MSkgVGoKVCoKRVQKUQpRCnEKUQpRCnEKMSAwIDAgMSAzIDcwIGNtCnEKMSAwIDAgMSAzIC0yIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA5LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMSA5IFRmCjAgMCAwIHJnCihSZWZlcnJhbCBcMDcyIERyXDA1NiBSZWZlcnJhbCkgVGoKVCoKRVQKUQpRCnEKUQpRCnEKMSAwIDAgMSAzOTguNTAwMDAgNzAgY20KcQoxIDAgMCAxIDMgLTIgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDkuMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKFJlZ1wwNTYgSUQgXDA3MiBJUCBcMDU1IExhYjEyMzQpIFRqClQqCkVUClEKUQpxClEKUQpxCjEgMCAwIDEgMyA1Mi41MDAwMCBjbQpxCjEgMCAwIDEgMyAtMiBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOS4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooUmVwb3J0IERhdGUgXDA3MiAxNFwwNTcwM1wwNTcyMFwwNTQgMTFcMDcyNDYgYVwwNTZtXDA1NikgVGoKVCoKRVQKUQpRCnEKUQpRCnEKMSAwIDAgMSAzOTguNTAwMDAgNTIuNTAwMDAgY20KcQoxIDAgMCAxIDMgLTIgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDkuMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKFJlcG9ydCBJRCBcMDcyIDI2NzQwKSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDMgMzUgY20KcQoxIDAgMCAxIDMgLTIgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDkuMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKFNhbXBsZSBEYXRlIFwwNzIgMTRcMDU3MDNcMDU3MjBcMDU0IDExXDA3MjQ1IGFcMDU2bVwwNTYpIFRqClQqCkVUClEKUQpxClEKUQpxCjEgMCAwIDEgMzk4LjUwMDAwIDM1IGNtCnEKMSAwIDAgMSAzIC0yIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA5LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMSA5IFRmCjAgMCAwIHJnCihTYW1wbGUgSUQgXDA3MiBPUDEyMzQ1TVIpIFRqClQqCkVUClEKUQpxClEKUQpxCjEgMCAwIDEgMyAxNy41MDAwMCBjbQpxCjEgMCAwIDEgMyAtMiBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOS4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooUHJpbnQgRGF0ZSBcMDcyIDE1XDA1NzA0XDA1NzIwXDA1NCAwM1wwNzIxMyBwXDA1Nm1cMDU2KSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDM5OC41MDAwMCAxNy41MDAwMCBjbQpxCjEgMCAwIDEgMyAtMiBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOS4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooTG9jYXRpb24gXDA3MiBCYW5lcikgVGoKVCoKRVQKUQpRCnEKUQpRCnEKMSAwIDAgMSAzIC0wIGNtCnEKMSAwIDAgMSAzIC0yIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA5LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMSA5IFRmCjAgMCAwIHJnCihTb3VyY2UgXDA3MiBBYmhpbmF2XDEzN09yZ1wxMzdUZXN0MikgVGoKVCoKRVQKUQpRCnEKUQpRCnEKMSAwIDAgMSAzOTguNTAwMDAgLTAgY20KcQoxIDAgMCAxIDMgLTIgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDkuMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKEhQRSBOb1wwNTYgXDA3MiBERFwwNTcyNjc0MFwwNTcyMCkgVGoKVCoKRVQKUQpRCnEKUQpRCnEKUQpRCnEKMSAwIDAgMSAxNSA2NTUuODg5ODAgY20KcQoxIHcKMSBKCjAgMCAwIFJHCm4KMCAwIG0KNTY1IDAgbApTClEKUQpxCjEgMCAwIDEgMTUgNjMyLjMwOTgwIGNtCnEKMSAwIDAgMSAxIC0xIGNtCnEKMC45MTEyNSB3CjAgMCAwIFJHCm4KMjY2LjEwMzUwIDcuNzc4NTQgbQoyOTYuODk2NTAgNy43Nzg1NCBsClMKQlQKMSAwIDAgMSAwIDkuNjAxMDQgVG0KMjY2LjEwMzUwIDAgVGQKMTQuNTgwMDAgVEwKL0YyIDkuNzIwMDAgVGYKMCAwIDAgcmcKKExpcGFzZSkgVGoKVCoKLTI2Ni4xMDM1MCAwIFRkCkVUClEKUQpxClEKUQpxCjEgMCAwIDEgMTUgNjE4LjgwOTgwIGNtCjAgMCAwIHJnCkJUCi9GMSAxMCBUZgoxMiBUTApFVApxCjEgMCAwIDEgMCAtMCBjbQpxCjEgMCAwIDEgMCAwIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA3LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMiA5IFRmCjAgMCAwIHJnCihJbnZlc3RpZ2F0aW9uKSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDIyNiAtMCBjbQpxCjEgMCAwIDEgMCAwIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA3LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMiA5IFRmCjAgMCAwIHJnCihWYWx1ZVwwNTBzXDA1MSkgVGoKVCoKRVQKUQpRCnEKUQpRCnEKMSAwIDAgMSAzMzkgLTAgY20KcQoxIDAgMCAxIDAgMCBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgNy4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjIgOSBUZgowIDAgMCByZwooVW5pdFwwNTBzXDA1MSkgVGoKVCoKRVQKUQpRCnEKUQpRCnEKUQpRCnEKMSAwIDAgMSAxNSA2MTcuODA5ODAgY20KcQoxIHcKMSBKCjAgMCAwIFJHCm4KMCAwIG0KNTY1IDAgbApTClEKUQpxCjEgMCAwIDEgMTUgNjAyLjMwOTgwIGNtCjAgMCAwIHJnCkJUCi9GMSAxMCBUZgoxMiBUTApFVApxCjEgMCAwIDEgMCAtMCBjbQpxCjEgMCAwIDEgMCAtMSBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOC4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooTGlwYXNlKSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDIyNiAtMCBjbQpxCjEgMCAwIDEgMCAtMSBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOC4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooMjMyIFVcMDU3TCkgVGoKVCoKRVQKUQpRCnEKUQpRCnEKMSAwIDAgMSAzMzkgLTAgY20KcQoxIDAgMCAxIDAgLTEgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDguMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKDczIFwwNTUgMzkzKSBUagpUKgpFVApRClEKcQpRClEKcQpRClEKcQoxIDAgMCAxIDE1IDU4Ni44MDk4MCBjbQpxCjEgMCAwIDEgMSAtMSBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOS4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjIgOSBUZgowIDAgMCByZwooUmVmZXJlbmNlXDA3MikgVGoKVCoKRVQKUQpRCnEKUQpRCnEKMSAwIDAgMSAxNSA1NzEuMzA5ODAgY20KcQoxIDAgMCAxIDEgLTEgY20KcQowLjg0Mzc1IHcKQlQKMSAwIDAgMSAwIDkuMDM4MDAgVG0KMTMuNTAwMDAgVEwKL0YxIDkgVGYKMCAwIDAgcmcKKFNpZW1lbnMga2l0IGxpdGVyYXR1cmUpIFRqClQqCkVUClEKUQpxClEKUQpxCjEgMCAwIDEgMTUgNTU1LjgwOTgwIGNtCnEKMSAwIDAgMSAxIC0xIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCA5LjAzODAwIFRtCjEzLjUwMDAwIFRMCi9GMSA5IFRmCjAgMCAwIHJnCihSZW1hcmtzKSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDE1IDU0MC4zMDk4MCBjbQpxCjEgMCAwIDEgMSAtMSBjbQpxCjAuODQzNzUgdwpCVAoxIDAgMCAxIDAgOS4wMzgwMCBUbQoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooTm90ZSBcMDcyKSBUagpUKgpFVApRClEKcQpRClEKcQoxIDAgMCAxIDE1IDUzOS4zMDk4MCBjbQpxCjEgdwoxIEoKMCAwIDAgUkcKbgowIDAgbQo1NjUgMCBsClMKUQpRCnEKMSAwIDAgMSAxNSA1MTMuODA5ODAgY20KcQoxIDAgMCAxIDEgLTExIGNtCnEKMC44NDM3NSB3CkJUCjEgMCAwIDEgMCAxOS4wMzgwMCBUbQoyMzcuNDk0NTAgMCBUZAoxMy41MDAwMCBUTAovRjEgOSBUZgowIDAgMCByZwooXDA1MlwwNTJFTkQgT0YgUkVQT1JUXDA1MlwwNTIpIFRqClQqCi0yMzcuNDk0NTAgMCBUZApFVApRClEKcQpRClEKUQpxCjEgMCAwIDEgMCAwIGNtCkJUCi9GMSAxMiBUZgoxNC40MDAwMCBUTApFVApCVAovRjEgOSBUZgoxNC40MDAwMCBUTApFVApCVAoxIDAgMCAxIDUwMCA1MCBUbQooUGFnZSAzIG9mIDMpIFRqClQqCkVUClEKCmVuZHN0cmVhbQplbmRvYmoKeHJlZgowIDE0CjAwMDAwMDAwMDAgNjU1MzUgZiAKMDAwMDAwMDAwOSAwMDAwMCBuIAowMDAwMDAwMDgwIDAwMDAwIG4gCjAwMDAwMDAxODEgMDAwMDAgbiAKMDAwMDAwMDIzMCAwMDAwMCBuIAowMDAwMDAwNTI2IDAwMDAwIG4gCjAwMDAwMDA4MjMgMDAwMDAgbiAKMDAwMDAwMTEyMCAwMDAwMCBuIAowMDAwMDExMTQ5IDAwMDAwIG4gCjAwMDAwMTI3NjYgMDAwMDAgbiAKMDAwMDAxMjg3OCAwMDAwMCBuIAowMDAwMDEyOTgyIDAwMDAwIG4gCjAwMDAwMTMwOTAgMDAwMDAgbiAKMDAwMDAxNzc2MiAwMDAwMCBuIAp0cmFpbGVyCjw8Ci9TaXplIDE0Ci9Sb290IDMgMCBSCi9JbmZvIDIgMCBSCj4+CnN0YXJ0eHJlZgoyMjQzNAolJUVPRgo="
+#     datas = ContentFile(base64.b64decode(a), name='repor81.' + "pdf")
+#     b=Prescriptionbook1.objects.filter(bookingid="DP22416")
+#     for i in b:
+#         i.report=File(datas)
+#         i.save()
+# pdfconvert()    
 # def creategosamplifyorder():
 #     url = "https://mtqn0qowxc.execute-api.us-east-1.amazonaws.com/create-customer-order"
 #     payload = json.dumps({

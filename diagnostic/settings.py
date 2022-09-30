@@ -54,7 +54,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
 ]
 
 ROOT_URLCONF = 'diagnostic.urls'
@@ -70,7 +69,6 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'app1.context_processor.context_processor'
-                
             ],
         },
     },
@@ -232,6 +230,14 @@ JAZZMIN_SETTINGS = {
     "default_icon_children": "",
     }
 
+# CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+# CELERY_ACCEPT_CONTENT = ['application/json']
+# CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_TIMEZONE = 'Asia/Kolkata'
+# CELERY_ALWAYS_EAGER=True
+# CELERY_RESULT_BACKEND = 'django-db'
+# CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
 # CELERY_RESULT_BACKEND='redis://127.0.0.1:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
@@ -240,6 +246,16 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Kolkata'
 CELERY_ALWAYS_EAGER=True
 CELERY_RESULT_BACKEND = 'django-db'
+# CELERY_IMPORTS = ("app1.task.send_mail_func",)
+# CELERY_BEAT_SCHEDULE={
+#     'send-mail': {
+#         'task': 'app1.task.send_mail_func',
+#         # 'schedule': crontab(hour=0, minute=46, day_of_month=19, month_of_year = 6),
+#         'schedule': crontab(minute='*/1'),
+#         #'args': (2,)
+#     }
+# }
+
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 SESSION_COOKIE_AGE = 1209600

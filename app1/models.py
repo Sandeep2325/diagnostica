@@ -1,3 +1,5 @@
+from email.policy import default
+from unittest.util import _MAX_LENGTH
 import shortuuid
 import re
 from django.db import models
@@ -84,6 +86,7 @@ class User(AbstractUser,PermissionsMixin):
         max_length=8,
         default="", null=True,blank=True
     )
+    dob=models.DateField(null=True,blank=True,verbose_name="DOB")
     aggregator = models.BooleanField(default=False,)
     is_used = models.BooleanField(default=False)
     USERNAME_FIELD = 'email'
@@ -1061,7 +1064,23 @@ class gosamplify(models.Model):
     class Meta:
         verbose_name_plural="Go Samplify"
         verbose_name="Go Samplify"
-    
+
+class creliohealthdata(models.Model):
+    organisationid=models.CharField(max_length=10,null=True,blank=True,verbose_name="Organisation Id")
+    appointmentid=models.CharField(max_length=15,null=True,blank=True,verbose_name="Appointment Id(Crelio)")
+    billid=models.CharField(max_length=25,null=True,blank=True,verbose_name="Bill Id")  
+    spanbookingid=models.CharField(max_length=25,null=True,blank=True,verbose_name="Span Booking Id")
+    gosamplifyorderid=models.CharField(max_length=25,null=True,blank=True,verbose_name="Go Samplify Order Id")
+    gosamplifytaskid=models.CharField(max_length=25,null=True,blank=True,verbose_name="Go Samplify Task/Visit Id")
+    labtoken=models.CharField(max_length=50,null=True,blank=True,verbose_name="labtoken")
+    notify=models.BooleanField(default=False,verbose_name="Report Email Notify")
+    def __str__(self):
+        return self.billid
+    class Meta:
+        verbose_name_plural="Crelio Health Data"
+        verbose_name="Crelio Health Data"
+               
+     
     
           
     

@@ -2,6 +2,10 @@
 from celery import shared_task
 from django.core.mail import send_mail
 from diagnostic.celery import app
+import requests
+import json
+import base64
+from django.core.files.base import ContentFile
 # from diagnostic import settings
 # from django.utils import timezone
 # from datetime import timedelta
@@ -30,5 +34,87 @@ def send_mail_func(self):
     #                     [booking.user.email],
     #                     fail_silently=False)
     return "Done"
+
+@app.task(bind=True)
+def reportsavee(self):
+    precbook=Prescriptionbook1.objects.filter(report__is_null=True)
+    tesbook=testbook.objects.filter(report__is_null=True,payment_status=True)
+    for book in precbook:
+        try:
+            cre=creliohealthdata.objects.filter(spanbookingid=book.bookingid)
+            for i in cre:
+                # token=""
+                # billid=""
+                if (bool(book.report) == False) and i.notify==False:
+                    url = f"https://livehealth.solutions/getOrderStausPDFWithAllReports/?token={i.labtoken}&billId={i.billid}"
+                    payload={}
+                    headers = {}
+                    response = requests.request("GET", url, headers=headers, data=payload)
+                    # print(response.text)
+                    resp=json.loads(response.text)
+                    if resp["code"]==200:
+                        # print("send mail")
+                        # print(resp["allReportDetails"]["reportDetails"])
+                        a=resp["allReportDetails"]["reportDetails"]
+                        datas = ContentFile(base64.b64decode(a), name=f'Report-{book.bookingid}.' + "pdf")
+                        b=Prescriptionbook1.objects.filter(bookingid=book.bookingid)
+                        for j in b:
+                            j.report=File(datas)
+                            j.save()
+                        send_mail(str(f"Report|Booking Id:{book.bookingid} | Dignostica Span" ),
+                            f"Hello {b.user.first_name}\nYour Report is uploaded to your Dashboard for Booking Id:{book.bookingid}\nPlease Verify\nThank you \nDiagnostica Span",
+                            settings.EMAIL_HOST_USER,
+                            ["sandeep.nexevo@gmail.com"],
+                            fail_silently=False
+                            )
+                        cre.update(notify=True)
+        except:
+            pass
+    for book in tesbook:
+        try:
+            cre=creliohealthdata.objects.filter(spanbookingid=book.bookingid)
+            for i in cre:
+                # token=""
+                # billid=""
+                if (bool(book.report) == False) and i.notify==False:
+                    url = f"https://livehealth.solutions/getOrderStausPDFWithAllReports/?token={i.labtoken}&billId={i.billid}"
+                    payload={}
+                    headers = {}
+                    response = requests.request("GET", url, headers=headers, data=payload)
+                    # print(response.text)
+                    resp=json.loads(response.text)
+                    if resp["code"]==200:
+                        # print("send mail")
+                        # print(resp["allReportDetails"]["reportDetails"])
+                        a=resp["allReportDetails"]["reportDetails"]
+                        datas = ContentFile(base64.b64decode(a), name=f'Report-{book.bookingid}.' + "pdf")
+                        b=testbook.objects.filter(bookingid=book.bookingid)
+                        for j in b:
+                            j.report=File(datas)
+                            j.save()
+                        send_mail(str(f"Report|Booking Id:{book.bookingid} | Dignostica Span" ),
+                           f"Hello {b.user.first_name}\nYour Report is uploaded to your Dashboard for Booking Id:{book.bookingid}\nPlease Verify\nThank you \nDiagnostica Span",
+                           settings.EMAIL_HOST_USER,
+                           ["sandeep.nexevo@gmail.com"],
+                           fail_silently=False
+                           )
+                        cre.update(notify=True)
+        except:
+            pass
+        # for i in precbook:
+        #     if i.
+# a={"code": 200,
+#     "allReportDetails": {
+#       "Gender": "Male",
+#       "Age": "24 years",
+#       "Contact No": "9405751941",
+#       "Patient Name": "Jane Doe",
+#       "billId": "17758",
+#       "labPatientId": "Lab1234",
+#       "reportDetails": "oooo",
+#       "Patient Id": 20185
+#     }
+#     }
+# print(a["code"])
 
 

@@ -5,6 +5,7 @@
 {% block title %}Diagnostica Span{% endblock %}
 {%block content%}
 <body>
+  <noscript>Please enable javascript</noscript>
   <div class="preload"><img src="http://i.imgur.com/KUJoe.gif">
   </div>
   <div  class="content">
@@ -27,6 +28,17 @@
           </div>
         </div>
       </div>
+      <div class="home-banner banner3 pt-4 pb-5 py-sm-5">
+        <div class="container">
+          <div class="row">
+            <div class=" text-end col-lg-7 "> </div>
+            <div class=" text-start col-lg-5 ">
+              <h1 class="p-0 m-0" style="color:red; font-weight: bold;">Check out our curated health and lifestyle packages</h1>
+             <a href="{% url 'packages' %}"><button class="mt-lg-5 mt-4">Health Packages</button></a>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="home-banner banner2 pt-4 pb-5 py-sm-5">
         <div class="container">
           <div class="row">
@@ -35,17 +47,6 @@
               <h1 class="p-0 m-0" style="color:red; font-weight: bold;">STAY SAFE</h1>
               <p class="fs-24" style="color:red"><b>HOME SAMPLE COLLECTION NOW AVAILABLE</b></p>
               <a href="{%url "lifestyles"%}"><button>Life Style Assessments</button></a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="home-banner banner3 pt-4 pb-5 py-sm-5">
-        <div class="container">
-          <div class="row">
-            <div class=" text-end col-lg-7 "> </div>
-            <div class=" text-start col-lg-5 ">
-              <h1 class="p-0 m-0" style="color:red; font-weight: bold;">Check out our curated health and lifestyle packages</h1>
-             <a href="{% url 'packages' %}"><button class="mt-lg-5 mt-4">Health Packages</button></a>
             </div>
           </div>
         </div>
