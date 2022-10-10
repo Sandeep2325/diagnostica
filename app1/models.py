@@ -1,4 +1,5 @@
 from email.policy import default
+from tabnanny import verbose
 from unittest.util import _MAX_LENGTH
 import shortuuid
 import re
@@ -1062,8 +1063,8 @@ class gosamplify(models.Model):
     def __str__(self):
         return self.goordernumber
     class Meta:
-        verbose_name_plural="Go Samplify"
-        verbose_name="Go Samplify"
+        verbose_name_plural="Go Samplify Data"
+        verbose_name="Go Samplify Data"
 
 class creliohealthdata(models.Model):
     organisationid=models.CharField(max_length=10,null=True,blank=True,verbose_name="Organisation Id")
@@ -1079,6 +1080,20 @@ class creliohealthdata(models.Model):
     class Meta:
         verbose_name_plural="Crelio Health Data"
         verbose_name="Crelio Health Data"
+
+class creliocitytokens(models.Model):
+    city=models.ForeignKey(city,null=True,blank=True,on_delete=models.CASCADE,verbose_name="City")
+    token=models.CharField(max_length=50,null=True,blank=True,verbose_name="Token")
+    orgid=models.CharField(max_length=10,null=-True,blank=True,verbose_name="Organisation Id")
+    
+    def __unicode__(self):
+        return str(self.city.cityname)
+    def __str__(self):
+        return str(self.city.cityname)
+    class Meta:
+        verbose_name_plural="Crelio City Tokens"
+        verbose_name="Crelio City Tokens"
+        
                
      
     

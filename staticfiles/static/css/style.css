@@ -1356,7 +1356,7 @@ input::-webkit-inner-spin-button {
     font-size: 20px;
     font-family: Chivo-Regular;
     color: #2B3147;
-    opacity: 0.6;
+    /* opacity: 1; */
 }
 
 .section_blog_detail .categort_data button {

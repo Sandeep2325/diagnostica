@@ -6,7 +6,7 @@
 {%block content%}
 <body>
   <noscript>Please enable javascript</noscript>
-  <div class="preload"><img src="http://i.imgur.com/KUJoe.gif">
+   <div class="preload"><img src="http://i.imgur.com/KUJoe.gif">
   </div>
   <div  class="content">
   {%include 'header.html'%}
@@ -120,6 +120,7 @@
             class="symptoms px-3 {% cycle 'bg-light-blue' 'bg-light-orange' 'bg-light-green' 'bg-light-pink' %} text-center py-lg-5 py-3 br-10">
             <img src="{{ symptoms.photo.url }}" alt="" class="img-fluid pb-3">
             <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold symp_height">{{symptoms.name}}</p>
+            {% comment %} {{ symptoms.photo}} {% endcomment %}
           </div>
         </a>
         </div>
@@ -506,9 +507,9 @@
    //$(window).on('load', function() {
    // $("#loaderr").hide();
    // })
-    $(window).on("load",function(){
+    {% comment %} $(window).on("load",function(){
       $(".loader-wrapper").fadeOut("slow");
-    });
+    });  {% endcomment %}
 $(document).ready(function(){
    $("#myModal").modal({
     backdrop: 'static',
@@ -940,13 +941,12 @@ $("#health_pack_carousel").owlCarousel({
     });
 });
 
-$(function() {
+ $(function() {
   $(".preload").fadeOut(2000, function() {
       $(".content").fadeIn(2000);        
   });
-});
+}); 
 
 </script>
-
 
 {% endblock %}

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "app1",
     "aggregator",
     "rangefilter",
+    # "celery",
     "django_celery_beat",
     "django_celery_results",
     
@@ -239,20 +240,21 @@ JAZZMIN_SETTINGS = {
 # CELERY_RESULT_BACKEND = 'django-db'
 # CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
-# CELERY_RESULT_BACKEND='redis://127.0.0.1:6379'
+CELERY_RESULT_BACKEND='redis://127.0.0.1:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Kolkata'
 CELERY_ALWAYS_EAGER=True
-CELERY_RESULT_BACKEND = 'django-db'
+# CELERY_RESULT_BACKEND = 'django-db'
 # CELERY_IMPORTS = ("app1.task.send_mail_func",)
+# from celery.schedules import crontab
+
 # CELERY_BEAT_SCHEDULE={
 #     'send-mail': {
 #         'task': 'app1.task.send_mail_func',
-#         # 'schedule': crontab(hour=0, minute=46, day_of_month=19, month_of_year = 6),
 #         'schedule': crontab(minute='*/1'),
-#         #'args': (2,)
+#         'args': ()
 #     }
 # }
 

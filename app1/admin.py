@@ -183,7 +183,7 @@ class prescriptionbookadmin(admin.ModelAdmin):
         for i in queryset:
             link=request.build_absolute_uri('/send-report/{}/{}'.format(i.user.phone_no,i.bookingid))
             if (i.payment_status== True) and (bool(i.report) == True):
-                send_mail(str("Tests Report | DIAGNOSTICA SPAN"),
+                send_mail(str(f"Tests Report| Booking Id:{i.bookingid} | DIAGNOSTICA SPAN"),
                 (f"Hi {i.user.first_name} {i.user.last_name},\nThank for using our Services.\nThis mail is regarding the booking id: {i.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please click {link} to view your report\nHope you liked our service. Have a healthy recovery.\nThank You,\nDIAGNOSTICA SPAN"),
                   settings.EMAIL_HOST_USER,
                   [i.user.email],
@@ -202,7 +202,7 @@ class prescriptionbookadmin(admin.ModelAdmin):
             link=request.build_absolute_uri('/send-report/{}/{}'.format(i.user.phone_no,i.bookingid))
             if (i.payment_status== True) and (bool(i.report) == True):
                 message=f"Hi {i.user.first_name} {i.user.last_name},\nThank for using our Services.\nThis mail is regarding the booking id: {i.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please click {link} to view your report\nHope you liked our service. Have a healthy recovery.\nThank You,\nDIAGNOSTICA SPAN"
-                sms(message,i.user.phone_no)
+                a=sms(message,i.user.phone_no)
                 return messages.success(request, 'Report Sent Successfully')
             elif(i.payment_status== False) and (bool(i.report) == True):
                 return messages.warning(request, 'Payment Is Pending')
@@ -259,7 +259,7 @@ class testbookadmin(admin.ModelAdmin):
         for i in queryset:
             link=request.build_absolute_uri('/send-report/{}/{}'.format(i.user.phone_no,i.bookingid))
             if (i.payment_status== True) and (bool(i.report) == True):
-                send_mail(str("Tests Report | DIAGNOSTICA SPAN"),
+                send_mail(str(f"Tests Report | Booking Id:{i.bookingid} | DIAGNOSTICA SPAN"),
                 (f"Hi {i.user.first_name} {i.user.last_name},\nThank for using our Services.\nThis mail is regarding the booking id: {i.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please click {link} to view your report\nHope you liked our service. Have a healthy recovery.\nThank You,\nDIAGNOSTICA SPAN"),
                   settings.EMAIL_HOST_USER,
                   [i.user.email],
@@ -277,7 +277,7 @@ class testbookadmin(admin.ModelAdmin):
             link=request.build_absolute_uri('/send-report/{}/{}'.format(i.user.phone_no,i.bookingid))
             if (i.payment_status== True) and (bool(i.report) == True):
                 message=f"Hi {i.user.first_name} {i.user.last_name},\nThank for using our Services.\nThis mail is regarding the booking id: {i.bookingid}\nYour report is successfully generated and has been uploaded in your dashboard. Please click {link} to view your report\nHope you liked our service. Have a healthy recovery.\nThank You,\nDIAGNOSTICA SPAN"
-                sms(message,i.user.phone_no)
+                a=sms(message,i.user.phone_no)
                 return messages.success(request, 'Report Sent Successfully')
             elif(i.payment_status== False) and (bool(i.report) == True):
                 return messages.warning(request, 'Payment Is Pending')
@@ -820,6 +820,9 @@ class aggregatorbookingsadmin(admin.ModelAdmin):
         return True
 class creliohealthdataAdmin(admin.ModelAdmin):
     list_display=["organisationid","billid","spanbookingid","gosamplifyorderid","gosamplifytaskid","labtoken"]
+class creliotokensadmin(admin.ModelAdmin):
+    list_display=["city","token","orgid"]
+admin.site.register(creliocitytokens,creliotokensadmin)
 admin.site.register(User,UserAdmin)
 admin.site.register(faq,faqadmin)
 admin.site.register(contactus,contactusadmin)

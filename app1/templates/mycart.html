@@ -259,7 +259,7 @@
                             <button class="mx-lg-0 mx-3 mt-4 globalsubmitbutton"
                                 type="submit" name="submit" id="checkout">SUBMIT</button>
                             <button class="mx-lg-0 mx-3 mt-4 globalsubmitbutton"
-                                type="submit" name="submit" id="checkoutloading" hidden> <i class="fa fa-spinner fa-spin"></i> Loading...</button>
+                                type="submit" name="submit" id="checkoutloading" hidden> <i class="fa fa-spinner fa-spin"></i> Please wait...</button>
                         {% comment %} </form> {% endcomment %}
                     </div>
                 </div>
@@ -270,7 +270,7 @@
 </body>
 <script src="https://checkout.razorpay.com/v1/checkout.js">
 </script>
-<script src="path/to/boostrap.min.js"></script>
+{% comment %} <script src="path/to/boostrap.min.js"></script> {% endcomment %}
 <script type = "text/javascript">
  var AMOUNT=0; 
 
@@ -763,6 +763,7 @@ function slots(){
       "city_code": a[1]
     }),
     error:function(response){
+        console.log(response)
         $("#timeslot").append(`<option value='' disabled>No Slots Availabe</option>`);
      }
   };

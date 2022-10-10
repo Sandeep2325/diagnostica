@@ -2,6 +2,8 @@ from django import template
 from django.utils.safestring import mark_safe
 from django.template.loader import render_to_string
 import html
+from datetime import datetime
+
 register = template.Library()
 @register.filter
 def low(value):
@@ -25,7 +27,11 @@ def split(value, key):
 def split2(value, key):
     a=value.split(key)
     return a[1]
-
+@register.filter()
+def dateconvert(value):
+    print("-------",value)
+    # datetime_object = datetime.strptime(value, '%y %m %d')
+    return value
 # @register.filter()
 # def subtract(value, arg):
 #     return value - arg

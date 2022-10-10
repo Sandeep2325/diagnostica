@@ -67,13 +67,16 @@ class customerEmailThread(threading.Thread):
         # self.html_content = html_content
         threading.Thread.__init__(self)
     def run (self):
-        send_mail(
-                self.subject,
-                self.message,
-                self.emailfrom,
-                self.recipient_list,
-                fail_silently=False,
-                )
+        try:
+            send_mail(
+                    self.subject,
+                    self.message,
+                    self.emailfrom,
+                    self.recipient_list,
+                    fail_silently=False,
+                    )
+        except:
+            pass
 class AdminEmailThread(threading.Thread):
     def __init__(self, subject, message, recipient_list):
         self.subject = subject
@@ -84,16 +87,19 @@ class AdminEmailThread(threading.Thread):
         threading.Thread.__init__(self)
     def run (self):
         # print("----------",self.recipient_list)
-        send_mail(
-                self.subject,
-                self.message,
-                self.emailfrom,
-                self.recipient_list,
-                fail_silently=False,
-                )
+        try:
+            send_mail(
+                    self.subject,
+                    self.message,
+                    self.emailfrom,
+                    self.recipient_list,
+                    fail_silently=False,
+                    )
+        except:
+            pass
 class countdownThread(threading.Thread):
     def __init__(self,timer,request):
-        print("---",timer)
+        # print("---",timer)
         self.timer=timer
         self.request=request
         threading.Thread.__init__(self)
@@ -133,8 +139,8 @@ def dashboard(request):
     for i in bookamount:
         if i.amount is not None:
             totalamount.append(int(float(i.amount)))
-    for i in  outstand:
-         if i.amount is not None:
+    for i in outstand:
+        if i.amount is not None:
             outstandingamount.append(int(float(i.amount)))
     # prescription_bookings1=test-test_bookings
     bookings=int(testbooking)+int(prescription_bookings)
@@ -348,7 +354,6 @@ def forgotpassword(request):
             request.session['email'] = e
             request.session['password'] = p
             otp = random.randint(1000,9999)
-            
             request.session['otp'] = otp
                 # message = f'your otp is {otp}'
                 # send_otp(p_number,message)
@@ -360,7 +365,7 @@ def forgotpassword(request):
             message = message
             subject = "DIAGNOSTICA SPAN | FORGOT PASSWORD"
             p_number=userr.phone_no
-            templateid=1507166152065523633
+            # templateid=1507166152065523633
             a=sms(message,p_number)
             # send_mail(
             #         subject,
@@ -453,8 +458,7 @@ def changepasswordotp(request):
                 data = User.objects.filter(
                                 email=request.user.email)
                 if data.exists():
-                    data = User.objects.filter(
-                                email=request.user.email).update(password=newpassword)
+                    data.update(password=newpassword)
                 # user_instance = User.objects.get(username=user)
                 # User.objects.create(
                 #                 user = user_instance,phone_number=p_number
@@ -571,7 +575,10 @@ def profilee(request):
         else:
             a=User.objects.get(email=request.user.email)
             try:
-                dobstrp = datetime.datetime.strptime(dob, '%d-%m-%Y')
+                try:
+                    dobstrp = datetime.datetime.strptime(dob, '%Y-%m-%d')
+                except:
+                    dobstrp = datetime.datetime.strptime(dob, '%d-%m-%Y')
                 a.first_name=firstname
                 a.last_name=lastname
                 a.photo=profilepic
@@ -586,7 +593,7 @@ def profilee(request):
                 a.save()
                 messages.success(request,"Profile updated Successfully")
             except Exception as e:
-                # print("-----------",e)
+                print("-----------",e)
                 messages.error(request,"Please Update every field")
         return redirect("profile")  
              
@@ -737,12 +744,14 @@ def home(request):
     envcity={"Bangalore":Bangalore,"Mumbai":Mumbai,"Bhophal":Bhophal,"Nanded":Nanded,"Pune":Pune,"Barshi":Barshi,"Aurangabad":Aurangabad}
     if request.method =="GET":
         cit=city.objects.filter(active=True)
-        tests=test.objects.all()
+        # tests=test.objects.select_related("categoryy").all()
         healthcheckup=healthcheckuppackages.objects.all()
-        healthpackage=healthpackages.objects.all()
-        healthsymptom=healthsymptoms.objects.all()
-        healthcareblog=healthcareblogs.objects.all()
+        healthpackage=healthpackages.objects.prefetch_related("test_name").all()
+        healthsymptom=healthsymptoms.objects.prefetch_related("test_name").all()
+        healthcareblog=healthcareblogs.objects.prefetch_related("category").all()
         testimonial=testimonials.objects.all()
+        # for i in healthsymptom:
+        #     print(i.name)
         context={
             "healthcheckup":healthcheckup,
             "healthpackage":healthpackage,
@@ -751,22 +760,22 @@ def home(request):
             "healthcareblog":healthcareblog,
             "city":cit,
             "currentcity":c,
-            "tests":tests,
+            # "tests":tests,
             "envcity":envcity,
             "blogcount":healthcareblog.count(),
             "testimonialcount":testimonial.count(),
         }
         if not request.user.is_anonymous:
-            c = cart.objects.filter(user=request.user)
+            usercart = cart.objects.filter(user=request.user)
         else:
-            c = cart.objects.filter(device=deviceCookie)    
+            devicecart = cart.objects.filter(device=deviceCookie)    
         if request.user.is_anonymous:
-            request.session['cart_count']= cart.objects.filter(device = deviceCookie).count()
+            request.session['cart_count']= cart.objects.filter(device=deviceCookie).count()
         else:
             if cart.objects.filter(user = request.user).count()==0:
-                request.session['cart_count']= cart.objects.filter(device = deviceCookie).count()
+                request.session['cart_count']= cart.objects.filter(device=deviceCookie).count()
             else:
-                request.session['cart_count']= cart.objects.filter(user = request.user).count()
+                request.session['cart_count']= cart.objects.filter(user=request.user).count()
         res = render(request,'home.html',context)
         return res
 
@@ -790,31 +799,31 @@ def home(request):
         #             fail_silently=False,
         #     )
         AdminEmailThread(subject, message, reachus).start()
-        cit=city.objects.all()
-        tests=test.objects.all()
-        healthcheckup=healthcheckuppackages.objects.all()[0:4]
-        healthpackage=healthpackages.objects.all()
-        healthsymptom=healthsymptoms.objects.all()
-        healthcareblog=healthcareblogs.objects.all()
-        testimonial=testimonials.objects.all()
-        context={
-                "healthcheckup":healthcheckup,
-                "healthpackage":healthpackage,
-                "healthsymptom":healthsymptom,
-                "testimonial":testimonial,
-                "healthcareblog":healthcareblog,
-                "city":cit,
-                "currentcity":c,
-                "tests":tests,
-                "envcity":envcity,
-        }
+        # cit=city.objects.all()
+        # tests=test.objects.all()
+        # healthcheckup=healthcheckuppackages.objects.all()[0:4]
+        # healthpackage=healthpackages.objects.all()
+        # healthsymptom=healthsymptoms.objects.all()
+        # healthcareblog=healthcareblogs.objects.all()
+        # testimonial=testimonials.objects.all()
+        # context={
+        #         "healthcheckup":healthcheckup,
+        #         "healthpackage":healthpackage,
+        #         "healthsymptom":healthsymptom,
+        #         "testimonial":testimonial,
+        #         "healthcareblog":healthcareblog,
+        #         "city":cit,
+        #         "currentcity":c,
+        #         "tests":tests,
+        #         "envcity":envcity,
+        # }
         messages.success(request,"Submitted Successfully")
         return HttpResponseRedirect(reverse("home"))
 
 def healthcheckupview(request,slug):
     c=request.session.get("city")
     city="Hyderabad"
-    data=healthcheckuppackages.objects.filter(slug=slug)[0:4]
+    data=healthcheckuppackages.objects.select_related("test_name").filter(slug=slug)[0:4]
     context={
         "data":data,
         "city":city
@@ -823,14 +832,14 @@ def healthcheckupview(request,slug):
 
 def healthcheckupallview(request):
     c=request.session.get("city")
-    checkups=healthcheckuppackages.objects.all()
+    checkups=healthcheckuppackages.objects.select_related("test_name").all()
     context={
         "checkups":checkups,
         "currentcity":c
     }
     return render(request,'latestviewall.html',context)
 def hpackagess(request):
-    packages=healthpackages.objects.all()
+    packages=healthpackages.objects.select_related("test_name").all()
     cit=request.session.get("city")
     envcity={"Bangalore":Bangalore,"Mumbai":Mumbai,"Bhophal":Bhophal,"Nanded":Nanded,"Pune":Pune,"Barshi":Barshi,"Aurangabad":Aurangabad}
     context={
@@ -842,8 +851,8 @@ def hpackagess(request):
 
 def healthpackageview(request,slug):
         citi=request.session.get("city")
-        package=healthpackages.objects.get(slug=slug)
-        packages=healthpackages.objects.exclude(slug=slug)
+        package=healthpackages.objects.select_related("test_name").get(slug=slug)
+        packages=healthpackages.objects.select_related("test_name").exclude(slug=slug)
         tests=package.test_name.all()
         c=package.test_name.all().count()
         l=int(c)//2
@@ -920,13 +929,13 @@ def healthpackageview(request,slug):
 def testdetails(request):
     if request.method=="POST":
             id=request.POST["id"]
-            a=book_history.objects.get(id=id)
+            a=book_history.objects.select_related("user").get(id=id)
             return JsonResponse({"message":a.bookingdetails})
 def prescriptionbreak(request):
     if request.method=="POST":
         city=request.session.get("city")
         id=request.POST["id"]
-        a=Prescriptionbook1.objects.get(bookingid=id)
+        a=Prescriptionbook1.objects.prefetch_related("test_name").get(bookingid=id)
         if a.coupon == None:
             strr=[]
             for i in a.test_name.all():
@@ -951,7 +960,7 @@ def prescriptionbreak(request):
             return JsonResponse({"message":strr,"coupon":False})
         else:
             try:
-                redeem=couponredeem.objects.get(booking_id=id)
+                redeem=couponredeem.objects.select_related("user").get(booking_id=id)
                 strr=[]
                 for i in a.test_name.all():
                     di={}
@@ -1000,7 +1009,7 @@ def prescriptionbreak(request):
 def healthsymptomview(request,slug):
     deviceCookie = request.COOKIES.get('device')
     c=request.session.get("city")
-    data=healthsymptoms.objects.filter(slug=slug)
+    data=healthsymptoms.objects.prefetch_related("test_name").filter(slug=slug)
     
     context={
         "data":data,
@@ -1009,8 +1018,8 @@ def healthsymptomview(request,slug):
     return render(request,'',context)
 def healthcareblogsview(request,slug):
     c=request.session.get("city")
-    detail=healthcareblogs.objects.get(slug=slug)
-    blogs=healthcareblogs.objects.all().order_by("-created")
+    detail=healthcareblogs.objects.select_related("category").get(slug=slug)
+    blogs=healthcareblogs.objects.select_related("category").all().order_by("-created")
     category=blogcategory.objects.all()
     context={
         "detail":detail,
@@ -1019,8 +1028,8 @@ def healthcareblogsview(request,slug):
     }
     return render(request,'blogdetail.html',context)
 def categoryblog(request,slug):
-    detail=healthcareblogs.objects.first()
-    blogs=healthcareblogs.objects.filter(category__slug=slug).order_by("-created")
+    detail=healthcareblogs.objects.select_related("category").first()
+    blogs=healthcareblogs.objects.select_related("category").filter(category__slug=slug).order_by("-created")
     category=blogcategory.objects.all()
     context={
         "detail":detail,
@@ -1052,7 +1061,7 @@ def prescriptionbookview(request):
         s = shortuuid.ShortUUID(alphabet="0123456789")
         bid = s.random(length=5)
         # bookingid="DP"+str(bid)
-        book=book_history.objects.all().order_by("-created")[0:1]
+        book=book_history.objects.filter(user=request.user).order_by("-created")[0:1]
         for i in book:
             temp = re.compile("([a-zA-Z]+)([0-9]+)")
             res = temp.match(i.bookingid).groups()
@@ -1094,7 +1103,7 @@ def prescriptionbookview(request):
             location=c,
             address=address,
             bookingid=bookingid).save()
-        data2=Prescriptionbook1.objects.get(unique=unique)
+        data2=Prescriptionbook1.objects.prefetch_related("test_name").get(unique=unique)
         if myself=="on":
             User.objects.filter(email=request.user.email).update(first_name=firstname,last_name=lastname,phone_no=contact,age=age,address=address,gender=gender)
         # data=prescription_book.objects.get(unique=unique)
@@ -1123,7 +1132,7 @@ def prescriptionbookview(request):
         #         recipient_list,
         #         fail_silently=False,
         # )
-        msg=f"Hi\nThere is an Upload Prescription order booked with following details\nBookingID:{bookingid}\nFullname:{firstname}{lastname}\nLocation:{c}\nPhone Number:{contact}"
+        msg=f"Hi\nThere is an Upload Prescription order booked with following details\nBooking ID:{bookingid}\nFullname:{firstname} {lastname}\nLocation:{c}\nPhone Number:{contact}"
         # send_mail(
         #     subject,
         #     msg,
@@ -1145,12 +1154,12 @@ def testselect(request):
     deviceCookie = request.COOKIES['device']
     c=request.session.get("city")
     tcategories=category.objects.all()
-    tests=test.objects.filter(Banglore_price__isnull=False)
+    tests=test.objects.select_related("categoryy").filter(Banglore_price__isnull=False)
     envcity={"Bangalore":Bangalore,"Mumbai":Mumbai,"Bhophal":Bhophal,"Nanded":Nanded,"Pune":Pune,"Barshi":Barshi,"Aurangabad":Aurangabad}
     if request.user.is_anonymous:
-        carts=cart.objects.filter(device = deviceCookie)
+        carts=cart.objects.select_related("user").filter(device = deviceCookie)
     else:
-        carts=cart.objects.filter(user = request.user)
+        carts=cart.objects.select_related("user").filter(user = request.user)
     cartlist=[]
     for carrt in carts:
         try:
@@ -1164,38 +1173,38 @@ def testselect(request):
         'envcity':envcity,
         "cartlist":cartlist
     }
-    if request.method=="POST":
-        test_name=request.POST.getlist("test_name")
-        myself=request.POST.get("myself")
-        others=request.POST.get('others')
-        others_choice=request.POST.get("others_choice")
-        firstname=request.POST.get('firstname')
-        lastname=request.POST.get('lastname')
-        contact=request.POST.get('contact')
-        age=request.POST.get('age')
-        gender=request.POST['gender']
-        unique = uuid.uuid4()
-        s = shortuuid.ShortUUID(alphabet="0123456789")
-        bid = s.random(length=5)
-        bookingid="DP"+str(bid)
-        for i in test_name:
-            item=test.objects.get(id=i)
-            if c==Bangalore:
-                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.Banglore_price).save()
-            elif c == Mumbai:
-                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.Mumbai_price).save()
-            elif c == Bhophal:
-                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.bhopal_price).save()   
-            elif c == Nanded:
-                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.nanded_price).save()
-            elif c == Pune:
-                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pune_price).save()
-            elif c == Barshi:
-                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.barshi_price).save()   
-            elif c == Aurangabad:
-                cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.aurangabad_price).save()
-        messages.success(request,"Your booking added to cart successfully")
-        return render(request,"choose-test-list.html",context)
+    # if request.method=="POST":
+    #     test_name=request.POST.getlist("test_name")
+    #     myself=request.POST.get("myself")
+    #     others=request.POST.get('others')
+    #     others_choice=request.POST.get("others_choice")
+    #     firstname=request.POST.get('firstname')
+    #     lastname=request.POST.get('lastname')
+    #     contact=request.POST.get('contact')
+    #     age=request.POST.get('age')
+    #     gender=request.POST['gender']
+    #     unique = uuid.uuid4()
+    #     s = shortuuid.ShortUUID(alphabet="0123456789")
+    #     bid = s.random(length=5)
+    #     bookingid="DP"+str(bid)
+    #     for i in test_name:
+    #         item=test.objects.get(id=i)
+    #         if c==Bangalore:
+    #             cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.Banglore_price).save()
+    #         elif c == Mumbai:
+    #             cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.Mumbai_price).save()
+    #         elif c == Bhophal:
+    #             cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.bhopal_price).save()   
+    #         elif c == Nanded:
+    #             cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.nanded_price).save()
+    #         elif c == Pune:
+    #             cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.pune_price).save()
+    #         elif c == Barshi:
+    #             cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.barshi_price).save()   
+    #         elif c == Aurangabad:
+    #             cart.objects.create(user=request.user,items=item,categoryy=item.categoryy,price=item.aurangabad_price).save()
+    #     messages.success(request,"Your booking added to cart successfully")
+    #     return render(request,"choose-test-list.html",context)
     return render(request,"choose-test-list.html",context)
 
 def couponsessiondelete(request):
@@ -1218,7 +1227,7 @@ def cartt(request):
     deviceCookie = request.COOKIES.get('device')
     cit=city.objects.filter(active=True)
     if not request.user.is_anonymous:
-        d = cart.objects.filter(device = deviceCookie).update(user=request.user)
+        d = cart.objects.select_related("user").filter(device = deviceCookie).update(user=request.user)
     if request.method=="POST":
         c=request.session.get("city")
         others=request.POST.get('option1')
@@ -1241,7 +1250,7 @@ def cartt(request):
         data=cart.objects.filter(user=request.user)
         s = shortuuid.ShortUUID(alphabet="0123456789")
         bid = s.random(length=5)
-        book=book_history.objects.all().order_by("-created")[0:1]
+        book=book_history.objects.select_related("user").all().order_by("-created")[0:1]
         for i in book:
             temp = re.compile("([a-zA-Z]+)([0-9]+)")
             res = temp.match(i.bookingid).groups()
@@ -1254,7 +1263,7 @@ def cartt(request):
                 bookingid="DP"+str(booking)
         except:
             bookingid="DP"+str(bid)
-        data1=cart.objects.filter(user=request.user)
+        data1=cart.objects.select_related("user").filter(user=request.user)
         tes=[]
         testli=[]
         for i in data1:
@@ -1350,7 +1359,8 @@ def cartt(request):
             citname=cit.cityname
             gosamporderid=res["data"][0]["order_number"]
             gosamtaskid=res["data"][0]["task_id"]
-            appointres=appointment(testli,firstname,lastname,age,genderr,gosamporderid,citname,dob)
+            tokencity=request.session.get("tempcity")
+            appointres=appointment(testli,firstname,lastname,age,genderr,gosamporderid,citname,dob,tokencity)
             print("------------",json.loads(appointres))
             appointress=json.loads(appointres)
             if appointress["code"]==200:
@@ -1435,7 +1445,7 @@ def cartt(request):
                         landmark=landmark,
                         timeslot=timeslot,
                         bookingid=bookingid,)
-                data=testbook.objects.get(unique=uniquee) 
+                data=testbook.objects.select_related("user").get(unique=uniquee) 
                 bookhistory=book_history(
                          user=request.user,
                          testbooking_id=data.id,
@@ -1682,12 +1692,17 @@ def cartt(request):
                 response = requests.request("GET", url, headers=headers, data=payload)
                 # gos=gosamplify.objects.filter(orderref=d.bookingid)
                 return JsonResponse({"message":False})
+        elif response.status_code==401:
+            subject=f"401 Unauthorised for Go Samplify"
+            message=f"Hi There,\nGo Samplify Order Creating API is Getting Unauthorised Error,Error Code :401\nPlease Lookinto it"
+            AdminEmailThread(subject, message, reachus).start()
+            return JsonResponse({"message":False})
         else:
             return JsonResponse({"message":False})
     if not request.user.is_anonymous:
-        c = cart.objects.filter(user=request.user)
+        c = cart.objects.select_related("user").filter(user=request.user)
     else:
-        c = cart.objects.filter(device=deviceCookie)
+        c = cart.objects.select_related("user").filter(device=deviceCookie)
     data=[]
     for i in c:
         if i.items == None and i.labtest:
@@ -1763,11 +1778,11 @@ def othersdetail(request):
         testid=request.POST["testid"]
         print("----",testid)
         try:
-            detail=Prescriptionbook1.objects.get(bookingid=testid)
-            print("prec")
+            detail=Prescriptionbook1.objects.prefetch_related("test_name").get(bookingid=testid)
+            # print("prec")
         except:
-            detail=testbook.objects.get(bookingid=testid)
-            print("test")
+            detail=testbook.objects.select_related("user").get(bookingid=testid)
+            # print("test")
         choice = ""
         gender=""
         if detail.others_choice=="m":
@@ -1804,11 +1819,11 @@ def paymenthandler(request,str,amount):
             if paymentid:
                 if verify_signature(request.POST):
                     transid=request.POST["razorpay_order_id"]
-                    cart.objects.filter(user=usr).delete()
-                    history=book_history.objects.get(payment_id=transid)
+                    cart.objects.select_related("user").filter(user=usr).delete()
+                    history=book_history.objects.select_related("user").get(payment_id=transid)
                     history.payment_status=True
-                    Prescriptionbook1.objects.filter(bookingid=history.bookingid).update(payment_status=True)
-                    testbook.objects.filter(bookingid=history.bookingid).update(payment_status=True)
+                    Prescriptionbook1.objects.prefetch_related("test_name").filter(bookingid=history.bookingid).update(payment_status=True)
+                    testbook.objects.select_related("user").filter(bookingid=history.bookingid).update(payment_status=True)
                     history.save()
                     # signatureid=request.session.get("signatureid")
                     # print("------",signatureid)
@@ -1836,7 +1851,7 @@ def paymenthandler(request,str,amount):
                     return redirect("booking-history")
             else:
                 transid=request.POST["razorpay_order_id"]
-                history=book_history.objects.get(payment_id=transid)
+                history=book_history.objects.select_related("user").get(payment_id=transid)
                 link=request.build_absolute_uri('/booking-history')
                 email_from = settings.EMAIL_HOST_USER
                 recipient_list = [history.user.email]
@@ -1857,9 +1872,9 @@ def paymenthandler(request,str,amount):
                 b=request.POST.get('error[metadata]')
                 c=json.loads(b)
                 # a=book_history.objects.filter(payment_id=c["order_id"])
-                history=book_history.objects.filter(payment_id=c["order_id"])
-                Prescriptionbook1.objects.filter(bookingid=history.bookingid).delete()
-                testbook.objects.filter(bookingid=history.bookingid).delete()
+                history=book_history.objects.select_related("user").filter(payment_id=c["order_id"])
+                Prescriptionbook1.objects.prefetch_related("test_name").filter(bookingid=history.bookingid).delete()
+                testbook.objects.select_related("user").filter(bookingid=history.bookingid).delete()
                 history.delete()
                 error = request.POST.get('error[description]')
                 messages.error(request, error)
@@ -1877,11 +1892,11 @@ def paymenthandler(request,str,amount):
         # print(metadata[0])
         # print(request.POST.get("order_id"))
         # order_id=request.POST.get(a["order_id"])
-        history=book_history.objects.get(payment_id=a["order_id"])
+        history=book_history.objects.select_related("user").get(payment_id=a["order_id"])
         # for i in history:
         #     a=i.bookingid
-        Prescriptionbook1.objects.filter(bookingid=history.bookingid).delete()
-        testbook.objects.filter(bookingid=history.bookingid).delete()
+        Prescriptionbook1.objects.prefetch_related("test_name").filter(bookingid=history.bookingid).delete()
+        testbook.objects.select_related("user").filter(bookingid=history.bookingid).delete()
         history.delete()
         messages.error(request, "Payment failed Please Retry")
         return redirect("booking-history")
@@ -1893,7 +1908,7 @@ def subscriptionview(request):
             email=request.POST.get("email")
             template_name = 'email.html'
             msg=EmailMessage(
-            'Diagnotica',
+            'Diagnostica',
             render_to_string(template_name),
             settings.EMAIL_HOST_USER,
             [email],
@@ -2024,11 +2039,11 @@ def categoryy(request):
         b=[]
         if pk != "all":
             if searched_name:
-                tests=test.objects.filter(categoryy__id=pk, testt__icontains = searched_name)
+                tests=test.objects.select_related("categoryy").filter(categoryy__id=pk, testt__icontains = searched_name)
             else:
-                tests=test.objects.filter(categoryy__id=pk)
+                tests=test.objects.select_related("categoryy").filter(categoryy__id=pk)
         else:
-            tests=test.objects.all()
+            tests=test.objects.select_related("categoryy").all()
         for tesst in tests:
             a={}
             a['id']=tesst.id
@@ -2064,11 +2079,11 @@ def search(request):
             req_cat = request.POST.get("cat")
             if req_cat != "all":
                 if searched:
-                    tests=test.objects.filter(categoryy__id=req_cat, testt__icontains = searched)
+                    tests=test.objects.select_related("category").filter(categoryy__id=req_cat, testt__icontains = searched)
                 else:
-                    tests=test.objects.filter(categoryy__id=req_cat)
+                    tests=test.objects.select_related("category").filter(categoryy__id=req_cat)
             else:
-                tests=test.objects.filter(testt__icontains=searched)
+                tests=test.objects.select_related("category").filter(testt__icontains=searched)
             b=[]
             for tesst in tests:
                 a={}
@@ -2098,7 +2113,7 @@ def destroy(request):
     if request.method=="POST":
         car=request.POST["cart"]
         try:
-            a = cart.objects.get(id=car)  
+            a = cart.objects.select_related("user").get(id=car)  
             a.delete()  
         except:
             pass
@@ -2112,7 +2127,7 @@ def coupon(request):
             citi=request.session.get("tempcity")
             try:
                 c=coupons.objects.get(couponcode=coupon,status="active")
-                couponcount=couponredeem.objects.filter(coupon=coupon).count()
+                couponcount=couponredeem.objects.select_related("user").filter(coupon=coupon).count()
                 if datetime.now(timezone.utc)>c.startdate:
                     if datetime.now(timezone.utc)<c.enddate:
                         if c.cityy.filter(cityname=citi).exists():
@@ -2158,8 +2173,8 @@ def coupon(request):
             citi=request.session.get("tempcity")
             try:
                 c=coupons.objects.get(couponcode=coupon,status="active")
-                couponcount=couponredeem.objects.filter(coupon=coupon).count()
-                presc=Prescriptionbook1.objects.get(bookingid=uni)
+                couponcount=couponredeem.objects.select_related("user").filter(coupon=coupon).count()
+                presc=Prescriptionbook1.objects.prefetch_related("test_name").get(bookingid=uni)
                 if presc.coupon==None:
                     if datetime.now(timezone.utc)>c.startdate:
                         if datetime.now(timezone.utc)<c.enddate:
@@ -2203,12 +2218,12 @@ def coupon(request):
 def razorpayclose(request):
     if request.method=="POST":
         paymentid=request.POST["paymentid"]
-        a=book_history.objects.filter(payment_id=paymentid)
+        a=book_history.objects.select_related("user").filter(payment_id=paymentid)
         b=invoicee.objects.filter(order_id=paymentid)
-        c=couponredeem.objects.filter(order_id=paymentid)
-        d=book_history.objects.get(payment_id=paymentid)
-        tes=testbook.objects.filter(bookingid=d.bookingid)
-        pres=Prescriptionbook1.objects.filter(bookingid=d.bookingid)
+        c=couponredeem.objects.select_related("user").filter(order_id=paymentid)
+        d=book_history.objects.select_related("user").get(payment_id=paymentid)
+        tes=testbook.objects.select_related("user").filter(bookingid=d.bookingid)
+        pres=Prescriptionbook1.objects.prefetch_related("user").filter(bookingid=d.bookingid)
         gos=gosamplify.objects.filter(orderref=d.bookingid)
         crelio=creliohealthdata.objects.filter(spanbookingid=d.bookingid)
         tes.delete()
@@ -2256,7 +2271,7 @@ def healthcheckupadd(request):
     if request.method=="POST":
         if request.POST.get("action") == "healthcheckup":
             slug=request.POST["ids"]
-            labtest=healthcheckuppackages.objects.get(id=slug)
+            labtest=healthcheckuppackages.objects.prefetch_related("test_name").get(id=slug)
             if cityy==Bangalore:
                 obj, created = cart.objects.get_or_create(
                     device = deviceCookie,
@@ -2421,12 +2436,12 @@ def html_to_pdf(template_src, context_dict={}):
 
 @login_required(login_url="/login/")
 def invoice(request,orderid):
-    order=book_history.objects.get(payment_id=orderid)
-    payments=payment.objects.get(transid=orderid)
+    order=book_history.objects.select_related("user").get(payment_id=orderid)
+    payments=payment.objects.select_related("user").get(transid=orderid)
     try:
-        testbooking=Prescriptionbook1.objects.get(bookingid=order.uni)
+        testbooking=Prescriptionbook1.objects.prefetch_related("test_name").get(bookingid=order.uni)
     except:
-        testbooking=testbook.objects.get(bookingid=order.uni)
+        testbooking=testbook.objects.select_related("user").get(bookingid=order.uni)
     invoic=invoicee.objects.filter(order_id=orderid)
     amount=payments.amount
     # couponamount=num2words(int(float(couponamount)), lang = 'en_IN')
@@ -2436,7 +2451,7 @@ def invoice(request,orderid):
     amount1=num2words(int(float(amount)), lang = 'en_IN')
     c=amount1.replace(",","")
     try:
-        coupoonn=couponredeem.objects.get(order_id=orderid)
+        coupoonn=couponredeem.objects.select_related("user").get(order_id=orderid)
         couponamount=coupoonn.actualamount
         couponamount=num2words(int(float(couponamount)), lang = 'en_IN')
         a=couponamount.replace(",","")
@@ -2476,16 +2491,16 @@ class BookingHistoryPay(LoginRequiredMixin,View):
     login_url = '/login/'
     def get(self, request,*args, **kwargs):
         # medics=medications.objects.filter(user=request.user)
-        medics=medications.objects.filter(user=request.user).order_by("-created")
+        medics=medications.objects.select_related("user").filter(user=request.user).order_by("-created")
         his = []
         cit=city.objects.filter(active=True)
-        bookhistories=book_history.objects.filter(user=request.user,booking_type__in=["Prescription","Selected Test/Packages"]).order_by('-created')
+        bookhistories=book_history.objects.select_related("user").filter(user=request.user,booking_type__in=["Prescription","Selected Test/Packages"]).order_by('-created')
         # bookhistories=book_history.objects.exclude(user=request.user,booking_type="Aggregator").order_by('-created')
-        payments=payment.objects.filter(user=request.user).order_by('-date')
+        payments=payment.objects.select_related("user").filter(user=request.user).order_by('-date')
         for i in bookhistories:
             try:
                 # try:
-                testbooking=Prescriptionbook1.objects.get(bookingid=i.uni)
+                testbooking=Prescriptionbook1.objects.prefetch_related("test_name").get(bookingid=i.uni)
                 # except:
                 #     pass
                 hi = {}
@@ -2512,7 +2527,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 his.append(hi)
             except:
                 # try:
-                testbooking=testbook.objects.get(bookingid=i.uni)
+                testbooking=testbook.objects.select_related("user").get(bookingid=i.uni)
                 # except:
                 #     pass
                 hi = {}
@@ -2633,7 +2648,8 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 gosamporderid=res["data"][0]["order_number"]
                 gosamtaskid=res["data"][0]["task_id"]
                 citi=city.objects.get(id=int(cc[0]))
-                appointres=appointment(testli,presc.firstname,presc.lastname,presc.age,genderr,gosamporderid,citi.cityname,dob)
+                tokencity=request.session.get("tempcity")
+                appointres=appointment(testli,presc.firstname,presc.lastname,presc.age,genderr,gosamporderid,citi.cityname,dob,tokencity)
                 # print("------------",json.loads(appointres))
                 appointress=json.loads(appointres)
                 if appointress["code"]==200:
@@ -2658,8 +2674,8 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                     try:
                         coup=coupons.objects.get(couponcode=coupon)
                         citi=city.objects.get(id=int(cc[0]))
-                        Prescriptionbook1.objects.filter(bookingid=id).update(date=date,timeslot=timeslot,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,coupon=coup,price=price,landmark=landmark)
-                        mod = book_history.objects.get(uni=id)
+                        Prescriptionbook1.objects.prefetch_related("test_name").filter(bookingid=id).update(date=date,timeslot=timeslot,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,coupon=coup,price=price,landmark=landmark)
+                        mod = book_history.objects.select_related("user").get(uni=id)
                         mod.amount=price
                         client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
                         tot_amt = float(mod.amount) * 100
@@ -2694,8 +2710,8 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                         }
                     except:
                         citi=city.objects.get(id=int(cc[0]))
-                        Prescriptionbook1.objects.filter(bookingid=id).update(date=date,timeslot=timeslot,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,landmark=landmark)
-                        mod = book_history.objects.get(uni=id)
+                        Prescriptionbook1.objects.prefetch_related("test_name").filter(bookingid=id).update(date=date,timeslot=timeslot,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,landmark=landmark)
+                        mod = book_history.objects.select_related("user").get(uni=id)
 
                         client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
                         tot_amt = float(mod.amount) * 100
@@ -2754,10 +2770,15 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                     #         invoicee.objects.create(user=request.user,order_id=razorpay_order['id'],items=item,price=item.aurangabad_price)   
                 else:
                     to_return = {"valid":False}
+            elif response.status_code==401:
+                subject=f"401 Unauthorised for Go Samplify"
+                message=f"Hi There,\nGo Samplify Order Creating API is Getting Unauthorised Error,Error Code :401\nPlease Lookinto it"
+                AdminEmailThread(subject, message, reachus).start()
+                to_return = {"valid":False}
             else:
                 to_return = {"valid":False}
         if request.POST.get("action") == "payment_canceled":
-            mod = book_history.objects.get(payment_id=request.POST.get('order_id'))
+            mod = book_history.objects.select_related("user").get(payment_id=request.POST.get('order_id'))
             gos=gosamplify.objects.filter(orderref=mod.bookingid)
             mod.payment_id = None
             mod.payment_status = False
@@ -2850,7 +2871,8 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 gosamporderid=res["data"][0]["order_number"]
                 gosamtaskid=res["data"][0]["task_id"]
                 citi=city.objects.get(id=int(cc[0]))
-                appointres=appointment(testli,presc.firstname,presc.lastname,presc.age,genderr,gosamporderid,citi.cityname,dob)
+                tokencity=request.session.get("tempcity")
+                appointres=appointment(testli,presc.firstname,presc.lastname,presc.age,genderr,gosamporderid,citi.cityname,dob,tokencity)
                 # print("------------",json.loads(appointres))
                 appointress=json.loads(appointres)
                 if appointress["code"]==200:
@@ -2875,9 +2897,9 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                     try:
                         a=coupons.objects.get(couponcode=coupon)
                         citi=city.objects.get(id=int(cc[0]))
-                        Prescriptionbook1.objects.filter(bookingid=id).update(date=date,timeslot=timeslot,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,coupon=a,price=price,landmark=landmark)
-                        book_history.objects.filter(uni=id).update(amount=price)
-                        history=book_history.objects.get(uni=id)
+                        Prescriptionbook1.objects.prefetch_related("test_name").filter(bookingid=id).update(date=date,timeslot=timeslot,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,coupon=a,price=price,landmark=landmark)
+                        book_history.objects.select_related("user").filter(uni=id).update(amount=price)
+                        history=book_history.objects.select_related("user").get(uni=id)
                         coupon=request.session.get("coupon")
                         discountamount=request.session.get("discountamount")
                         couponpercent=request.session.get("couponpercent")
@@ -2902,7 +2924,7 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                         AdminEmailThread(subject, mes, reachus).start()
                     except:
                         citi=city.objects.get(id=int(cc[0]))
-                        Prescriptionbook1.objects.filter(bookingid=id).update(date=date,timeslot=timeslot,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,landmark=landmark)
+                        Prescriptionbook1.objects.prefetch_related("test_name").filter(bookingid=id).update(date=date,timeslot=timeslot,location=citi.cityname,address=address,pincode=pincode,paymentmethod=paymentmethod,landmark=landmark)
                         email_from = settings.EMAIL_HOST_USER
                         subject=f"Cash On Collection | DIAGNOSTICA SPAN | Booking Id:{id}"
                         mes=f"Cash On Collection Booking for Booking ID:{id}\nPlease Checkit"
@@ -2913,6 +2935,11 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                     to_return = {"valid":True}
                 else:
                     to_return = {"valid":False}
+            elif response.status_code==401:
+                subject=f"401 Unauthorised for Go Samplify"
+                message=f"Hi There,\nGo Samplify Order Creating API is Getting Unauthorised Error,Error Code :401\nPlease Lookinto it"
+                AdminEmailThread(subject, message, reachus).start()
+                to_return = {"valid":False}
             else:
                 to_return = {"valid":False}
         return HttpResponse(json.dumps(to_return), content_type="application/json")
@@ -2920,8 +2947,8 @@ class HealthSymptoms(View):
     def get(self, request, *args,**kwargs):
         c=request.session.get("city")
         currentSymptom = kwargs['slug']
-        currentObj = healthsymptoms.objects.get(slug = currentSymptom)
-        obj = healthsymptoms.objects.exclude(slug = currentSymptom)
+        currentObj = healthsymptoms.objects.prefetch_related("test_name").get(slug = currentSymptom)
+        obj = healthsymptoms.objects.prefetch_related("test_name").exclude(slug = currentSymptom)
         envcity={"Bangalore":Bangalore,"Mumbai":Mumbai,"Bhophal":Bhophal,"Nanded":Nanded,"Pune":Pune,"Barshi":Barshi,"Aurangabad":Aurangabad}
         res = {
             "currentObj":currentObj,
@@ -3110,7 +3137,7 @@ def requestcallheader(request):
         except:
             return JsonResponse({"message":"error"})
 def lifestyleassessment(request):
-    healthsymptom=healthsymptoms.objects.all()
+    healthsymptom=healthsymptoms.objects.prefetch_related("test_name").all()
     context={
          "healthsymptom":healthsymptom,
     }
@@ -3121,9 +3148,9 @@ def lifestyletests(request):
         id=request.POST.getlist("pk[]")
         deviceCookie = request.COOKIES.get('device')
         if not request.user.is_anonymous:
-            carts = cart.objects.filter(user=request.user)
+            carts = cart.objects.select_related("user").filter(user=request.user)
         else:
-            carts = cart.objects.filter(device=deviceCookie)
+            carts = cart.objects.select_related("user").filter(device=deviceCookie)
         test1=[]
         for carrt in carts:
             if str(carrt.items.id) in id:
@@ -3156,13 +3183,13 @@ def medicationsview(request):
 def medicationinfo(request):
     if request.method=="POST":
       id=request.POST["pk"]
-      medication=medications.objects.get(id=id)
+      medication=medications.objects.select_related("user").get(id=id)
       return JsonResponse({"message":True,"id":medication.id,"medic":medication.medic,"morning":medication.morning,"afternoon":medication.afternoon,"evening":medication.evening,"night":medication.night})  
 def medicationdelete(request):
     if request.method=="POST":
         id=request.POST["pk"]
-        medications.objects.get(id=id).delete()
-        medicocount=medications.objects.all().count()
+        medications.objects.select_related("user").get(id=id).delete()
+        medicocount=medications.objects.select_related("user").all().count()
         return JsonResponse({"message":True,"medicocount":medicocount})  
 def medicupdate(request):
     if request.method=="POST":
@@ -3187,7 +3214,7 @@ def medicupdate(request):
             night=request.POST["tabnightupdate"]
         except:
             night="off"
-        medications.objects.filter(id=id).update(user=request.user,medic=medic,morning=True if morning == 'on' else False,afternoon=True if afternoon == 'on' else False,evening=True if evening == 'on' else False,night=True if night == 'on' else False)
+        medications.objects.select_related("user").filter(id=id).update(user=request.user,medic=medic,morning=True if morning == 'on' else False,afternoon=True if afternoon == 'on' else False,evening=True if evening == 'on' else False,night=True if night == 'on' else False)
         return JsonResponse({"message":True}) 
         # id=request.POST["pk"]
         # medications.objects.filter(pk=some_value).update(field1='some value')   
@@ -3304,90 +3331,118 @@ def sms(message,mobile):
         print(e)
         return "Your OTP is not delivered Please try again!"
     
-def appointment(testli,firstname,lastname,age,genderr,gosamorder,citname,dob):
-    import datetime
-    print("---------------",dob)
-    print(testli)
-    dt = datetime.datetime.now(timezone.utc)
-    today = dt.replace(tzinfo=timezone.utc)
-    next_2ndday=dt.replace(tzinfo=timezone.utc) + datetime.timedelta(days=4)
-    todayy=str(today)
-    next_2nddayy=str(next_2ndday)
-    token="c52066e6-3800-11ed-af41-02c92f98bf54"
-    organisationid=318018
-    # print(type(a))
-    # print("------------",a)
-    # print("----------",next_2ndday)
-    url=f"https://livehealth.solutions/LHRegisterBillAPI/{token}/"
-    payload = json.dumps({
-    "countryCode": "91",
-    "mobile": "",
-    "email": "",
-    "designation": "",
-    "fullName": f"{firstname} {lastname}",
-    "firstName": firstname,
-    "middleName": "",
-    "lastName": lastname,
-    "age": age,
-    "gender":genderr,
-    "area": "",
-    "city": "",
-    "patientType": "",
-    "labPatientId": "",
-    "pincode": "",
-    "patientId": "",
-    "dob": dob,
-    "passportNo": "",
-    "panNumber": "",
-    "aadharNumber": "",
-    "insuranceNo": "",
-    "nationality": "Indian",
-    "ethnicity": "",
-    "nationalIdentityNumber": "",
-    "workerCode": "",
-    "doctorCode": "",
-    "areaOfResidence": "",
-    "state": "Maharashtra",
-    "isAppointmentRequest": 0,
-    "startDate":todayy,
-    "endDate":next_2nddayy,
-    "billDetails": {
-      "emergencyFlag": "0",
-      "totalAmount": "0",
-      "advance": "0",
-      "billConcession": "0",
-      "additionalAmount": "",
-      "billDate": todayy,
-      "paymentType": "",
-      "referralName": "",
-      "otherReferral": "",
-      "sampleId": "",
-      "orderNumber":gosamorder,
-      "referralIdLH": "",
-      "organisationName": "",
-      "organizationIdLH": organisationid,
-      "comments": "New Patient Registration",
-      "testList":testli,
-      "paymentList": [
-        {
+def appointment(testli,firstname,lastname,age,genderr,gosamorder,citname,dob,citytoken):
+    try:
+        import datetime
+        dt = datetime.datetime.now(timezone.utc)
+        today = dt.replace(tzinfo=timezone.utc)
+        next_2ndday=dt.replace(tzinfo=timezone.utc) + datetime.timedelta(days=4)
+        todayy=str(today)
+        next_2nddayy=str(next_2ndday)
+        # token="c52066e6-3800-11ed-af41-02c92f98bf54"
+        # organisationid=370207
+        # if citname==Bangalore:
+        #     a=creliocitytokens.objects.select_related('city').get(city__cityname=Bangalore)
+        #     tokenn=a.token
+        #     organisationid=a.orgid
+        # elif citname==Mumbai:
+        #     a=creliocitytokens.objects.select_related('city').get(city__cityname=Mumbai)
+        #     tokenn=a.token
+        #     organisationid=a.orgid
+        # elif citname==Pune:
+        #     a=creliocitytokens.objects.select_related('city').get(city__cityname=Pune)
+        #     tokenn=a.token
+        #     organisationid=a.orgid
+        # else:
+            # a=creliocitytokens.objects.select_related('city').get(city__cityname=Mumbai)
+            # tokenn=a.token   
+            # organisationid=a.orgid
+        try:
+            a=creliocitytokens.objects.select_related('city').get(city__cityname=citname)
+            tokenn=a.token   
+            organisationid=a.orgid
+        except:
+            a=creliocitytokens.objects.select_related('city').get(city__cityname=Bangalore)
+            tokenn=a.token   
+            organisationid=a.orgid
+        # Mumbaitoken="c52066e6-3800-11ed-af41-02c92f98bf54"
+        # punetoken="ebf247a8-3800-11ed-b48e-0232dfade036"
+        # bangaloretoken="01a5f72a-3fbd-11ed-8614-024670730770"
+        # print(type(a))
+        # print("------------",a)
+        # print("----------",next_2ndday)
+        url=f"https://livehealth.solutions/LHRegisterBillAPI/{tokenn}/"
+        payload = json.dumps({
+        "countryCode": "91",
+        "mobile": "",
+        "email": "",
+        "designation": "",
+        "fullName": f"{firstname} {lastname}",
+        "firstName": firstname,
+        "middleName": "",
+        "lastName": lastname,
+        "age": age,
+        "gender":genderr,
+        "area": "",
+        "city": "",
+        "patientType": "",
+        "labPatientId": "",
+        "pincode": "",
+        "patientId": "",
+        "dob": dob,
+        "passportNo": "",
+        "panNumber": "",
+        "aadharNumber": "",
+        "insuranceNo": "",
+        "nationality": "Indian",
+        "ethnicity": "",
+        "nationalIdentityNumber": "",
+        "workerCode": "",
+        "doctorCode": "",
+        "areaOfResidence": "",
+        "state": "Maharashtra",
+        "isAppointmentRequest": 0,
+        "startDate":todayy,
+        "endDate":next_2nddayy,
+        "billDetails": {
+          "emergencyFlag": "0",
+          "totalAmount": "0",
+          "advance": "0",
+          "billConcession": "0",
+          "additionalAmount": "",
+          "billDate": todayy,
           "paymentType": "",
-          "paymentAmount": "",
-          "issueBank": ""
+          "referralName": "",
+          "otherReferral": "",
+          "sampleId": "",
+          "orderNumber":gosamorder,
+          "referralIdLH": "",
+          "organisationName": "",
+          "organizationIdLH": organisationid,
+          "comments": "New Patient Registration",
+          "testList":testli,
+          "paymentList": [
+            {
+              "paymentType": "",
+              "paymentAmount": "",
+              "issueBank": ""
+            }
+          ]
+          }
+          })
+        headers = {
+          'Content-Type': 'application/json'
         }
-      ]
-      }
-      })
-    headers = {
-      'Content-Type': 'application/json'
-    }
-    response = requests.request("POST", url, headers=headers, data=payload)
-    # print("---------------",response.text)
-    # print(payload)
-    code=json.loads(response.text)["code"]
-    billid=json.loads(response.text)["billId"]
-    respp={"code":code,"billid":billid,"organisationid":organisationid,"labtoken":token}
-    a=json.dumps(respp)
-    return a
+        response = requests.request("POST", url, headers=headers, data=payload)
+        # print("---------------",response.text)
+        # print(payload)
+        code=json.loads(response.text)["code"]
+        billid=json.loads(response.text)["billId"]
+        respp={"code":code,"billid":billid,"organisationid":organisationid,"labtoken":tokenn}
+        a=json.dumps(respp)
+        return a
+    except:
+        return ("Something Went Wrong Please Try again")
 
 # import base64
 # from django.core.files.base import ContentFile
@@ -3445,3 +3500,13 @@ def appointment(testli,firstname,lastname,age,genderr,gosamorder,citname,dob):
 #     response = requests.request("POST", url, headers=headers, data=payload)
 #     # print(response.text)
 #     # print(json.loads(response.text))
+from .task import send_mail_func,reportsavee
+def dummyy(request):
+    a=send_mail_func.apply_async()
+    b=reportsavee.apply_async()
+    # a=Prescriptionbook1.objects.all().values("id")
+    # precriptionb = serializers.serialize("json", testbook.objects.all().order_by('-created')[0:10])
+    # request.session["dataa"]=precriptionb
+    # for i in json.loads(request.session.get("dataa")):
+    #     print(i["fields"]["bookingid"])
+    return HttpResponse("vsdfvs")

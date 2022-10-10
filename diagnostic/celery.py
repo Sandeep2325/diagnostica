@@ -8,7 +8,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'diagnostic.settings')
 app = Celery('app1',backend=settings.CELERY_RESULT_BACKEND,broker=settings.CELERY_BROKER_URL)
 app.conf.enable_utc = False
 app.conf.update(timezone = 'Asia/Kolkata')
-app.config_from_object(settings, namespace='CELERY')
+app.config_from_object("django.conf:settings", namespace='CELERY')
 
 # Celery Beat Settings
 app.conf.beat_schedule = {
@@ -19,7 +19,8 @@ app.conf.beat_schedule = {
     },
     "reportsave":{
         'task': 'app1.task.reportsavee',
-        'schedule': crontab(minute='*/1')
+        'schedule': crontab(minute='*/1'),
+        # 'schedule': crontab(minute='0', hour='*/12'),
         # 'schedule': crontab(minute='0',hour="1"),
         # 'args': ('Firstdata',)
     }

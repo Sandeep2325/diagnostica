@@ -10,7 +10,7 @@
                         {% if request.user.photo %}
                         <a class="pe-2 dropdown-toggle " href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                           <img src="{{request.user.photo.url}}" alt="" class="w-20 photoafterlogin" />
-                      </a>
+                        </a>
                       {%else%}
                             <a class="nav-link dropdown-toggle DropDownToggle " href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                               <img src="{%static 'images/user.png' %}" alt="" class="w-20 photoafterlogin" />
