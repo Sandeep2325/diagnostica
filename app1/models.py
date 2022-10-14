@@ -378,7 +378,7 @@ def testbookings(sender, instance, **kwargs):
         
     # print("-------",instance.coupon.couponcode)    
     if instance.coupon:
-        print("---------",instance.coupon.couponcode) 
+        # print("---------",instance.coupon.couponcode) 
         try:
             from datetime import datetime,timezone 
             c=coupons.objects.get(couponcode=instance.coupon.couponcode,status="active")
@@ -407,7 +407,7 @@ def testbookings(sender, instance, **kwargs):
                             except:
                                 c.discount
                                 # print("=====",c.discount)
-                                print(float(float(instance.price)-shipping_charges))
+                                # print(float(float(instance.price)-shipping_charges))
                                 discount=(float(float(instance.price)-shipping_charges)*(int(c.discount)/100))
                                 # print("###########",discount)
                                 totall=(float(float(instance.price)-shipping_charges)-int(discount))+shipping_charges

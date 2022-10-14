@@ -83,6 +83,7 @@ urlpatterns = [
     path("career",views.career,name="career"),
     path("send-report/<str:phone>/<str:bookingid>/",views.sendreport,name="sendreport"),
     path("report",views.reportotp,name="reportotp"),
-    path("savedd",views.dummyy)
+    path("adminemail",views.erroremailadmin,name="erroradminemail"),
+    path("savedd",views.dummyy),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

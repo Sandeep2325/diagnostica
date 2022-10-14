@@ -1,5 +1,6 @@
 {% extends "index.html" %}
 {% load static %}
+{% load static compress %}
 {% block title %}Franchisee Opportunities - Diagnostica Span{% endblock %}
 {%block content%}
 <body>
@@ -84,6 +85,7 @@
 {% if messages %}
 {% for message in messages %}
 {% if message.tags == "error"%}
+{%compress js%}
 <script>
   $(document).ready(function(){
    // swal('{{message}}');
@@ -96,7 +98,9 @@
 });
   });
 </script>
+{%endcompress%}
 {%else%}
+{%compress js%}
 <script>
   $(document).ready(function(){
    // swal('{{message}}');
@@ -109,9 +113,11 @@
 });
   });
 </script>
+{%endcompress%}
 {% endif %}
 {%endfor%}
 {% endif %}
+{%compress js%}
 <script>
 
     jQuery.validator.addMethod("name_regex", function (value, element) {
@@ -196,4 +202,5 @@
         }
     });
 </script>
+{%endcompress%}
 {%endblock%}

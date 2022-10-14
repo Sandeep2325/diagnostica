@@ -1,4 +1,5 @@
 {% load static %}
+{% load static compress %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,21 +8,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
     {% comment %} <title>Diagnostica Span</title> {% endcomment %}
+    {% compress css %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{%static "fontawesome/css/font-awesome.min.css"%}">
     <link rel="stylesheet" href="{%static "css/bootstrap.min.css"%}">
     <link rel="stylesheet" href="{%static "css/owl.carousel.min.css"%}">
     {% comment %} <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> {% endcomment %}
     <link rel="stylesheet" href="{%static "css/owl.theme.default.min.css"%}">
+    {% endcompress %}
+    {% comment %} {% block jivo %}{% endblock %} {% endcomment %}
+    {% compress js %}
     <script type="text/javascript"src="{%static "js/jquery-3.6.0.min.js"%}"></script>
     <script type="text/javascript" src="{%static "js/bootstrap.bundle.min.js"%}"></script>
     <script type="text/javascript" src="{%static "js/owl.carousel.min.js"%}"></script>
     <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+    {% endcompress %}
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="//code.jivosite.com/widget/Wvc3xttFFW" async></script>
     {% comment %} <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> {% endcomment %}
 </head>
     {% block content %}
 
     {% endblock %}
+    {%compress js%}
+    <script>
+        (function() {
+            var elements = document.querySelectorAll('img[data-src]');
+            var index = 0;
+            var lazyLoad = function() {
+                if (index >= elements.length) return;
+                var item = elements[index];
+                if ((this.scrollY + this.innerHeight) > item.offsetTop) {
+                    var src = item.getAttribute("data-src");
+                    item.src = src;
+                    item.addEventListener('load', function() {
+                        item.removeAttribute('data-src');
+                    });
+                    index++;
+                    lazyLoad();
+                }
+            };
+            var init = function() {
+                window.addEventListener('scroll', lazyLoad);
+                lazyLoad();
+            };
+            return init();
+        })();
+    </script>
+    {%endcompress%}
+    {% comment %} <script type="text/javascript">
+        var vsid = "si2482944259361";
+        (function() { 
+        var vsjs = document.createElement('script'); vsjs.type = 'text/javascript'; vsjs.async = true; vsjs.setAttribute('defer', 'defer');
+         vsjs.src = 'https://www.virtualspirits.com/vsa/chat.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(vsjs, s);
+        })();
+       </script> {% endcomment %}
+        {% comment %} <script type="text/javascript">
+            (function(d, m){
+                var kommunicateSettings = 
+                    {"appId":"31dff07a46473187873e4642db98b6a3f","popupWidget":true,"automaticChatOpenOnNavigation":true};
+                var s = document.createElement("script"); s.type = "text/javascript"; s.async = true;
+                s.src = "https://widget.kommunicate.io/v2/kommunicate.app";
+                var h = document.getElementsByTagName("head")[0]; h.appendChild(s);
+                window.kommunicate = m; m._globals = kommunicateSettings;
+            })(document, window.kommunicate || {});
+        /* NOTE : Use web server to view HTML files as real-time update will not work if you directly open the HTML file in the browser. */
+        </script> {% endcomment %}
+    <!-- Start of ChatBot (www.chatbot.com) code -->
+ {% comment %} <script type="text/javascript">
+    window.__be = window.__be || {};
+    window.__be.id = "6347a8463b976a00079377b0";
+    (function() {
+        var be = document.createElement('script'); be.type = 'text/javascript'; be.async = true;
+        be.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'cdn.chatbot.com/widget/plugin.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(be, s);
+    })();
+</script> {% endcomment %}
+<!-- Start of LiveChat (www.livechat.com) code -->
+{% comment %} <script>
+    window.__lc = window.__lc || {};
+    window.__lc.license = 14620476;
+    ;(function(n,t,c){function i(n){return e._h?e._h.apply(null,n):e._q.push(n)}var e={_q:[],_h:null,_v:"2.0",on:function(){i(["on",c.call(arguments)])},once:function(){i(["once",c.call(arguments)])},off:function(){i(["off",c.call(arguments)])},get:function(){if(!e._h)throw new Error("[LiveChatWidget] You can't use getters before load.");return i(["get",c.call(arguments)])},call:function(){i(["call",c.call(arguments)])},init:function(){var n=t.createElement("script");n.async=!0,n.type="text/javascript",n.src="https://cdn.livechatinc.com/tracking.js",t.head.appendChild(n)}};!n.__lc.asyncInit&&e.init(),n.LiveChatWidget=n.LiveChatWidget||e}(window,document,[].slice))
+</script>
+<noscript><a href="https://www.livechat.com/chat-with/14620476/" rel="nofollow">Chat with us</a>, powered by <a href="https://www.livechat.com/?welcome" rel="noopener nofollow" target="_blank">LiveChat</a></noscript>   {% endcomment %}
+<!-- End of LiveChat code -->
+<!-- End of ChatBot code -->
 </html>

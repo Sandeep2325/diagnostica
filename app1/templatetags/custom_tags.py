@@ -1,8 +1,6 @@
 from django import template
 from django.utils.safestring import mark_safe
-from django.template.loader import render_to_string
 import html
-from datetime import datetime
 
 register = template.Library()
 @register.filter

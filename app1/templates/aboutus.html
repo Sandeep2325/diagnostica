@@ -1,5 +1,6 @@
 {% extends "index.html" %}
 {% load static %}
+{% load static compress %}
 {% block title %}About Us - Diagnostica Span{% endblock %}
 {%block content%}
 
@@ -112,6 +113,7 @@ home leading-edge technologies that advance the standard of medical practice in 
     {%include "footer.html"%}
 
 </body>
+{% compress js %}
 <script>
     $("#about_us_slider").owlCarousel({
         loop: true,
@@ -147,5 +149,5 @@ home leading-edge technologies that advance the standard of medical practice in 
     });
 
 </script>
-
+{% endcompress %}
 {%endblock%}

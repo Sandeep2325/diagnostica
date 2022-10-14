@@ -1,5 +1,6 @@
 {% extends "index.html" %}
 {% load static %}
+{% load static compress %}
 {% block title %}Login - Diagnostica Span{% endblock %}
 {%block content%}
 <body>
@@ -120,6 +121,7 @@
 {% endif %}
 {%endfor%}
 {% endif %}
+{%compress js%}
 <script>
     $(document).on('click', '.toggle-password', function() {
 
@@ -159,4 +161,5 @@
         }
     });
 </script>
+{%endcompress%}
 {%endblock%}

@@ -1,5 +1,6 @@
 {% extends "index.html" %}
 {% load static %}
+{% load static compress %}
 {% block title %}{{detail.title}} - Diagnostica Span{% endblock %}
 {%block content%}
 <body>
@@ -100,6 +101,7 @@
 
 
 </body>
+{%compress js%}
 <script>
     $("#health-care-slider").owlCarousel({
         loop: false,
@@ -135,5 +137,5 @@
         },
     });
 </script>
-
+{%endcompress%}
 {%endblock%}

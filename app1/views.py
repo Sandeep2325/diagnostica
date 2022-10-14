@@ -565,7 +565,7 @@ def profilee(request):
         age=request.POST.get("age",request.user.age)
         address=request.POST.get("address",request.user.address)
         dob=request.POST.get("dob",request.user.address)
-        print("---------",dob)
+        # print("---------",dob)
         try:
             c=city.objects.get(id=int(location))
         except:
@@ -736,6 +736,7 @@ def newsletter(request):
         subscription.objects.create(email=email).save()
         return JsonResponse({"message":True,"email":email})
     # return render(request,"footer.html")
+
 def home(request):
     # request.session["city"]="Bangalore"
     # request.session["city"]="Bangalore"
@@ -832,14 +833,14 @@ def healthcheckupview(request,slug):
 
 def healthcheckupallview(request):
     c=request.session.get("city")
-    checkups=healthcheckuppackages.objects.select_related("test_name").all()
+    checkups=healthcheckuppackages.objects.prefetch_related("test_name").all()
     context={
         "checkups":checkups,
         "currentcity":c
     }
     return render(request,'latestviewall.html',context)
 def hpackagess(request):
-    packages=healthpackages.objects.select_related("test_name").all()
+    packages=healthpackages.objects.prefetch_related("test_name").all()
     cit=request.session.get("city")
     envcity={"Bangalore":Bangalore,"Mumbai":Mumbai,"Bhophal":Bhophal,"Nanded":Nanded,"Pune":Pune,"Barshi":Barshi,"Aurangabad":Aurangabad}
     context={
@@ -851,10 +852,10 @@ def hpackagess(request):
 
 def healthpackageview(request,slug):
         citi=request.session.get("city")
-        package=healthpackages.objects.select_related("test_name").get(slug=slug)
-        packages=healthpackages.objects.select_related("test_name").exclude(slug=slug)
-        tests=package.test_name.all()
-        c=package.test_name.all().count()
+        package=healthpackages.objects.prefetch_related("test_name").get(slug=slug)
+        packages=healthpackages.objects.prefetch_related("test_name").exclude(slug=slug)
+        tests=package.test_name.select_related("categoryy").all()
+        c=package.test_name.select_related("categoryy").all().count()
         l=int(c)//2
         a,b=tests[:l],tests[l:]
         lstt=[]
@@ -1157,13 +1158,13 @@ def testselect(request):
     tests=test.objects.select_related("categoryy").filter(Banglore_price__isnull=False)
     envcity={"Bangalore":Bangalore,"Mumbai":Mumbai,"Bhophal":Bhophal,"Nanded":Nanded,"Pune":Pune,"Barshi":Barshi,"Aurangabad":Aurangabad}
     if request.user.is_anonymous:
-        carts=cart.objects.select_related("user").filter(device = deviceCookie)
+       carts=cart.objects.select_related("user").filter(device = deviceCookie)
     else:
         carts=cart.objects.select_related("user").filter(user = request.user)
     cartlist=[]
     for carrt in carts:
         try:
-           cartlist.append(int(carrt.items.id)) 
+          cartlist.append(int(carrt.items.id)) 
         except:
             pass
     context={
@@ -1693,7 +1694,8 @@ def cartt(request):
                 # gos=gosamplify.objects.filter(orderref=d.bookingid)
                 return JsonResponse({"message":False})
         elif response.status_code==401:
-            subject=f"401 Unauthorised for Go Samplify"
+            datee=datetime.now()
+            subject=f"401 Unauthorised for Go Samplify \ Date:{datee}"
             message=f"Hi There,\nGo Samplify Order Creating API is Getting Unauthorised Error,Error Code :401\nPlease Lookinto it"
             AdminEmailThread(subject, message, reachus).start()
             return JsonResponse({"message":False})
@@ -1875,7 +1877,22 @@ def paymenthandler(request,str,amount):
                 history=book_history.objects.select_related("user").filter(payment_id=c["order_id"])
                 Prescriptionbook1.objects.prefetch_related("test_name").filter(bookingid=history.bookingid).delete()
                 testbook.objects.select_related("user").filter(bookingid=history.bookingid).delete()
+                deletegosamplify(history.bookingid)
+                # crelio=creliohealthdata.objects.filter(spanbookingid=history.bookingid)
+                # gos=gosamplify.objects.filter(orderref=history.bookingid)
+                # for i in gos:
+                #     url = f"https://mtqn0qowxc.execute-api.us-east-1.amazonaws.com/delete-customer-visit/{i.taskid}"
+                #     payload={}
+                #     headers = {
+                #       'api-key': gosamplify_apikey,
+                #       'customer-code': customer_code,
+                #     'Content-Type': 'application/json'
+                #     }
+                #     response = requests.request("GET", url, headers=headers, data=payload)
+                # gos.delete()
+                # crelio.delete()
                 history.delete()
+                
                 error = request.POST.get('error[description]')
                 messages.error(request, error)
                 # return HttpResponseRedirect(reverse("booking-history"))
@@ -1897,6 +1914,20 @@ def paymenthandler(request,str,amount):
         #     a=i.bookingid
         Prescriptionbook1.objects.prefetch_related("test_name").filter(bookingid=history.bookingid).delete()
         testbook.objects.select_related("user").filter(bookingid=history.bookingid).delete()
+        deletegosamplify(history.bookingid)
+        # crelio=creliohealthdata.objects.filter(spanbookingid=history.bookingid)
+        # gos=gosamplify.objects.filter(orderref=history.bookingid)
+        # for i in gos:
+        #     url = f"https://mtqn0qowxc.execute-api.us-east-1.amazonaws.com/delete-customer-visit/{i.taskid}"
+        #     payload={}
+        #     headers = {
+        #       'api-key': gosamplify_apikey,
+        #       'customer-code': customer_code,
+        #     'Content-Type': 'application/json'
+        #     }
+        #     response = requests.request("GET", url, headers=headers, data=payload)
+        # gos.delete()
+        # crelio.delete()
         history.delete()
         messages.error(request, "Payment failed Please Retry")
         return redirect("booking-history")
@@ -1959,7 +1990,6 @@ def addtocart(request):
             RES = res
             
         elif cityy==Nanded:
-            
             obj, created = cart.objects.get_or_create(
                 device = deviceCookie,
                 items = item,
@@ -2224,26 +2254,26 @@ def razorpayclose(request):
         d=book_history.objects.select_related("user").get(payment_id=paymentid)
         tes=testbook.objects.select_related("user").filter(bookingid=d.bookingid)
         pres=Prescriptionbook1.objects.prefetch_related("user").filter(bookingid=d.bookingid)
-        gos=gosamplify.objects.filter(orderref=d.bookingid)
-        crelio=creliohealthdata.objects.filter(spanbookingid=d.bookingid)
+        deletegosamplify(d.bookingid)
         tes.delete()
         pres.delete()
         b.delete()
         a.delete()
         c.delete()
-        crelio.delete()
-        for i in gos:
-            url = f"https://mtqn0qowxc.execute-api.us-east-1.amazonaws.com/delete-customer-visit/{i.taskid}"
-            payload={}
-            headers = {
-              'api-key': gosamplify_apikey,
-              'customer-code': customer_code,
-            'Content-Type': 'application/json'
-            }
-            response = requests.request("GET", url, headers=headers, data=payload)
-            # print("------------",response.text)
-            # print("------------",response.status_code)
-        gos.delete()
+        
+        # crelio.delete()
+        # for i in gos:
+        #     url = f"https://mtqn0qowxc.execute-api.us-east-1.amazonaws.com/delete-customer-visit/{i.taskid}"
+        #     payload={}
+        #     headers = {
+        #       'api-key': gosamplify_apikey,
+        #       'customer-code': customer_code,
+        #     'Content-Type': 'application/json'
+        #     }
+        #     response = requests.request("GET", url, headers=headers, data=payload)
+        #     # print("------------",response.text)
+        #     # print("------------",response.status_code)
+        # gos.delete()
         return JsonResponse({"message":True})
     
 def contactuss(request):
@@ -2771,7 +2801,8 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 else:
                     to_return = {"valid":False}
             elif response.status_code==401:
-                subject=f"401 Unauthorised for Go Samplify"
+                datee=datetime.now()
+                subject=f"401 Unauthorised for Go Samplify \ Date:{datee}"
                 message=f"Hi There,\nGo Samplify Order Creating API is Getting Unauthorised Error,Error Code :401\nPlease Lookinto it"
                 AdminEmailThread(subject, message, reachus).start()
                 to_return = {"valid":False}
@@ -2779,22 +2810,23 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 to_return = {"valid":False}
         if request.POST.get("action") == "payment_canceled":
             mod = book_history.objects.select_related("user").get(payment_id=request.POST.get('order_id'))
-            gos=gosamplify.objects.filter(orderref=mod.bookingid)
+            # gos=gosamplify.objects.filter(orderref=mod.bookingid)
+            deletegosamplify(mod.bookingid)
             mod.payment_id = None
             mod.payment_status = False
             mod.save()
-            for i in gos:
-                url = f"https://mtqn0qowxc.execute-api.us-east-1.amazonaws.com/delete-customer-visit/{i.taskid}"
-                payload={}
-                headers = {
-                  'api-key': gosamplify_apikey,
-                  'customer-code': customer_code,
-                    'Content-Type': 'application/json'
-                }
-                response = requests.request("GET", url, headers=headers, data=payload)
-                # print("------------",response.text)
-                # print("------------",response.status_code)
-            gos.delete()
+            # for i in gos:
+            #     url = f"https://mtqn0qowxc.execute-api.us-east-1.amazonaws.com/delete-customer-visit/{i.taskid}"
+            #     payload={}
+            #     headers = {
+            #       'api-key': gosamplify_apikey,
+            #       'customer-code': customer_code,
+            #         'Content-Type': 'application/json'
+            #     }
+            #     response = requests.request("GET", url, headers=headers, data=payload)
+            #     # print("------------",response.text)
+            #     # print("------------",response.status_code)
+            # gos.delete()
             to_return = {"valid":True}
         if request.POST.get("action") == "COD":
             id=request.POST.get("id")
@@ -2936,7 +2968,8 @@ class BookingHistoryPay(LoginRequiredMixin,View):
                 else:
                     to_return = {"valid":False}
             elif response.status_code==401:
-                subject=f"401 Unauthorised for Go Samplify"
+                datee=datetime.now()
+                subject=f"401 Unauthorised for Go Samplify \ Date:{datee}"
                 message=f"Hi There,\nGo Samplify Order Creating API is Getting Unauthorised Error,Error Code :401\nPlease Lookinto it"
                 AdminEmailThread(subject, message, reachus).start()
                 to_return = {"valid":False}
@@ -3500,6 +3533,20 @@ def appointment(testli,firstname,lastname,age,genderr,gosamorder,citname,dob,cit
 #     response = requests.request("POST", url, headers=headers, data=payload)
 #     # print(response.text)
 #     # print(json.loads(response.text))
+def deletegosamplify(id):
+    gos=gosamplify.objects.filter(orderref=id)
+    crelio=creliohealthdata.objects.filter(spanbookingid=id)
+    for i in gos:
+        url = f"https://mtqn0qowxc.execute-api.us-east-1.amazonaws.com/delete-customer-visit/{i.taskid}"
+        payload={}
+        headers = {
+          'api-key': gosamplify_apikey,
+          'customer-code': customer_code,
+        'Content-Type': 'application/json'
+        }
+        response = requests.request("GET", url, headers=headers, data=payload) 
+    crelio.delete()
+    gos.delete()
 from .task import send_mail_func,reportsavee
 def dummyy(request):
     a=send_mail_func.apply_async()
@@ -3509,4 +3556,13 @@ def dummyy(request):
     # request.session["dataa"]=precriptionb
     # for i in json.loads(request.session.get("dataa")):
     #     print(i["fields"]["bookingid"])
-    return HttpResponse("vsdfvs")
+    return HttpResponse(f"send email:{a}\nreporsave:{b}")
+
+def erroremailadmin(request):
+    datee=datetime.now()
+    subject=f"401 Unauthorised for Go Samplify API | Date & Time:{datee}"
+    message=f"Hi There,\nGo Samplify Available slots API is Getting Unauthorised Error\nError Code :401\nPlease Lookinto it"
+    # print("email sent")
+    AdminEmailThread(subject, message, reachus).start()
+    return JsonResponse({"message":True})
+    

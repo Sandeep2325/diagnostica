@@ -1,5 +1,6 @@
 {% extends "index.html" %}
 {% load static %}
+{% load static compress %}
 {% block title %}OTP - Diagnostica Span{% endblock %}
 {%block content%}
 
@@ -66,7 +67,7 @@
         </div>
     </section>
 </body>
-
+{%compress js%}
 <script>
     let digitValidate = function (ele) {
         ele.value = ele.value.replace(/[^0-9]/g, '');
@@ -81,9 +82,11 @@
         }
     });
 </script>
+{%endcompress%}
 {% if messages %}
 {% for message in messages %}
 {% if message.tags == "error"%}
+{%compress js%}
 <script>
     $(document).ready(function () {
         // swal('{{message}}');
@@ -96,7 +99,9 @@
         });
     });
 </script>
+{%endcompress%}
 {%else%}
+{%compress js%}
 <script>
     $(document).ready(function () {
         // swal('{{message}}');
@@ -108,8 +113,8 @@
             button: "ok"
         });
     });
-
 </script>
+{%endcompress%}
 {% endif %}
 {%endfor%}
 {% endif %}

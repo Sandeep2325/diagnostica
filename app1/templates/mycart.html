@@ -1,5 +1,6 @@
 {% extends "index.html" %}
 {% load static %}
+{% load static compress %}
 {% block title %}Cart - Diagnostica Span{% endblock %}
 {%block content%}
 <body onload="setAttr()">
@@ -271,6 +272,7 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js">
 </script>
 {% comment %} <script src="path/to/boostrap.min.js"></script> {% endcomment %}
+{%compress js%}
 <script type = "text/javascript">
  var AMOUNT=0; 
 
@@ -763,7 +765,16 @@ function slots(){
       "city_code": a[1]
     }),
     error:function(response){
-        console.log(response)
+        //console.log(response)
+        if(response["status"]==401){
+            $.ajax({
+                "url":"{% url 'erroradminemail' %}",
+                "method":"GET"
+            });
+            alert("Something went wrong please try again after sometime");
+            window.location.reload();
+        }
+        
         $("#timeslot").append(`<option value='' disabled>No Slots Availabe</option>`);
      }
   };
@@ -803,6 +814,7 @@ $(document).ready(function(){
  });
 })
     </script>
+    {%endcompress%}
 {%endblock%}
 
 

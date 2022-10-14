@@ -12051,11 +12051,11 @@ fieldset[disabled] .navbar .navbar-nav>a.btn.active {
 }
 
 .btn-primary {
-    background: #e14eca;
+    background: transparent linear-gradient(90deg, #20C7BA 0%, #1686F1 100%) 0% 0% no-repeat padding-box;
     background-image: -webkit-linear-gradient(to bottom left, #e14eca, #ba54f5, #e14eca);
     background-image: -o-linear-gradient(to bottom left, #e14eca, #ba54f5, #e14eca);
     background-image: -moz-linear-gradient(to bottom left, #e14eca, #ba54f5, #e14eca);
-    background-image: linear-gradient(to bottom left, #e14eca, #ba54f5, #e14eca);
+    /* background-image: linear-gradient(to bottom left, #e14eca, #ba54f5, #e14eca); */
     background-size: 210% 210%;
     background-position: top right;
     background-color: #e14eca;

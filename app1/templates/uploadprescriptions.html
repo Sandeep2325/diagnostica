@@ -1,5 +1,6 @@
 {% extends "index.html" %}
 {% load static %}
+{% load static compress %}
 {% block title %}Upload Prescription - Diagnostica Span{% endblock %}
 {%block content%}
 <body>
@@ -188,6 +189,7 @@
     </section>
 {%include "footer.html"%}
 </body>
+{%compress js%}
 <script>
     jQuery.validator.addMethod("name_regex", function (value, element) {
         return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);
@@ -352,4 +354,5 @@
             $("#PatientInformation").show();
     });
 </script>
+{%endcompress%}
 {%endblock%}

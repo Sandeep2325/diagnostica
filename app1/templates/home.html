@@ -1,12 +1,14 @@
 {% extends "index.html" %}
 {% load i18n %}
 {% load static %}
+{% load static compress %}
 {% load custom_tags %}
 {% block title %}Diagnostica Span{% endblock %}
+{% comment %} {%block jivo%}<script src="//code.jivosite.com/widget/Wvc3xttFFW" async></script>{%endblock%} {% endcomment %}
 {%block content%}
 <body>
   <noscript>Please enable javascript</noscript>
-   <div class="preload"><img src="http://i.imgur.com/KUJoe.gif">
+   <div class="preload"><img data-src="http://i.imgur.com/KUJoe.gif">
   </div>
   <div  class="content">
   {%include 'header.html'%}
@@ -118,7 +120,7 @@
           <a href={% url 'health_symptoms' symptoms.slug %}>  
           <div
             class="symptoms px-3 {% cycle 'bg-light-blue' 'bg-light-orange' 'bg-light-green' 'bg-light-pink' %} text-center py-lg-5 py-3 br-10">
-            <img src="{{ symptoms.photo.url }}" alt="" class="img-fluid pb-3">
+            <img data-src="{{ symptoms.photo.url }}" alt="" class="img-fluid pb-3">
             <p class="pt-2 m-0 fs-20 cl-dark-blue font-bold symp_height">{{symptoms.name}}</p>
             {% comment %} {{ symptoms.photo}} {% endcomment %}
           </div>
@@ -240,7 +242,7 @@
               <div class="row">
                 <div class="col-lg-6 h-100">
                   <div class="pe-lg-4">
-                    <img src="{{blog.image.url}}" alt="" class="img-fluid br-10">
+                    <img data-src="{{blog.image.url}}" alt="" class="img-fluid br-10">
                   </div>
                 </div>
                 <div class="col-lg-6">
@@ -298,7 +300,7 @@
           </div>
         </div>
         <div class="col-lg-6 ps-lg-5">
-          <img src="{%static "images/about-us-img.png"%}" alt="" class="img-fluid">
+          <img data-src="{%static "images/about-us-img.png"%}" alt="" class="img-fluid">
 
         </div>
       </div>
@@ -310,7 +312,7 @@
       <div class="row">
         <h1 class="fs-40 font-bold d-flex align-items-center cl-dark-blue py-lg-5 py-3 m-0">Our CRITICAL services</h1>
         <div class="col-lg-12 pb-lg-5">
-          <img src="{%static "images/bg-critical.png"%}" alt="" class="img-fluid">
+          <img data-src="{%static "images/bg-critical.png"%}" alt="" class="img-fluid">
         </div>
       </div>
     </div>
@@ -327,7 +329,7 @@
                 <i class="fa fa-quote-left testimonial_quote text-center py-4" aria-hidden="true"></i>
                 <p class="fs-18 font-regular">{{test.description}}</p>
                 <div>
-                  <img src="{{test.photo.url}}" alt="" class="img-fluid test_img br-50">
+                  <img data-src="{{test.photo.url}}" alt="" class="img-fluid test_img br-50">
                 </div>
                 <p class="fs-18 font-bold py-4">{{test.username}}</p>
               </div>
@@ -450,9 +452,9 @@
                     <button class="cursor h-100 w-100 br" id="city" name="{{i.cityname}}"
                       onclick='myfunction("{{i.cityname}}","{{i.citycode}}")'>
                       {% if i.city_icon %}
-                      <img src="{{i.city_icon.url}}" alt="" class="img-fluid">
+                      <img data-src="{{i.city_icon.url}}" alt="" class="img-fluid">
                       {% else %}
-                      <img src="{%static "images/city.png"%}" alt="" class="img-fluid">
+                      <img data-src="{%static "images/city.png"%}" alt="" class="img-fluid">
                       {% endif %}
                       
                       <h6 class="text-break text-center">{{i.cityname}}</h6>
@@ -503,6 +505,7 @@
 {% endif %}
 <script src="https://checkout.razorpay.com/v1/checkout.js">
 </script>
+{% compress js %}
   <script>
    //$(window).on('load', function() {
    // $("#loaderr").hide();
@@ -948,5 +951,5 @@ $("#health_pack_carousel").owlCarousel({
 }); 
 
 </script>
-
+{%endcompress%}
 {% endblock %}

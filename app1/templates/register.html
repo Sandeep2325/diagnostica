@@ -1,5 +1,6 @@
 {% extends "index.html" %}
 {% load static %}
+{% load static compress %}
 {% block title %}Registration - Diagnostica Span{% endblock %}
 {%block content%}
 <body>
@@ -124,6 +125,7 @@
 {% if messages %}
 {% for message in messages %}
 {% if message.tags == "error"%}
+{%compress js%}
 <script>
   $(document).ready(function(){
    // swal('{{message}}');
@@ -136,11 +138,12 @@
 });
   });
 </script>
+{%endcompress%}
 {%else%}
+{%compress js%}
 <script>
   $(document).ready(function(){
    // swal('{{message}}');
-
     swal({
 	title:'{{message}}',
 	//text: "You clicked the button!",
@@ -149,9 +152,11 @@
 });
   });
 </script>
+{%endcompress%}
 {% endif %}
 {%endfor%}
 {% endif %}
+{%compress js%}
 <script>
     $(document).on('click', '.toggle-password-register', function () {
 
@@ -249,5 +254,5 @@
 
 
 </script>
-
+{%endcompress%}
 {%endblock%}

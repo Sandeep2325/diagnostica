@@ -1,5 +1,6 @@
 {% extends "index.html" %}
 {% load static %}
+{% load static compress %}
 {% load custom_tags %}
 {% block title %}Profile - Diagnostica Span{% endblock %}
 {%block content%}
@@ -235,6 +236,7 @@
 {% if messages %}
 {% for message in messages %}
 {% if message.tags == "error"%}
+{% compress js %}
 <script>
   $(document).ready(function(){
    // swal('{{message}}');
@@ -247,7 +249,9 @@
 });
   });
 </script>
+{%endcompress%}
 {%else%}
+{%compress js%}
 <script>
   $(document).ready(function(){
    // swal('{{message}}');
@@ -260,9 +264,11 @@
 });
   });
 </script>
+{%endcompress%}
 {% endif %}
 {%endfor%}
 {% endif %}
+{%compress js%}
 <script>
     jQuery.validator.addMethod("name_regex", function (value, element) {
         return this.optional(element) || /^[a-zA-z\.\-_]{1,30}$/i.test(value);
@@ -401,6 +407,7 @@
      });
      
 </script>
+{%endcompress%}
 {% comment %} <script>
     $("#newsletter").on("click", function (e) {
         var email = $("#emaill").val();

@@ -1,5 +1,6 @@
 {% extends "index.html" %}
 {% load static %}
+{% load static compress %}
 {%block content%}
 <body>
     {%include "header.html"%}
@@ -98,7 +99,9 @@
     </section>
 {%include "footer.html"%}
 </body>
+{%compress js%}
 <script>
+  
  function testnow(e){
     //localStorage.setItem("healthcheckup",[e]);
     $.ajax({
@@ -124,4 +127,5 @@
   });
    }
    </script>
+   {%endcompress%}
 {%endblock%}

@@ -1,5 +1,6 @@
 
 {% load static %}
+{% load static compress %}
 <body>
     <a id="button" class="scroll_top"></a>
 
@@ -143,6 +144,7 @@
         </div>
     </section>
 </body>
+{%compress js%}
 <script>
 
     $.validator.addMethod('filesize', function (value, element, param) {
@@ -241,4 +243,5 @@
         });
       });
 </script>
+{%endcompress%}
 

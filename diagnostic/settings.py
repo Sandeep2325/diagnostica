@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # "celery",
     "django_celery_beat",
     "django_celery_results",
+    "compressor",
     
 ]
 INSTALLED_APPS += ('django_summernote', ) 
@@ -159,7 +160,12 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#         'LOCATION': '127.0.0.1:11211',
+#     }
+# }
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
@@ -183,7 +189,25 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'photos/')
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
-
+STATICFILES_FINDERS = (
+        # other finders..
+        'django.contrib.staticfiles.finders.FileSystemFinder',
+        'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+        'compressor.finders.CompressorFinder',
+)
+STATICFILES_STORAGE = 'compress_staticfiles.storage.CompressStaticFilesStorage'
+COMPRESS_ENABLED = True
+COMPRESS_CSS_FILTERS = ["compressor.filters.cssmin.CSSMinFilter"]
+COMPRESS_JS_FILTERS = ["compressor.filters.jsmin.JSMinFilter"]
+MINIFY_STATIC = True
+BROTLI_STATIC_COMPRESSION = True
+GZIP_STATIC_COMPRESSION = True
+if not COMPRESS_ENABLED:
+    COMPRESS_ENABLED = True
+    COMPRESS_CSS_FILTERS = ["compressor.filters.cssmin.CSSMinFilter"]
+    COMPRESS_JS_FILTERS = ["compressor.filters.jsmin.JSMinFilter"]
+HTML_MINIFY = True
+KEEP_COMMENTS_ON_MINIFYING = True
 # RAZOR_KEY_ID = "rzp_live_ZSkJErOIklssAc"
 # RAZOR_KEY_SECRET = "Er7q5aHnDix03E1y66x0bMIA"
 RAZOR_KEY_ID = "rzp_test_JiD8eNtJ2aNwZr"
