@@ -107,6 +107,24 @@ html {
 .fs-48 {
     font-size: 30px;
 }
+h1{
+    font-size: 35px!important;
+}
+h2{
+    font-size: 30px!important;
+}
+h3{
+    font-size: 25px!important;
+}
+h4{
+    font-size: 20px!important;
+}
+h5{
+    font-size: 18px!important;
+}
+h6{
+    font-size: 16px!important;
+}
 
 
 /* component css */
@@ -441,44 +459,35 @@ textarea {
     transform: translate(-50%, -50%);
 }
 
-.banner1 {
-    background: url(../images/home_banner.jpeg) no-repeat;
+.homebanner{
     background-size: cover;
     min-height: 450px;
     border-radius: 15px;
     display: flex;
-    align-items: center;
+    align-items: center; 
+}
+
+.banner1 {
+    background: url(../images/home_banner.jpeg) no-repeat;
 }
 
 .banner2 {
     background: url(../images/banner3.png) no-repeat;
-    background-size: cover;
-    min-height: 450px;
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
     background-position: unset;
 }
 
 .banner3 {
     background: url(../images/banner03.png) no-repeat;
-    background-size: cover;
-    min-height: 450px;
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
     background-position: 100%;
 }
 
 .home-banner h1 {
-    font-size: 35px;
     font-family: Chivo-regular;
     color: white;
     padding: 0px 0px 25px 0px;
 }
 
-.home-banner h2 {
-    font-size: 25px;
+.home-banner h3 {
     font-family: Chivo-bold;
     color: white;
 }
@@ -535,7 +544,7 @@ textarea {
     height: 96px;
     overflow: hidden;
 }
-
+/* 
 .section_home_health_check .home_ul_li ul,
 .section_home_health_check .home_ul_li ol {
     padding-bottom: 25px;
@@ -543,7 +552,7 @@ textarea {
     padding-left: 20px;
     height: 200px;
     overflow-y: hidden;
-}
+} */
 
 .section_home_health_check .health_care_ {
     border-bottom: 1px solid #17235A;
@@ -570,11 +579,11 @@ textarea {
     display: none;
 }
 
-.section_home_health_check .home_ul_li li {
+/* .section_home_health_check .home_ul_li li {
     padding-bottom: 12px;
     font-size: 18px;
     list-style: circle;
-}
+} */
 
 .section_home_health_check li::marker {
     color: transparent linear-gradient(325deg, #8200D4 0%, #04336A 100%) 0% 0% no-repeat padding-box !important;
@@ -657,8 +666,8 @@ textarea {
 }
 
 .section_health_pack .home_linear_border {
-    width: 210px;
-    height: 210px;
+    width: 200px;
+    height: 200px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1491,21 +1500,22 @@ textarea {
 
 .whatsapp_float {
     position: fixed;
-    width: 60px;
-    height: 60px;
-    bottom: 40px;
-    left: 40px;
+    width: 50px;
+    height: 50px;
+    bottom: 30px;
+    left: 30px;
     background-color: #25d366;
     color: #FFF;
-    border-radius: 10px;
+    border-radius: 4px;
     text-align: center;
     font-size: 30px;
     box-shadow: 2px 2px 3px #999;
     z-index: 100;
+
 }
 
 .my-float {
-    margin-top: 16px;
+    margin-top: 11px;
 }
 
 
@@ -1532,26 +1542,7 @@ textarea {
     .w-22 {
         width: 19px;
     }
-    h1,
-    .fs-40 {
-        font-size: 23px !important;
-    }
-    h2,
-    .fs-35 {
-        font-size: 20px !important;
-    }
-    h3,
-    .fs-30 {
-        font-size: 18px !important;
-    }
-    h4,
-    .fs-26 {
-        font-size: 16px;
-    }
-    h5,
-    .fs-20 {
-        font-size: 14px;
-    }
+  
     label,
     .fs-20 {
         font-size: 14px !important;
@@ -1559,10 +1550,6 @@ textarea {
     p,
     .fs-18 {
         font-size: 14px !important;
-    }
-    button,
-    .fs-18 {
-        font-size: 16px !important;
     }
     .section_register h1 {
         padding-top: 15px;
@@ -1579,11 +1566,11 @@ textarea {
     .helping_book_test .healper_sub_header {
         font-size: 15px!important;
     }
-    .section_home_health_check .home_ul_li li {
+    /* .section_home_health_check .home_ul_li li {
         padding-bottom: 12px;
         font-size: 14px!important;
         list-style: circle;
-    }
+    } */
     .section_nav_bar .dropdown-menu[data-bs-popper] {
         margin-top: 15px !important;
     }
@@ -1603,46 +1590,41 @@ textarea {
 }
 
 @media (max-width: 767.98px) {
-    h1,
-    .fs-40 {
-        font-size: 28px;
+   h1{
+    font-size: 28px!important;
+   }
+   h2{
+    font-size: 25px!important;
+   }
+   h3{
+    font-size: 20px!important;
+   }
+   h4{
+    font-size: 18px!important;
+   }
+   h5,h6{
+    font-size: 15px;
+   }
+    button {
+        font-size: 13px!important;
     }
-    h2,
-    .fs-35 {
-        font-size: 23px;
-    }
-    h3,
-    .fs-30 {
-        font-size: 20px;
-    }
-    h4,
-    .fs-26 {
-        font-size: 18px;
-    }
-    h5,
-    .fs-20 {
-        font-size: 16px;
-    }
-    label,
-    .fs-20 {
-        font-size: 16px;
-    }
-    p,
-    .fs-18 {
-        font-size: 16px;
-    }
-    button,
-    .fs-18 {
-        font-size: 16px;
-    }
+
     .helping_book_test .helping_contact {
         font-size: 18px;
         padding-top: 0px;
     }
-    .section_booking_history .tad_button {
-        padding: 10px 20px;
-        font-size: 16px;
+    .section_booking_history .tad_button{
+            color: #2B3147;
+    border-bottom: 3px solid #b8cad6;
+    padding: none;
+    width: 103px;
+    border-radius: 5px;
+    font-size: 15px;
     }
+    .section_book-test-online{
+        background-color: #f0f3f8;
+    }
+   
     .test-list-price p {
         display: flex;
         justify-content: left;
@@ -1732,10 +1714,6 @@ textarea {
     .home_banner b {
         font-size: 18px;
     } */
-    .section_booking_history .tad_button {
-        padding: 10px 20px;
-        font-size: 16px;
-    }
     .cart_table h1 {
         font-size: 25px;
     }
@@ -1847,10 +1825,6 @@ textarea {
         width: 250px;
         float: left;
         margin: 25px 0px;
-    }
-    .section_booking_history .tad_button {
-        padding: 10px 20px;
-        font-size: 20px;
     }
     .helper_header_col {
         padding-top: 30px;

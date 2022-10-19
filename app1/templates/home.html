@@ -11,7 +11,7 @@
   {%include 'header.html'%}
   <section class="home_banner pt-3 pb-lg-3">
     <div class="owl-carousel owl-theme home-banner-slider">
-      <div class="home-banner banner1 pt-4 pb-5 py-sm-5">
+      <div class="home-banner banner1 homebanner pt-4 pb-5 py-sm-5">
         <div class="container">
           <div class="row">
             <div class="offset-xl-1 offset-xxl-1 col-xxl-5 col-xl-6 col-lg-10 ">
@@ -20,16 +20,14 @@
               {%else%}
               <h1 class="" id="cityName">Hello {{request.session.tempcity}}!</h1>
               {%endif%}
-              <h2 class="">Protect your health with our check-ups and packages</h2>
+              <h3 class="">Protect your health with our check-ups and packages</h3>
               <p class="fs-24">We are a<b> “One Stop Solution” </b> for all your Diagnostic needs</p>
               <a href="{%url "bookonline"%}"><button>BOOK A TEST ONLINE</button></a>
             </div>
           </div>
         </div>
       </div>
-      <div class="home-banner banner3 pt-4 pb-5 py-sm-5">
-
-
+      <div class="home-banner banner3 homebanner pt-4 pb-5 py-sm-5">
         <div class="container">
           <div class="row">
             <div class=" text-end col-lg-7 "> </div>
@@ -50,13 +48,13 @@
           </div>
         </div> {% endcomment %}
       </div>
-      <div class="home-banner banner2 pt-4 pb-5 py-sm-5">
+      <div class="home-banner banner2 homebanner pt-4 pb-5 py-sm-5">
         <div class="container">
           <div class="row">
             <div class="offset-xl-1 offset-xxl-1 col-xxl-5 col-xl-6 col-lg-10 ">
               <h1 class="p-0" style="color:red">#</h1>
               <h1 class="p-0 m-0" style="color:red; font-weight: bold;">STAY SAFE</h1>
-              <p class="fs-24" style="color:red"><b>HOME SAMPLE COLLECTION NOW AVAILABLE</b></p>
+              <h3 class="mb-4"><b>HOME SAMPLE COLLECTION NOW AVAILABLE</b></h3>
               <a href="{%url "lifestyles"%}"><button>Life Style Assessments</button></a>
             </div>
           </div>
@@ -73,20 +71,19 @@
       </div>
     </div>
   </section>
-  <section class="section_home_health_check">
+  <section class="section_home_health_check py-3">
     <div class="container">
       <div class="row">
-        <div class="col-lg-12 d-flex justify-content-between pt-3">
-          <h1 class="fs-40 font-bold d-flex align-items-center home_health_h1 w-100 m-0 cl-dark-blue">Popular Tests
-          </h1>
+        <div class="col-lg-12 d-flex justify-content-between mb-3">
+          <h3 class="font-bold d-flex align-items-center home_health_h1 w-100 m-0 cl-dark-blue">Popular Tests
+          </h3>
           <a href="{% url 'testselect' %}"><button class="home_pack_viewpack py-2 px-0 fs-16 br-50 " style="min-width: 150px;">VIEW ALL</button></a>
           
         </div>
         <div id="popular_tests" class="owl-carousel owl-theme">
           {%for checkup in healthcheckup%}
         
-        <div class=" py-lg-4 py-2 ">
-
+        <div>
           <div class=" bg-light-grey br-10 h-100 health_check_height">
             <div class="position-relative ">
               <!-- <div class="batdge">8% OFF </div> -->
@@ -94,7 +91,7 @@
            
             <div class="px-xl-4 px-3 py-4 bg-light-grey br-10">
               <div>
-                <h1 class="cl-dark-blue fs-35 font-bold test_head pt-2">{{checkup.package_title}}</h1>
+                <h4 class="cl-dark-blue font-bold test_head pt-2">{{checkup.package_title}}</h4>
                 {% comment %} <h2 id="loading">Loading<h3> {% endcomment %}
               </div>
               <div class="home_ul_li ul-dot m-0 health_care_ ">
@@ -104,11 +101,11 @@
               <div class="position-relative">
                 <p class="my-2 pt-2 fs-20 font-bold cl-light-blue">Price</p>
                 <div class="d-flex align-items-center">
-                  <h2 class="fs-25 mb-0 font-bold cl-dark-blue home_price" id="price1">₹{{checkup.dBanglore_price}}</h2>
+                  <h5 class="fs-25 mb-0 font-bold cl-dark-blue home_price" id="price1">₹{{checkup.dBanglore_price}}</h5>
                   <!-- <strike
                     class="ps-xl-3 ps-2 text-center fs-20 font-bold cl-light-blue health_price_disc">₹799</strike> -->
                   <button
-                    class="px-xl-3 px-2 test_now_button fs-16 cl-dark-blue font-bold py-2 px-4 br-20 position-absolute br" onclick='testnow("{{checkup.id}}")' name={{checkup.slug}} id="testnow">Test
+                    class="px-4 test_now_button fs-14 cl-dark-blue font-bold py-2  br-20 position-absolute br" onclick='testnow("{{checkup.id}}")' name={{checkup.slug}} id="testnow">Test
                     Now</button>
                 </div>
               </div>
@@ -122,19 +119,19 @@
   </section>
 
 
-  <section class="section_synbrome">
+  <section class="section_synbrome py-3">
     <div class="container">
       <div class="row h-100">
-        <div class="col-lg-12 d-flex justify-content-between py-lg-3 py-2">
-          <h1 class="fs-40 font-bold d-flex align-items-center home_health_h1 w-100 m-0 cl-dark-blue">Lifestyle Assessments
-          </h1>
+        <div class="col-lg-12 d-flex justify-content-between mb-3">
+          <h3 class="font-bold d-flex align-items-center home_health_h1 w-100 m-0 cl-dark-blue">Lifestyle Assessments
+          </h3>
           <a href="{%url 'lifestyles'%}"><button class="home_pack_viewpack py-2 px-0 fs-16 br-50 " style="min-width: 150px;">VIEW ALL</button></a>
           
         </div>
         <div id="health_symptoms" class="owl-carousel owl-theme">
           {%for symptoms in healthsymptom%}
 
-        <div class=" py-2 ">
+        <div>
           <a href={% url 'health_symptoms' symptoms.slug %}>  
           <div
             class="symptoms px-3 {% cycle 'bg-light-blue' 'bg-light-orange' 'bg-light-green' 'bg-light-pink' %} text-center py-lg-5 py-3 br-10">
@@ -150,12 +147,12 @@
     </div>
   </section> 
 
-  <section class="section_health_pack pb-3">
+  <section class="section_health_pack py-3">
     <div class="container">
       <div class="row">
-        <div class="col-lg-12 d-flex justify-content-between pt-lg-3 ">
-          <h1 class="fs-40 font-bold d-flex align-items-center home_health_h1 w-100 m-0 cl-dark-blue">Health Packages
-          </h1>
+        <div class="col-lg-12 d-flex justify-content-between mb-3">
+          <h3 class=" font-bold d-flex align-items-center home_health_h1 w-100 m-0 cl-dark-blue">Health Packages
+          </h3>
           <a href="{%url "packages"%}"><button class="home_pack_viewpack py-2 px-0 fs-16 br-50 " style="min-width: 150px;">VIEW ALL</button></a>
           
         </div>
@@ -201,10 +198,10 @@
         {%endfor%} {% endcomment %}
 <div id="health_pack_carousel" class="owl-carousel owl-theme">
         {%for package in healthpackage%}
-        <div class=" pt-3">
-        <div class="py-5 bg-light-grey br-30 health_hover">
-          <p class="fs-35 font-bold cl-dark-blue text-center m-0">{{package.package_name}}</p>
-          <div class="d-flex justify-content-center align-content-center pt-4 mt-lg-3">
+        <div>
+        <div class="py-4 bg-light-grey br-30 health_hover">
+          <h4 class="font-bold cl-dark-blue text-center m-0">{{package.package_name}}</h4>
+          <div class="d-flex justify-content-center align-content-center pt-lg-4 pt-3">
             <div class="home_linear_border  ">
               <div class="">
                 <p
@@ -212,19 +209,19 @@
                   Price</p>
                   {% comment %} <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.Banglore_price}}</h1> {% endcomment %}
                {%if currentcity == envcity.Bangalore%}
-                <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.Banglore_price}}</h1>
+                <h1 class="cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.Banglore_price}}</h1>
                 {%elif currentcity == envcity.Mumbai%}
-                <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.Mumbai_price}}</h1>
+                <h1 class="cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.Mumbai_price}}</h1>
                 {%elif currentcity == envcity.Bhophal%}
-                <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.bhopal_price}}</h1>
+                <h1 class="cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.bhopal_price}}</h1>
                 {%elif currentcity == envcity.Nanded%}
-                <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.nanded_price}}</h1>
+                <h1 class="cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.nanded_price}}</h1>
                 {%elif currentcity == envcity.Pune%}
-                <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.pune_price}}</h1>
+                <h1 class="cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.pune_price}}</h1>
                 {%elif currentcity == envcity.Barshi%}
-                <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.barshi_price}}</h1>
+                <h1 class="cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.barshi_price}}</h1>
                 {%elif currentcity == envcity.Aurangabad%}
-                <h1 class="fs-40 cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.aurangabad_price}}</h1>
+                <h1 class="cl-dark-blue font-bold d-flex justify-content-center m-0 ">₹{{package.aurangabad_price}}</h1>
                 {%endif%}
                 <p
                   class="d-flex justify-content-center align-content-center align-items-center m-0 fs-18 cl-dark-blue font-bold">
@@ -234,9 +231,9 @@
               </div>
             </div>
           </div>
-          <div class="d-flex justify-content-center pt-lg-5 pt-4">
+          <div class="d-flex justify-content-center pt-lg-4 pt-3">
             <a href="{%url "Health-package" package.slug%}"><button
-                class="home_pack_viewpack py-3 fs-16 font-bold br-50 ">VIEW PACK</button></a>
+                class="home_pack_viewpack py-lg-3 py-2 fs-16 font-bold br-50 ">VIEW PACK</button></a>
           </div>
         </div>
       </div>
@@ -246,11 +243,11 @@
     </div>
   </section>
 
-  <section class="section_care pb-4">
+  <section class="section_care py-3">
     <div class="container">
       <div class="">
         <div class="row">
-          <h3 class="fs-40  cl-dark-blue font-bold d-flex align-items-center home_health_symp_header m-0 py-lg-5  py-3" id="healt">The Diagnostica Blog</h3>
+          <h3 class="cl-dark-blue font-bold d-flex align-items-center home_health_symp_header mb-3" id="healt">The Diagnostica Blog</h3>
 
           <div id="health-care-slider" class="col-lg-12 health-care-slider owl-carousel owl-theme">
             {%for blog in healthcareblog%}
@@ -263,7 +260,7 @@
                   </div>
                 </div>
                 <div class="col-lg-6">
-                  <h1 class="fs-35 font-bold cl-dark-blue m-0 blog_head_height">{{blog.title}}</h1>
+                  <h4 class="font-bold cl-dark-blue my-lg-0 mt-3 blog_head_height">{{blog.title}}</h4>
                   
                   {% comment %} <p class="m-0 fs-18 cl-dark-blue health_care_p pb-3" >{{blog.description|low|truncatewords:40}}</p> {% endcomment %}
                   <p class="m-0 fs-18 cl-dark-blue health_care_p pb-3" >{{blog.description|striptags|truncatechars:140|safe}}</p>
@@ -282,11 +279,11 @@
     </div>
   </section>
 
-  <section class="section_about_span bg-light-grey mt-5" id="about">
+  <section class="section_about_span bg-light-grey my-3" id="about">
     <div class="container">
       <div class="row  py-3">
         <div class="col-lg-6 pe-lg-5 py-3">
-          <h1 class="fs-40 font-bold d-flex align-items-center cl-dark-blue pb-lg-3">About Diagnostica SPAN</h1>
+          <h3 class="font-bold d-flex align-items-center cl-dark-blue pb-lg-3">About Diagnostica SPAN</h3>
           <p class="fs-24 font-regular cl-dark-brown pt-3">
             On December 1 2018, SPAN (www.spanhealth.com) took the first step towards making diagnostics a
             key vertical. The laboratories are located in Bangalore, Pune, Barshi, Aurangabad, Nanded, Nashik
@@ -324,21 +321,21 @@
     </div>
   </section>
 
-  <section class="section_critical">
+  <section class="section_critical py-3">
     <div class="container">
       <div class="row">
-        <h1 class="fs-40 font-bold d-flex align-items-center cl-dark-blue py-lg-5 py-3 m-0">Our CRITICAL services</h1>
-        <div class="col-lg-12 pb-lg-5">
+        <h3 class="font-bold d-flex align-items-center cl-dark-blue mb-3">Our CRITICAL services</h3>
+        <div class="col-lg-12">
           <img src="{%static "images/bg-critical.png"%}" alt="" class="img-fluid">
         </div>
       </div>
     </div>
   </section>
-  <section class="section_testimonial" id="testicount">
+  <section class="section_testimonial py-3" id="testicount">
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
-          <h1 class="fs-40 font-bold d-flex align-items-center cl-dark-blue py-4 m-0" id="testicountt">Testimonials</h1>
+          <h3 class="font-bold d-flex align-items-center cl-dark-blue mb-3" id="testicountt">Testimonials</h3>
           <div id="testimonial_slider" class="owl-carousel owl-theme">
             {%for test in testimonial%}
             <div class=" bg-light-brown w-100 br-15 position-relative">
@@ -357,11 +354,11 @@
       </div>
     </div>
   </section>
-  <section class="helping_book_test pt-3 mt-lg-5">
-    <div class="helping-book-banner py-lg-5 py-3">
+  <section class="helping_book_test">
+    <div class="helping-book-banner py-lg-5">
       <div class="container">
         <div class="row">
-          <div class="col-lg-6 col-md-12 py-4 ">
+          <div class="col-lg-6 col-md-12 py-lg-4 ">
             {% comment %} <h1 class="fs-40 font-bold cl-dark-white pe-xxl-5 me-xxl-5">Helping Patients for around The Globe !!!</h1> {% endcomment %}
             <div class="row">
               <div class="col-12 col-md-6 pe-lg-4 helper_header_col">
@@ -403,7 +400,7 @@
             <form method="post" id="homeForm">
               {%csrf_token%}
               <div class="bg-dark-white px-lg-4 px-3 py-4 br-15">
-                <h1 class="fs-40 font-bold cl-dark-blue pt-2 pb-lg-4">Request a Call Back</h1>
+                <h3 class="font-bold cl-dark-blue pt-2 pb-lg-4">Request a Call Back</h3>
                 <div class="row">
                   <div class="col-12 col-md-12 col-lg-6 pt-4">
                     <label class="fs-20 font-regular cl-dark-blue">First name<span
@@ -436,13 +433,13 @@
                       <option  value={{test.id}}>{{test.testt}}</option>
                       {%endfor%}
                     </select> {% endcomment %}
-                    <div class="col-lg-12 pt-4 px-lg-2 px-0">
+                    <div class="col-lg-12 pt-4">
                       <label class="fs-20 font-regular cl-dark-blue">Message<span
                         class="cl-red ps-1">*</span></label>
                       <textarea class="w-100 form_input" rows="2" cols="50"
                           placeholder="Message" name="message" maxlength="250"></textarea>
                   </div>
-                  <div class="col-12 py-3 mt-4"><button
+                  <div class="col-12 py-lg-3 mt-4"><button
                       class="globalsubmitbutton" type="submit" id="requestbtn">Submit</button>
                   </div>
                 </div>
