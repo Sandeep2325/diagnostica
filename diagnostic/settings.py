@@ -184,8 +184,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
-RAZOR_KEY_ID = "rzp_live_ZSkJErOIklssAc"
-RAZOR_KEY_SECRET = "Er7q5aHnDix03E1y66x0bMIA"
+RAZOR_KEY_ID = "*******"
+RAZOR_KEY_SECRET = "******"
 # RAZOR_KEY_ID = "rzp_test_JiD8eNtJ2aNwZr"
 # RAZOR_KEY_SECRET = "gtukARkLZ5U4Bjo9EfCSWkMf"
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
