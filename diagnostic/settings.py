@@ -94,10 +94,10 @@ AUTH_USER_MODEL = 'app1.User'
 DATABASES = {  
     'default': {  
         'ENGINE': 'django.db.backends.mysql',  
-        'NAME': 'spandiagnodb',  
-        'USER': 'spandiagno_user',  
-        'PASSWORD': 'spanDiagnoV2db',  
-        'HOST': 'spandiagnov2.cubknyrg0xrn.us-east-2.rds.amazonaws.com',  
+        'NAME': '****',  
+        'USER': '****',  
+        'PASSWORD': '******',  
+        'HOST': '****,  
         'PORT': '3306',   
     }  
 } 
@@ -208,8 +208,8 @@ EMAIL_HOST = 'smtp-mail.outlook.com'
 EMAIL_USE_TLS = True
 # EMAIL_USE_SSL=FALSE
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "enquiry@spanhealth.com"
-EMAIL_HOST_PASSWORD = 'Ravi@123'
+EMAIL_HOST_USER = "***"
+EMAIL_HOST_PASSWORD = '**'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # SESSION_SAVE_EVERY_REQUEST =True
