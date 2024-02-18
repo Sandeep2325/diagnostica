@@ -18,13 +18,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
      "localhost",
-    "162.240.55.20",
-    "127.0.0.1",
-    "18.116.13.187",
-    "172.31.8.226",
-    "ec2-18-116-13-187.us-east-2.compute.amazonaws.com",
-    "spandiagno.com",
-    "www.spandiagno.com",
+    
      ]
 env = environ.Env()
 # Application definition
@@ -101,43 +95,6 @@ DATABASES = {
         'PORT': '3306',   
     }  
 } 
-# DATABASES = {  
-#     'default': {  
-#         'ENGINE': 'django.db.backends.mysql', 
-#         'NAME': 'diagnospan1',  
-#         'USER': 'root',  
-#         'PASSWORD': 'Sandeep@8105',  
-#         'HOST': 'localhost',  
-#         'PORT': '3306',
-#     }
-# }
-# DATABASES = {  
-#     'default': {  
-#         'ENGINE': 'django.db.backends.mysql',  
-#         'NAME': 'spanDiagnoV2',  
-#         'USER': 'spanDiagnoV2User',  
-#         'PASSWORD': 'spanDiagnoV2User',  
-#         'HOST': 'localhost',  
-#         'PORT': '3306',   
-#     }  
-# }
-# DATABASES = {  
-
-#     'default': {  
-
-#         'ENGINE': 'django.db.backends.mysql',  
-
-#         'NAME': 'diagnospan',  
-
-#         'USER': 'root',  
-
-#         'PASSWORD': 'mySqlServer@#$432',  
-
-#         'HOST': 'localhost',  
-
-#         'PORT': '3306',   
-
-#     }  
 
 # }
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 20000
@@ -238,4 +195,4 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_SAMESITE="None"
 CSRF_COOKIE_SECURE = True
-CSRF_TRUSTED_ORIGINS  = ['https://spandiagno.com','https://www.spandiagno.com','https://api.razorpay.com']
+CSRF_TRUSTED_ORIGINS  = []
