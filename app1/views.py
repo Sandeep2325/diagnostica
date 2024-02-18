@@ -2871,11 +2871,11 @@ def readfile(request):
 import requests
 def sms(message,mobile):
     try:
-        url=f"""https://www.smsidea.co.in/smsstatuswithid.aspx?mobile=9986788880&pass=Malatesh@78&senderid=SPANDS&to={mobile}&msg={message}"""
-        # url=f"""https://www.smsidea.co.in/smsstatuswithid.aspx?mobile=9986788880&pass=Malatesh@78&senderid=SPANDS&to={mobile}&msg={message}&peid=1501615380000049113&templateid={templateid}"""
+        url=f"""https://www.smsidea.co.in/smsstatuswithid.aspx?mobile=1234567890&pass=password&senderid=abc&to={mobile}&msg={message}"""
+        
         connection=requests.get(url)
         a=connection.text.split(":")
-        deliveryurl=f"""https://www.smsidea.co.in/sms/api/msgstatus.aspx?mobile=9986788880&pass=Malatesh@78&msgtempid={a[1].strip()}"""
+        deliveryurl=f"""https://www.smsidea.co.in/sms/api/msgstatus.aspx?mobile=333&pass=7686&msgtempid={a[1].strip()}"""
         deliveryconnection=requests.get(deliveryurl)
         if deliveryconnection.status_code!=200:
             return "Your OTP is not delivered Please try again!"
